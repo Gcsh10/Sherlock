@@ -1,0 +1,3322 @@
+<!DOCTYPE html>
+<html lang="it" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="SHERLOCK">
+<meta name="theme-color" content="#09090b">
+<title>SHERLOCK</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.14/dist/hls.min.js"></script>
+<style>
+:root{--bg:#09090b;--bg2:#0f0f11;--s:#111113;--s2:#18181b;--bd:#27272a;--bd2:#3f3f46;--acc:#22d35e;--acc2:#16a34a;--acc3:#052e16;--tx:#f4f4f5;--tx2:#a1a1aa;--mu:#52525b;--re:#ef4444;--am:#f59e0b;}
+[data-theme=light]{--bg:#f4f4f5;--bg2:#e8e8ea;--s:#fff;--s2:#f0f0f0;--bd:#d4d4d8;--bd2:#a1a1aa;--acc:#16a34a;--acc2:#15803d;--acc3:#dcfce7;--tx:#09090b;--tx2:#3f3f46;--mu:#a1a1aa;--re:#dc2626;--am:#d97706;}
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font-family:'Rajdhani',sans-serif;font-size:15px;}
+header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);display:flex;align-items:center;padding:0 12px;gap:10px;flex-shrink:0;z-index:200;}
+.logo{font-family:'Share Tech Mono',monospace;font-size:clamp(16px,1.6vw,20px);color:var(--acc);letter-spacing:.3em;text-shadow:0 0 16px var(--acc2);}
+.hsep{width:1px;height:20px;background:var(--bd2);}
+.live-dot{width:7px;height:7px;border-radius:50%;background:var(--acc);animation:pulse 1.2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,211,94,.4)}50%{opacity:.4;box-shadow:0 0 0 4px transparent}}
+.live-lbl{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--acc);letter-spacing:.15em;}
+.timer-wrap{display:flex;align-items:center;gap:5px;}
+.ring svg{transform:rotate(-90deg);}.ring circle{fill:none;stroke-width:2.5;}
+.bgc{stroke:var(--bd2);}.fgc{stroke:var(--acc);stroke-linecap:round;transition:stroke-dashoffset .9s linear;}
+#tlbl{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--mu);}
+.hright{margin-left:auto;display:flex;align-items:center;gap:5px;}
+.hbtn{background:none;border:1px solid var(--bd2);color:var(--tx2);cursor:pointer;font-size:12px;padding:3px 9px;line-height:1.4;font-family:'Share Tech Mono',monospace;transition:all .15s;letter-spacing:.05em;}
+.hbtn:hover{border-color:var(--acc2);color:var(--acc);}.hbtn.acc{border-color:var(--acc2);color:var(--acc);}
+#rbtn{font-size:16px;padding:2px 9px;}#rbtn:disabled{opacity:.3;cursor:not-allowed;}
+#clock{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--mu);}
+.shell{display:flex;height:calc(100vh - 46px);overflow:hidden;}
+.sidebar{width:clamp(180px,18vw,210px);flex-shrink:0;background:var(--s);border-right:1px solid var(--bd2);display:flex;flex-direction:column;overflow:hidden;}
+.tabs{display:flex;border-bottom:1px solid var(--bd2);flex-shrink:0;}
+.tab{flex:1;padding:7px 3px;font-size:10px;font-weight:700;text-align:center;cursor:pointer;color:var(--mu);border:none;background:transparent;border-bottom:2px solid transparent;transition:all .15s;letter-spacing:.07em;text-transform:uppercase;font-family:'Share Tech Mono',monospace;}
+.tab.on{color:var(--acc);border-bottom-color:var(--acc);}
+.pane{flex:1;overflow-y:auto;display:flex;flex-direction:column;min-height:0;}
+.pane.hidden{display:none!important;}
+.slbl{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);padding:7px 8px 2px;font-family:'Share Tech Mono',monospace;border-left:2px solid var(--acc2);flex-shrink:0;}
+.src-hd{display:flex;align-items:center;justify-content:space-between;padding:5px 8px;border-bottom:1px solid var(--bd);flex-shrink:0;}
+.src-hd span{font-size:11px;color:var(--mu);font-family:'Share Tech Mono',monospace;}
+.src-item{display:flex;align-items:center;gap:5px;padding:4px 8px;border-bottom:1px solid var(--bd);flex-shrink:0;}
+.src-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.src-nm{flex:1;font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.src-st{font-size:10px;font-family:'Share Tech Mono',monospace;}
+.src-st.ok{color:#22c55e;}.src-st.err{color:var(--re);}.src-st.lo{color:var(--mu);}
+.tog{width:26px;height:14px;border:none;cursor:pointer;position:relative;flex-shrink:0;border-radius:2px;transition:background .2s;}
+.tog.on{background:var(--acc2);}.tog.off{background:var(--bd2);}
+.tog::after{content:'';position:absolute;top:2px;width:10px;height:10px;background:#fff;border-radius:1px;transition:left .2s;}
+.tog.on::after{left:14px;background:var(--acc);}.tog.off::after{left:2px;}
+.src-del{background:none;border:none;color:var(--mu);cursor:pointer;font-size:12px;padding:0 2px;}
+.src-del:hover{color:var(--re);}
+.qadd{padding:7px 8px;border-top:1px solid var(--bd2);flex-shrink:0;}
+.qi{width:100%;background:var(--s2);border:1px solid var(--bd);padding:4px 7px;color:var(--tx);font-size:11px;font-family:'Share Tech Mono',monospace;outline:none;margin-bottom:3px;}
+.qi:focus{border-color:var(--acc2);}
+.qrow{display:flex;gap:3px;}
+.qsel{flex:1;background:var(--s2);border:1px solid var(--bd);padding:4px 5px;color:var(--tx);font-size:11px;font-family:'Share Tech Mono',monospace;outline:none;}
+.qadd-btn{background:none;border:1px solid var(--acc2);color:var(--acc);cursor:pointer;font-size:14px;padding:3px 10px;font-family:'Share Tech Mono',monospace;flex-shrink:0;transition:all .15s;}
+.qadd-btn:hover{background:rgba(34,211,94,.1);}
+.main-area{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;}
+.cols-wrap{display:flex;overflow-x:auto;overflow-y:hidden;gap:0;flex:1;min-height:0;}
+.cols-wrap::-webkit-scrollbar{height:5px;}
+.cols-wrap::-webkit-scrollbar-track{background:var(--bg);}
+.cols-wrap::-webkit-scrollbar-thumb{background:var(--bd2);}
+.acol{min-width:clamp(220px,28vw,280px);max-width:100%;flex:1 1 300px;display:flex;flex-direction:column;border-right:1px solid var(--bd);height:100%;overflow:hidden;background:var(--bg);}
+.acol.drag-over{border-right:2px solid var(--acc);}
+.col-hd{display:flex;align-items:center;gap:5px;padding:6px 8px;background:var(--bg2);border-bottom:1px solid var(--bd2);flex-shrink:0;cursor:grab;user-select:none;}
+.col-icon{font-size:14px;}.col-name{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:11px;font-weight:700;color:var(--tx2);letter-spacing:.08em;text-transform:uppercase;flex:1;}
+.col-cnt{font-size:10px;color:var(--mu);font-family:'Share Tech Mono',monospace;background:var(--s2);padding:1px 5px;}
+.col-close{background:none;border:none;color:var(--mu);cursor:pointer;font-size:13px;padding:0 2px;transition:color .15s;flex-shrink:0;}
+.col-close:hover{color:var(--re);}
+.col-feed{flex:1;overflow-y:auto;overflow-x:hidden;padding:4px 0;}
+.col-feed::-webkit-scrollbar{width:3px;}
+.col-feed::-webkit-scrollbar-thumb{background:var(--bd2);}
+.card{padding:7px 10px;border-bottom:1px solid var(--bd);transition:background .12s;}
+.card:hover{background:var(--s);}
+.card[data-sev=critical]{border-left:3px solid var(--re);}
+.card[data-sev=high]{border-left:3px solid var(--am);}
+.card[data-sev=medium]{border-left:3px solid #3b82f6;}
+.ctop{display:flex;align-items:center;gap:5px;margin-bottom:3px;}
+.csrc{display:inline-flex;align-items:center;gap:6px;color:#ffffff !important;font-weight:700;letter-spacing:.04em;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:2px 8px;}
+.ctlink{display:block;font-size:clamp(16px,1.8vw,20px);font-weight:600;color:var(--tx);text-decoration:none;line-height:1.35;}
+.ctlink:hover{color:var(--acc);}
+.cdesc{color:#c9d1d9;font-size:clamp(13px,1.4vw,15px);color:#c9d1d9;margin-top:3px;line-height:1.4;}
+.cfoot{margin-top:4px;}.ctime{font-size:13px;color:var(--mu);font-family:'Share Tech Mono',monospace;}
+.empty{padding:24px 12px;text-align:center;font-size:11px;color:var(--mu);font-family:'Share Tech Mono',monospace;line-height:1.8;}
+.skel{height:58px;background:var(--s2);margin:4px 8px;animation:shimmer 1.2s infinite;}
+@keyframes shimmer{0%{opacity:.4}50%{opacity:.9}100%{opacity:.4}}
+.add-col-btn{min-width:40px;display:flex;align-items:center;justify-content:center;border-right:1px solid var(--bd);cursor:pointer;background:transparent;border-top:none;border-bottom:none;border-left:none;color:var(--mu);font-size:22px;transition:all .15s;flex-shrink:0;}
+.add-col-btn:hover{color:var(--acc);background:var(--s);}
+
+
+
+
+
+
+
+
+
+#map-wrap svg{width:100%;height:100%;display:block;}
+
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:500;display:flex;align-items:center;justify-content:center;}
+.modal{background:var(--s);border:1px solid var(--bd2);padding:16px;min-width:300px;max-width:460px;width:90%;}
+.modal-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;}
+.modal-t{font-family:'Share Tech Mono',monospace;font-size:13px;letter-spacing:.1em;color:var(--acc);}
+.mf{margin-bottom:8px;}.mf label{font-size:11px;color:var(--mu);display:block;margin-bottom:2px;}
+.mi{width:100%;background:var(--s2);border:1px solid var(--bd2);color:var(--tx);padding:5px 8px;font-size:12px;outline:none;font-family:'Share Tech Mono',monospace;}
+.mi:focus{border-color:var(--acc2);}
+.mrow{display:flex;gap:6px;justify-content:flex-end;margin-top:4px;}
+.pgrid{display:flex;flex-wrap:wrap;gap:4px;}
+.pbtn{background:var(--s2);border:1px solid var(--bd);color:var(--tx2);padding:4px 8px;cursor:pointer;font-size:11px;font-family:'Share Tech Mono',monospace;transition:all .15s;}
+.pbtn:hover,.pbtn.added{border-color:var(--acc2);color:var(--acc);}
+.pbtn.added{background:var(--acc3);}
+.restore-grid{display:flex;flex-direction:column;gap:4px;max-height:300px;overflow-y:auto;}
+.restore-btn{background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px 10px;cursor:pointer;font-size:13px;text-align:left;transition:all .15s;}
+.restore-btn:hover{border-color:var(--acc2);background:var(--acc3);}
+.notif{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--s2);border:1px solid var(--acc2);color:var(--acc);padding:6px 14px;font-family:'Share Tech Mono',monospace;font-size:11px;z-index:600;pointer-events:none;}
+#tv-panel{position:fixed;bottom:12px;right:12px;z-index:450;width:min(420px,42vw);height:min(250px,30vh);background:#000;border:1px solid var(--bd2);border-top:2px solid var(--re);box-shadow:0 6px 32px rgba(0,0,0,.85);display:flex;flex-direction:column;resize:both;overflow:hidden;min-width:260px;min-height:160px;}
+#tv-panel.tv-off{display:none!important;}
+.tvhd{display:flex;align-items:center;gap:4px;padding:4px 7px;background:var(--s2);border-bottom:1px solid var(--bd);flex-shrink:0;cursor:move;user-select:none;height:30px;}
+.tvdot{width:7px;height:7px;border-radius:50%;background:var(--re);animation:pulse 1.2s infinite;flex-shrink:0;}
+.tvlbl{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--re);letter-spacing:.06em;flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.tvsel{background:var(--s);border:1px solid var(--bd2);color:var(--tx2);font-size:9px;font-family:'Share Tech Mono',monospace;padding:1px 3px;outline:none;cursor:pointer;max-width:110px;}
+.tvbtn2{background:none;border:1px solid var(--bd2);color:var(--mu);cursor:pointer;font-size:9px;padding:1px 5px;font-family:'Share Tech Mono',monospace;flex-shrink:0;white-space:nowrap;transition:all .15s;}
+.tvbtn2:hover{border-color:var(--re);color:var(--re);}
+#tv-yt-wrap{flex:1;position:relative;min-height:0;background:#000;overflow:hidden;}
+#tv-yt-wrap iframe{position:absolute;inset:0;width:100%!important;height:100%!important;border:none;}
+#tv-hls-video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:none;}
+.tv-msg{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;gap:8px;background:#000;color:#555;font-family:'Share Tech Mono',monospace;font-size:11px;text-align:center;padding:12px;}
+.tv-msg a{color:var(--re);text-decoration:none;}
+
+/* page switcher removed */
+
+
+
+
+/* BRIEFING MODAL */
+.briefing-bg{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:700;display:flex;align-items:center;justify-content:center;padding:20px;}
+.briefing-modal{background:var(--bg);border:1px solid var(--bd2);width:100%;max-width:780px;max-height:92vh;display:flex;flex-direction:column;}
+.briefing-topbar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--bg2);border-bottom:1px solid var(--bd2);flex-shrink:0;}
+.briefing-topbar-title{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--acc);letter-spacing:.12em;flex:1;}
+.briefing-body{flex:1;overflow-y:auto;padding:24px 28px;}
+.briefing-body::-webkit-scrollbar{width:4px;}
+.briefing-body::-webkit-scrollbar-thumb{background:var(--bd2);}
+.br-header{border-bottom:1px solid var(--bd2);padding-bottom:14px;margin-bottom:20px;}
+.br-title{font-family:'Share Tech Mono',monospace;font-size:16px;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);}
+.br-date{font-size:11px;color:var(--mu);font-family:'Share Tech Mono',monospace;letter-spacing:.08em;margin-top:4px;}
+.br-theater{margin-bottom:24px;}
+.br-theater-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.br-theater-num{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--mu);}
+.br-theater-name{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--acc2);border-left:2px solid var(--acc2);padding-left:7px;}
+.br-item{display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--bd);align-items:flex-start;}
+.br-item:last-child{border-bottom:none;}
+.br-sev-badge{font-size:8px;font-family:'Share Tech Mono',monospace;padding:2px 5px;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0;margin-top:3px;}
+.br-sev-badge.critical{background:rgba(239,68,68,.15);color:var(--re);}
+.br-sev-badge.high{background:rgba(245,158,11,.15);color:var(--am);}
+.br-sev-badge.medium{background:rgba(59,130,246,.15);color:#3b82f6;}
+.br-item-body{flex:1;}
+.br-item-headline{font-size:15px;font-weight:600;color:var(--tx);text-decoration:none;display:block;line-height:1.35;}
+.br-item-headline:hover{color:var(--acc);}
+.br-item-meta{font-size:10px;color:var(--mu);font-family:'Share Tech Mono',monospace;margin-top:2px;}
+.br-footer{font-size:10px;color:var(--mu);font-family:'Share Tech Mono',monospace;border-top:1px solid var(--bd2);padding-top:10px;margin-top:8px;text-align:right;letter-spacing:.06em;}
+
+@media print{
+  .briefing-topbar{display:none;}
+  .briefing-modal{max-height:none;border:none;}
+  .briefing-bg{position:static;padding:0;}
+  body > *:not(.briefing-bg){display:none!important;}
+}
+
+
+/* Card nuova — highlight incrementale */
+@keyframes card-in{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+.card-new{animation:card-in .35s ease;border-left:2px solid var(--acc)!important;}
+.card-new-flash{border-left:2px solid var(--acc)!important;transition:border-color 3s ease;}
+
+
+/* PAGE SWITCHER */
+.page-tabs{display:flex;gap:2px;margin-left:8px;}
+.page-tab{background:none;border:1px solid var(--bd2);color:var(--mu);cursor:pointer;font-size:11px;padding:3px 10px;font-family:'Share Tech Mono',monospace;transition:all .15s;letter-spacing:.06em;}
+.page-tab.on{border-color:var(--acc2);color:var(--acc);background:var(--acc3);}
+.page{display:none;height:100%;width:100%;}
+.page.on{display:flex;}
+
+/* PAGINA 2 */
+.p2-wrap{flex:1;display:flex;gap:0;overflow:hidden;height:100%;}
+.p2-map{flex:1;display:flex;flex-direction:column;border-right:1px solid var(--bd2);overflow:hidden;}
+.p2-alerts{width:340px;flex-shrink:0;display:flex;flex-direction:column;overflow:hidden;}
+.p2-map-hd,.p2-alerts-hd{padding:6px 10px;background:var(--bg2);border-bottom:1px solid var(--bd2);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;flex-shrink:0;display:flex;align-items:center;gap:8px;}
+.p2-map-hd span:first-child{color:var(--acc);}
+.p2-alerts-hd span:first-child{color:var(--re);}
+.p2-legend{display:flex;gap:8px;align-items:center;font-size:9px;margin-left:auto;}
+.p2-legend span{display:flex;align-items:center;gap:3px;}
+.p2-legend i{width:9px;height:9px;display:inline-block;}
+#p2-map-wrap{flex:1;min-height:0;position:relative;overflow:hidden;background:var(--s2);}
+#p2-map-wrap svg{width:100%;height:100%;display:block;}
+.p2-alerts-feed{flex:1;overflow-y:auto;padding:4px 0;}
+.p2-alerts-feed::-webkit-scrollbar{width:3px;}
+.p2-alerts-feed::-webkit-scrollbar-thumb{background:var(--bd2);}
+.alert-card{padding:7px 10px;border-bottom:1px solid var(--bd);transition:background .12s;}
+.alert-card:hover{background:var(--s);}
+.alert-card[data-sev=critical]{border-left:3px solid var(--re);}
+.alert-card[data-sev=high]{border-left:3px solid var(--am);}
+.alert-badge{font-size:9px;font-family:'Share Tech Mono',monospace;padding:1px 5px;text-transform:uppercase;letter-spacing:.06em;margin-right:4px;}
+.alert-badge.critical{background:rgba(239,68,68,.15);color:var(--re);}
+.alert-badge.high{background:rgba(245,158,11,.15);color:var(--am);}
+.p2-map-tip{position:fixed;background:var(--s2);border:1px solid var(--bd2);color:var(--tx);font-family:'Share Tech Mono',monospace;font-size:10px;padding:4px 8px;pointer-events:none;z-index:600;display:none;line-height:1.5;}
+
+@media(max-width:768px){
+  .sidebar{display:none;}.main-area{flex-direction:column;}
+  .cols-wrap{flex-direction:column;overflow-x:hidden;overflow-y:auto;}
+  .acol{min-width:100%;max-width:100%;height:auto;border-right:none;border-bottom:1px solid var(--bd);}
+  .col-feed{max-height:40vh;}
+  #tv-panel{width:100%!important;height:200px!important;left:0!important;right:0!important;bottom:0!important;resize:none!important;}
+}
+
+/* ── MAP MARKERS & OVERLAYS ─────────────────────────────────────── */
+@keyframes globe-pulse{0%{transform:scale(1);opacity:.7}70%{transform:scale(2.2);opacity:0}100%{transform:scale(2.2);opacity:0}}
+@keyframes hs-spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+.p2-map-pins{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;overflow:hidden;}
+.p2-pin{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;}
+.p2-pin .dot{width:8px;height:8px;border-radius:50%;position:relative;}
+.p2-pin .dot::after{content:'';position:absolute;inset:-4px;border-radius:50%;animation:globe-pulse 2s ease-out infinite;}
+.p2-pin.crit .dot{background:#ef4444;border:1.5px solid #fca5a5;}
+.p2-pin.crit .dot::after{background:rgba(239,68,68,.35);}
+.p2-pin.high .dot{background:#f59e0b;border:1.5px solid #fcd34d;}
+.p2-pin.high .dot::after{background:rgba(245,158,11,.3);}
+.p2-pin.med .dot{background:#3b82f6;border:1.5px solid #93c5fd;}
+.p2-pin.med .dot::after{background:rgba(59,130,246,.25);animation-duration:3s;}
+.p2-pin.low .dot{background:#22d35e;border:1.5px solid #86efac;}
+.p2-pin.low .dot::after{background:rgba(34,211,94,.2);animation-duration:4s;}
+.p2-pin .badge{position:absolute;top:-8px;right:-8px;background:#1e293b;color:#e2e8f0;font-size:9px;font-family:'Share Tech Mono',monospace;padding:1px 4px;border-radius:4px;border:1px solid var(--bd);white-space:nowrap;pointer-events:none;}
+.p2-hotspot{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;}
+.p2-hotspot .hs-inner{width:10px;height:10px;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);position:relative;}
+.p2-hotspot .hs-ring{position:absolute;inset:-5px;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);opacity:.4;animation:globe-pulse 2.5s ease-out infinite;}
+.p2-hotspot.crit .hs-inner{background:#ff2020;box-shadow:0 0 8px 2px rgba(255,32,32,.6);}
+.p2-hotspot.crit .hs-ring{background:#ff2020;}
+.p2-hotspot.high .hs-inner{background:#ff7700;box-shadow:0 0 7px 2px rgba(255,119,0,.5);}
+.p2-hotspot.high .hs-ring{background:#ff7700;}
+.p2-hotspot.med .hs-inner{background:#ffcc00;box-shadow:0 0 6px 2px rgba(255,204,0,.4);}
+.p2-hotspot.med .hs-ring{background:#ffcc00;}
+.p2-layer-ctrl{position:absolute;top:8px;right:8px;display:flex;flex-direction:column;gap:4px;z-index:10;}
+.p2-lbtn{background:var(--s);border:1px solid var(--bd);color:var(--tx2);font-size:10px;font-family:'Share Tech Mono',monospace;padding:3px 7px;border-radius:4px;cursor:pointer;opacity:.85;transition:opacity .15s,background .15s;}
+.p2-lbtn.on{background:var(--acc3);border-color:var(--acc);color:var(--acc2);opacity:1;}
+.p2-lbtn:hover{opacity:1;}
+/* ── MAP TOOLBAR & REGION BUTTONS ────────────────────────────────*/
+.p2-map-toolbar{display:flex;align-items:center;gap:8px;padding:4px 8px;background:var(--bg);border-bottom:1px solid var(--bd2);flex-shrink:0;overflow-x:auto;flex-wrap:nowrap;}
+.p2-region-btns,.p2-layer-btns{display:flex;gap:3px;flex-shrink:0;}
+.p2-rbtn{font-family:'Share Tech Mono',monospace;font-size:10px;padding:3px 8px;border:1px solid var(--bd);border-radius:3px;background:transparent;color:var(--tx2);cursor:pointer;white-space:nowrap;transition:all .15s;}
+.p2-rbtn.active,.p2-rbtn:hover{background:var(--bd2);color:var(--tx);}
+.p2-map-toolbar .p2-lbtn{font-family:'Share Tech Mono',monospace;font-size:10px;padding:3px 7px;border:1px solid var(--bd);border-radius:3px;background:transparent;color:var(--mu);cursor:pointer;white-space:nowrap;transition:all .15s;}
+.p2-map-toolbar .p2-lbtn.on{background:rgba(22,163,74,.15);border-color:var(--acc);color:var(--acc);}
+.p2-stats{margin-left:auto;display:flex;gap:10px;font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--mu);}
+.p2-stats span{display:flex;align-items:center;gap:3px;}
+.p2-stats .dot{width:6px;height:6px;border-radius:50%;}
+/* ── TRANSLATE & LANG BADGE ──────────────────────────────────────*/
+.ctranslate{display:inline-flex;align-items:center;font-size:10px;color:#4ade80;border:1px solid rgba(74,222,128,.35);border-radius:3px;padding:1px 6px;margin-left:6px;cursor:pointer;background:transparent;font-family:'Share Tech Mono',monospace;transition:all .15s;}
+.ctranslate:hover{background:rgba(74,222,128,.18);border-color:#4ade80;}
+.clang-badge{font-size:9px;color:#f59e0b;border:1px solid rgba(245,158,11,.4);border-radius:2px;padding:0 3px;margin-left:4px;font-family:'Share Tech Mono',monospace;}
+
+@media (max-width: 1200px){
+  .sidebar{width:180px;}
+  .acol{min-width:240px;}
+  #tv-panel{width:min(380px,46vw);height:min(230px,28vh);}
+}
+
+@media (max-width: 992px){
+  .sidebar{width:160px;}
+  .page-tabs{margin-left:4px;}
+  .hbtn{padding:3px 6px;font-size:11px;}
+  .ctlink{line-height:1.3;}
+}
+
+@media (max-width: 768px){
+  .sidebar{display:none;}
+  .main-area{flex-direction:column;}
+  .cols-wrap{flex-direction:column;overflow-x:hidden;overflow-y:auto;}
+  .acol{min-width:100%;max-width:100%;height:auto;border-right:none;border-bottom:1px solid var(--bd);}
+  .col-feed{max-height:40vh;}
+  #tv-panel{width:100%!important;height:200px!important;left:0!important;right:0!important;bottom:0!important;resize:none!important;}
+}
+
+@media (max-width: 560px){
+  header{
+    flex-wrap:wrap;
+    height:auto;
+    padding:8px;
+    gap:6px;
+  }
+  .hsep{display:none;}
+  .timer-wrap{order:2;}
+  .page-tabs{order:3;width:100%;margin-left:0;}
+  .page-tab{flex:1;}
+  .hright{
+    order:4;
+    width:100%;
+    justify-content:space-between;
+    margin-left:0;
+    flex-wrap:wrap;
+    gap:6px;
+  }
+  #clock{display:none;}
+  .hbtn{padding:4px 6px;font-size:10px;}
+}
+
+@media (max-width: 420px){
+  .logo{letter-spacing:.18em;}
+  .tvsel{max-width:92px;}
+  .tvlbl{font-size:9px;}
+}
+
+
+.mobile-menu-btn{display:none;border-color:var(--acc2);color:var(--acc);}
+.mobile-menu-open .hright{display:flex!important;}
+
+@media (max-width: 560px){
+  .mobile-menu-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    margin-left:auto;
+  }
+
+  .hright{
+    display:none;
+    order:5;
+    width:100%;
+    flex-direction:column;
+    align-items:stretch;
+    margin-left:0;
+    gap:6px;
+    padding-top:4px;
+  }
+
+  .hright .hbtn{
+    width:100%;
+    text-align:center;
+  }
+
+  .page-tabs{
+    order:4;
+    width:100%;
+  }
+
+  .timer-wrap{
+    order:3;
+  }
+
+  .logo{
+    order:1;
+  }
+
+  .mobile-menu-btn{
+    order:2;
+  }
+}
+
+
+.mobile-side-btn{display:none;border-color:var(--acc2);color:var(--acc);margin-left:6px;}
+.mobile-sidebar-overlay{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  z-index:320;
+}
+.mobile-sidebar-head{display:none;padding:8px;border-bottom:1px solid var(--bd2);background:var(--bg2);}
+
+@media (max-width: 768px){
+  .mobile-side-btn{display:inline-flex;align-items:center;justify-content:center;}
+  .shell{position:relative;}
+  #mobile-sidebar{
+    display:flex!important;
+    position:fixed;
+    top:46px;
+    left:0;
+    bottom:0;
+    width:min(84vw,320px);
+    max-width:320px;
+    z-index:350;
+    transform:translateX(-102%);
+    transition:transform .22s ease;
+    box-shadow:0 10px 40px rgba(0,0,0,.45);
+  }
+  .mobile-sidebar-head{display:block;}
+  body.mobile-sidebar-open #mobile-sidebar{
+    transform:translateX(0);
+  }
+  body.mobile-sidebar-open #mobile-sidebar-overlay{
+    display:block;
+  }
+}
+
+@media (max-width: 560px){
+  #mobile-sidebar{
+    top:88px;
+    width:88vw;
+  }
+}
+
+
+.col-new-badge{
+  display:none;
+  margin-left:6px;
+  font-size:10px;
+  color:var(--acc);
+  font-family:'Share Tech Mono',monospace;
+  border:1px solid var(--acc2);
+  padding:1px 5px;
+  background:var(--acc3);
+}
+.sync-dot{
+  width:6px;height:6px;border-radius:50%;background:var(--acc);display:inline-block;opacity:.8;
+}
+
+
+/* Source badge */
+.csrc{display:inline-flex;align-items:center;gap:6px;color:#ffffff !important;font-weight:700;letter-spacing:.04em;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:2px 8px;}
+
+.csrc::before{
+  content:'';
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#ffffff;
+  opacity:.9;
+  flex-shrink:0;
+}
+
+
+/* tiny visual cue for feed-backed sources */
+.src-nm:has(+ .src-st), .src-item .src-nm{max-width:100%;}
+
+
+/* Light theme readability fixes */
+body.light .csrc,
+body.theme-light .csrc{
+  color:#000000 !important;
+  border-color:rgba(0,0,0,.2);
+  background:rgba(0,0,0,.06);
+}
+
+body.light .cdesc,
+body.theme-light .cdesc{
+  color:#000000 !important;
+}
+
+
+/* Source family badge colors */
+.csrc.reuters, .csrc.ap, .csrc.afp, .csrc.ansa, .csrc.bbc, .csrc.ft, .csrc.wsj, .csrc.bloomberg, .csrc.guardian{
+  background:rgba(59,130,246,.16);
+  border-color:rgba(59,130,246,.38);
+}
+.csrc.xinhua, .csrc.people, .csrc.pla, .csrc.beijing, .csrc.qstheory, .csrc.pekingnology, .csrc.wenweipo, .csrc.mingpao, .csrc.singtao, .csrc.zaobao, .csrc.gmw, .csrc.cecn{
+  background:rgba(239,68,68,.14);
+  border-color:rgba(239,68,68,.34);
+}
+.csrc.cna, .csrc.straits, .csrc.rappler, .csrc.jakarta, .csrc.bangkokpost, .csrc.bernama, .csrc.vietnamnews, .csrc.tempo, .csrc.kompas, .csrc.khmertimes{
+  background:rgba(16,185,129,.16);
+  border-color:rgba(16,185,129,.34);
+}
+.csrc.intelligence, .csrc.gpf, .csrc.csis, .csrc.rand, .csrc.merics, .csrc.iiss, .csrc.chatham, .csrc.ecfr{
+  background:rgba(168,85,247,.16);
+  border-color:rgba(168,85,247,.34);
+}
+
+/* Dark mode: publication times lighter */
+html[data-theme=dark] .ctime,
+[data-theme=dark] .ctime{
+  color:#d1d5db !important;
+}
+
+/* Light mode keep source and summaries dark */
+html[data-theme=light] .csrc,
+[data-theme=light] .csrc{
+  color:#000 !important;
+  background:rgba(0,0,0,.06);
+  border-color:rgba(0,0,0,.2);
+}
+html[data-theme=light] .cdesc,
+[data-theme=light] .cdesc,
+html[data-theme=light] .ctime,
+[data-theme=light] .ctime{
+  color:#000 !important;
+}
+
+
+/* Optional relay-backed source hint */
+.rsshub-note{
+  font-size:10px;
+  color:var(--mu);
+  margin-top:6px;
+  line-height:1.4;
+  font-family:'Share Tech Mono',monospace;
+}
+
+
+/* Rounded header buttons like source badges */
+.hbtn, .page-tab, .tvsel, .tvbtn, .filter-btn {
+  border-radius:999px !important;
+}
+
+
+/* Top bar refinements */
+header{
+  padding:0 10px;
+  gap:8px;
+}
+.hbtn, .page-tab, .tvsel, .tvbtn, .filter-btn{
+  border-radius:999px !important;
+}
+.hbtn{
+  padding:3px 10px;
+  transition:all .15s ease, box-shadow .15s ease, transform .08s ease;
+}
+.hbtn:hover{
+  box-shadow:0 0 0 1px rgba(34,211,94,.15), 0 0 10px rgba(34,211,94,.12);
+  transform:translateY(-1px);
+}
+.page-tab{
+  padding:4px 11px;
+  transition:all .15s ease, box-shadow .15s ease;
+}
+.page-tab:hover{
+  box-shadow:0 0 0 1px rgba(34,211,94,.12), 0 0 8px rgba(34,211,94,.10);
+}
+
+/* Hide/show left sidebar to widen columns */
+body.sidebar-collapsed .sidebar{
+  display:none !important;
+}
+body.sidebar-collapsed .main-area{
+  width:100%;
+  flex:1 1 auto;
+}
+body.sidebar-collapsed .cols-wrap{
+  width:100%;
+}
+body.sidebar-collapsed #sidebar-toggle-btn{
+  border-color:var(--acc2);
+  color:var(--acc);
+  background:var(--acc3);
+}
+
+
+/* Analisi panel readability */
+#analisi-chatgpt-panel textarea::placeholder{color:#cbd5e1;}
+#analisi-chatgpt-panel button:hover{box-shadow:0 0 0 1px rgba(255,255,255,.08),0 0 10px rgba(255,255,255,.08);}
+html[data-theme=dark] #analisi-chatgpt-panel,
+[data-theme=dark] #analisi-chatgpt-panel{
+  background:#111827 !important;
+  border-color:#4b5563 !important;
+}
+html[data-theme=dark] #analisi-chatgpt-panel textarea,
+[data-theme=dark] #analisi-chatgpt-panel textarea{
+  background:#0b1220 !important;
+  color:#f9fafb !important;
+  border-color:#6b7280 !important;
+}
+
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">SHERLOCK</div>
+  <div class="hsep"></div>
+  <div class="timer-wrap">
+    <div class="ring"><svg width="18" height="18" viewBox="0 0 18 18">
+      <circle class="bgc" cx="9" cy="9" r="7" stroke-dasharray="44"/>
+      <circle class="fgc" id="tarc" cx="9" cy="9" r="7" stroke-dasharray="44" stroke-dashoffset="0"/>
+    </svg></div>
+    <span id="tlbl">120s</span>
+    <button class="hbtn" id="rbtn" onclick="doRefresh()">&#8635;</button>
+  </div>
+  <div class="hsep"></div>
+  <div class="live-dot"></div><span class="live-lbl">LIVE</span>
+  <button class="hbtn mobile-side-btn" id="mobile-side-btn" onclick="toggleMobileSidebar()">☰ FILTRI</button>
+  <div class="page-tabs">
+    <button class="page-tab on" id="ptab-1" onclick="switchPage(1)">&#9776; NOTIZIE</button>
+    <button class="page-tab" id="ptab-2" onclick="switchPage(2)">&#127758; MAPPA</button>
+  </div>
+  <button class="hbtn mobile-menu-btn" id="mobile-menu-btn" onclick="toggleMobileMenu()">☰ MENU</button>
+  <div class="hright">
+    <span id="clock"></span>
+    <button class="hbtn" onclick="toggleTheme()">&#9681;</button>
+    <button class="hbtn" id="sidebar-toggle-btn" onclick="toggleSidebar()" title="Mostra/Nascondi filtri e fonti">☰ PANNELLO</button>
+    <button class="hbtn acc" onclick="openSrcModal()">&#8853; FONTE</button>
+    <button class="hbtn" onclick="openRestoreModal()">&#8617; Colonne</button>
+    <button class="hbtn" onclick="hardReset()" title="Reset completo localStorage" style="color:var(--re);border-color:var(--re)">&#9888; Reset</button>
+    <button class="hbtn acc" onclick="openBriefing()" title="Genera briefing">&#128196; BRIEFING</button>
+    <button class="hbtn" onclick="openAnalisi()" title="Analisi intelligence" style="border-color:#8b5cf6;color:#8b5cf6">&#129504; ANALISI</button>
+    <button class="hbtn" id="trbtn" onclick="translateAll()" data-alltr="0" title="Traduci articoli cinesi con Google Translate" style="border-color:#4ade80;color:#4ade80">&#127758; TRADUCI</button>
+    <button class="hbtn" id="tvbtn" onclick="tvToggle()" style="border-color:var(--re);color:var(--re)">&#9654; LIVE</button>
+  </div>
+</header>
+
+<div class="modal-bg" id="src-modal" style="display:none" onclick="if(event.target===this)closeSrcModal()">
+  <div class="modal">
+    <div class="modal-h"><div class="modal-t">&#8853; Aggiungi fonte RSS</div>
+      <button style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:18px" onclick="closeSrcModal()">&#x2715;</button></div>
+    <div style="font-size:9px;color:var(--mu);letter-spacing:.14em;margin-bottom:5px;font-family:'Share Tech Mono',monospace">// PRESET RAPIDI</div>
+    <div class="pgrid" id="pgrid"></div>
+    <div class="rsshub-note">Fonti RSSHub/relay disponibili nei preset cinesi: attivale se vuoi più copertura in lingua cinese.</div>
+    <hr style="border:none;border-top:1px solid var(--bd);margin:8px 0">
+    <div class="mf"><label>Nome fonte</label><input class="mi" id="mn" placeholder="es. Jane's Intelligence"></div>
+    <div class="mf"><label>URL Feed RSS</label><input class="mi" id="murl" placeholder="https://..."></div>
+    <div class="mf"><label>Categoria</label>
+      <select class="mi" id="mcat">
+        <option value="media">Media internazionale</option><option value="italia">Media italiano</option>
+        <option value="think">Think tank</option><option value="ist">Istituzioni</option>
+        <option value="cyber">Cyber / OSINT</option><option value="finance">Finanza</option>
+        <option value="regional">Regionale</option><option value="agenzie">Agenzia</option>
+        <option value="osint">OSINT</option>
+      </select></div>
+    <div class="mrow">
+      <button class="hbtn" onclick="closeSrcModal()">Annulla</button>
+      <button class="hbtn acc" onclick="addSrc()">&#8853; Aggiungi</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="restore-modal" style="display:none" onclick="if(event.target===this)closeRestoreModal()">
+  <div class="modal" style="max-width:320px">
+    <div class="modal-h"><div class="modal-t">&#8617; Ripristina colonne</div>
+      <button style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:18px" onclick="closeRestoreModal()">&#x2715;</button></div>
+    <div style="font-size:11px;color:var(--mu);margin-bottom:8px">Riattiva colonne chiuse:</div>
+    <div class="restore-grid" id="restore-grid"></div>
+  </div>
+</div>
+
+
+<!-- BRIEFING MODAL -->
+<div class="briefing-bg" id="briefing-bg" style="display:none" onclick="if(event.target===this)closeBriefing()">
+  <div class="briefing-modal">
+    <div class="briefing-topbar">
+      <span class="briefing-topbar-title">&#128196; DAILY BRIEFING</span>
+      <button class="hbtn" onclick="exportBriefingText()">&#128203; Copia</button>
+      <button class="hbtn" onclick="window.print()">&#128424; Stampa</button>
+      <button class="hbtn" onclick="closeBriefing()" style="color:var(--re)">&#x2715;</button>
+    </div>
+    <div class="briefing-body" id="briefing-body"></div>
+  </div>
+</div>
+
+<div class="p2-map-tip" id="p2-map-tip"></div>
+<div class="shell" style="flex-direction:column;">
+  <!-- PAGINA 1: colonne -->
+  <div class="page on" id="page-1" style="flex:1;min-height:0;">
+  <div class="mobile-sidebar-overlay" id="mobile-sidebar-overlay" onclick="closeMobileSidebar()"></div>
+  <aside class="sidebar" id="mobile-sidebar">
+    <div class="mobile-sidebar-head"><button class="hbtn" id="mobile-sidebar-close" onclick="closeMobileSidebar()">✕ Chiudi</button></div>
+    <div class="tabs">
+      <button class="tab on" id="tab-f" onclick="showTab('f')">FILTRI</button>
+      <button class="tab" id="tab-s" onclick="showTab('s')">FONTI</button>
+    </div>
+    <div class="pane" id="pane-f">
+      <div class="slbl">// COLONNE ATTIVE</div>
+      <div id="col-list"></div>
+    </div>
+    <div class="pane hidden" id="pane-s">
+      <div class="src-hd">
+        <span>Attive: <span id="actcount" style="color:var(--acc)">0</span></span>
+        <button class="hbtn acc" style="font-size:10px;padding:2px 6px" onclick="openSrcModal()">&#8853;</button>
+      </div>
+      <div class="qadd">
+        <div class="slbl" style="padding:0;border:none;margin-bottom:4px">// RAPIDO</div>
+        <input class="qi" id="qi-nm" placeholder="Nome">
+        <input class="qi" id="qi-url" placeholder="URL RSS">
+        <div class="qrow">
+          <select class="qsel" id="qi-cat">
+            <option value="media">Media</option><option value="italia">Italia</option>
+            <option value="agenzie">Agenzia</option><option value="think">Think tank</option>
+            <option value="ist">Ist.</option><option value="cyber">Cyber</option>
+            <option value="finance">Finance</option><option value="regional">Reg.</option>
+            <option value="osint">OSINT</option>
+          </select>
+          <button class="qadd-btn" onclick="addInline()">&#8853;</button>
+        </div>
+      </div>
+      <div id="srclist"></div>
+    </div>
+  </aside>
+  <div class="main-area">
+    <div class="cols-wrap" id="cols-wrap">
+      <button class="add-col-btn" id="add-col-btn" onclick="openRestoreModal()" title="Ripristina">+</button>
+    </div>
+  </div>
+  </div><!-- /page-1 -->
+
+  <!-- PAGINA 2: mappa + alert -->
+  <div class="page" id="page-2" style="flex:1;min-height:0;">
+    <div class="p2-wrap">
+      <div class="p2-map">
+        <div class="p2-map-hd">
+          <span>&#127758; MAPPA INTELLIGENCE</span>
+          <div class="p2-legend">
+            <span><i style="background:#ef4444"></i> Critico</span>
+            <span><i style="background:#f59e0b"></i> Alto</span>
+            <span><i style="background:#3b82f6"></i> Medio</span>
+            <span><i style="background:#22d35e"></i> Basso</span>
+          </div>
+          <div class="p2-stats" id="p2-stats"></div>
+        </div>
+        <div class="p2-map-toolbar" id="p2-toolbar">
+          <div class="p2-region-btns">
+            <button class="p2-rbtn active" onclick="p2SetView('global')">&#127758; Global</button>
+            <button class="p2-rbtn p2-zoom-btn" onclick="p2ZoomStep(1.5)" title="Zoom in">&#43;</button>
+            <button class="p2-rbtn p2-zoom-btn" onclick="p2ZoomStep(0.67)" title="Zoom out">&#8722;</button>
+          </div>
+          <div class="p2-layer-btns">
+            <button class="p2-lbtn on" id="lbtn-pins" onclick="p2ToggleLayer('pins',this)">&#9679; Notizie</button>
+            <button class="p2-lbtn on" id="lbtn-hs" onclick="p2ToggleLayer('hs',this)">&#9671; Hotspot</button>
+            <button class="p2-lbtn on" id="lbtn-cables" onclick="p2ToggleLayer('cables',this)">&#8767; Cavi</button>
+            <button class="p2-lbtn on" id="lbtn-conflict" onclick="p2ToggleLayer('conflict',this)">&#9888; Conflitti</button>
+            <button class="p2-lbtn" id="lbtn-pipes" onclick="p2ToggleLayer('pipes',this)">&#9728; Pipeline</button>
+            <button class="p2-lbtn on" id="lbtn-heatmap" onclick="p2ToggleLayer('heatmap',this)">&#127777; Heatmap</button>
+          </div>
+          <div class="p2-timeline-bar" id="p2-timeline-bar">
+            <span class="p2-tl-label" id="p2-tl-from">72h</span>
+            <input type="range" id="p2-timeline" min="1" max="72" value="72" step="1"
+              style="flex:1;accent-color:var(--acc);"
+              oninput="p2TimelineChange(this.value)">
+            <span class="p2-tl-label">ora</span>
+            <span class="p2-tl-label" id="p2-tl-count" style="color:var(--acc);min-width:60px;text-align:right;"></span>
+          </div>
+        </div>
+        <div id="p2-map-wrap" style="position:relative;"></div>
+      </div>
+      <div class="p2-alerts">
+        <div class="p2-alerts-hd">
+          <span>&#9888; ALERT</span>
+          <span id="alert-count" style="color:var(--mu);margin-left:4px">0</span>
+        </div>
+        <div class="p2-alerts-feed" id="p2-alerts-feed"></div>
+      </div>
+    </div>
+  </div><!-- /page-2 -->
+</div>
+
+<div id="tv-panel" class="tv-off">
+  <div class="tvhd" id="tvhd">
+    <div class="tvdot"></div>
+    <span class="tvlbl" id="tvlbl">AL JAZEERA EN — LIVE</span>
+    <select class="tvsel" id="tvsel" onchange="tvChange()">
+      <option value="0">Al Jazeera EN</option><option value="1">Al Jazeera AR</option>
+      <option value="2">France 24 EN</option><option value="3">DW News</option>
+      <option value="4">Euronews EN</option><option value="5">TRT World</option>
+      <option value="6">Sky News</option><option value="7">NHK World</option>
+      <option value="8">RT English</option><option value="9">i24 News</option>
+      <option value="10">Bloomberg</option><option value="11">CNN</option>
+    </select>
+    <button class="tvbtn2" id="tv-mute-btn" onclick="tvUnmute()">SUONO</button>
+    <button class="tvbtn2" onclick="tvOpenYT()">YT &#x2197;</button>
+    <button class="tvbtn2" onclick="tvClose()" style="color:var(--re)">&#x2715;</button>
+  </div>
+  <div id="tv-yt-wrap">
+    <video webkit-playsinline autoplay controls id="tv-hls-video" playsinline muted style="width:100%;height:100%;"></video>
+    <div id="tv-msg" class="tv-msg"><span>Stream non disponibile</span><a href="#" target="_blank">Apri &#x2197;</a></div>
+  </div>
+</div>
+
+<script>
+
+var DEFAULTS=[
+  {id:'gpf',name:'Geopolitical Futures (feed)',url:'https://geopoliticalfutures.com/feed',cat:'osint',on:true},
+
+  {id:'intelligence_online',name:'Intelligence Online',url:'https://news.google.com/rss/search?q=site:intelligenceonline.com&hl=en&gl=US&ceid=US:en',cat:'osint',on:true},
+
+  {id:'straitstimes',name:'The Straits Times (RSS)',url:'https://www.straitstimes.com/news/asia/rss.xml',cat:'sudest_asia',on:true},
+  {id:'cna_sg',name:'Channel NewsAsia (RSS)',url:'https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml&category=6511',cat:'sudest_asia',on:true},
+  {id:'bangkokpost',name:'Bangkok Post',url:'https://news.google.com/rss/search?q=site:bangkokpost.com&hl=en&gl=TH&ceid=TH:en',cat:'sudest_asia',on:true},
+  {id:'nation_th',name:'The Nation Thailand',url:'https://news.google.com/rss/search?q=site:nationthailand.com&hl=en&gl=TH&ceid=TH:en',cat:'sudest_asia',on:true},
+  {id:'vietnamnews',name:'Viet Nam News',url:'https://news.google.com/rss/search?q=site:vietnamnews.vn&hl=en&gl=VN&ceid=VN:en',cat:'sudest_asia',on:true},
+  {id:'tuoitre',name:'Tuoi Tre News',url:'https://news.google.com/rss/search?q=site:tuoitrenews.vn&hl=en&gl=VN&ceid=VN:en',cat:'sudest_asia',on:true},
+  {id:'jakartapost',name:'The Jakarta Post',url:'https://news.google.com/rss/search?q=site:thejakartapost.com&hl=en&gl=ID&ceid=ID:en',cat:'sudest_asia',on:true},
+  {id:'kompas',name:'Kompas',url:'https://news.google.com/rss/search?q=site:kompas.com&hl=id&gl=ID&ceid=ID:id',cat:'sudest_asia',on:true},
+  {id:'tempo',name:'Tempo',url:'https://news.google.com/rss/search?q=site:tempo.co+OR+site:en.tempo.co&hl=en&gl=ID&ceid=ID:en',cat:'sudest_asia',on:true},
+  {id:'rappler',name:'Rappler',url:'https://news.google.com/rss/search?q=site:rappler.com&hl=en&gl=PH&ceid=PH:en',cat:'sudest_asia',on:true},
+  {id:'inquirer',name:'Philippine Daily Inquirer',url:'https://news.google.com/rss/search?q=site:inquirer.net&hl=en&gl=PH&ceid=PH:en',cat:'sudest_asia',on:true},
+  {id:'starmalaysia',name:'The Star Malaysia',url:'https://news.google.com/rss/search?q=site:thestar.com.my&hl=en&gl=MY&ceid=MY:en',cat:'sudest_asia',on:true},
+  {id:'bernama',name:'BernAMA',url:'https://news.google.com/rss/search?q=site:bernama.com&hl=en&gl=MY&ceid=MY:en',cat:'sudest_asia',on:true},
+  {id:'khmertimes',name:'Khmer Times',url:'https://news.google.com/rss/search?q=site:khmertimeskh.com&hl=en&gl=KH&ceid=KH:en',cat:'sudest_asia',on:true},
+  {id:'myanmarnow',name:'Myanmar Now',url:'https://news.google.com/rss/search?q=site:myanmar-now.org&hl=en&gl=MM&ceid=MM:en',cat:'sudest_asia',on:true},
+
+  {id:'wenweipo',name:'Wen Wei Po',url:'https://news.google.com/rss/search?q=site:wenweipo.com&hl=zh-CN&gl=HK&ceid=HK:zh-Hans',cat:'cina',on:true},
+  {id:'mingpao',name:'Ming Pao Daily',url:'https://news.google.com/rss/search?q=site:mingpao.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',cat:'cina',on:true},
+  {id:'singtao',name:'Sing Tao Daily',url:'https://news.google.com/rss/search?q=site:stheadline.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',cat:'cina',on:true},
+  {id:'applehk',name:'Apple Daily HK',url:'https://news.google.com/rss/search?q=%22Apple+Daily%22+Hong+Kong&hl=en&gl=HK&ceid=HK:en',cat:'cina',on:true},
+  {id:'zaobao',name:'United Morning Post (Zaobao)',url:'https://news.google.com/rss/search?q=site:zaobao.com.sg&hl=zh-CN&gl=SG&ceid=SG:zh-Hans',cat:'cina',on:true},
+  {id:'cna_tw',name:'Central News Agency',url:'https://news.google.com/rss/search?q=site:cna.com.tw&hl=zh-TW&gl=TW&ceid=TW:zh-Hant',cat:'cina',on:true},
+  {id:'pla_daily',name:'PLA Daily',url:'https://news.google.com/rss/search?q=site:81.cn+解放军报&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
+  {id:'pla_eastern',name:'Eastern Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+东部战区&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
+  {id:'pla_southern',name:'Southern Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+南部战区&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
+  {id:'pla_western',name:'Western Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+西部战区&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
+  {id:'pla_northern',name:'Northern Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+北部战区&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
+  {id:'pla_central',name:'Central Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+中部战区&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
+  {id:'qstheory',name:'Seeking Truth',url:'https://news.google.com/rss/search?q=site:qstheory.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
+  {id:'beijingdaily',name:'Beijing Daily',url:'https://news.google.com/rss/search?q=site:bjd.com.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
+  {id:'ce_cn',name:'China Economic Net',url:'https://news.google.com/rss/search?q=site:ce.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
+  {id:'gmw',name:'Guangming Daily',url:'https://news.google.com/rss/search?q=site:gmw.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
+  {id:'pekingnology',name:'Pekingnology (feed)',url:'https://www.pekingnology.com/feed',cat:'cina',on:true},
+
+  {id:'reuters',   name:'Reuters',            cat:'agenzie', url:'https://news.google.com/rss/search?q=reuters+world+news&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'ap',        name:'AP',                 cat:'agenzie', url:'https://news.google.com/rss/search?q=associated+press+world&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'afp',       name:'AFP',                cat:'agenzie', url:'https://news.google.com/rss/search?q=agence+france+presse+AFP&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'ansa',      name:'ANSA Mondo',         cat:'agenzie', url:'https://news.google.com/rss/search?q=site:ansa.it+mondo&hl=it&gl=IT&ceid=IT:it',on:true},
+  {id:'ansait',    name:'ANSA Italia',        cat:'agenzie', url:'https://news.google.com/rss/search?q=site:ansa.it+politica&hl=it&gl=IT&ceid=IT:it',on:true},
+  {id:'tass',      name:'TASS',               cat:'agenzie', url:'https://news.google.com/rss/search?q=site:tass.com&hl=en',on:true},
+  {id:'xinhua',    name:'Xinhua',             cat:'agenzie', url:'https://news.google.com/rss/search?q=site:xinhuanet.com&hl=en',on:true},
+  {id:'kyodo',     name:'Kyodo News',         cat:'agenzie', url:'https://news.google.com/rss/search?q=kyodo+news&hl=en',on:true},
+  {id:'yonhap',    name:'Yonhap (KR)',        cat:'agenzie', url:'https://news.google.com/rss/search?q=site:yna.co.kr&hl=en',on:true},
+  {id:'dpa',       name:'DPA (DE)',           cat:'agenzie', url:'https://news.google.com/rss/search?q=dpa+news+agency&hl=en',on:true},
+  {id:'efe',       name:'EFE (ES)',           cat:'agenzie', url:'https://news.google.com/rss/search?q=site:efe.com&hl=en',on:true},
+  {id:'anadolu',   name:'Anadolu Agency',     cat:'agenzie', url:'https://news.google.com/rss/search?q=site:aa.com.tr&hl=en',on:true},
+  {id:'wam',       name:'WAM (UAE)',           cat:'agenzie', url:'https://news.google.com/rss/search?q=site:wam.ae&hl=en',on:true},
+  {id:'pti',       name:'PTI (India)',        cat:'agenzie', url:'https://news.google.com/rss/search?q=press+trust+india&hl=en',on:true},
+  {id:'prensa',    name:'Prensa Latina',      cat:'agenzie', url:'https://news.google.com/rss/search?q=site:plenglish.com&hl=en',on:true},
+  {id:'bbc',       name:'BBC World',          cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+world+news&hl=en&gl=GB&ceid=GB:en',on:true},
+  {id:'bbcme',     name:'BBC Middle East',    cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+middle+east&hl=en&gl=GB&ceid=GB:en',on:true},
+  {id:'bbcasia',   name:'BBC Asia',           cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+asia&hl=en&gl=GB&ceid=GB:en',on:true},
+  {id:'bbcafrica', name:'BBC Africa',         cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+africa&hl=en&gl=GB&ceid=GB:en',on:true},
+  {id:'aljazeera', name:'Al Jazeera',         cat:'media',   url:'https://news.google.com/rss/search?q=site:aljazeera.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'france24',  name:'France 24',          cat:'media',   url:'https://news.google.com/rss/search?q=site:france24.com&hl=en&gl=FR&ceid=FR:en',on:true},
+  {id:'dwnews',    name:'DW News',            cat:'media',   url:'https://news.google.com/rss/search?q=site:dw.com&hl=en&gl=DE&ceid=DE:en',on:true},
+  {id:'euronews',  name:'Euronews',           cat:'media',   url:'https://news.google.com/rss/search?q=euronews+world&hl=en',on:true},
+  {id:'guardian',  name:'The Guardian',       cat:'media',   url:'https://news.google.com/rss/search?q=site:theguardian.com+world&hl=en&gl=GB&ceid=GB:en',on:true},
+  {id:'spiegel',   name:'Der Spiegel EN',     cat:'media',   url:'https://news.google.com/rss/search?q=site:spiegel.de+international&hl=en&gl=DE&ceid=DE:en',on:true},
+  {id:'lemonde',   name:'Le Monde EN',        cat:'media',   url:'https://news.google.com/rss/search?q=site:lemonde.fr&hl=en',on:true},
+  {id:'elpais',    name:'El Pais EN',         cat:'media',   url:'https://news.google.com/rss/search?q=site:elpais.com&hl=en&gl=ES&ceid=ES:en',on:true},
+  {id:'rfi',       name:'RFI English',        cat:'media',   url:'https://news.google.com/rss/search?q=site:rfi.fr&hl=en&gl=FR&ceid=FR:en',on:true},
+  {id:'voa',       name:'VOA News',           cat:'media',   url:'https://news.google.com/rss/search?q=site:voanews.com&hl=en',on:true},
+  {id:'nhk',       name:'NHK World',          cat:'media',   url:'https://news.google.com/rss/search?q=site:nhk.or.jp&hl=en&gl=JP&ceid=JP:en',on:true},
+  {id:'thehill',   name:'The Hill',           cat:'media',   url:'https://news.google.com/rss/search?q=site:thehill.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'axios',     name:'Axios World',        cat:'media',   url:'https://news.google.com/rss/search?q=site:axios.com+world&hl=en',on:true},
+  {id:'nikkei',    name:'Nikkei Asia',        cat:'regional',url:'https://news.google.com/rss/search?q=site:asia.nikkei.com&hl=en',on:true},
+  {id:'scmp',      name:'S.China Morning',    cat:'regional',url:'https://news.google.com/rss/search?q=site:scmp.com&hl=en',on:true},
+  {id:'haaretz',   name:'Haaretz',            cat:'regional',url:'https://news.google.com/rss/search?q=site:haaretz.com&hl=en',on:true},
+  {id:'meye',      name:'Middle East Eye',    cat:'regional',url:'https://news.google.com/rss/search?q=site:middleeasteye.net&hl=en',on:true},
+  {id:'kyivindep', name:'Kyiv Independent',   cat:'regional',url:'https://news.google.com/rss/search?q=site:kyivindependent.com&hl=en',on:true},
+  {id:'news24',    name:'News24 Africa',      cat:'regional',url:'https://news.google.com/rss/search?q=site:news24.com&hl=en&gl=ZA&ceid=ZA:en',on:true},
+  {id:'dawn',      name:'Dawn Pakistan',      cat:'regional',url:'https://news.google.com/rss/search?q=site:dawn.com&hl=en&gl=PK&ceid=PK:en',on:true},
+  {id:'caixin',    name:'Caixin Global',      cat:'regional',url:'https://news.google.com/rss/search?q=site:caixinglobal.com&hl=en',on:true},
+  {id:'repubblica',name:'La Repubblica',      cat:'italia',  url:'https://news.google.com/rss/search?q=site:repubblica.it+esteri&hl=it&gl=IT&ceid=IT:it',on:true},
+  {id:'corriere',  name:'Corriere della S.',  cat:'italia',  url:'https://news.google.com/rss/search?q=site:corriere.it+esteri&hl=it',on:true},
+  {id:'rainews',   name:'Rainews 24',         cat:'italia',  url:'https://news.google.com/rss/search?q=site:rainews.it&hl=it',on:true},
+  {id:'sole24',    name:'Sole 24 Ore',        cat:'italia',  url:'https://news.google.com/rss/search?q=site:ilsole24ore.com+mondo&hl=it',on:true},
+  {id:'stampa',    name:'La Stampa',          cat:'italia',  url:'https://news.google.com/rss/search?q=site:lastampa.it+esteri&hl=it',on:true},
+  {id:'messaggero',name:'Il Messaggero',      cat:'italia',  url:'https://news.google.com/rss/search?q=site:ilmessaggero.it+mondo&hl=it',on:true},
+  {id:'fp',        name:'Foreign Policy',     cat:'think',   url:'https://news.google.com/rss/search?q=site:foreignpolicy.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'foreignaff',name:'Foreign Affairs',    cat:'think',   url:'https://news.google.com/rss/search?q=site:foreignaffairs.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'crisisgrp', name:'Crisis Group',       cat:'think',   url:'https://news.google.com/rss/search?q=site:crisisgroup.org&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'chatham',   name:'Chatham House',      cat:'think',   url:'https://news.google.com/rss/search?q=site:chathamhouse.org&hl=en',on:true},
+  {id:'ecfr',      name:'ECFR',               cat:'think',   url:'https://news.google.com/rss/search?q=site:ecfr.eu&hl=en',on:true},
+  {id:'atlanticco',name:'Atlantic Council',   cat:'think',   url:'https://news.google.com/rss/search?q=site:atlanticcouncil.org&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'warzone',   name:'The War Zone',       cat:'think',   url:'https://news.google.com/rss/search?q=site:twz.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'defone',    name:'Defense One',        cat:'think',   url:'https://news.google.com/rss/search?q=site:defenseone.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'diplomat',  name:'The Diplomat',       cat:'think',   url:'https://news.google.com/rss/search?q=site:thediplomat.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'politico',  name:'Politico EU',        cat:'think',   url:'https://news.google.com/rss/search?q=site:politico.eu&hl=en&gl=BE&ceid=BE:en',on:true},
+  {id:'economist', name:'The Economist',      cat:'think',   url:'https://news.google.com/rss/search?q=site:economist.com&hl=en',on:true},
+  {id:'sipri',     name:'SIPRI',              cat:'think',   url:'https://news.google.com/rss/search?q=site:sipri.org&hl=en',on:true},
+  {id:'intelonline',name:'Intelligence Online',cat:'think',  url:'https://news.google.com/rss/search?q=site:intelligenceonline.com&hl=en',on:true},
+  {id:'un',        name:'ONU',                cat:'ist',     url:'https://news.google.com/rss/search?q=site:news.un.org&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'iaea',      name:'IAEA',               cat:'ist',     url:'https://news.google.com/rss/search?q=site:iaea.org&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'nato',      name:'NATO',               cat:'ist',     url:'https://news.google.com/rss/search?q=NATO+statement&hl=en',on:true},
+  {id:'ft',        name:'Financial Times',    cat:'finance', url:'https://news.google.com/rss/search?q=site:ft.com+world&hl=en',on:true},
+  {id:'bloomberg', name:'Bloomberg',          cat:'finance', url:'https://news.google.com/rss/search?q=site:bloomberg.com+geopolitics&hl=en',on:true},
+  {id:'wsj',       name:'WSJ World',          cat:'finance', url:'https://news.google.com/rss/search?q=site:wsj.com+world&hl=en',on:true},
+  {id:'therecord', name:'The Record',         cat:'cyber',   url:'https://news.google.com/rss/search?q=site:therecord.media&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'bellingcat',name:'Bellingcat',         cat:'cyber',   url:'https://news.google.com/rss/search?q=site:bellingcat.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'osint_rferl',  name:'RFE/RL',          cat:'osint',   url:'https://news.google.com/rss/search?q=site:rferl.org&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'osint_twz',    name:'The War Zone',    cat:'osint',   url:'https://news.google.com/rss/search?q=site:twz.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'osint_defone', name:'Defense One',     cat:'osint',   url:'https://news.google.com/rss/search?q=site:defenseone.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'osint_janes',  name:'Janes',           cat:'osint',   url:'https://news.google.com/rss/search?q=site:janes.com&hl=en',on:true},
+  {id:'osint_oryx',   name:'Oryx',            cat:'osint',   url:'https://news.google.com/rss/search?q=site:oryxspioenkop.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'osint_geopol', name:'Geopolitical Monitor',cat:'osint',url:'https://news.google.com/rss/search?q=site:geopoliticalmonitor.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'osint_acled',  name:'ACLED',           cat:'osint',   url:'https://news.google.com/rss/search?q=site:acleddata.com&hl=en',on:true},
+  {id:'cia',     name:'CIA Newsroom',  cat:'ist', url:'https://news.google.com/rss/search?q=site:cia.gov&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'cia_x',   name:'CIA / X',        cat:'ist', url:'https://rsshub.app/twitter/user/CIA',on:true},
+  {id:'dis',     name:'Sic.Naz. IT',   cat:'ist', url:'https://news.google.com/rss/search?q=sicurezzanazionale+DIS+AISE+AISI&hl=it&gl=IT&ceid=IT:it',on:true},
+  {id:'dis_x',   name:'SicNazionale / X', cat:'ist', url:'https://rsshub.app/twitter/user/SicNazionale',on:true},
+  {id:'dgse',    name:'DGSE France',   cat:'ist', url:'https://news.google.com/rss/search?q=DGSE+renseignement+france&hl=fr&gl=FR&ceid=FR:fr',on:true},
+  {id:'dgse_x',  name:'DGSE / X',       cat:'ist', url:'https://rsshub.app/twitter/user/dgsefr',on:true},
+];
+
+var PRESETS=[
+  {id:'rsshub_wechat_rmrb',name:'RSSHub 人民日报公众号',cat:'cina',url:'https://rsshub.app/wechat/mp/人民日报',on:true},
+  {id:'rsshub_wechat_xinhua',name:'RSSHub 新华社公众号',cat:'cina',url:'https://rsshub.app/wechat/mp/新华社',on:true},
+  {id:'rsshub_wechat_guancha',name:'RSSHub 观察者网公众号',cat:'cina',url:'https://rsshub.app/wechat/mp/观察者网',on:true},
+  {id:'rsshub_wechat_huanqiu',name:'RSSHub 环球时报公众号',cat:'cina',url:'https://rsshub.app/wechat/mp/环球时报',on:true},
+  {id:'rsshub_wechat_yuyuan',name:'RSSHub 玉渊谭天',cat:'cina',url:'https://rsshub.app/wechat/mp/玉渊谭天',on:true},
+  {id:'rsshub_wechat_niudanqin',name:'RSSHub 牛弹琴',cat:'cina',url:'https://rsshub.app/wechat/mp/牛弹琴',on:true},
+  {id:'rsshub_weibo_xinhua',name:'RSSHub 微博 新华社',cat:'cina',url:'https://rsshub.app/weibo/user/1699432410',on:true},
+  {id:'rsshub_weibo_rmrb',name:'RSSHub 微博 人民日报',cat:'cina',url:'https://rsshub.app/weibo/user/2803301701',on:true},
+  {id:'rsshub_weibo_huanqiu',name:'RSSHub 微博 环球时报',cat:'cina',url:'https://rsshub.app/weibo/user/1974576991',on:true},
+  {id:'rsshub_zhihu_china',name:'RSSHub 知乎 中国话题',cat:'cina',url:'https://rsshub.app/zhihu/topic/19550517',on:true},
+  {id:'rsshub_zhihu_tw',name:'RSSHub 知乎 台湾话题',cat:'cina',url:'https://rsshub.app/zhihu/topic/19553789',on:true},
+  {id:'rsshub_bilibili_guancha',name:'RSSHub B站 观察者网',cat:'cina',url:'https://rsshub.app/bilibili/user/video/10330740',on:true},
+  {id:'baidu_huanqiu',name:'Baidu 环球时报/环球网',cat:'cina',url:'https://news.baidu.com/n?cmd=4&class=chnnews&tn=rss&word=%E7%8E%AF%E7%90%83%E6%97%B6%E6%8A%A5+OR+%E7%8E%AF%E7%90%83%E7%BD%91',on:true},
+  {id:'baidu_wenweipo',name:'Baidu 文汇报',cat:'cina',url:'https://news.baidu.com/n?cmd=4&class=chnnews&tn=rss&word=%E6%96%87%E6%B1%87%E6%8A%A5',on:true},
+  {id:'baidu_gmw',name:'Baidu 光明网',cat:'cina',url:'https://news.baidu.com/n?cmd=4&class=chnnews&tn=rss&word=%E5%85%89%E6%98%8E%E7%BD%91',on:true},
+  {id:'baidu_bjd',name:'Baidu 北京日报',cat:'cina',url:'https://news.baidu.com/n?cmd=4&class=chnnews&tn=rss&word=%E5%8C%97%E4%BA%AC%E6%97%A5%E6%8A%A5',on:true},
+  {id:'baidu_qst',name:'Baidu 求是',cat:'cina',url:'https://news.baidu.com/n?cmd=4&class=chnnews&tn=rss&word=%E6%B1%82%E6%98%AF',on:true},
+  {id:'baidu_81cn',name:'Baidu 81.cn / 解放军',cat:'cina',url:'https://news.baidu.com/n?cmd=4&class=chnnews&tn=rss&word=81.cn+%E8%A7%A3%E6%94%BE%E5%86%9B+%E6%88%98%E5%8C%BA',on:true},
+  {id:'baidu_thepaper',name:'Baidu 澎湃新闻',cat:'cina',url:'https://news.baidu.com/n?cmd=4&class=chnnews&tn=rss&word=%E6%BE%8E%E6%B9%83%E6%96%B0%E9%97%BB',on:true},
+  {id:'baidu_guancha',name:'Baidu 观察者网',cat:'cina',url:'https://news.baidu.com/n?cmd=4&class=chnnews&tn=rss&word=%E8%A7%82%E5%AF%9F%E8%80%85%E7%BD%91',on:true},
+  {id:'people_world_zh',name:'人民网 国际 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:people.com.cn+国际&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
+  {id:'thepaper_zh',name:'澎湃新闻 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:thepaper.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
+  {id:'hk01_zh',name:'HK01 香港01 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:hk01.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',on:true},
+  {id:'lianhezaobao_zh',name:'联合早报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:zaobao.com.sg&hl=zh-CN&gl=SG&ceid=SG:zh-Hans',on:true},
+  {id:'wenweipo_zh',name:'文汇报 Wenweipo (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:wenweipo.com&hl=zh-CN&gl=HK&ceid=HK:zh-Hans',on:true},
+  {id:'mingpao_zh',name:'明报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:mingpao.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',on:true},
+  {id:'singtao_zh',name:'星岛日报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:stheadline.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',on:true},
+  {id:'gmw_zh',name:'光明网 Guangming (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:gmw.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
+  {id:'beijingdaily_zh',name:'北京日报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:bjd.com.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
+  {id:'qstheory_zh',name:'求是理论网 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:qstheory.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
+  {id:'huanqiu_zh',name:'环球网 / 环球时报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:huanqiu.com+OR+环球时报&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
+  {id:'rand',      name:'RAND Corp.',  cat:'think',   url:'https://news.google.com/rss/search?q=site:rand.org&hl=en'},
+  {id:'brookings', name:'Brookings',   cat:'think',   url:'https://news.google.com/rss/search?q=site:brookings.edu&hl=en'},
+  {id:'iiss',      name:'IISS',        cat:'think',   url:'https://news.google.com/rss/search?q=site:iiss.org&hl=en'},
+  {id:'cna',       name:'CNA',         cat:'regional',url:'https://news.google.com/rss/search?q=site:channelnewsasia.com&hl=en&gl=SG&ceid=SG:en'},
+  {id:'arabnews',  name:'Arab News',   cat:'regional',url:'https://news.google.com/rss/search?q=site:arabnews.com&hl=en'},
+  // ── FONTI CINESI (in lingua cinese e inglese) ──────────────────
+  // English-language Chinese state/official media
+  {id:'xinhua_en',   name:'Xinhua (EN)',        cat:'cina', url:'http://www.xinhuanet.com/english/rss/worldrss.xml', on:true},
+  {id:'cgtn_en',     name:'CGTN',               cat:'cina', url:'https://news.google.com/rss/search?q=site:cgtn.com&hl=en', on:true},
+  {id:'globaltimes', name:'Global Times (EN)',   cat:'cina', url:'https://www.globaltimes.cn/rss/outbrain.xml', on:true},
+  {id:'chinadaily',  name:'China Daily (EN)',    cat:'cina', url:'https://rss.chinadaily.com.cn/rss/cndy_topnews.xml', on:true},
+  {id:'people_en',   name:'Peoples Daily (EN)',cat:'cina', url:'https://news.google.com/rss/search?q=site:en.people.cn&hl=en', on:true},
+  // Chinese-language sources (RSS in 中文)
+  {id:'xinhua_zh',   name:'新华社 Xinhua (中)',  cat:'cina', url:'http://www.xinhuanet.com/politics/rss/index.xml', on:true},
+  {id:'people_zh',   name:'人民日报 (中)',        cat:'cina', url:'http://www.people.com.cn/rss/politics.xml', on:true},
+  {id:'globaltimes_zh',name:'环球时报 (中)',      cat:'cina', url:'https://news.google.com/rss/search?q=环球时报+军事&hl=zh-CN&gl=CN&ceid=CN:zh-Hans', on:true},
+  {id:'guancha',     name:'观察者网 (中)',        cat:'cina', url:'https://news.google.com/rss/search?q=观察者网&hl=zh-CN&gl=CN&ceid=CN:zh-Hans', on:true},
+  {id:'caixin',      name:'财新 Caixin (中)',     cat:'cina', url:'https://news.google.com/rss/search?q=site:caixin.com&hl=zh-CN', on:true},
+  // Taiwan / HK perspectives  
+  {id:'rti_tw',      name:'RTI Taiwan (中)',      cat:'cina', url:'https://news.google.com/rss/search?q=site:rti.org.tw&hl=zh-TW&gl=TW&ceid=TW:zh-Hant', on:true},
+  {id:'rfa_zh',      name:'自由亚洲 RFA (中)',    cat:'cina', url:'https://www.rfa.org/chinese/rss2.xml', on:true},
+  {id:'voachinese',  name:'美国之音 VOA (中)',    cat:'cina', url:'https://www.voachinese.com/api/z-pqypqivu-t', on:true},
+  {id:'scmp_cn',     name:'SCMP China',           cat:'cina', url:'https://news.google.com/rss/search?q=site:scmp.com+china&hl=en', on:true},
+  // Think tank / analysis on China
+  {id:'merics',      name:'MERICS (China)',       cat:'cina', url:'https://news.google.com/rss/search?q=MERICS+china&hl=en', on:true},
+  {id:'csis_china',  name:'CSIS China',           cat:'cina', url:'https://news.google.com/rss/search?q=site:csis.org+china&hl=en', on:true},
+
+];
+
+var ALL_COLS=[
+  {id:'global',      name:'Globale',      icon:'&#127758;', regions:['all']},
+  {id:'europa',      name:'Europa',       icon:'&#127466;&#127482;', regions:['europa']},
+  {id:'medioriente', name:'Medio Oriente',icon:'&#128332;', regions:['medioriente']},
+  {id:'italia',      name:'Italia',       icon:'&#127470;&#127481;', regions:['italia']},
+  {id:'cina',        name:'Cina',           icon:'&#127464;&#127475;', regions:['cina','indopacifico']},
+  {id:'indopacifico',name:'Indo-Pacifico',icon:'&#127759;', regions:['indopacifico']},
+  {id:'americas',    name:'Americhe',     icon:'&#127758;', regions:['americas']},
+  {id:'osint',       name:'OSINT',        icon:'&#128065;', regions:['osint']},
+];
+
+var sources=[],articles=[],colOrder=[],colClosed=[],timerSec=120,timerInt=null,sourceStatus={},pIdx=0;
+
+function persist(){try{localStorage.setItem('sh3_sources',JSON.stringify(sources));localStorage.setItem('sh3_colorder',JSON.stringify(colOrder));localStorage.setItem('sh3_colclosed',JSON.stringify(colClosed));}catch(e){}}
+function loadPersist(){
+  try{
+    // Se colOrder salvato è vuoto o invalido, cancella tutto
+    var _co=localStorage.getItem('sh3_colorder');
+    if(_co){try{var _p=JSON.parse(_co);if(!Array.isArray(_p)||_p.length===0){localStorage.removeItem('sh3_colorder');localStorage.removeItem('sh3_colclosed');}}catch(e){localStorage.removeItem('sh3_colorder');}}
+    var s=localStorage.getItem('sh3_sources');
+    if(s){
+      try{
+        var saved=JSON.parse(s);
+        // Merge: keep saved prefs (on/off) but add any new DEFAULTS not yet saved
+        var savedIds={};saved.forEach(function(x){savedIds[x.id]=x;});
+        var merged=DEFAULTS.map(function(d){return savedIds[d.id]?savedIds[d.id]:d;});
+        // Also keep any custom user-added sources not in DEFAULTS
+        saved.forEach(function(x){if(!DEFAULTS.find(function(d){return d.id===x.id;}))merged.push(x);});
+        sources=merged;
+      }catch(e){sources=DEFAULTS.slice();}
+    } else { sources=DEFAULTS.slice(); }
+    var co=localStorage.getItem('sh3_colorder'); colOrder=co?JSON.parse(co):ALL_COLS.map(function(c){return c.id;});
+    var cc=localStorage.getItem('sh3_colclosed'); colClosed=cc?JSON.parse(cc):[];
+    DEFAULTS.forEach(function(d){if(!sources.find(function(s){return s.id===d.id;}))sources.push(d);});
+    ALL_COLS.forEach(function(c){if(colOrder.indexOf(c.id)<0)colOrder.push(c.id);});
+    // Deduplication: rimuovi duplicati da colOrder
+    var seen={};
+    colOrder=colOrder.filter(function(id){if(seen[id])return false;seen[id]=true;return true;});
+    // Rimuovi ID non validi
+    colOrder=colOrder.filter(function(id){return ALL_COLS.find(function(c){return c.id===id;});});
+    // Safety: se tutte le colonne sono chiuse, resetta
+    var visibleCols=colOrder.filter(function(id){return colClosed.indexOf(id)<0;});
+    if(visibleCols.length===0){colClosed=[];}
+    // Salva subito per pulire localStorage corrotto
+    persist();
+  }catch(e){sources=DEFAULTS.slice();colOrder=ALL_COLS.map(function(c){return c.id;});colClosed=[];}
+}
+
+var PROXIES=[
+  // allorigins /raw - risposta diretta (più veloce)
+  function(u){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(u);},
+  // allorigins /get - risposta JSON con .contents
+  function(u){return 'https://api.allorigins.win/get?url='+encodeURIComponent(u);},
+  // corsproxy.io
+  function(u){return 'https://corsproxy.io/?'+encodeURIComponent(u);},
+  // rss2json - ritorna JSON pre-parsato
+  function(u){return 'https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(u);},
+  // codetabs
+  function(u){return 'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(u);},
+];
+function fetchRSS(url){
+  var TIMEOUT_MS=12000;
+  function makeOpts(){
+    try{return AbortSignal.timeout?{signal:AbortSignal.timeout(TIMEOUT_MS)}:{};}catch(e){return {};}
+  }
+  function parseResult(t,proxyIdx){
+    // rss2json returns JSON with .items
+    if(proxyIdx===3){
+      try{
+        var j=JSON.parse(t);
+        if(j&&j.items&&j.items.length){
+          // Rebuild RSS-like XML from rss2json response
+          var items=j.items.map(function(it){
+            return '<item><title>'+esc(it.title||'')+'</title><link>'+esc(it.link||it.url||'')+'</link>'
+              +'<description>'+esc(it.description||it.content||'')+'</description>'
+              +'<pubDate>'+esc(it.pubDate||'')+'</pubDate></item>';
+          }).join('');
+          return '<rss><channel>'+items+'</channel></rss>';
+        }
+        throw new Error('empty rss2json');
+      }catch(e){throw new Error('rss2json parse fail');}
+    }
+    // allorigins /get returns {contents: '...'}
+    if(proxyIdx===1){
+      try{var j=JSON.parse(t);if(j&&j.contents&&j.contents.length>30)return j.contents;}catch(e){}
+    }
+    // Direct text (proxy 0,2,4)
+    if(!t||t.trim().length<30)throw new Error('empty');
+    return t;
+  }
+  function tryNext(i){
+    if(i>=PROXIES.length)return Promise.reject(new Error('all failed'));
+    return fetch(PROXIES[i](url),makeOpts())
+      .then(function(r){if(!r.ok)throw new Error(r.status);return r.text();})
+      .then(function(t){return parseResult(t,i);})
+      .catch(function(e){return tryNext(i+1);});
+  }
+  return tryNext(0);
+}
+
+
+var CL={
+  critical:['war','attack','strike','missile','killed','airstrike','explosion','nuclear','emergency','crisis','guerra','attacco','missili','esplosione','crisi','morti','uccisi'],
+  high:['conflict','troops','military','sanctions','coup','escalation','offensive','threat','conflitto','truppe','militare','sanzioni','golpe'],
+  medium:['tension','protest','election','summit','negotiations','ceasefire','talks','tensione','protesta','elezione','vertice','negoziato'],
+  regions:{
+    europa:['europe','european','nato','ukraine','poland','germany','france','uk','britain','romania','hungary','turkey','balkan','sweden','finland','spain','europa','europeo','ucraina','polonia','germania','francia'],
+    italia:['italy','italian','italia','italiano','roma','rome','milan','milano','meloni','palazzo chigi','quirinale','farnesina'],
+    medioriente:['middle east','iran','israel','gaza','palestine','syria','iraq','lebanon','saudi','yemen','hamas','hezbollah','idf','tehran','jerusalem','riyadh','medio oriente','israele','palestina','siria','libano'],
+    indopacifico:['japan','korea','india','taiwan','pacific','asean','indo-pacific','tokyo','seoul','singapore','vietnam','philippines','indonesia','australia','myanmar','giappone','corea'],
+    cina:['china','chinese','xi jinping','pla','bri','cina','cinese','pechino','beijing'],
+    americas:['usa','united states','america','trump','washington','canada','brazil','mexico','latin','venezuela','colombia','argentina','stati uniti'],
+    africa:['africa','sudan','ethiopia','somalia','mali','sahel','congo','nigeria','kenya','libya','mozambique','etiopia','libia'],
+    russia:['russia','putin','kremlin','moscow','wagner','cremlino','mosca'],
+  }
+};
+function classify(item){
+  var txt=((item.title||'')+' '+(item.description||'')).toLowerCase();
+  var sev='low';
+  for(var i=0;i<CL.critical.length;i++){if(txt.indexOf(CL.critical[i])>=0){sev='critical';break;}}
+  if(sev==='low'){for(var i=0;i<CL.high.length;i++){if(txt.indexOf(CL.high[i])>=0){sev='high';break;}}}
+  if(sev==='low'){for(var i=0;i<CL.medium.length;i++){if(txt.indexOf(CL.medium[i])>=0){sev='medium';break;}}}
+  var reg='global',rks=Object.keys(CL.regions);
+  for(var r=0;r<rks.length;r++){var kw=CL.regions[rks[r]];for(var k=0;k<kw.length;k++){if(txt.indexOf(kw[k])>=0){reg=rks[r];break;}}if(reg!=='global')break;}
+  item.sev=sev;item.region=reg;
+  // If region still global but source has explicit cat mapping, use it
+  if(reg==='global'&&item.cat==='cina')item.region='cina';
+  if(reg==='global'&&item.cat==='sudest_asia')item.region='indopacifico';
+  if(reg==='global'&&item.cat==='italia')item.region='italia';
+  return item;
+}
+
+function parseRSS(xml,src){
+  var out=[];
+  try{
+    var doc=new DOMParser().parseFromString(xml,'text/xml');
+    doc.querySelectorAll('item, entry').forEach(function(el){
+      var title=(el.querySelector('title')||{}).textContent||'';
+      var lo=el.querySelector('link');
+      var link=lo?(lo.getAttribute('href')||lo.textContent||''):'';
+      var desc=(el.querySelector('description, summary, content')||{}).textContent||'';
+      var pub=(el.querySelector('pubDate, published, updated')||{}).textContent||'';
+      title=title.replace(/<[^>]+>/g,'').trim();
+      desc=desc.replace(/<[^>]+>/g,'').trim().substring(0,200);
+      if(!title)return;
+      out.push(classify({title:title,link:link,description:desc,pub:pub,src:src.name,cat:src.cat,ts:pub?new Date(pub).getTime()||0:0}));
+    });
+  }catch(e){}
+  return out;
+}
+
+function doRefresh(){
+  var btn=document.getElementById('rbtn');
+  if(btn){btn.disabled=true;btn.textContent='·';}
+
+  var active=sources.filter(function(s){return s.on;});
+  var done=0,newArts=[];
+  if(!active.length){
+    if(!window._shInitialLoadDone){
+      articles=[];
+      renderAll();
+      try{ensureSeenFromArticles&&ensureSeenFromArticles();}catch(e){}
+      window._shInitialLoadDone=true;
+    }
+    if(btn){btn.disabled=false;btn.textContent='↻';}
+    startTimer();
+    return;
+  }
+
+  // Only show skeletons on the very first load
+  if(!window._shInitialLoadDone){
+    showSkeletons();
+  }
+
+  active.forEach(function(src){
+    fetchRSS(src.url)
+      .then(function(xml){
+        sourceStatus[src.id]='ok';
+        newArts=newArts.concat(parseRSS(xml,src));
+      })
+      .catch(function(){
+        sourceStatus[src.id]='err';
+      })
+      .then(function(){
+        done++;
+        if(done===active.length){
+          var seenLocal={};
+          newArts=newArts.filter(function(a){
+            var k=articleKey ? articleKey(a) : ((a.link||'')+'|'+(a.title||''));
+            if(seenLocal[k]) return false;
+            seenLocal[k]=true;
+            return true;
+          });
+
+          newArts.sort(function(a,b){
+            var td=(b.ts||0)-(a.ts||0);
+            if(td!==0) return td;
+            var SO={critical:4,high:3,medium:2,low:1};
+            return (SO[b.sev]||1)-(SO[a.sev]||1);
+          });
+
+          // First load = full render once
+          if(!window._shInitialLoadDone){
+            articles=newArts;
+            renderAll();
+            try{renderSrcList();}catch(e){}
+            try{_refreshP2Overlay();}catch(e){}
+            try{ensureSeenFromArticles&&ensureSeenFromArticles();}catch(e){}
+            window._shInitialLoadDone=true;
+            if(btn){btn.disabled=false;btn.textContent='↻';}
+            startTimer();
+            return;
+          }
+
+          // Subsequent loads = incremental only, no black screen, no full rerender
+          var fresh=newArts.filter(function(a){
+            var k=articleKey ? articleKey(a) : ((a.link||'')+'|'+(a.title||''));
+            if(window._seenArticleKeys && window._seenArticleKeys.has(k)) return false;
+            if(window._seenArticleKeys) window._seenArticleKeys.add(k);
+            return true;
+          });
+
+          if(fresh.length){
+            articles=fresh.concat(articles||[]);
+            var colAdds={};
+
+            fresh.slice().reverse().forEach(function(a){
+              (ALL_COLS||[]).forEach(function(col){
+                if(colClosed && colClosed.indexOf(col.id)!==-1) return;
+                try{
+                  if(inCol(col,a)){
+                    if(typeof insertArticleIntoColumn==='function' && insertArticleIntoColumn(col.id,a)){
+                      colAdds[col.id]=(colAdds[col.id]||0)+1;
+                    }
+                  }
+                }catch(e){}
+              });
+            });
+
+            if(typeof updateColumnCounters==='function') updateColumnCounters();
+            Object.keys(colAdds).forEach(function(colId){
+              if(typeof updateNewBadge==='function') updateNewBadge(colId,colAdds[colId]);
+            });
+            try{renderSrcList();}catch(e){}
+            try{_refreshP2Overlay();}catch(e){}
+          }
+
+          if(btn){btn.disabled=false;btn.textContent='↻';}
+          startTimer();
+        }
+      });
+  });
+}
+
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function fmtTime(pub){if(!pub)return '';var d=new Date(pub);if(isNaN(d))return '';var diff=Date.now()-d.getTime();if(diff<3600000)return Math.round(diff/60000)+'m fa';if(diff<86400000)return Math.round(diff/3600000)+'h fa';return d.toLocaleDateString('it-IT',{day:'numeric',month:'short'});}
+function _isNonLatin(s){return /[\u4e00-\u9fff\u3040-\u30ff\u0600-\u06ff\u3400-\u4dbf]/.test(s||'');}
+function cardHTML(a){
+  var time=a.pub?'<span class="ctime">'+fmtTime(a.pub)+'</span>':'';
+  var isChinese=_isNonLatin(a.title||'');
+  var needsTr=isChinese||(a.cat==='cina')||_isNonLatin(a.src||'');
+  var zhBadge=isChinese?'<span class="clang-badge">中</span>':'';
+  var trBtn=needsTr?'<button class="ctranslate" onclick="translateCard(this)" title="Translate to English">🌐 EN</button>':'';
+  var needsAttr=needsTr?' data-needstr="1"':'';
+  return '<div class="card" data-sev="'+a.sev+'"'+needsAttr+'>'
+    +'<div class="ctop"><span class="csrc">'+esc(a.src)+'</span>'+zhBadge+'</div>'
+    +'<a class="ctlink" href="'+esc(a.link||'')+'" target="_blank" rel="noopener">'+esc(a.title)+'</a>'
+    +(a.description?'<div class="cdesc">'+esc(a.description)+'</div>':'')
+    +'<div class="cfoot">'+time+trBtn+'</div></div>';
+}
+
+function getForCol(def){return articles.filter(function(a){
+  if(def.regions[0]==='all') return true;
+  if(def.regions[0]==='osint') return a.cat==='osint';
+  // For cina column, also match by cat so even misclassified articles show
+  if(def.id==='cina') return a.region==='cina'||a.cat==='cina';
+  return def.regions.indexOf(a.region)>=0;
+});}
+function renderAll(){renderColumns();updateColList();}
+function renderColumns(){
+  var wrap=document.getElementById('cols-wrap');if(!wrap)return;
+  var addBtn=document.getElementById('add-col-btn');
+  wrap.querySelectorAll('.acol').forEach(function(el){el.parentNode.removeChild(el);});
+  colOrder.forEach(function(cid){
+    if(colClosed.indexOf(cid)>=0)return;
+    var def=ALL_COLS.find(function(c){return c.id===cid;});if(!def)return;
+    wrap.insertBefore(buildCol(def,getForCol(def)),addBtn);
+  });
+}
+function buildCol(def,arts){
+  var col=document.createElement('div');
+  col.className='acol';col.id='col-'+def.id;col.setAttribute('data-colid',def.id);col.setAttribute('draggable','true');
+  var hd=document.createElement('div');hd.className='col-hd';
+  hd.innerHTML='<span class="col-icon">'+def.icon+'</span><span class="col-name">'+def.name+'</span>'
+    +'<span class="col-cnt" id="colcnt-'+def.id+'">'+arts.length+'</span>'
+    +'<button class="col-close" onclick="closeCol(\''+def.id+'\')">&#x2715;</button>';
+  col.appendChild(hd);
+  var feed=document.createElement('div');feed.className='col-feed';feed.id='colfeed-'+def.id;
+  feed.innerHTML=arts.length?arts.slice(0,200).map(cardHTML).join(''):'<div class="empty">Nessun articolo</div>';
+  col.appendChild(feed);
+  col.addEventListener('dragstart',onDragStart);col.addEventListener('dragover',onDragOver);
+  col.addEventListener('dragleave',onDragLeave);col.addEventListener('drop',onDrop);col.addEventListener('dragend',onDragEnd);
+  return col;
+}
+function showSkeletons(){
+  var wrap=document.getElementById('cols-wrap');if(!wrap)return;
+  wrap.querySelectorAll('.acol').forEach(function(el){var f=el.querySelector('.col-feed');if(f)f.innerHTML='<div class="skel"></div><div class="skel"></div><div class="skel"></div>';});
+}
+function updateColList(){
+  var el=document.getElementById('col-list');if(!el)return;
+  el.innerHTML=colOrder.filter(function(cid){return colClosed.indexOf(cid)<0;}).map(function(cid){
+    var def=ALL_COLS.find(function(c){return c.id===cid;});if(!def)return '';
+    return '<div style="display:flex;align-items:center;gap:5px;padding:3px 8px">'
+      +'<span style="font-size:12px">'+def.icon+'</span>'
+      +'<span style="flex:1;font-size:13px;font-weight:600;color:var(--tx2)">'+def.name+'</span>'
+      +'<span style="font-size:10px;color:var(--mu);font-family:Share Tech Mono,monospace">'+getForCol(def).length+'</span>'
+      +'</div>';
+  }).join('');
+}
+function closeCol(id){if(colClosed.indexOf(id)<0)colClosed.push(id);persist();renderAll();notify('Colonna nascosta');}
+function restoreCol(id){colClosed=colClosed.filter(function(x){return x!==id;});persist();renderAll();closeRestoreModal();}
+function openRestoreModal(){
+  var grid=document.getElementById('restore-grid');
+  var closed=colClosed.filter(function(cid){return ALL_COLS.find(function(c){return c.id===cid;});});
+  if(!closed.length){notify('Nessuna colonna nascosta');return;}
+  grid.innerHTML=closed.map(function(cid){var def=ALL_COLS.find(function(c){return c.id===cid;});return '<button class="restore-btn" onclick="restoreCol(\''+cid+'\')">'+def.icon+' '+def.name+'</button>';}).join('');
+  document.getElementById('restore-modal').style.display='flex';
+}
+function closeRestoreModal(){document.getElementById('restore-modal').style.display='none';}
+var dragSrc=null;
+function onDragStart(e){dragSrc=this;e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',this.getAttribute('data-colid'));}
+function onDragOver(e){e.preventDefault();if(this!==dragSrc)this.classList.add('drag-over');}
+function onDragLeave(){this.classList.remove('drag-over');}
+function onDrop(e){e.preventDefault();this.classList.remove('drag-over');if(this===dragSrc)return;var si=colOrder.indexOf(e.dataTransfer.getData('text/plain')),di=colOrder.indexOf(this.getAttribute('data-colid'));if(si>=0&&di>=0){var moved=colOrder.splice(si,1)[0];var newDi=colOrder.indexOf(this.getAttribute('data-colid'));if(newDi<0)newDi=di>si?di-1:di;colOrder.splice(newDi,0,moved);persist();renderAll();}}
+function onDragEnd(){this.classList.remove('dragging');}
+function showTab(id){
+  document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on');});
+  document.querySelectorAll('.pane').forEach(function(p){p.classList.add('hidden');});
+  var t=document.getElementById('tab-'+id),p=document.getElementById('pane-'+id);
+  if(t)t.classList.add('on');if(p)p.classList.remove('hidden');
+}
+function renderSrcList(){
+  var el=document.getElementById('srclist');if(!el)return;
+  var CAT={agenzie:'Agenzie',media:'Media',italia:'Italia',think:'Think tank',ist:'Ist.',cyber:'Cyber',finance:'Finance',regional:'Reg.',osint:'OSINT',cina:'🇨🇳 Cina'};
+  var catmap={};
+  sources.forEach(function(s){var c=s.cat||'media';if(!catmap[c])catmap[c]=[];catmap[c].push(s);});
+  var html='';
+  Object.keys(catmap).forEach(function(cat){
+    html+='<div style="font-size:9px;color:var(--mu);padding:4px 8px 1px;font-family:Share Tech Mono,monospace;text-transform:uppercase;letter-spacing:.1em">'+(CAT[cat]||cat)+'</div>';
+    catmap[cat].forEach(function(s){
+      var st=sourceStatus[s.id],stCls=st==='ok'?'ok':st==='err'?'err':'lo',stTxt=st==='ok'?'●':st==='err'?'✕':'○';
+      var isDel=s.id&&s.id.indexOf('c_')===0;
+      html+='<div class="src-item"><div class="src-dot" style="background:'+(s.on?'var(--acc)':'var(--mu)')+'"></div>'
+        +'<span class="src-nm" title="'+esc(s.url)+'">'+esc(s.name)+'</span>'
+        +'<span class="src-st '+stCls+'">'+stTxt+'</span>'
+        +'<button class="tog '+(s.on?'on':'off')+'" onclick="toggleSrc(\''+s.id+'\')"></button>'
+        +(isDel?'<button class="src-del" onclick="delSrc(\''+s.id+'\')">&#x2715;</button>':'')
+        +'</div>';
+    });
+  });
+  el.innerHTML=html;
+  var ac=document.getElementById('actcount');if(ac)ac.textContent=sources.filter(function(s){return s.on;}).length;
+}
+function toggleSrc(id){var s=sources.find(function(x){return x.id===id;});if(s){s.on=!s.on;persist();renderSrcList();}}
+function delSrc(id){sources=sources.filter(function(s){return s.id!==id;});persist();renderSrcList();}
+function addInline(){
+  var nm=(document.getElementById('qi-nm').value||'').trim(),url=(document.getElementById('qi-url').value||'').trim(),cat=document.getElementById('qi-cat').value;
+  if(!nm||!url){notify('Nome e URL richiesti');return;}
+  if(sources.find(function(s){return s.url===url;})){notify('URL gia presente');return;}
+  sources.push({id:'c_'+Date.now(),name:nm,cat:cat,url:url,on:true});
+  persist();renderSrcList();document.getElementById('qi-nm').value='';document.getElementById('qi-url').value='';
+  notify('Aggiunto: '+nm);doRefresh();
+}
+function openSrcModal(){
+  var grid=document.getElementById('pgrid');if(!grid)return;
+  grid.innerHTML=PRESETS.map(function(p){var added=sources.find(function(s){return s.id===p.id;});return '<button class="pbtn'+(added?' added':'')+'" onclick="addPreset(\''+p.id+'\')">'+esc(p.name)+'</button>';}).join('');
+  document.getElementById('src-modal').style.display='flex';
+}
+function closeSrcModal(){document.getElementById('src-modal').style.display='none';}
+function addSrc(){
+  var nm=(document.getElementById('mn').value||'').trim(),url=(document.getElementById('murl').value||'').trim(),cat=document.getElementById('mcat').value;
+  if(!nm||!url){notify('Nome e URL richiesti');return;}
+  if(sources.find(function(s){return s.url===url;})){notify('URL gia presente');return;}
+  sources.push({id:'c_'+Date.now(),name:nm,cat:cat,url:url,on:true});
+  persist();renderSrcList();closeSrcModal();notify('Aggiunto: '+nm);doRefresh();
+}
+function addPreset(id){
+  var p=PRESETS.find(function(x){return x.id===id;});if(!p)return;
+  if(!sources.find(function(s){return s.id===id;})){sources.push({id:p.id,name:p.name,cat:p.cat,url:p.url,on:true});persist();doRefresh();}
+  notify('Aggiunto: '+p.name);openSrcModal();
+}
+function startTimer(){
+  clearInterval(timerInt);timerSec=120;
+  var arc=document.getElementById('tarc'),lbl=document.getElementById('tlbl'),C=44;
+  timerInt=setInterval(function(){
+    timerSec--;
+    if(lbl)lbl.textContent=timerSec+'s';
+    if(arc)arc.style.strokeDashoffset=((1-timerSec/120)*C).toString();
+    if(timerSec<=0){clearInterval(timerInt);doRefresh();}
+  },1000);
+}
+function tickClock(){var el=document.getElementById('clock');if(!el)return;var n=new Date();el.textContent=[n.getHours(),n.getMinutes(),n.getSeconds()].map(function(x){return x.toString().padStart(2,'0');}).join(':');}
+setInterval(tickClock,1000);tickClock();
+function toggleTheme(){var h=document.documentElement;h.setAttribute('data-theme',h.getAttribute('data-theme')==='light'?'dark':'light');}
+function notify(msg){var n=document.createElement('div');n.className='notif';n.textContent=msg;document.body.appendChild(n);setTimeout(function(){if(n.parentNode)n.parentNode.removeChild(n);},2500);}
+
+
+
+// ── BRIEFING ─────────────────────────────────────────────────────
+var REGION_LABELS = {
+  global:'Globale / Non classificato',
+  europa:'Europa',
+  russia:'Russia e spazio post-sovietico',
+  medioriente:'Medio Oriente e Nord Africa',
+  italia:'Italia',
+  indopacifico:'Indo-Pacifico',
+  cina:'Cina e Taiwan',
+  americas:'Americhe',
+  africa:'Africa subsahariana',
+  osint:'OSINT / Analisi difesa'
+};
+var REGION_ORDER = ['medioriente','russia','europa','cina','indopacifico','americas','africa','global'];
+
+function openBriefing(){
+  if(!articles||!articles.length){notify('Nessuna notizia caricata');return;}
+  document.getElementById('briefing-body').innerHTML = buildBriefingHTML();
+  document.getElementById('briefing-bg').style.display='flex';
+}
+function closeBriefing(){document.getElementById('briefing-bg').style.display='none';}
+
+function buildBriefingHTML(){
+  var now = new Date();
+  var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  var months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  var dateStr = days[now.getDay()]+', '+months[now.getMonth()]+' '+now.getDate()+', '+now.getFullYear();
+  var timeStr = now.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'})+' CET';
+
+  var arts = articles.filter(function(a){return a.cat!=='italia' && a.region!=='italia';});
+  var srcCount={};
+  arts.forEach(function(a){srcCount[a.src]=(srcCount[a.src]||0)+1;});
+  var srcNum=Object.keys(srcCount).length;
+
+  var TEATRI=[
+    {reg:'medioriente', label:'Middle East & North Africa'},
+    {reg:'russia',      label:'Russia & Post-Soviet Space'},
+    {reg:'europa',      label:'Europe'},
+    {reg:'cina',        label:'China & Taiwan Strait'},
+    {reg:'indopacifico',label:'Indo-Pacific'},
+    {reg:'americas',    label:'Western Hemisphere'},
+    {reg:'africa',      label:'Sub-Saharan Africa'},
+    {reg:'global',      label:'Global'},
+  ];
+
+  var byRegion={};
+  arts.forEach(function(a){var r=a.region||'global';if(!byRegion[r])byRegion[r]=[];byRegion[r].push(a);});
+
+  var html='';
+
+  // Header
+  html+='<div class="br-header">';
+  html+='<div class="br-title">Daily Briefing</div>';
+  html+='<div class="br-date">'+dateStr.toUpperCase()+' &mdash; '+timeStr+'</div>';
+  html+='</div>';
+
+  // Teatri
+  var num=1;
+  TEATRI.forEach(function(t){
+    var regArts=byRegion[t.reg];
+    if(!regArts||!regArts.length)return;
+    var top=regArts.slice().sort(function(a,b){
+      var SO={critical:4,high:3,medium:2,low:1};
+      return(SO[b.sev]||1)-(SO[a.sev]||1)||(b.ts||0)-(a.ts||0);
+    }).filter(function(a){return a.sev!=='low';}).slice(0,5);
+    if(!top.length)return;
+
+    html+='<div class="br-theater">';
+    html+='<div class="br-theater-hd">';
+    html+='<span class="br-theater-num">'+num+'.</span>';
+    html+='<span class="br-theater-name">'+t.label+'</span>';
+    html+='</div>';
+    top.forEach(function(a){
+      html+='<div class="br-item">';
+      html+='<span class="br-sev-badge '+a.sev+'">'+a.sev+'</span>';
+      html+='<div class="br-item-body">';
+      html+='<a class="br-item-headline" href="'+esc(a.link)+'" target="_blank" rel="noopener">'+esc(a.title)+'</a>';
+      html+='<div class="br-item-meta">'+esc(a.src)+(a.pub?' &mdash; '+fmtTime(a.pub):'')+'</div>';
+      html+='</div></div>';
+    });
+    html+='</div>';
+    num++;
+  });
+
+  html+='<div class="br-footer">SHERLOCK &mdash; '+timeStr+' &mdash; '+arts.length+' items &mdash; '+srcNum+' sources</div>';
+  return html;
+}
+
+function exportBriefingText(){
+  var body = document.getElementById('briefing-body');
+  if(!body) return;
+  // Plain text version
+  var lines = [];
+  var now = new Date();
+  lines.push("PRESIDENT'S DAILY BRIEFING");
+  lines.push(now.toLocaleDateString('it-IT',{weekday:'long',year:'numeric',month:'long',day:'numeric'}).toUpperCase());
+  lines.push("ANALISI INTERNA - USO ESCLUSIVO");
+  lines.push("=".repeat(60));
+  lines.push('');
+
+  var critical = articles.filter(function(a){return a.sev==='critical';});
+  var high = articles.filter(function(a){return a.sev==='high';});
+  lines.push('Notizie totali: '+articles.length+' | Critiche: '+critical.length+' | Alta priorità: '+high.length);
+  lines.push('');
+  lines.push("// SITUAZIONE D\u2019URGENZA");
+  lines.push("-".repeat(40));
+  articles.filter(function(a){return a.sev==='critical'||a.sev==='high';}).slice(0,5).forEach(function(a){
+    lines.push('['+a.sev.toUpperCase()+'] '+a.title);
+    lines.push('  Fonte: '+a.src+(a.pub?' - '+fmtTime(a.pub):''));
+    lines.push('  Link: '+a.link);
+    lines.push('');
+  });
+
+  var byRegion = {};
+  articles.forEach(function(a){var r=a.region||'global';if(!byRegion[r])byRegion[r]=[];byRegion[r].push(a);});
+  REGION_ORDER.forEach(function(reg){
+    var arts=byRegion[reg];if(!arts||!arts.length)return;
+    lines.push('');
+    lines.push('// '+(REGION_LABELS[reg]||reg).toUpperCase());
+    lines.push("-".repeat(40));
+    arts.sort(function(a,b){var S={critical:4,high:3,medium:2,low:1};return(S[b.sev]||1)-(S[a.sev]||1)||(b.ts||0)-(a.ts||0);}).slice(0,4).forEach(function(a){
+      lines.push('['+a.sev.toUpperCase()+'] '+a.title);
+      lines.push('  '+a.src+(a.pub?' - '+fmtTime(a.pub):''));
+      lines.push('');
+    });
+  });
+  lines.push("=".repeat(60));
+  lines.push("SHERLOCK GEOPOLITICS MONITOR - "+now.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}));
+
+  var text = lines.join('\n');
+  if(navigator.clipboard){
+    navigator.clipboard.writeText(text).then(function(){notify('Briefing copiato negli appunti');});
+  } else {
+    var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    notify('Briefing copiato');
+  }
+}
+
+
+
+
+// ── PAGINA 2: SWITCHER ────────────────────────────────────────────
+function switchPage(n){
+  var p1=document.getElementById('page-1'),p2=document.getElementById('page-2');
+  var t1=document.getElementById('ptab-1'),t2=document.getElementById('ptab-2');
+  if(p1)p1.classList.toggle('on',n===1);
+  if(p2)p2.classList.toggle('on',n===2);
+  if(t1)t1.classList.toggle('on',n===1);
+  if(t2)t2.classList.toggle('on',n===2);
+  if(n===2){renderAlerts();if(!_p2MapWorld)initP2Map();else _drawP2Map();}
+}
+
+// ── MAPPA PAGINA 2 ────────────────────────────────────────────────
+var _p2MapWorld=null;
+// ── INLINE TRANSLATION ENGINE ────────────────────────────────────
+// Uses Google Translate free API — translates text in-place, no redirect
+var _trCache={};  // cache: text → translated text
+
+function _gtFree(text, callback){
+  if(!text||!text.trim()){callback(text);return;}
+  var key=text.substring(0,80);
+  if(_trCache[key]){callback(_trCache[key]);return;}
+  var url='https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q='+encodeURIComponent(text);
+  fetch(url)
+    .then(function(r){return r.json();})
+    .then(function(d){
+      // Response: [[["translated","original",...],...],...]
+      var tr='';
+      if(d&&d[0]){d[0].forEach(function(chunk){if(chunk&&chunk[0])tr+=chunk[0];});}
+      _trCache[key]=tr||text;
+      callback(_trCache[key]);
+    })
+    .catch(function(){callback(text);});
+}
+
+function translateCard(btn){
+  var card=btn.closest('.card');
+  if(!card)return;
+  if(card.dataset.translated==='1'){
+    // Restore originals
+    var titleEl=card.querySelector('.ctlink');
+    var descEl=card.querySelector('.cdesc');
+    if(titleEl&&card.dataset.origTitle)titleEl.textContent=card.dataset.origTitle;
+    if(descEl&&card.dataset.origDesc)descEl.textContent=card.dataset.origDesc;
+    card.dataset.translated='0';
+    btn.textContent='🌐 EN';
+    btn.title='Translate to English';
+    btn.style.opacity='1';
+    return;
+  }
+  btn.textContent='…';
+  btn.style.opacity='0.5';
+  var titleEl=card.querySelector('.ctlink');
+  var descEl=card.querySelector('.cdesc');
+  var title=titleEl?titleEl.textContent:'';
+  var desc=descEl?descEl.textContent:'';
+  // Save originals
+  card.dataset.origTitle=title;
+  card.dataset.origDesc=desc;
+  _gtFree(title,function(trTitle){
+    if(titleEl)titleEl.textContent=trTitle;
+    if(desc&&descEl){
+      _gtFree(desc,function(trDesc){
+        if(descEl)descEl.textContent=trDesc;
+      });
+    }
+    card.dataset.translated='1';
+    btn.textContent='↩ orig';
+    btn.title='Restore original text';
+    btn.style.opacity='1';
+  });
+}
+
+function translateAll(){
+  // Translate all untranslated Chinese cards in DOM
+  var btn=document.getElementById('trbtn');
+  var active=btn&&btn.dataset.alltr==='1';
+  document.querySelectorAll('.card[data-needstr="1"]').forEach(function(card){
+    var trBtn=card.querySelector('.ctranslate');
+    if(!trBtn)return;
+    if(!active&&card.dataset.translated!=='1') translateCard(trBtn);
+    else if(active&&card.dataset.translated==='1') translateCard(trBtn);
+  });
+  if(btn){
+    btn.dataset.alltr=active?'0':'1';
+    btn.style.background=active?'':'rgba(74,222,128,.2)';
+    btn.textContent=active?'🌐 TRADUCI':'↩ ORIGINALE';
+  }
+}
+
+
+var _p2Layers={pins:true,hs:true,cables:true,conflict:true,pipes:false,heatmap:true};
+var _p2CurrentView='global';
+
+// ── Region → ISO-2 mapping ───────────────────────────────────────
+var RC={
+  europa:['AL','AD','AT','BY','BE','BA','BG','HR','CY','CZ','DK','EE','FI','FR','DE','GR','HU','IS','IE','IT','LV','LI','LT','LU','MT','MD','MC','ME','NL','MK','NO','PL','PT','RO','RS','SK','SI','ES','SE','CH','UA','GB'],
+  russia:['RU'],
+  medioriente:['BH','EG','IR','IQ','IL','JO','KW','LB','LY','OM','PS','QA','SA','SY','TN','TR','AE','YE'],
+  americas:['AG','AR','BS','BB','BZ','BO','BR','CA','CL','CO','CR','CU','DM','DO','EC','SV','GD','GT','GY','HT','HN','JM','MX','NI','PA','PY','PE','KN','LC','VC','SR','TT','US','UY','VE'],
+  indopacifico:['AU','BD','BT','BN','KH','FJ','IN','ID','JP','KI','LA','MY','MV','MH','FM','MN','MM','NR','NP','NZ','PK','PW','PG','PH','WS','SG','SB','LK','TH','TL','TO','TV','VU','VN'],
+  cina:['CN','TW'],
+  africa:['DZ','AO','BJ','BW','BF','BI','CV','CM','CF','TD','KM','CG','CD','CI','DJ','GQ','ER','SZ','ET','GA','GM','GH','GN','GW','KE','LS','LR','MG','MW','ML','MR','MU','MA','MZ','NA','NE','NG','RW','ST','SN','SL','SO','ZA','SS','SD','TZ','TG','UG','ZM','ZW']
+};
+var CN2={'AF':'Afghanistan','AL':'Albania','DZ':'Algeria','AO':'Angola','AR':'Argentina','AU':'Australia','AT':'Austria','BH':'Bahrein','BD':'Bangladesh','BY':'Bielorussia','BE':'Belgio','BJ':'Benin','BO':'Bolivia','BA':'Bosnia','BW':'Botswana','BR':'Brasile','BN':'Brunei','BG':'Bulgaria','KH':'Cambogia','CM':'Camerun','CA':'Canada','CF':'R. Centrafricana','TD':'Ciad','CL':'Cile','CN':'Cina','CO':'Colombia','CG':'Congo','CD':'Congo RD','CR':'Costa Rica','HR':'Croazia','CU':'Cuba','CY':'Cipro','CZ':'Rep. Ceca','DK':'Danimarca','DO':'Rep. Dominicana','EC':'Ecuador','EG':'Egitto','SV':'El Salvador','ER':'Eritrea','ET':'Etiopia','FI':'Finlandia','FR':'Francia','GA':'Gabon','GM':'Gambia','DE':'Germania','GH':'Ghana','GR':'Grecia','GT':'Guatemala','GN':'Guinea','GW':'Guinea-Bissau','GY':'Guyana','HT':'Haiti','HN':'Honduras','HU':'Ungheria','IS':'Islanda','IN':'India','ID':'Indonesia','IR':'Iran','IQ':'Iraq','IE':'Irlanda','IL':'Israele','IT':'Italia','JP':'Giappone','JO':'Giordania','KE':'Kenya','KW':'Kuwait','LA':'Laos','LV':'Lettonia','LB':'Libano','LR':'Liberia','LY':'Libia','LT':'Lituania','LU':'Lussemburgo','MG':'Madagascar','MW':'Malawi','MY':'Malaysia','ML':'Mali','MT':'Malta','MR':'Mauritania','MX':'Messico','MD':'Moldavia','MN':'Mongolia','ME':'Montenegro','MA':'Marocco','MZ':'Mozambico','MM':'Myanmar','NA':'Namibia','NP':'Nepal','NL':'Paesi Bassi','NZ':'Nuova Zelanda','NI':'Nicaragua','NE':'Niger','NG':'Nigeria','MK':'Macedonia del Nord','NO':'Norvegia','OM':'Oman','PK':'Pakistan','PS':'Palestina','PA':'Panama','PG':'Papua NG','PY':'Paraguay','PE':'Peru','PH':'Filippine','PL':'Polonia','PT':'Portogallo','QA':'Qatar','RO':'Romania','RU':'Russia','SA':'Arabia Saudita','SN':'Senegal','RS':'Serbia','SL':'Sierra Leone','SG':'Singapore','SK':'Slovacchia','SI':'Slovenia','SO':'Somalia','ZA':'Sudafrica','SS':'Sud Sudan','ES':'Spagna','LK':'Sri Lanka','SD':'Sudan','SR':'Suriname','SE':'Svezia','CH':'Svizzera','SY':'Siria','TW':'Taiwan','TZ':'Tanzania','TH':'Tailandia','TL':'Timor Est','TG':'Togo','TT':'Trinidad','TN':'Tunisia','TR':'Turchia','UG':'Uganda','UA':'Ucraina','AE':'Emirati Arabi','GB':'Gran Bretagna','US':'USA','UY':'Uruguay','VE':'Venezuela','VN':'Vietnam','YE':'Yemen','ZM':'Zambia','ZW':'Zimbabwe'};
+var N2I={'4':'AF','8':'AL','12':'DZ','24':'AO','32':'AR','36':'AU','40':'AT','50':'BD','56':'BE','68':'BO','76':'BR','100':'BG','116':'KH','120':'CM','124':'CA','152':'CL','156':'CN','170':'CO','180':'CD','191':'HR','192':'CU','203':'CZ','208':'DK','218':'EC','818':'EG','231':'ET','246':'FI','250':'FR','276':'DE','288':'GH','300':'GR','320':'GT','332':'HT','340':'HN','348':'HU','356':'IN','360':'ID','364':'IR','368':'IQ','372':'IE','376':'IL','380':'IT','392':'JP','400':'JO','404':'KE','414':'KW','418':'LA','422':'LB','430':'LR','434':'LY','440':'LT','484':'MX','504':'MA','508':'MZ','516':'NA','524':'NP','528':'NL','554':'NZ','558':'NI','562':'NE','566':'NG','578':'NO','586':'PK','591':'PA','598':'PG','600':'PY','604':'PE','608':'PH','616':'PL','620':'PT','634':'QA','642':'RO','643':'RU','682':'SA','686':'SN','694':'SL','706':'SO','710':'ZA','716':'ZW','724':'ES','728':'SS','729':'SD','740':'SR','752':'SE','756':'CH','760':'SY','764':'TH','768':'TG','780':'TT','788':'TN','792':'TR','800':'UG','804':'UA','784':'AE','826':'GB','840':'US','858':'UY','862':'VE','704':'VN','887':'YE','894':'ZM','158':'TW'};
+
+// ── Regional view presets [cx,cy,scale] ─────────────────────────
+var P2_VIEWS={
+  global:   {s:1,   tx:0,   ty:0},
+  europe:   {s:3.2, tx:-500, ty:-150},
+  mena:     {s:2.8, tx:-780, ty:-250},
+  asia:     {s:2.5, tx:-1050,ty:-200},
+  americas: {s:2.2, tx:350,  ty:-120},
+  africa:   {s:2.8, tx:-550, ty:-340}
+};
+
+// ── Geo-hub: keyword → [lat,lng] ────────────────────────────────
+var GEO_HUBS=[
+  {k:['ucraina','ukraine','kyiv','kiev','kharkiv','mariupol','bakhmut','zaporizhzhia','odessa','donbas','donbass','zaporizia'],lat:49.0,lng:31.4,name:'Ucraina'},
+  {k:['russia','mosca','moscow','cremlino','kremlin','san pietroburgo','st. petersburg','belgorod','vladivostok'],lat:55.7,lng:37.6,name:'Russia'},
+  {k:['gaza','rafah','khan younis','hamas','cisgordania','west bank','palestina','ramallah','jenin','tulkarm'],lat:31.5,lng:34.5,name:'Gaza/Palestina'},
+  {k:['israele','israel','tel aviv','netanyahu','idf','haifa','gerusalemme','jerusalem'],lat:31.8,lng:35.2,name:'Israele'},
+  {k:['libano','lebanon','beirut','hezbollah','tiro','tripoli libano'],lat:33.9,lng:35.5,name:'Libano'},
+  {k:['siria','syria','damasco','damascus','aleppo','idlib','raqqa','hts'],lat:34.8,lng:38.9,name:'Siria'},
+  {k:['iran','tehran','teheran','khamenei','pasdaran','irgc','natanz'],lat:35.7,lng:51.4,name:'Iran'},
+  {k:['iraq','baghdad','erbil','mosul','basra','kurdistan','kerbala'],lat:33.3,lng:44.4,name:'Iraq'},
+  {k:['yemen','sana','sanaa','aden','houthi','huti','hudaydah'],lat:15.4,lng:44.2,name:'Yemen'},
+  {k:['arabia saudita','saudi arabia','riyad','riyadh','mbs','jeddah','aramco'],lat:24.7,lng:46.7,name:'Arabia Saudita'},
+  {k:['turchia','turkey','ankara','erdogan','istanbul','kurd','pkk'],lat:39.9,lng:32.9,name:'Turchia'},
+  {k:['cina','china','pechino','beijing','shanghai','xi jinping','hong kong','xinjiang','tibet'],lat:39.9,lng:116.4,name:'Cina'},
+  {k:['taiwan','taipei','tsai','lai ching-te','formosa','stretto taiwan'],lat:25.0,lng:121.5,name:'Taiwan'},
+  {k:['corea del nord','north korea','kim jong','pyongyang','missili nordcoreani'],lat:39.0,lng:125.8,name:'Corea del Nord'},
+  {k:['corea del sud','south korea','seoul','seul','yoon','han'],lat:37.6,lng:127.0,name:'Corea del Sud'},
+  {k:['giappone','japan','tokyo','kishida','yokohama','osaka'],lat:35.7,lng:139.7,name:'Giappone'},
+  {k:['india','nuova delhi','new delhi','modi','mumbai','kashmir'],lat:28.6,lng:77.2,name:'India'},
+  {k:['pakistan','islamabad','karachi','lahore','isi pakistan'],lat:33.7,lng:73.1,name:'Pakistan'},
+  {k:['afghanistan','kabul','talebani','taliban','kandahar','isis-k'],lat:34.5,lng:69.2,name:'Afghanistan'},
+  {k:['stati uniti','usa','washington','biden','trump','pentagono','cia','state department','congresso','new york','california'],lat:38.9,lng:-77.0,name:'USA'},
+  {k:['nato','alleanza atlantica','shape','ramstein','norfolk'],lat:50.9,lng:4.5,name:'NATO/Bruxelles'},
+  {k:['unione europea','ue','eu','bruxelles','brussels','von der leyen'],lat:50.8,lng:4.4,name:'UE/Bruxelles'},
+  {k:['gran bretagna','regno unito','uk','londra','london','sunak','westminster','downing street'],lat:51.5,lng:-0.1,name:'Gran Bretagna'},
+  {k:['francia','france','parigi','paris','macron','eliso'],lat:48.9,lng:2.4,name:'Francia'},
+  {k:['germania','germany','berlino','berlin','scholz','bundeswehr','bundestag'],lat:52.5,lng:13.4,name:'Germania'},
+  {k:['italia','rome','roma','meloni','quirinale','farnesina','palazzo chigi'],lat:41.9,lng:12.5,name:'Italia'},
+  {k:['spagna','spain','madrid','sanchez','barcellona','catalogna'],lat:40.4,lng:-3.7,name:'Spagna'},
+  {k:['polonia','poland','varsavia','warsaw','tusk'],lat:52.2,lng:21.0,name:'Polonia'},
+  {k:['bielorussia','belarus','minsk','lukashenko'],lat:53.9,lng:27.6,name:'Bielorussia'},
+  {k:['serbia','belgrado','belgrade','vucic','kosovo'],lat:44.8,lng:20.5,name:'Serbia'},
+  {k:['stretto di ormuz','hormuz','strait of hormuz','golfo persico'],lat:26.6,lng:56.4,name:'Str. Hormuz'},
+  {k:['mar rosso','red sea','bab el-mandeb','bab-el-mandeb','suez','canale di suez'],lat:20.0,lng:38.5,name:'Mar Rosso'},
+  {k:['stretto di taiwan','taiwan strait','mar cinese meridionale','south china sea'],lat:22.0,lng:115.0,name:'Mar Cina Merid.'},
+  {k:['libia','libya','tripoli','bengasi','haftar'],lat:32.9,lng:13.2,name:'Libia'},
+  {k:['sudan','khartoum','rsf','rapid support forces','darfur'],lat:15.6,lng:32.5,name:'Sudan'},
+  {k:['etiopia','ethiopia','addis abeba','addis ababa','tigray','amhara'],lat:9.0,lng:38.7,name:'Etiopia'},
+  {k:['mali','bamako','sahel','wagner africa','burkina faso','niger','niamey'],lat:12.6,lng:-8.0,name:'Sahel/Mali'},
+  {k:['somalia','mogadiscio','mogadishu','al shabaab'],lat:2.0,lng:45.3,name:'Somalia'},
+  {k:['nigeria','abuja','lagos','boko haram'],lat:9.1,lng:7.4,name:'Nigeria'},
+  {k:['congo','kinshasa','drc','m23','goma','kivu'],lat:-4.3,lng:15.3,name:'Congo RD'},
+  {k:['azerbaigian','azerbaijan','baku','nagorno-karabakh','karabakh'],lat:40.4,lng:49.9,name:'Azerbaigian'},
+  {k:['georgia','tbilisi'],lat:41.7,lng:44.8,name:'Georgia'},
+  {k:['venezuela','caracas','maduro'],lat:10.5,lng:-66.9,name:'Venezuela'},
+  {k:['brasile','brazil','brasilia','lula','rio de janeiro'],lat:-15.8,lng:-47.9,name:'Brasile'},
+  {k:['messico','mexico','ciudad de mexico','cartello','cartel'],lat:19.4,lng:-99.1,name:'Messico'},
+  {k:['colombia','bogota','farc','eln'],lat:4.7,lng:-74.1,name:'Colombia'},
+  {k:['myanmar','birmania','naypyidaw','tatmadaw'],lat:19.7,lng:96.2,name:'Myanmar'},
+  {k:['emirati','uae','dubai','abu dhabi'],lat:24.5,lng:54.4,name:'Emirati Arabi'},
+  {k:['qatar','doha'],lat:25.3,lng:51.5,name:'Qatar'},
+  {k:['egitto','egypt','cairo','il cairo','sisi','sinai'],lat:30.1,lng:31.3,name:'Egitto'},
+  {k:['marocco','morocco','rabat','casablanca'],lat:33.9,lng:-6.9,name:'Marocco'},
+  {k:['tunisia','tunis','tunisi'],lat:36.8,lng:10.2,name:'Tunisia'},
+  {k:['algeria','algeri','algiers'],lat:36.8,lng:3.1,name:'Algeria'},
+  {k:['filippine','philippines','manila','mindanao'],lat:14.6,lng:120.9,name:'Filippine'},
+  {k:['indonesia','giacarta','jakarta','prabowo'],lat:-6.2,lng:106.8,name:'Indonesia'},
+  {k:['australia','canberra','sydney','albanese','aukus'],lat:-35.3,lng:149.1,name:'Australia'},
+  {k:['svezia','sweden','stoccolma'],lat:59.3,lng:18.1,name:'Svezia'},
+  {k:['finlandia','finland','helsinki'],lat:60.2,lng:24.9,name:'Finlandia'},
+  {k:['norvegia','norway','oslo','artico'],lat:59.9,lng:10.7,name:'Norvegia'},
+  {k:['paesi baltici','estonia','lettonia','lituania','tallinn','riga','vilnius'],lat:56.9,lng:24.1,name:'Baltici'},
+  {k:['ungheria','hungary','budapest','orban'],lat:47.5,lng:19.1,name:'Ungheria'},
+  {k:['mar baltico','baltic sea','kaliningrad'],lat:57.0,lng:19.0,name:'Mar Baltico'},
+  {k:['artico','arctic','polo nord','rompighiaccio'],lat:80.0,lng:10.0,name:'Artico'},
+  {k:['cipro','cyprus','nicosia'],lat:35.2,lng:33.4,name:'Cipro'},
+  {k:['grecia','greece','atene','athens','aegean'],lat:37.9,lng:23.7,name:'Grecia'},
+  {k:['moldavia','moldova','chisinau','transnistria'],lat:47.0,lng:28.9,name:'Moldavia'},
+  {k:['armenia','yerevan','erevan'],lat:40.2,lng:44.5,name:'Armenia'},
+  {k:['kazakistan','kazakhstan','astana'],lat:51.2,lng:71.5,name:'Kazakistan'}
+];
+
+// ── Active conflict zones (countries) with intensity level ──────
+var CONFLICT_ZONES={
+  'UA':'crit','PS':'crit','IL':'high','LB':'high','RU':'high',
+  'SY':'high','YE':'crit','SD':'crit','MM':'high','SO':'high',
+  'ML':'high','BF':'high','NE':'high','NG':'med','CD':'high',
+  'SS':'high','ET':'med','IQ':'med','AF':'high','LY':'med',
+  'TR':'low','IR':'med'
+};
+var CONFLICT_COLORS={crit:'rgba(239,68,68,',high:'rgba(245,158,11,',med:'rgba(59,130,246,',low:'rgba(34,211,94,'};
+// Opacity levels for conflict zone fill vs stroke
+var CZ_FILL_OP={crit:0.30,high:0.22,med:0.15,low:0.08};
+var CZ_STROKE_OP={crit:0.85,high:0.75,med:0.60,low:0.45};
+
+// ── Major undersea cable routes [lat1,lng1,lat2,lng2,name] ──────
+var CABLES=[
+  {pts:[[51,-4],[37,-9],[33,-17],[16,-23],[5,-5],[-6,12],[-8,13]],name:'WACS (Africa Occ.)',col:'rgba(0,210,255,0.55)'},
+  {pts:[[51,-4],[46,-7],[40,-9],[36,-7],[33,-5],[28,-15],[20,-17],[16,-23],[10,-15],[5,-5]],name:'SAT-3/SAFE',col:'rgba(0,210,255,0.45)'},
+  {pts:[[51,-4],[51,-6],[44,-10],[36,-14],[28,-15],[15,-17],[8,-14],[4,-5],[0,6],[-6,12],[-8,13]],name:'ACE (Africa)',col:'rgba(0,195,200,0.4)'},
+  {pts:[[50,-5],[44,-14],[36,-25],[28,-30],[22,-40],[16,-50],[12,-55],[8,-57],[8,-60],[11,-61],[10,-65],[10,-67]],name:'Columbus III (Atlantico)',col:'rgba(100,160,255,0.5)'},
+  {pts:[[40,-74],[42,-70],[48,-56],[50,-4]],name:'TAT-14 (N. Atlantico)',col:'rgba(100,160,255,0.55)'},
+  {pts:[[37,-9],[36,-5],[37,10],[33,12],[30,32],[28,35],[26,38],[22,39],[20,39],[15,42],[12,44],[11,43]],name:'MedNautilus/IMEWE',col:'rgba(80,200,220,0.5)'},
+  {pts:[[22,39],[24,38],[26,57],[22,59],[15,42]],name:'SEA-ME-WE 3 (Golfo)',col:'rgba(80,200,220,0.5)'},
+  {pts:[[50,-5],[46,-7],[43,-8],[40,-9],[36,-7],[34,-6],[37,10],[37,14],[35,25],[32,32],[30,32],[28,35],[24,37],[20,40],[12,44],[10,45],[5,40],[1,40],[-5,40],[-10,40],[-15,46],[-20,57],[-25,60],[-30,70],[-35,80],[-38,78],[-33,72]],name:'SEA-ME-WE 4',col:'rgba(50,180,210,0.45)'},
+  {pts:[[35,140],[32,131],[28,121],[22,114],[16,110],[10,104],[5,100],[1,104],[-6,106],[-8,115],[-20,115],[-30,115],[-34,116]],name:'Asia-Pacific (APCN)',col:'rgba(100,210,200,0.5)'},
+  {pts:[[35,140],[37,123],[39,119],[38,116]],name:'EAC (Cina-Giappone)',col:'rgba(100,200,180,0.45)'},
+  {pts:[[35,140],[40,142],[46,153],[53,160],[56,163],[62,-179],[60,-150],[56,-132],[48,-124],[40,-74]],name:'Trans-Pacific (TPC)',col:'rgba(80,180,255,0.45)'},
+  {pts:[[1,104],[12,44],[22,39]],name:'FOG (India-Medio Oriente)',col:'rgba(80,200,210,0.45)'},
+  {pts:[[22,39],[24,55],[22,59],[12,44],[1,40],[-10,40],[-20,45],[-30,55],[-34,116]],name:'EIG (Europa-India-Golfo)',col:'rgba(60,190,200,0.4)'}
+];
+
+// ── Strategic flashpoints ────────────────────────────────────────
+var HOTSPOTS=[
+  {id:'ukr',name:'Ucraina orientale',lat:48.5,lng:37.5,sev:'crit',desc:'Conflitto attivo — linea del fronte'},
+  {id:'gaz',name:'Gaza / Palestina',lat:31.4,lng:34.4,sev:'crit',desc:'Conflitto ad alta intensità'},
+  {id:'leb',name:'Libano — Hezbollah',lat:33.3,lng:35.4,sev:'crit',desc:'Escalation israeliano-libanese'},
+  {id:'red',name:'Mar Rosso — Bab el-Mandeb',lat:12.6,lng:43.4,sev:'crit',desc:'Attacchi Houthi — blocco navale'},
+  {id:'syr',name:'Siria nord',lat:36.2,lng:37.2,sev:'high',desc:'Instabilità post-Assad'},
+  {id:'irn',name:'Iran — nucleare',lat:32.7,lng:51.7,sev:'high',desc:'Tensioni programma nucleare'},
+  {id:'twn',name:'Stretto di Taiwan',lat:24.5,lng:120.5,sev:'high',desc:'Tensioni PRC-Taiwan'},
+  {id:'kpn',name:'Corea del Nord',lat:39.0,lng:125.8,sev:'high',desc:'Test missilistici e trasferimento armi'},
+  {id:'sah',name:'Sahel — instabilità',lat:15.0,lng:0.0,sev:'high',desc:'Golpe e espansione jihadista'},
+  {id:'ksh',name:'Kashmir',lat:34.1,lng:74.8,sev:'med',desc:'Tensione India-Pakistan'},
+  {id:'mya',name:'Myanmar — conflitto civile',lat:21.0,lng:95.0,sev:'high',desc:'Guerra civile — PDR'},
+  {id:'sud',name:'Sudan — RSF vs SAF',lat:15.6,lng:32.5,sev:'crit',desc:'Guerra civile — crisi umanitaria'},
+  {id:'som',name:'Somalia — Al-Shabaab',lat:2.0,lng:45.3,sev:'high',desc:'Offensiva jihadista'},
+  {id:'hor',name:'Stretto di Hormuz',lat:26.6,lng:56.4,sev:'high',desc:'Chokepoint energetico sotto tensione'},
+  {id:'cod',name:'Congo RD — M23',lat:-1.5,lng:28.9,sev:'high',desc:'Offensiva M23/Ruanda'},
+  {id:'scs',name:'Mar Cina Merid.',lat:12.0,lng:114.0,sev:'med',desc:'Dispute territoriali — PRC vs ASEAN'},
+  {id:'arm',name:'Kosovo/Balcani',lat:42.9,lng:20.9,sev:'med',desc:'Tensioni etniche e politiche'},
+  {id:'geo',name:'Georgia — frontiera',lat:42.2,lng:43.5,sev:'med',desc:'Influenza russa e proteste interne'}
+];
+
+// ── D3 zoom state ────────────────────────────────────────────────
+var _p2Proj=null, _p2ZoomBeh=null, _p2SVG=null, _p2G=null;
+
+function _sevCol(sev){if(sev>=4)return '#ef4444';if(sev>=3)return '#f59e0b';if(sev>=2)return '#3b82f6';if(sev>=1)return '#22d35e';return null;}
+function _buildColors(){
+  // Build per-country severity only from DIRECT news geo-matches (not entire region)
+  // This avoids coloring 42 European countries all red because of one article
+  var ic={};
+  var clusters=_geolocateArticles();
+  // Map hub→ ISO countries via simple lookup
+  var HUB_ISO={
+    'Ucraina':['UA'],'Russia':['RU'],'Gaza/Palestina':['PS','IL'],'Israele':['IL'],
+    'Libano':['LB'],'Siria':['SY'],'Iran':['IR'],'Iraq':['IQ'],'Yemen':['YE'],
+    'Arabia Saudita':['SA'],'Turchia':['TR'],'Cina':['CN'],'Taiwan':['TW'],
+    'Corea del Nord':['KP'],'Corea del Sud':['KR'],'Giappone':['JP'],
+    'India':['IN'],'Pakistan':['PK'],'Afghanistan':['AF'],
+    'USA':['US'],'Gran Bretagna':['GB'],'Francia':['FR'],'Germania':['DE'],
+    'Italia':['IT'],'Polonia':['PL'],'Spagna':['ES'],'Bielorussia':['BY'],
+    'Serbia':['RS'],'Libia':['LY'],'Sudan':['SD'],'Etiopia':['ET'],
+    'Sahel/Mali':['ML','BF','NE'],'Somalia':['SO'],'Nigeria':['NG'],
+    'Congo RD':['CD'],'Azerbaigian':['AZ'],'Georgia':['GE'],
+    'Venezuela':['VE'],'Brasile':['BR'],'Messico':['MX'],'Colombia':['CO'],
+    'Myanmar':['MM'],'Emirati Arabi':['AE'],'Qatar':['QA'],'Egitto':['EG'],
+    'Marocco':['MA'],'Tunisia':['TN'],'Algeria':['DZ'],'Filippine':['PH'],
+    'Indonesia':['ID'],'Australia':['AU'],'Grecia':['GR'],'Ungheria':['HU'],
+    'Moldavia':['MD'],'Armenia':['AM'],'Kazakistan':['KZ'],
+    'NATO/Bruxelles':['BE'],'UE/Bruxelles':['BE'],'Mar Rosso':['YE','DJ'],
+    'Str. Hormuz':['IR','AE'],'Mar Cina Merid.':['CN','PH','VN']
+  };
+  Object.keys(clusters).forEach(function(key){
+    var cl=clusters[key];
+    var maxSev=0;
+    cl.items.forEach(function(a){var s={critical:4,high:3,medium:2,low:1}[a.sev]||0;if(s>maxSev)maxSev=s;});
+    var c=_sevCol(maxSev);
+    if(!c)return;
+    var isos=HUB_ISO[cl.hub.name]||[];
+    isos.forEach(function(i2){if(!ic[i2]||maxSev>(ic[i2]||0))ic[i2]=c;});
+  });
+  return ic;
+}
+
+// ── Update stats bar ─────────────────────────────────────────────
+function _updateStats(){
+  var el=document.getElementById('p2-stats');if(!el)return;
+  var crit=articles.filter(function(a){return a.sev==='critical';}).length;
+  var high=articles.filter(function(a){return a.sev==='high';}).length;
+  var med=articles.filter(function(a){return a.sev==='medium';}).length;
+  el.innerHTML=
+    '<span><span class="dot" style="background:#ef4444"></span>'+crit+' Crit.</span>'+
+    '<span><span class="dot" style="background:#f59e0b"></span>'+high+' Alto</span>'+
+    '<span><span class="dot" style="background:#3b82f6"></span>'+med+' Medio</span>'+
+    '<span style="color:var(--acc)">'+articles.length+' tot.</span>';
+}
+
+// ── Geo-locate articles → clusters ──────────────────────────────
+function _geolocateArticles(){
+  var clusters={};
+  var filteredArts=_timelineFilter(articles);
+  // update count display
+  var cnt=document.getElementById('p2-tl-count');
+  if(cnt)cnt.textContent=filteredArts.length+'/'+articles.length+' notizie';
+  filteredArts.forEach(function(a){
+    var title=(a.title||'').toLowerCase()+' '+(a.source||'').toLowerCase();
+    for(var i=0;i<GEO_HUBS.length;i++){
+      var hub=GEO_HUBS[i];
+      for(var j=0;j<hub.k.length;j++){
+        if(title.indexOf(hub.k[j])>=0){
+          var key=hub.id||hub.lat+'_'+hub.lng;
+          if(!clusters[key]){clusters[key]={hub:hub,items:[]};}
+          clusters[key].items.push(a);
+          break;
+        }
+      }
+    }
+  });
+  return clusters;
+}
+
+
+// ══════════════════════════════════════════════════════════════════
+// MAP FEATURE 1: HEATMAP — country fill by news intensity
+// ══════════════════════════════════════════════════════════════════
+function _buildHeatmap(){
+  // Returns {ISO2: intensity 0-1} based on article count+severity
+  var scores={};
+  var SEV={critical:4,high:3,medium:2,low:1};
+  articles.forEach(function(a){
+    var reg=a.region||'';
+    var isos=RC[reg]||[];
+    var s=SEV[a.sev]||1;
+    isos.forEach(function(iso){scores[iso]=(scores[iso]||0)+s;});
+  });
+  var max=Math.max(1,Math.max.apply(null,Object.values(scores)));
+  var norm={};
+  Object.keys(scores).forEach(function(k){norm[k]=scores[k]/max;});
+  return norm;
+}
+
+function _heatColor(intensity){
+  // 0 → transparent, 0.3 → amber, 0.7+ → red
+  if(intensity<=0)return 'rgba(0,0,0,0)';
+  if(intensity<0.3) return 'rgba(59,130,246,'+(intensity*0.4+0.05)+')'; // blue tint
+  if(intensity<0.6) return 'rgba(245,158,11,'+(intensity*0.5+0.1)+')'; // amber
+  return 'rgba(239,68,68,'+(Math.min(intensity,1)*0.55+0.1)+')';        // red
+}
+
+// ══════════════════════════════════════════════════════════════════
+// MAP FEATURE 2: PIPELINES layer
+// ══════════════════════════════════════════════════════════════════
+var PIPELINES=[
+  // [name, color, [[lng,lat],...]]
+  ['Nord Stream 1/2','#22d3ee',[[28.8,60.7],[20,57],[18,55],[15.5,54.5],[13.7,54.1]]],
+  ['TurkStream','#f59e0b',[[37.3,44.9],[37,43],[34,42],[31,41.2],[28.7,41.1],[28,41.5],[27,41.8]]],
+  ['TAP / TANAP','#a78bfa',[[49.8,40.4],[43,41.7],[38,39],[36,37],[30,39],[28,41],[26,41],[24,41],[20,40],[18,40],[16,40.5],[15.8,40.6]]],
+  ['Druzhba','#fb923c',[[32,52],[24,52],[18,52],[14,51],[12,51],[14,48],[16,48]]],
+  ['Yamal-Europa','#facc15',[[57,68],[40,62],[28,58],[20,55],[17,52],[14,51]]],
+  ['BTC','#34d399',[[49.8,40.4],[44,41],[41,41],[38,39],[36.8,37],[36.2,36.8]]],
+  ['Power of Siberia','#f87171',[[131,48],[129,45],[125,42],[122,41],[115,40],[110,38],[105,37],[103,38]]],
+  ['Greenstream (Libia-Italia)','#67e8f9',[[13.3,32.7],[12.5,34],[12,36],[12.4,37.8],[13,38.5],[15.5,39.5]]],
+  ['Arab Gas Pipeline','#fbbf24',[[32.5,29.8],[34,33],[35.5,33.9],[36,34],[36.5,35],[37,37],[37.5,38]]],
+];
+
+function _drawPipelines(gNode,path){
+  var g=d3.select(gNode);
+  var existing=g.select('.pipes-layer');
+  if(!existing.empty())existing.remove();
+  if(!_p2Layers.pipes)return;
+  var layer=g.append('g').attr('class','pipes-layer');
+  PIPELINES.forEach(function(pipe){
+    var name=pipe[0],color=pipe[1],coords=pipe[2];
+    var geoj={type:'Feature',geometry:{type:'LineString',coordinates:coords}};
+    // Glow
+    layer.append('path').datum(geoj)
+      .attr('d',path)
+      .attr('fill','none')
+      .attr('stroke',color)
+      .attr('stroke-width','3')
+      .attr('stroke-opacity','0.18')
+      .attr('stroke-linecap','round');
+    // Main line
+    layer.append('path').datum(geoj)
+      .attr('d',path)
+      .attr('fill','none')
+      .attr('stroke',color)
+      .attr('stroke-width','1.5')
+      .attr('stroke-opacity','0.75')
+      .attr('stroke-dasharray','6 3')
+      .attr('stroke-linecap','round')
+      .append('title').text(name);
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════
+// MAP FEATURE 3: TIMELINE SLIDER
+// ══════════════════════════════════════════════════════════════════
+var _p2TimelineHours=72; // show last N hours (72 = all)
+
+function p2TimelineChange(val){
+  _p2TimelineHours=parseInt(val)||72;
+  var lbl=document.getElementById('p2-tl-from');
+  if(lbl)lbl.textContent=val+'h';
+  _redrawOverlay();
+  _updateStats();
+}
+
+function _timelineFilter(arts){
+  if(_p2TimelineHours>=72)return arts;
+  var cutoff=Date.now()-_p2TimelineHours*3600*1000;
+  return arts.filter(function(a){return (a.ts||0)>=cutoff;});
+}
+
+// ══════════════════════════════════════════════════════════════════
+// MAP FEATURE 4: COUNTRY CLICK PANEL
+// ══════════════════════════════════════════════════════════════════
+var _cpCurrentIso='';
+var _cpCurrentReg='';
+
+// Country flag emoji from ISO2
+function _isoToFlag(iso){
+  if(!iso||iso.length!==2)return '🌍';
+  return String.fromCodePoint(...iso.toUpperCase().split('').map(function(c){return 0x1F1E0-65+c.charCodeAt(0);}));
+}
+
+function openCountryPanel(iso2, name){
+  var reg=Object.keys(RC).find(function(r){return RC[r].indexOf(iso2)>=0;})||'global';
+  _cpCurrentIso=iso2;
+  _cpCurrentReg=reg;
+
+  document.getElementById('cp-flag').textContent=_isoToFlag(iso2);
+  document.getElementById('cp-name').textContent=name||iso2;
+  document.getElementById('cp-region').textContent=reg.toUpperCase()+' · '+iso2;
+
+  // Status badges
+  var statusEl=document.getElementById('cp-status');
+  var czInfo=CONFLICT_ZONES[iso2];
+  var badges='';
+  if(czInfo){
+    var czColors={critical:'#ef4444',high:'#f59e0b',medium:'#3b82f6',low:'#6b7280'};
+    badges+='<span class="cp-conflict-badge">&#9888; CONFLITTO — '+(czInfo.level||'').toUpperCase()+'</span>';
+  }
+  var artCount=articles.filter(function(a){return a.region===reg;}).length;
+  if(artCount>0)badges+='<span style="font-size:11px;color:var(--acc);">'+artCount+' notizie attive</span>';
+  statusEl.innerHTML=badges||'<span style="color:var(--mu);font-size:11px;">Nessun alert attivo</span>';
+
+  // Articles
+  var cpArts=articles.filter(function(a){return a.region===reg||a.cat===iso2.toLowerCase();});
+  cpArts=_timelineFilter(cpArts).slice(0,25);
+  var SEV_COLOR={critical:'#ef4444',high:'#f59e0b',medium:'#3b82f6',low:'#6b7280'};
+  var artEl=document.getElementById('cp-articles');
+  if(cpArts.length===0){
+    artEl.innerHTML='<div style="color:var(--mu);font-size:12px;padding:20px;text-align:center;">Nessuna notizia recente per questo paese.</div>';
+  } else {
+    artEl.innerHTML=cpArts.map(function(a){
+      return '<div class="cp-card" onclick="window.open(\''+esc(a.link)+'\',\'_blank\')">'
+        +'<div class="cp-card-title">'
+        +'<span class="cp-card-sev" style="background:'+(SEV_COLOR[a.sev]||'#6b7280')+'"></span>'
+        +esc(a.title)+'</div>'
+        +'<div class="cp-card-meta">'+esc(a.src||'')+(a.pub?' · '+fmtTime(a.pub):'')+'</div>'
+        +'</div>';
+    }).join('');
+  }
+
+  // Show panel
+  var panel=document.getElementById('country-panel');
+  var overlay=document.getElementById('country-panel-overlay');
+  if(panel){panel.style.right='0';}
+  if(overlay){overlay.style.display='block';}
+}
+
+function closeCountryPanel(){
+  var panel=document.getElementById('country-panel');
+  var overlay=document.getElementById('country-panel-overlay');
+  if(panel)panel.style.right='-420px';
+  if(overlay)overlay.style.display='none';
+  _cpCurrentIso='';
+}
+
+function cpRunAnalisi(){
+  // Pre-filter ANALISI to current region and open modal
+  var focusEl=document.getElementById('analisi-focus');
+  var focusMap={europa:'europa',medioriente:'medio oriente',indopacifico:'cina',cina:'cina',americas:'americas',africa:'africa'};
+  if(focusEl&&_cpCurrentReg){focusEl.value=focusMap[_cpCurrentReg]||'';}
+  // Switch to dashboard mode
+  var dashBtn=document.getElementById('src-dashboard');
+  if(dashBtn)analisiSetSrc('dashboard',dashBtn);
+  closeCountryPanel();
+  openAnalisi();
+}
+
+// ── Region view presets (zoom + translate on SVG g) ──────────────
+function p2ZoomStep(factor){
+  if(!_p2SVG||!_p2ZoomBeh)return;
+  _p2SVG.transition().duration(300).call(_p2ZoomBeh.scaleBy, factor);
+}
+
+function p2SetView(view){
+  _p2CurrentView=view;
+  // Update button state
+  document.querySelectorAll('.p2-rbtn').forEach(function(b){b.classList.remove('active');});
+  var pressed=document.querySelector('[onclick="p2SetView(\''+view+'\')"]');
+  if(pressed)pressed.classList.add('active');
+  if(!_p2SVG||!_p2ZoomBeh)return;
+  var vp=P2_VIEWS[view];
+  if(!vp)return;
+  var wrap=document.getElementById('p2-map-wrap');
+  var W=wrap?wrap.clientWidth:900, H=wrap?wrap.clientHeight:420;
+  var cx=W/2, cy=H/2;
+  var tx=cx+vp.tx*vp.s/2, ty=cy+vp.ty*vp.s/2;
+  var t=d3.zoomIdentity.translate(tx,ty).scale(vp.s);
+  _p2SVG.transition().duration(700).call(_p2ZoomBeh.transform,t);
+}
+
+function p2ToggleLayer(layer,btn){
+  _p2Layers[layer]=!_p2Layers[layer];
+  if(btn)btn.classList.toggle('on',_p2Layers[layer]);
+  if(layer==='pipes'||layer==='heatmap'){
+    // These require SVG redraw
+    if(_p2G&&_p2Proj){
+      var path=d3.geoPath(_p2Proj);
+      if(layer==='pipes') _drawPipelines(_p2G.node(),path);
+      if(layer==='heatmap'){
+        var hm=_buildHeatmap();
+        _p2G.selectAll('path.country').attr('fill',function(f){
+          var i2=N2I[String(f.id)]||'';
+          if(_p2Layers.heatmap) return _heatColor(hm[i2]||0);
+          var ic=_buildColors();
+          var TINT={'#ef4444':'rgba(239,68,68,0.14)','#f59e0b':'rgba(245,158,11,0.10)','#3b82f6':'rgba(59,130,246,0.10)','#22d35e':'rgba(34,211,94,0.08)'};
+          return ic[i2]?TINT[ic[i2]]||'var(--s2)':'var(--s2)';
+        });
+      }
+    }
+  } else {
+    _redrawOverlay();
+  }
+}
+
+// ── Draw overlay (pins + hotspots) — called on each data update ──
+function _redrawOverlay(){
+  if(!_p2Proj)return;
+  var wrap=document.getElementById('p2-map-wrap');if(!wrap)return;
+  var tip=document.getElementById('p2-map-tip');
+
+  // Remove existing HTML overlay
+  var old=wrap.querySelector('.p2-map-pins');
+  if(old)wrap.removeChild(old);
+
+  var overlay=document.createElement('div');
+  overlay.className='p2-map-pins';
+  // Use current transform to position pins correctly
+  var curT=_p2G?d3.zoomTransform(_p2SVG.node()):null;
+
+  function toScreen(lat,lng){
+    var xy=_p2Proj([lng,lat]);
+    if(!xy)return null;
+    if(curT)return [curT.applyX(xy[0]),curT.applyY(xy[1])];
+    return xy;
+  }
+
+  // ── News pins ─────────────────────────────────────────────────
+  if(_p2Layers.pins){
+    var clusters=_geolocateArticles();
+    Object.keys(clusters).forEach(function(key){
+      var cl=clusters[key], items=cl.items, hub=cl.hub;
+      var xy=toScreen(hub.lat,hub.lng);
+      if(!xy||xy[0]<-20||xy[0]>wrap.clientWidth+20||xy[1]<-20||xy[1]>wrap.clientHeight+20)return;
+      var maxSev=0;
+      items.forEach(function(a){var s={critical:4,high:3,medium:2,low:1}[a.sev]||0;if(s>maxSev)maxSev=s;});
+      var cls=maxSev>=4?'crit':maxSev>=3?'high':maxSev>=2?'med':'low';
+      var pin=document.createElement('div');
+      pin.className='p2-pin '+cls;
+      pin.style.cssText='position:absolute;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;left:'+xy[0]+'px;top:'+xy[1]+'px;';
+      var badge=items.length>1?'<span class="badge">'+items.length+'</span>':'';
+      pin.innerHTML='<div class="dot"></div>'+badge;
+      pin.addEventListener('mouseenter',function(e){
+        if(tip){
+          var names=items.slice(0,4).map(function(a){
+            var col=a.sev==='critical'?'#ef4444':a.sev==='high'?'#f59e0b':'#94a3b8';
+            return '<li style="color:'+col+';margin:2px 0">'+a.title.substring(0,60)+'…</li>';
+          }).join('');
+          tip.innerHTML='<b style="font-size:11px;color:var(--acc)">&#9679; '+hub.name+'</b><div style="color:var(--mu);font-size:10px;margin:2px 0">'+items.length+' notizie correlate</div><ul style="margin:4px 0 0;padding:0 0 0 14px;font-size:10px">'+names+'</ul>';
+          tip.style.display='block';
+        }
+      });
+      pin.addEventListener('mousemove',function(e){if(tip){tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';}});
+      pin.addEventListener('mouseleave',function(){if(tip)tip.style.display='none';});
+      overlay.appendChild(pin);
+    });
+  }
+
+  // ── Hotspot markers ───────────────────────────────────────────
+  if(_p2Layers.hs){
+    HOTSPOTS.forEach(function(hs){
+      var xy=toScreen(hs.lat,hs.lng);
+      if(!xy||xy[0]<-20||xy[0]>wrap.clientWidth+20||xy[1]<-20||xy[1]>wrap.clientHeight+20)return;
+      var el=document.createElement('div');
+      el.className='p2-hotspot '+hs.sev;
+      el.style.cssText='position:absolute;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;left:'+xy[0]+'px;top:'+xy[1]+'px;';
+      el.innerHTML='<div class="hs-ring"></div><div class="hs-inner"></div>';
+      el.addEventListener('mouseenter',function(){
+        if(tip){tip.innerHTML='<b style="color:#ff6b6b">&#9671; '+hs.name+'</b><div style="color:var(--mu);font-size:10px;margin-top:3px">'+hs.desc+'</div>';tip.style.display='block';}
+      });
+      el.addEventListener('mousemove',function(e){if(tip){tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';}});
+      el.addEventListener('mouseleave',function(){if(tip)tip.style.display='none';});
+      overlay.appendChild(el);
+    });
+  }
+
+  wrap.appendChild(overlay);
+}
+
+// ── Draw undersea cables on SVG ──────────────────────────────────
+function _drawCables(g, path){
+  if(!_p2Layers.cables)return;
+  var NS=document.createElementNS.bind(document,'http://www.w3.org/2000/svg');
+  var cableG=NS('g');cableG.setAttribute('class','cables-layer');
+  CABLES.forEach(function(cable){
+    var lineData={type:'LineString',coordinates:cable.pts.map(function(p){return [p[1],p[0]];})};
+    var d=path(lineData);if(!d)return;
+    var el=NS('path');
+    el.setAttribute('d',d);
+    el.style.cssText='fill:none;stroke:'+cable.col+';stroke-width:1.5px;stroke-linecap:round;';
+    el.setAttribute('title',cable.name);
+    cableG.appendChild(el);
+  });
+  g.appendChild(cableG);
+}
+
+// ── Draw conflict zone fills on SVG ──────────────────────────────
+function _drawConflictFills(g, countries, path){
+  if(!_p2Layers.conflict)return;
+  var NS=document.createElementNS.bind(document,'http://www.w3.org/2000/svg');
+  var czG=NS('g');czG.setAttribute('class','conflict-fills-layer');
+  countries.features.forEach(function(f){
+    var i2=N2I[String(f.id)]||'';
+    if(!CONFLICT_ZONES[i2])return;
+    var lvl=CONFLICT_ZONES[i2];
+    var baseCol=CONFLICT_COLORS[lvl]||'rgba(239,68,68,';
+    // Very subtle fill + distinct stroke border — no red wash
+    var fillOp={crit:0.12,high:0.08,med:0.05,low:0.03}[lvl]||0.08;
+    var strokeOp={crit:0.80,high:0.65,med:0.50,low:0.35}[lvl]||0.6;
+    var strokeW={crit:1.8,high:1.4,med:1.1,low:0.8}[lvl]||1.4;
+    var fill=baseCol+fillOp+')';
+    var stroke=baseCol+strokeOp+')';
+    var d=path(f);if(!d)return;
+    var el=NS('path');
+    el.setAttribute('d',d);
+    el.style.cssText='fill:'+fill+';stroke:'+stroke+';stroke-width:'+strokeW+'px;stroke-linejoin:round;pointer-events:none;';
+    czG.appendChild(el);
+  });
+  g.appendChild(czG);
+}
+
+// ── Main draw function ────────────────────────────────────────────
+function _drawP2Map(){
+  if(!_p2MapWorld||!window.topojson||!window.d3)return;
+  var wrap=document.getElementById('p2-map-wrap');if(!wrap)return;
+  var W=wrap.clientWidth||900,H=wrap.clientHeight||420;
+  if(W<10||H<10){setTimeout(_drawP2Map,200);return;}
+
+  var countries=topojson.feature(_p2MapWorld,_p2MapWorld.objects.countries);
+  var borders=topojson.mesh(_p2MapWorld,_p2MapWorld.objects.countries,function(a,b){return a!==b;});
+  var ic=_buildColors();
+  var tip=document.getElementById('p2-map-tip');
+
+  _p2Proj=d3.geoNaturalEarth1().scale(W/6.2).translate([W/2,H/2]).precision(0.5);
+  var path=d3.geoPath(_p2Proj);
+  var NS=document.createElementNS.bind(document,'http://www.w3.org/2000/svg');
+
+  // SVG root
+  var svg=d3.select(document.createElementNS('http://www.w3.org/2000/svg','svg'))
+    .attr('viewBox','0 0 '+W+' '+H)
+    .style('width','100%').style('height','100%').style('display','block').style('overflow','hidden');
+
+  // Sphere background
+  svg.append('path').datum({type:'Sphere'}).attr('d',path)
+    .attr('fill','var(--bg2)');
+
+  // Graticule
+  svg.append('path').datum(d3.geoGraticule()()).attr('d',path)
+    .attr('fill','none').attr('stroke','var(--bd)').attr('stroke-width','0.3').attr('opacity','0.45');
+
+  // Zoom group
+  var g=svg.append('g').attr('class','zoom-group');
+  _p2G=g;
+
+  // Countries fill
+  g.selectAll('path.country').data(countries.features).enter().append('path')
+    .attr('class','country')
+    .attr('d',path)
+    .attr('fill',function(f){
+        var i2=N2I[String(f.id)]||'';
+        if(_p2Layers.heatmap){
+          var hm=_buildHeatmap();
+          return _heatColor(hm[i2]||0);
+        }
+        var TINT={'#ef4444':'rgba(239,68,68,0.14)','#f59e0b':'rgba(245,158,11,0.10)','#3b82f6':'rgba(59,130,246,0.10)','#22d35e':'rgba(34,211,94,0.08)'};
+        return ic[i2]?TINT[ic[i2]]||'var(--s2)':'var(--s2)';
+      })
+    .attr('stroke','var(--bg)').attr('stroke-width','0.5')
+    .attr('vector-effect','non-scaling-stroke')
+    .attr('cursor',function(f){return N2I[String(f.id)]?'pointer':'default';})
+    .on('mouseenter',function(event,f){
+      var i2=N2I[String(f.id)]||'';
+      if(!i2)return;
+      d3.select(this).attr('opacity','0.7');
+      if(tip){
+        var name=CN2[i2]||i2;
+        var reg=Object.keys(RC).find(function(r){return RC[r].indexOf(i2)>=0;})||'';
+        var cnt=reg?articles.filter(function(a){return a.region===reg;}).length:0;
+        var cz=CONFLICT_ZONES[i2]?'<span style="color:#ef4444;margin-left:6px">&#9888; zona conflitto</span>':'';
+        tip.innerHTML='<b>'+name+'</b>'+cz+(cnt?' &mdash; <span style="color:var(--acc)">'+cnt+' notizie</span>':'');
+        tip.style.display='block';
+      }
+    })
+    .on('mousemove',function(event){if(tip){tip.style.left=(event.clientX+14)+'px';tip.style.top=(event.clientY-10)+'px';}})
+    .on('mouseleave',function(){d3.select(this).attr('opacity','1');if(tip)tip.style.display='none';})
+    .on('click',function(event,f){
+      var i2=N2I[String(f.id)]||'';
+      if(!i2)return;
+      event.stopPropagation();
+      openCountryPanel(i2, CN2[i2]||i2);
+    });
+
+  // Conflict zone highlights
+  _drawConflictFills(g.node(),countries,path);
+
+  // Borders
+  g.append('path').datum(borders).attr('d',path)
+    .attr('fill','none').attr('stroke','var(--bg)').attr('stroke-width','0.5');
+
+  // Undersea cables
+  _drawCables(g.node(),path);
+
+  // Energy pipelines
+  _drawPipelines(g.node(),path);
+
+  // Globe outline
+  svg.append('path').datum({type:'Sphere'}).attr('d',path)
+    .attr('fill','none').attr('stroke','var(--bd2)').attr('stroke-width','0.8');
+
+  // D3 zoom
+  _p2ZoomBeh=d3.zoom()
+    .scaleExtent([0.7,15])
+    .translateExtent([[-W*2,-H*2],[W*3,H*3]])
+    .on('zoom',function(event){
+      g.attr('transform',event.transform);
+      _redrawOverlay(); // reposition HTML pins on zoom/pan
+    });
+
+  var svgNode=svg.node();
+  svgNode.style.cssText='width:100%;height:100%;display:block;overflow:hidden;';
+  wrap.innerHTML='';
+  wrap.appendChild(svgNode);
+  _p2SVG=d3.select(svgNode);
+  _p2SVG.call(_p2ZoomBeh);
+
+  // Draw HTML overlay (pins + hotspots)
+  _redrawOverlay();
+  _updateStats();
+  // Restore previous view
+  if(_p2CurrentView!=='global')p2SetView(_p2CurrentView);
+}
+
+function _refreshP2Overlay(){
+  _redrawOverlay();
+  _updateStats();
+}
+
+function initP2Map(){
+  function _doLoad(){
+    fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
+      .then(function(r){return r.json();})
+      .then(function(w){_p2MapWorld=w;_drawP2Map();})
+      .catch(function(){
+        var wrap=document.getElementById('p2-map-wrap');
+        if(wrap)wrap.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--mu);font-size:11px">Mappa non disponibile</div>';
+      });
+  }
+  function _loadD3(cb){
+    if(window.d3){cb();return;}
+    var s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js';
+    s.onload=cb;document.head.appendChild(s);
+  }
+  function _loadTopo(cb){
+    if(window.topojson){cb();return;}
+    var s=document.createElement('script');
+    s.src='https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js';
+    s.onload=cb;document.head.appendChild(s);
+  }
+  _loadD3(function(){_loadTopo(_doLoad);});
+}
+// ── ALERT FEED ────────────────────────────────────────────────────
+function renderAlerts(){
+  var feed=document.getElementById('p2-alerts-feed');
+  var cnt=document.getElementById('alert-count');
+  if(!feed)return;
+  var alerts=articles.filter(function(a){return a.sev==='critical'||a.sev==='high';});
+  alerts.sort(function(a,b){var SO={critical:4,high:3};return (SO[b.sev]||0)-(SO[a.sev]||0)||(b.ts||0)-(a.ts||0);});
+  if(cnt)cnt.textContent=alerts.length;
+  if(!alerts.length){feed.innerHTML='<div class="empty">Nessun alert critico</div>';return;}
+  feed.innerHTML=alerts.slice(0,100).map(function(a){
+    return '<div class="alert-card" data-sev="'+a.sev+'">'
+      +'<span class="alert-badge '+a.sev+'">'+(a.sev==='critical'?'&#9679; CRITICO':'&#9650; ALTO')+'</span>'
+      +'<a href="'+esc(a.link)+'" target="_blank" rel="noopener" style="font-size:14px;font-weight:600;color:var(--tx);text-decoration:none;display:block;margin-top:3px;line-height:1.35;">'+esc(a.title)+'</a>'
+      +'<div style="font-size:10px;color:var(--mu);font-family:Share Tech Mono,monospace;margin-top:3px">'+esc(a.src)+' &mdash; '+fmtTime(a.pub)+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+
+// ── TV PLAYER ─────────────────────────────────────────────────────
+var TV_CH=[
+  {name:'Al Jazeera EN', type:'hls', hls:'https://live-hls-web-aje.getaj.net/AJE/index.m3u8',              yt:'gCNeDWCI0vo'},
+  {name:'Al Jazeera AR', type:'hls', hls:'https://live-hls-web-aja.getaj.net/AJA/index.m3u8',              yt:'rChF468RWrU'},
+  {name:'France 24 EN',  type:'hls', hls:'https://static.france24.com/live/F24_EN_LO_HLS/live_web.m3u8',   yt:'u9foWyMSETk'},
+  {name:'DW News',       type:'hls', hls:'https://dwamdstream102.akamaized.net/hls/live/2015531/dwstream102/index.m3u8', yt:'LuKwFajn37U'},
+  {name:'Euronews EN',   type:'hls', hls:'https://euronews-euronews-1-gb.samsung.wurl.tv/manifest/playlist.m3u8', yt:'pykpO5kQJ98'},
+  {name:'TRT World',     type:'hls', hls:'https://trtworldlive.akamaized.net/hls/live/2003168/trtworldlive/index.m3u8', yt:'ABfFhWzWs0s'},
+  {name:'Sky News',      type:'hls', hls:'https://linear417-gb-hls1-prd-ak.cdn.skycdp.com/100e/Content/HLS_001_1080_30/Live/channel(skynews)/index_1080-30.m3u8', yt:'9Auq9mYxFEE'},
+  {name:'NHK World',     type:'hls', hls:'https://nhkworld.webcdn.stream.ne.jp/www11/nhkworld-tv/global/263941/live_wa_s.m3u8', yt:'f0lYfG_vY_U'},
+  {name:'RT English',    type:'hls', hls:'https://rt-glb.rttv.com/live/rten/playlist.m3u8', yt:''},
+  {name:'i24 News',      type:'hls', hls:'https://bcovlive-a.akamaihd.net/6db4a900c00c4f7dac5f1e97ab87a0e4/eu-central-1/5377161796001/profile_0/chunklist.m3u8', yt:''},
+  {name:'Bloomberg',     type:'link',link:'https://www.bloomberg.com/live', yt:''},
+  {name:'CNN',           type:'link',link:'https://edition.cnn.com/live-tv', yt:''},
+];
+var _tvIdx=0,_tvMuted=true,_hlsInst=null;
+function _buildPlayer(idx){
+  var ch=TV_CH[idx];if(!ch)return;_tvIdx=idx;
+  var lbl=document.getElementById('tvlbl');if(lbl)lbl.textContent=ch.name.toUpperCase()+' \u2014 LIVE';
+  if(_hlsInst){try{_hlsInst.destroy();}catch(e){}_hlsInst=null;}
+  var wrap=document.getElementById('tv-yt-wrap');
+  if(wrap){wrap.querySelectorAll('iframe').forEach(function(f){f.parentNode.removeChild(f);});}
+  var vid=document.getElementById('tv-hls-video');
+  if(vid){vid.pause();vid.removeAttribute('src');vid.load();vid.style.display='none';}
+  var msg=document.getElementById('tv-msg');if(msg)msg.style.display='none';
+  _tvMuted=true;_updateMuteBtn();
+  if(ch.type==='link'){if(msg){msg.style.display='flex';var a=msg.querySelector('a');if(a){a.href=ch.link;a.textContent='Apri '+ch.name+' \u2197';}}return;}
+  _tryHLS(ch.hls,ch.yt);
+}
+function _tryHLS(url,ytId){
+  var vid=document.getElementById('tv-hls-video');if(!vid)return;
+  function fallback(){vid.style.display='none';if(ytId)_ytEmbed(ytId);else{var m=document.getElementById('tv-msg');if(m)m.style.display='flex';}}
+  try{vid.pause();}catch(e){}
+  vid.style.display='block';
+  vid.muted=true;
+  vid.setAttribute('playsinline','');
+  vid.setAttribute('webkit-playsinline','');
+  if(typeof Hls!=='undefined'&&Hls.isSupported()){
+    _hlsInst=new Hls({maxBufferLength:20,liveSyncDurationCount:3,manifestLoadingTimeOut:10000,levelLoadingTimeOut:10000,fragLoadingTimeOut:20000,enableWorker:true});
+    _hlsInst.loadSource(url);_hlsInst.attachMedia(vid);
+    _hlsInst.on(Hls.Events.MANIFEST_PARSED,function(){vid.play().catch(function(){});});
+    _hlsInst.on(Hls.Events.ERROR,function(ev,data){if(data&&data.fatal){try{_hlsInst.destroy();}catch(e){}_hlsInst=null;fallback();}});
+  }else if(vid.canPlayType('application/vnd.apple.mpegurl')){
+    vid.src=url;
+    vid.addEventListener('loadedmetadata',function(){vid.play().catch(function(){});},{once:true});
+    vid.addEventListener('error',function(){fallback();},{once:true});
+  }else{fallback();}
+}
+function _ytEmbed(id){
+  var wrap=document.getElementById('tv-yt-wrap');if(!wrap)return;
+  var iframe=document.createElement('iframe');
+  iframe.src='https://www.youtube.com/embed/'+id+'?autoplay=1&mute=1&rel=0&playsinline=1';
+  iframe.allow='autoplay;encrypted-media;picture-in-picture';iframe.allowFullscreen=true;
+  iframe.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:none;';
+  wrap.appendChild(iframe);
+}
+function tvUnmute(){_tvMuted=!_tvMuted;var vid=document.getElementById('tv-hls-video');if(vid&&vid.style.display!=='none'){vid.muted=_tvMuted;if(!_tvMuted)vid.play().catch(function(){});}_updateMuteBtn();}
+function _updateMuteBtn(){var b=document.getElementById('tv-mute-btn');if(b)b.textContent=_tvMuted?'SUONO':'MUTE';}
+function tvChange(){var sel=document.getElementById('tvsel');if(sel)_buildPlayer(parseInt(sel.value,10));}
+function tvToggle(){var panel=document.getElementById('tv-panel');if(!panel)return;if(panel.classList.contains('tv-off')){panel.classList.remove('tv-off');_buildPlayer(_tvIdx);}else{tvClose();}}
+function tvClose(){if(_hlsInst){try{_hlsInst.destroy();}catch(e){}_hlsInst=null;}var vid=document.getElementById('tv-hls-video');if(vid){vid.pause();vid.removeAttribute('src');vid.load();}var wrap=document.getElementById('tv-yt-wrap');if(wrap){wrap.querySelectorAll('iframe').forEach(function(f){f.parentNode.removeChild(f);});}var panel=document.getElementById('tv-panel');if(panel)panel.classList.add('tv-off');}
+function tvOpenYT(){var ch=TV_CH[_tvIdx];if(!ch)return;var url=ch.link||(ch.yt?'https://www.youtube.com/watch?v='+ch.yt:'');if(url)window.open(url,'_blank');}
+(function(){
+  var hd=document.getElementById('tvhd'),panel=document.getElementById('tv-panel');
+  if(!hd||!panel)return;
+  var dx=0,dy=0,down=false;
+  hd.addEventListener('mousedown',function(e){if(e.target.tagName==='BUTTON'||e.target.tagName==='SELECT')return;down=true;dx=e.clientX-panel.offsetLeft;dy=e.clientY-panel.offsetTop;e.preventDefault();});
+  document.addEventListener('mousemove',function(e){if(!down)return;panel.style.left=(e.clientX-dx)+'px';panel.style.top=(e.clientY-dy)+'px';panel.style.right='auto';panel.style.bottom='auto';});
+  document.addEventListener('mouseup',function(){down=false;});
+})();
+
+// ── INIT ──────────────────────────────────────────────────────────
+function hardReset(){
+  try{localStorage.removeItem('sh3_sources');localStorage.removeItem('sh3_colorder');localStorage.removeItem('sh3_colclosed');}catch(e){}
+  sources=DEFAULTS.slice();
+  colOrder=ALL_COLS.map(function(c){return c.id;});
+  colClosed=[];
+  renderAll();doRefresh();
+  notify('Reset completato');
+}
+// ── ANALISI INTELLIGENCE ─────────────────────────────────────────
+var _analisiTab='swot';
+var _analisiSrc='dashboard'; // 'dashboard' | 'urls'
+
+function openAnalisi(){
+  var m=document.getElementById('analisi-modal');
+  if(!m)return;
+  m.style.display='flex';
+  var saved=localStorage.getItem('sh3_apikey')||'';
+  var inp=document.getElementById('analisi-apikey');
+  if(inp&&!inp.value&&saved)inp.value=saved;
+  _updateAnalisiKeyStatus();
+}
+function closeAnalisi(){
+  var m=document.getElementById('analisi-modal');
+  if(m)m.style.display='none';
+}
+function _updateAnalisiKeyStatus(){
+  var inp=document.getElementById('analisi-apikey');
+  var ks=document.getElementById('analisi-key-status');
+  var key=(inp&&inp.value)||localStorage.getItem('sh3_apikey')||'';
+  if(ks){
+    if(key){ks.textContent='✓ Key pronta';ks.style.color='var(--acc)';}
+    else{ks.textContent='Senza key: analisi locale';ks.style.color='var(--mu)';}
+  }
+}
+function selectAnalisiTab(tab,el){
+  _analisiTab=tab;
+  document.querySelectorAll('.analisi-tab').forEach(function(b){b.classList.remove('active');});
+  if(el)el.classList.add('active');
+}
+function analisiSetSrc(src,el){
+  _analisiSrc=src;
+  document.querySelectorAll('.analisi-src-btn').forEach(function(b){b.classList.remove('active');});
+  if(el)el.classList.add('active');
+  var urlPanel=document.getElementById('analisi-url-panel');
+  var txtPanel=document.getElementById('analisi-text-panel');
+  if(urlPanel)urlPanel.style.display=src==='urls'?'block':'none';
+  if(txtPanel)txtPanel.style.display=src==='text'?'block':'none';
+  // Wire up character counter for free text
+  if(src==='text'){
+    var ta=document.getElementById('analisi-freetext');
+    var cnt=document.getElementById('analisi-text-count');
+    if(ta&&cnt){
+      ta.oninput=function(){cnt.textContent=ta.value.length+' caratteri';};
+    }
+  }
+}
+
+// ── URL FETCHING ──────────────────────────────────────────────────
+// Fetches article text via allorigins CORS proxy
+function _fetchArticleText(url){
+  var proxy='https://api.allorigins.win/get?url='+encodeURIComponent(url);
+  return fetch(proxy,{signal:AbortSignal.timeout(12000)})
+    .then(function(r){return r.json();})
+    .then(function(d){
+      var html=d.contents||'';
+      // Strip tags, collapse whitespace, take first ~3000 chars of meaningful text
+      var text=html
+        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi,'')
+        .replace(/<style[^>]*>[\s\S]*?<\/style>/gi,'')
+        .replace(/<[^>]+>/g,' ')
+        .replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')
+        .replace(/\s{2,}/g,' ').trim();
+      return text.substring(0,4000);
+    });
+}
+
+function _setProgress(pct){
+  var bar=document.getElementById('analisi-progress');
+  var fill=document.getElementById('analisi-progress-bar');
+  if(!bar||!fill)return;
+  if(pct>=100||pct<0){bar.style.display='none';fill.style.width='0%';return;}
+  bar.style.display='block';
+  fill.style.width=pct+'%';
+}
+
+// ── MAIN RUN ──────────────────────────────────────────────────────
+function runAnalisi(){
+  var body=document.getElementById('analisi-body');
+  var status=document.getElementById('analisi-status');
+  if(!body||!status)return;
+  var tab=_analisiTab;
+  var focus=(document.getElementById('analisi-focus')||{}).value||'';
+  var apiKey=((document.getElementById('analisi-apikey')||{}).value||'').trim()||
+             (localStorage.getItem('sh3_apikey')||'').trim();
+
+  if(_analisiSrc==='urls'){
+    _runUrlAnalisi(tab,focus,apiKey,body,status);
+  } else if(_analisiSrc==='text'){
+    _runFreeTextAnalisi(tab,focus,apiKey,body,status);
+  } else {
+    _runDashboardAnalisi(tab,focus,apiKey,body,status);
+  }
+}
+
+// ── FREE TEXT MODE ────────────────────────────────────────────────
+function _runFreeTextAnalisi(tab,focus,apiKey,body,status){
+  var ta=document.getElementById('analisi-freetext');
+  var testo=(ta&&ta.value)||'';
+  testo=testo.trim();
+  if(testo.length<80){
+    body.innerHTML='<div style="padding:20px;color:var(--am);font-family:\'Share Tech Mono\',monospace;font-size:11px;">⚠ Incolla almeno qualche riga di testo nel campo sopra.</div>';
+    return;
+  }
+  var ctx=testo.substring(0,5000);
+  body.innerHTML='<div class="analisi-loading"><div class="analisi-spinner"></div>Analisi in corso…</div>';
+  _setProgress(40);
+  status.textContent='Elaborazione testo libero…';
+  if(!apiKey){
+    setTimeout(function(){
+      _setProgress(-1);
+      body.innerHTML=_buildLocalFromText(tab,ctx,1);
+      status.textContent='Analisi locale — testo libero';
+    },200);
+    return;
+  }
+  _callClaudeAPI(tab,ctx,focus,apiKey,function(result){
+    _setProgress(-1);
+    body.innerHTML=result;
+    status.textContent='Claude API — testo libero — '+new Date().toLocaleTimeString('it-IT');
+  },function(err){
+    _setProgress(-1);
+    body.innerHTML='<div style="padding:10px;color:var(--re);font-size:11px;">Errore API: '+err+'</div>';
+    status.textContent='Errore API';
+  });
+}
+
+// ── URL MODE ──────────────────────────────────────────────────────
+function _runUrlAnalisi(tab,focus,apiKey,body,status){
+  var textarea=document.getElementById('analisi-urls');
+  if(!textarea)return;
+  var rawUrls=textarea.value.trim();
+  if(!rawUrls){
+    body.innerHTML='<div style="padding:20px;color:var(--am);font-family:\'Share Tech Mono\',monospace;font-size:11px;">⚠ Incolla almeno un URL nel campo sopra.</div>';
+    return;
+  }
+  var urls=rawUrls.split('\n').map(function(u){return u.trim();}).filter(function(u){return u.length>10;}).slice(0,6);
+  body.innerHTML='<div class="analisi-loading"><div class="analisi-spinner"></div>Recupero articoli ('+urls.length+')…</div>';
+  _setProgress(5);
+  status.textContent='Fetching '+urls.length+' URL…';
+
+  var urlStatus=document.getElementById('analisi-url-status');
+
+  var fetches=urls.map(function(url,i){
+    return _fetchArticleText(url)
+      .then(function(text){
+        if(urlStatus)urlStatus.textContent='✓ Recuperato: '+url.substring(0,60)+'…';
+        _setProgress(10+Math.round(70*(i+1)/urls.length));
+        return {url:url,text:text,ok:true};
+      })
+      .catch(function(e){
+        return {url:url,text:'',ok:false,err:e.message};
+      });
+  });
+
+  Promise.all(fetches).then(function(results){
+    var ok=results.filter(function(r){return r.ok&&r.text.length>100;});
+    var failed=results.filter(function(r){return !r.ok||r.text.length<=100;});
+
+    if(ok.length===0){
+      _setProgress(-1);
+      body.innerHTML='<div style="padding:20px;color:var(--re);font-size:12px;">'+
+        '<b>⚠ Impossibile recuperare il contenuto degli URL.</b><br><br>'+
+        'Alcuni siti bloccano l\'accesso esterno. Prova con URL di fonti aperte (Reuters, AP, NYT, ecc.).<br><br>'+
+        '<b>URL tentati:</b><ul>'+results.map(function(r){return '<li style="font-size:11px;color:var(--mu)">'+r.url+(r.err?' — '+r.err:'')+'</li>';}).join('')+'</ul>'+
+        '</div>';
+      status.textContent='Errore fetch';
+      return;
+    }
+
+    // Build context string from fetched articles
+    var ctx='';
+    ok.forEach(function(r,i){
+      ctx+='=== ARTICOLO '+(i+1)+' ===\nURL: '+r.url+'\n\n'+r.text+'\n\n';
+    });
+
+    var failNote=failed.length?'\n\n['+failed.length+' URL non accessibili: '+failed.map(function(r){return r.url;}).join(', ')+']':'';
+
+    var warningHtml='';
+    if(failed.length){
+      warningHtml='<div style="font-size:10px;color:var(--am);background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);border-radius:4px;padding:6px 10px;margin-bottom:10px;">'+
+        '⚠ '+failed.length+' URL non accessibili (sito protetto o bloccato): '+
+        failed.map(function(r){return '<br>· '+r.url;}).join('')+'</div>';
+    }
+
+    _setProgress(80);
+    status.textContent='Elaborazione con '+(apiKey?'Claude API':'analisi locale')+'…';
+
+    if(!apiKey){
+      _setProgress(-1);
+      body.innerHTML=warningHtml+_buildLocalFromText(tab,ctx,ok.length);
+      status.textContent='Analisi locale completata — '+ok.length+' articoli';
+      return;
+    }
+
+    _callClaudeAPI(tab,ctx,focus,apiKey,function(result){
+      _setProgress(-1);
+      body.innerHTML=warningHtml+result;
+      status.textContent='Claude API — '+ok.length+' art. analizzati — '+new Date().toLocaleTimeString('it-IT');
+    },function(err){
+      _setProgress(-1);
+      body.innerHTML=warningHtml+'<div style="padding:10px;color:var(--re);font-size:11px;">API error: '+err+'</div>';
+      status.textContent='Errore API';
+    });
+  });
+}
+
+// ── DASHBOARD MODE ────────────────────────────────────────────────
+function _runDashboardAnalisi(tab,focus,apiKey,body,status){
+  var arts=articles.slice(0,60);
+  if(focus){
+    var ff=arts.filter(function(a){
+      return (a.title||'').toLowerCase().indexOf(focus)>=0||(a.region||'').toLowerCase().indexOf(focus)>=0;
+    });
+    if(ff.length>5)arts=ff;
+  }
+  body.innerHTML='<div class="analisi-loading"><div class="analisi-spinner"></div>'+(apiKey?'Claude API…':'Analisi locale…')+'</div>';
+  _setProgress(30);
+  if(!apiKey){
+    setTimeout(function(){_setProgress(-1);_runLocalAnalisi(tab,arts,body,status);},300);
+    return;
+  }
+  var headlines=arts.map(function(a,i){
+    return (i+1)+'. ['+(a.sev||'').toUpperCase()+'|'+(a.region||'')+'] '+(a.title||'');
+  }).join('\n');
+  _setProgress(60);
+  var ctx='Le seguenti notizie geopolitiche sono state raccolte dalla dashboard:\n\n'+headlines;
+  _callClaudeAPI(tab,ctx,focus,apiKey,function(result){
+    _setProgress(-1);
+    body.innerHTML=result;
+    status.textContent='Claude API — '+arts.length+' notizie — '+new Date().toLocaleTimeString('it-IT');
+  },function(err){
+    _setProgress(-1);
+    _runLocalAnalisi(tab,arts,body,status);
+    var errDiv=document.createElement('div');
+    errDiv.style.cssText='padding:8px;background:rgba(239,68,68,.08);border:1px solid var(--re);border-radius:4px;font-size:10px;color:var(--re);margin-bottom:10px;';
+    errDiv.textContent='API error (fallback locale): '+err;
+    body.insertBefore(errDiv,body.firstChild);
+    status.textContent='Fallback locale';
+  });
+}
+
+// ── CLAUDE API CALL ───────────────────────────────────────────────
+function _buildPrompt(tab,ctx,focus){
+  var focusStr=focus?' Focus tematico: '+focus+'.':'';
+  var prompts={
+    swot:'Sei un analista geopolitico senior di Limes.'+focusStr+'\nAnalizza il seguente contenuto e produci una SWOT Analysis geopolitica. Per ogni quadrante (Strengths, Weaknesses, Opportunities, Threats) fornisci 4-5 punti concreti e specifici. Rispondi SOLO con JSON valido:\n{"strengths":["..."],"weaknesses":["..."],"opportunities":["..."],"threats":["..."]}\n\n'+ctx,
+    competitive:'Sei un analista geopolitico senior.'+focusStr+'\nAnalizza il seguente contenuto. Identifica e analizza i principali attori geopolitici: per ognuno dai posizione attuale, vantaggi strategici, vulnerabilità. Usa intestazioni ### Nome Attore. Rispondi SOLO in italiano. Max 700 parole.\n\n'+ctx,
+    devil:'Sei un analista che pratica il Devil\'s Advocacy.'+focusStr+'\nAnalizza il seguente contenuto. Identifica le 3-4 narrative dominanti e smontale con argomentazioni rigorose. Struttura: ### Narrativa → controargomentazioni → punto cieco. Rispondi SOLO in italiano. Max 700 parole.\n\n'+ctx,
+    scenario:'Sei un analista strategico.'+focusStr+'\nAnalizza il seguente contenuto. Produci 3 scenari evolutivi per i prossimi 3-6 mesi. SOLO JSON valido:\n[{"label":"...","prob":XX,"drivers":["..."],"implications":"...","type":"low-prob|med-prob|high-prob"}]\n\n'+ctx
+  };
+  return prompts[tab]||prompts.swot;
+}
+
+function _callClaudeAPI(tab,ctx,focus,apiKey,onSuccess,onError){
+  fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'x-api-key':apiKey,
+      'anthropic-version':'2023-06-01',
+      'anthropic-dangerous-direct-browser-access':'true'
+    },
+    body:JSON.stringify({
+      model:'claude-sonnet-4-6',
+      max_tokens:1400,
+      system:'Sei un analista geopolitico senior di Limes. Rispondi SEMPRE in italiano, in modo preciso e sintetico.',
+      messages:[{role:'user',content:_buildPrompt(tab,ctx,focus)}]
+    })
+  })
+  .then(function(r){
+    if(!r.ok)return r.json().then(function(e){throw new Error((e.error&&e.error.message)||r.status);});
+    return r.json();
+  })
+  .then(function(data){
+    var text=(data.content&&data.content[0]&&data.content[0].text)||'';
+    onSuccess(_renderAnalisiAPI(tab,text));
+  })
+  .catch(function(e){onError(e.message);});
+}
+
+// ── RENDER API RESULT ─────────────────────────────────────────────
+function _renderAnalisiAPI(tab,text){
+  if(tab==='swot'){
+    try{
+      var d=JSON.parse(text.replace(/```json\n?|\n?```/g,'').trim());
+      return '<div class="swot-grid">'+
+        '<div class="swot-cell s"><h4>⬡ STRENGTHS</h4><ul>'+d.strengths.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>'+
+        '<div class="swot-cell w"><h4>⬡ WEAKNESSES</h4><ul>'+d.weaknesses.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>'+
+        '<div class="swot-cell o"><h4>⬡ OPPORTUNITIES</h4><ul>'+d.opportunities.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>'+
+        '<div class="swot-cell t"><h4>⬡ THREATS</h4><ul>'+d.threats.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>'+
+        '</div>';
+    }catch(e){}
+  }
+  if(tab==='scenario'){
+    try{
+      var sc=JSON.parse(text.replace(/```json\n?|\n?```/g,'').trim());
+      return sc.map(function(s){
+        var col=s.type==='low-prob'?'#3b82f6':s.type==='med-prob'?'#f59e0b':'#ef4444';
+        var icon=s.type==='low-prob'?'▼':s.type==='med-prob'?'►':'▲';
+        return '<div class="scenario-item '+s.type+'" style="margin-bottom:10px">'+
+          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">'+
+          '<b style="color:'+col+'">'+icon+' '+s.label+'</b>'+
+          '<span style="font-family:monospace;font-size:11px;color:'+col+';background:var(--s2);padding:2px 8px;border-radius:3px">'+s.prob+'%</span>'+
+          '</div>'+
+          '<div style="font-size:11px;color:var(--mu);margin-bottom:4px">Drivers: '+s.drivers.join(' · ')+'</div>'+
+          '<div style="font-size:12px">'+s.implications+'</div></div>';
+      }).join('');
+    }catch(e){}
+  }
+  // Markdown fallback
+  return '<div>'+text
+    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
+    .replace(/^## (.+)$/gm,'<h3>$1</h3>')
+    .replace(/\*\*(.+?)\*\*/g,'<b>$1</b>')
+    .replace(/^[-*] (.+)$/gm,'<li>$1</li>')
+    .replace(/(<li>[^<]+<\/li>\n?)+/g,function(m){return '<ul>'+m+'</ul>';})
+    .replace(/\n\n/g,'</p><p>')+'</div>';
+}
+
+// ── LOCAL ANALYSIS (no API) ───────────────────────────────────────
+function _buildLocalFromText(tab,ctx,count){
+  return '<div style="background:rgba(139,92,246,.07);border:1px solid rgba(139,92,246,.25);border-radius:6px;padding:12px;font-size:12px;line-height:1.6">'+
+    '<b style="color:#a78bfa">&#9872; Analisi locale — '+count+' articoli recuperati</b><br><br>'+
+    '<span style="color:var(--mu)">Inserisci una Anthropic API key per ottenere un\'analisi Claude contestuale sul contenuto degli URL forniti.<br><br>'+
+    'Contenuto estratto: <b>'+Math.round(ctx.length/1000)+'k caratteri</b> da '+count+' articoli.</span>'+
+    '<div style="margin-top:10px;font-size:10px;font-family:\'Share Tech Mono\',monospace;color:var(--mu)">Preview contenuto:</div>'+
+    '<div style="font-size:10px;font-family:\'Share Tech Mono\',monospace;color:var(--tx2);background:var(--s2);padding:8px;border-radius:4px;margin-top:4px;max-height:120px;overflow-y:auto;white-space:pre-wrap">'+
+    esc(ctx.substring(0,600))+'…</div>'+
+    '</div>';
+}
+
+function _runLocalAnalisi(tab,arts,body,status){
+  var byReg={};var bySev={critical:0,high:0,medium:0,low:0};var actors={};
+  arts.forEach(function(a){
+    byReg[a.region]=(byReg[a.region]||0)+1;
+    if(a.sev)bySev[a.sev]=(bySev[a.sev]||0)+1;
+    ['Russia','Ukraine','China','USA','NATO','Iran','Israel','Hamas','Houthi','EU'].forEach(function(k){
+      if((a.title||'').indexOf(k)>=0)actors[k]=(actors[k]||0)+1;
+    });
+  });
+  var topRegs=Object.keys(byReg).sort(function(a,b){return byReg[b]-byReg[a];}).slice(0,5);
+  var topActors=Object.keys(actors).sort(function(a,b){return actors[b]-actors[a];}).slice(0,4);
+  var critZones=[...new Set(arts.filter(function(a){return a.sev==='critical';}).map(function(a){return a.region;}))].slice(0,4);
+  var html='';
+  if(tab==='swot'){
+    html='<div class="swot-grid">'+
+      '<div class="swot-cell s"><h4>⬡ STRENGTHS</h4><ul>'+
+        '<li>Active monitoring on '+topRegs.slice(0,3).join(', ')+'</li>'+
+        '<li>'+arts.length+' sources tracked, '+bySev.high+' high-priority alerts</li>'+
+        (topActors.length?'<li>Key actors tracked: '+topActors.slice(0,3).join(', ')+'</li>':'')+
+        '<li>Early warning architecture across '+Object.keys(byReg).length+' theaters</li>'+
+      '</ul></div>'+
+      '<div class="swot-cell w"><h4>⬡ WEAKNESSES</h4><ul>'+
+        '<li>'+critZones.length+' critical areas with uncertain response capacity</li>'+
+        '<li>Open-source dependency — risk of information lag</li>'+
+        '<li>Narrative fragmentation across '+Object.keys(byReg).length+' theaters</li>'+
+        (bySev.critical>5?'<li>Information overload: '+bySev.critical+' simultaneous critical items</li>':'<li>Coverage gaps in secondary theaters</li>')+
+      '</ul></div>'+
+      '<div class="swot-cell o"><h4>⬡ OPPORTUNITIES</h4><ul>'+
+        '<li>Diplomatic windows in medium-intensity theaters</li>'+
+        '<li>Possible convergence between actors on energy/trade dossiers</li>'+
+        '<li>Space for multilateral mediation absent direct escalation</li>'+
+        '<li>Stabilization potential in low-activity areas</li>'+
+      '</ul></div>'+
+      '<div class="swot-cell t"><h4>⬡ THREATS</h4><ul>'+
+        (critZones.length?'<li>Escalation in critical theaters: '+critZones.join(', ')+'</li>':'<li>Latent instability across multiple areas</li>')+
+        '<li>Spillover risk between adjacent theaters</li>'+
+        '<li>Weaponization of energy and logistics flows</li>'+
+        '<li>Erosion of multilateral system — UN/G20 under pressure</li>'+
+      '</ul></div>'+
+      '</div>';
+  } else if(tab==='scenario'){
+    html=[
+      {label:'De-escalation / Diplomacy',prob:22,type:'low-prob',drivers:['Partial ceasefire agreement','China-US mediation','Economic pressure on belligerents'],impl:'Reduced energy pressure on Europe. Trade negotiations resume. Limited peace dividend.'},
+      {label:'Status Quo / War of attrition',prob:55,type:'med-prob',drivers:['No actor able to win militarily','Coalition fragmentation','Elections deferring decisions'],impl:'Prolonged uncertainty. Growing costs for Europe. Russian war economy adapts. Diplomatic standstill.'},
+      {label:'Escalation / Multiple crises',prob:23,type:'high-prob',drivers:['Incident in Taiwan Strait or South China Sea','Attack on NATO infrastructure','Collapse of negotiations'],impl:'Article 5 activation. Global energy shock. Deep recession. Mass migration crisis toward Europe.'}
+    ].map(function(s){
+      var col=s.type==='low-prob'?'#3b82f6':s.type==='med-prob'?'#f59e0b':'#ef4444';
+      var icon=s.type==='low-prob'?'▼':s.type==='med-prob'?'►':'▲';
+      return '<div class="scenario-item '+s.type+'" style="margin-bottom:10px">'+
+        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">'+
+        '<b style="color:'+col+'">'+icon+' '+s.label+'</b>'+
+        '<span style="font-family:monospace;font-size:11px;color:'+col+';background:var(--s2);padding:2px 8px;border-radius:3px">'+s.prob+'%</span>'+
+        '</div><div style="font-size:11px;color:var(--mu);margin-bottom:4px">Drivers: '+s.drivers.join(' · ')+'</div>'+
+        '<div style="font-size:12px">'+s.impl+'</div></div>';
+    }).join('');
+  } else {
+    html='<div style="padding:16px;font-size:12px;line-height:1.7;color:var(--mu)">Analisi locale disponibile solo per SWOT e Scenari.<br>Inserisci API key Claude per analisi '+tab+' contestuale.</div>';
+  }
+  body.innerHTML=html;
+  if(status)status.textContent='Local analysis — '+arts.length+' items — '+new Date().toLocaleTimeString('it-IT');
+}
+
+loadPersist();
+renderAll();
+doRefresh();
+
+
+</script>
+
+<!-- ── ANALISI MODAL ──────────────────────────────────────────────── -->
+<div class="modal-bg" id="analisi-modal" style="display:none" onclick="if(event.target===this)closeAnalisi()">
+  <div class="modal" style="width:820px;max-width:96vw;max-height:90vh;display:flex;flex-direction:column;">
+    <div class="modal-h">
+      <div class="modal-t">&#129504; ANALISI INTELLIGENCE</div>
+      <button class="modal-x" onclick="closeAnalisi()">&#10005;</button>
+    </div>
+
+    <!-- API KEY -->
+    <div style="padding:6px 14px;background:rgba(139,92,246,.07);border-bottom:1px solid var(--bd);flex-shrink:0;display:flex;align-items:center;gap:8px;">
+      <span style="font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--mu);white-space:nowrap;">&#128273; API KEY:</span>
+      <input id="analisi-apikey" type="password" placeholder="sk-ant-api…"
+        style="flex:1;font-size:11px;padding:3px 8px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);border-radius:4px;font-family:'Share Tech Mono',monospace;"
+        oninput="localStorage.setItem('sh3_apikey',this.value);_updateAnalisiKeyStatus()">
+      <span id="analisi-key-status" style="font-size:10px;color:var(--mu);white-space:nowrap;"></span>
+    </div>
+
+    <!-- SOURCE TOGGLE: dashboard / URL / free text -->
+    <div style="padding:8px 14px;border-bottom:1px solid var(--bd);flex-shrink:0;display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
+      <span style="font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--mu);">FONTE:</span>
+      <button class="analisi-src-btn active" id="src-dashboard" onclick="analisiSetSrc('dashboard',this)">&#128240; Dashboard</button>
+      <button class="analisi-src-btn" id="src-urls" onclick="analisiSetSrc('urls',this)">&#128279; URL</button>
+      <button class="analisi-src-btn" id="src-text" onclick="analisiSetSrc('text',this)">&#128203; Testo libero</button>
+    </div>
+
+    <!-- URL INPUT PANEL -->
+    <div id="analisi-url-panel" style="display:none;padding:10px 14px;border-bottom:1px solid var(--bd);flex-shrink:0;">
+      <div style="font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--mu);margin-bottom:6px;">Uno o più URL (uno per riga) — il testo verrà estratto automaticamente:</div>
+      <textarea id="analisi-urls" rows="4"
+        placeholder="https://www.globaltimes.cn/...&#10;https://www.xinhuanet.com/...&#10;https://apnews.com/..."
+        style="width:100%;box-sizing:border-box;font-size:11px;padding:6px 8px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);border-radius:4px;font-family:'Share Tech Mono',monospace;resize:vertical;"></textarea>
+      <div id="analisi-url-status" style="font-size:10px;color:var(--mu);margin-top:4px;font-family:'Share Tech Mono',monospace;"></div>
+    </div>
+
+    <!-- FREE TEXT PANEL -->
+    <div id="analisi-text-panel" style="display:none;padding:10px 14px;border-bottom:1px solid var(--bd);flex-shrink:0;">
+      <div style="font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--mu);margin-bottom:6px;">Incolla direttamente il testo dell'articolo o del documento da analizzare:</div>
+      <textarea id="analisi-freetext" rows="6"
+        placeholder="Incolla qui il testo dell'articolo, del documento o del comunicato stampa…"
+        style="width:100%;box-sizing:border-box;font-size:11px;padding:6px 8px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);border-radius:4px;font-family:inherit;resize:vertical;line-height:1.5;"></textarea>
+      <div id="analisi-text-count" style="font-size:10px;color:var(--mu);margin-top:4px;text-align:right;font-family:'Share Tech Mono',monospace;">0 caratteri</div>
+    </div>
+
+    <!-- ANALYSIS TYPE TABS + FOCUS + RUN -->
+    <div style="padding:8px 14px 6px;display:flex;gap:6px;border-bottom:1px solid var(--bd);flex-shrink:0;flex-wrap:wrap;align-items:center;">
+      <button class="analisi-tab active" data-tab="swot" onclick="selectAnalisiTab('swot',this)">&#9726; SWOT</button>
+      <button class="analisi-tab" data-tab="competitive" onclick="selectAnalisiTab('competitive',this)">&#9651; COMPETITIVA</button>
+      <button class="analisi-tab" data-tab="devil" onclick="selectAnalisiTab('devil',this)">&#9968; DEVIL'S ADVOCACY</button>
+      <button class="analisi-tab" data-tab="scenario" onclick="selectAnalisiTab('scenario',this)">&#9654; SCENARIO</button>
+      <div style="flex:1;min-width:8px;"></div>
+      <select id="analisi-focus" style="font-size:11px;padding:3px 6px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);border-radius:4px;font-family:inherit;">
+        <option value="">— Focus: tutti —</option>
+        <option value="ucraina">Ucraina</option>
+        <option value="medio oriente">Medio Oriente</option>
+        <option value="cina">Cina / Taiwan</option>
+        <option value="iran">Iran</option>
+        <option value="sahel">Sahel / Africa</option>
+        <option value="nato">NATO</option>
+      </select>
+      <button onclick="runAnalisi()" style="background:#7c3aed;color:#fff;border:none;padding:4px 16px;border-radius:4px;font-size:11px;cursor:pointer;font-family:inherit;letter-spacing:.05em;font-weight:600;">&#9654; GENERA</button>
+    </div>
+
+    <!-- OUTPUT BODY -->
+    <div id="analisi-body" style="flex:1;overflow-y:auto;padding:14px;font-size:12.5px;line-height:1.65;min-height:280px;">
+      <div style="color:var(--mu);text-align:center;padding:48px 20px;font-family:'Share Tech Mono',monospace;font-size:11px;">
+        Scegli il tipo di analisi e premi <b>GENERA</b>.<br><br>
+        Puoi analizzare le <b>notizie della dashboard</b> o incollare <b>URL specifici</b> da analizzare.
+      </div>
+    </div>
+
+    <!-- STATUS BAR -->
+    <div style="padding:5px 14px;border-top:1px solid var(--bd);color:var(--mu);font-size:10px;font-family:'Share Tech Mono',monospace;flex-shrink:0;display:flex;align-items:center;gap:8px;">
+      <span id="analisi-status">Pronto</span>
+      <div id="analisi-progress" style="flex:1;height:2px;background:var(--bd);border-radius:1px;display:none;">
+        <div id="analisi-progress-bar" style="height:100%;background:#7c3aed;border-radius:1px;width:0%;transition:width .3s;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ── COUNTRY PANEL ─────────────────────────────────────────────── -->
+<div id="country-panel" style="position:fixed;top:0;right:-420px;width:400px;height:100vh;background:var(--bg);border-left:1px solid var(--bd);z-index:900;display:flex;flex-direction:column;transition:right .28s cubic-bezier(.4,0,.2,1);box-shadow:-4px 0 24px rgba(0,0,0,.4);">
+  <div style="padding:12px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;">
+    <div id="cp-flag" style="font-size:24px;"></div>
+    <div style="flex:1;">
+      <div id="cp-name" style="font-weight:700;font-size:15px;"></div>
+      <div id="cp-region" style="font-size:11px;color:var(--mu);font-family:'Share Tech Mono',monospace;"></div>
+    </div>
+    <button onclick="closeCountryPanel()" style="background:transparent;border:none;color:var(--mu);font-size:18px;cursor:pointer;padding:4px 8px;">&#10005;</button>
+  </div>
+  <div id="cp-status" style="padding:8px 14px;border-bottom:1px solid var(--bd);flex-shrink:0;"></div>
+  <div id="cp-articles" style="flex:1;overflow-y:auto;padding:10px 12px;"></div>
+  <div style="padding:10px 14px;border-top:1px solid var(--bd);flex-shrink:0;display:flex;gap:8px;">
+    <button onclick="cpRunAnalisi()" style="flex:1;background:rgba(139,92,246,.15);border:1px solid #8b5cf6;color:#a78bfa;padding:7px;border-radius:5px;cursor:pointer;font-size:12px;font-family:inherit;">&#129504; Analizza con Claude</button>
+    <button onclick="closeCountryPanel()" style="background:var(--s2);border:1px solid var(--bd);color:var(--mu);padding:7px 12px;border-radius:5px;cursor:pointer;font-size:12px;">Chiudi</button>
+  </div>
+</div>
+<div id="country-panel-overlay" onclick="closeCountryPanel()" style="display:none;position:fixed;inset:0;z-index:899;background:rgba(0,0,0,.25);"></div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded",function(){
+ if(typeof _buildPlayer === "function"){ _buildPlayer(0); }
+});
+</script>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  try {
+    if (typeof _buildPlayer === "function") {
+      setTimeout(function(){ _buildPlayer(0); }, 300);
+    }
+  } catch(e) {}
+});
+</script>
+
+<script>
+function toggleMobileMenu(){
+  try{
+    document.body.classList.toggle('mobile-menu-open');
+  }catch(e){}
+}
+window.addEventListener('resize', function(){
+  try{
+    if(window.innerWidth > 560){
+      document.body.classList.remove('mobile-menu-open');
+    }
+  }catch(e){}
+});
+</script>
+
+
+<script>
+function toggleMobileSidebar(){
+  try{ document.body.classList.toggle('mobile-sidebar-open'); }catch(e){}
+}
+function closeMobileSidebar(){
+  try{ document.body.classList.remove('mobile-sidebar-open'); }catch(e){}
+}
+window.addEventListener('resize', function(){
+  try{
+    if(window.innerWidth > 768){
+      document.body.classList.remove('mobile-sidebar-open');
+    }
+  }catch(e){}
+});
+</script>
+
+
+<script>
+/* --- TweetDeck-style incremental refresh --- */
+var _seenArticleKeys = new Set();
+var _initialRenderDone = false;
+var _pendingByCol = {};
+function articleKey(a){
+  return ((a.link||'')+'|'+(a.title||'').trim().toLowerCase()+'|'+(a.src||'')).trim();
+}
+function colMatchesArticle(col, a){
+  try{
+    if(typeof inCol === 'function') return inCol(col, a);
+  }catch(e){}
+  try{
+    if(typeof matchCol === 'function') return matchCol(col, a);
+  }catch(e){}
+  return true;
+}
+function ensureSeenFromArticles(){
+  try{
+    (articles||[]).forEach(function(a){ _seenArticleKeys.add(articleKey(a)); });
+  }catch(e){}
+}
+function updateColumnCounters(){
+  try{
+    (ALL_COLS||[]).forEach(function(col){
+      var cntEl=document.querySelector('[data-col-cnt="'+col.id+'"]');
+      if(!cntEl) return;
+      var n=(articles||[]).filter(function(a){
+        try{return inCol(col,a);}catch(e){ return true; }
+      }).length;
+      cntEl.textContent=n;
+    });
+  }catch(e){}
+}
+function updateNewBadge(colId, n){
+  var el=document.getElementById('new-badge-'+colId);
+  if(!el) return;
+  if(n>0){
+    el.style.display='inline-block';
+    el.textContent=n+' nuovi';
+  }else{
+    el.style.display='none';
+    el.textContent='0 nuovi';
+  }
+}
+function insertArticleIntoColumn(colId, article){
+  var feed=document.querySelector('[data-col-feed="'+colId+'"]');
+  if(!feed) return false;
+  var wrapper=document.createElement('div');
+  wrapper.innerHTML=cardHTML(article);
+  var card=wrapper.firstElementChild;
+  if(!card) return false;
+  card.classList.add('card-new');
+  feed.prepend(card);
+  setTimeout(function(){card.classList.remove('card-new');card.classList.add('card-new-flash');},350);
+  setTimeout(function(){card.classList.remove('card-new-flash');},3200);
+  while(feed.children.length>120){
+    feed.removeChild(feed.lastElementChild);
+  }
+  return true;
+}
+function refreshIncremental(){
+  var btn=document.getElementById('rbtn');
+  if(btn){btn.disabled=true;btn.textContent='·';}
+  var active=sources.filter(function(s){return s.on;});
+  var done=0, incoming=[];
+  if(!active.length){
+    if(btn){btn.disabled=false;btn.textContent='↻';}
+    startTimer();
+    return;
+  }
+  active.forEach(function(src){
+    fetchRSS(src.url)
+      .then(function(xml){sourceStatus[src.id]='ok';incoming=incoming.concat(parseRSS(xml,src));})
+      .catch(function(){sourceStatus[src.id]='err';})
+      .then(function(){
+        done++;
+        if(done===active.length){
+          var dedup={}, uniq=[];
+          incoming.forEach(function(a){
+            var k=articleKey(a);
+            if(!dedup[k]){dedup[k]=1;uniq.push(a);}
+          });
+          uniq.sort(function(a,b){
+            var td=(b.ts||0)-(a.ts||0);
+            if(td!==0) return td;
+            var SO={critical:4,high:3,medium:2,low:1};
+            return (SO[b.sev]||1)-(SO[a.sev]||1);
+          });
+
+          var fresh=uniq.filter(function(a){
+            var k=articleKey(a);
+            if(_seenArticleKeys.has(k)) return false;
+            _seenArticleKeys.add(k);
+            return true;
+          });
+
+          if(fresh.length){
+            articles = fresh.concat(articles||[]);
+            var colAdds={};
+            fresh.slice().reverse().forEach(function(a){
+              (ALL_COLS||[]).forEach(function(col){
+                if(colClosed && colClosed.indexOf(col.id)!==-1) return;
+                try{
+                  if(inCol(col,a)){
+                    if(insertArticleIntoColumn(col.id,a)){
+                      colAdds[col.id]=(colAdds[col.id]||0)+1;
+                    }
+                  }
+                }catch(e){}
+              });
+            });
+            Object.keys(colAdds).forEach(function(colId){
+              updateNewBadge(colId,colAdds[colId]);
+            });
+            updateColumnCounters();
+            try{renderSrcList();}catch(e){}
+            try{_refreshP2Overlay();}catch(e){}
+          }
+          if(btn){btn.disabled=false;btn.textContent='↻';}
+          startTimer();
+        }
+      });
+  });
+}
+</script>
+
+
+<script>
+(function(){
+  if(typeof doRefresh!=='function') return;
+  var _origDoRefresh = null;
+  doRefresh = function(){
+    if(false&& !_initialRenderDone){
+      doRefresh();
+      setTimeout(function(){
+        try{ensureSeenFromArticles(); _initialRenderDone=true;}catch(e){}
+      }, 1200);
+      return;
+    }
+    refreshIncremental();
+  };
+  document.addEventListener('click', function(ev){
+    var hd = ev.target && ev.target.closest ? ev.target.closest('.col-hd') : null;
+    if(!hd) return;
+    var badge = hd.querySelector('.col-new-badge');
+    if(badge){ badge.style.display='none'; badge.textContent='0 nuovi'; }
+  });
+  setTimeout(function(){
+    try{ensureSeenFromArticles();}catch(e){}
+  }, 1500);
+})();
+</script>
+
+
+<script>
+(function(){
+  function colorForSource(name){
+    name=(name||'').toLowerCase();
+    if(name.includes('reuters')) return '#ffcc66';
+    if(name.includes('bbc')) return '#ff8a80';
+    if(name.includes('xinhua') || name.includes('people') || name.includes('pla') || name.includes('beijing') || name.includes('pekingnology')) return '#ff6b6b';
+    if(name.includes('cna') || name.includes('straits') || name.includes('rappler') || name.includes('jakarta')) return '#6ee7b7';
+    if(name.includes('intelligence') || name.includes('geopolitical futures')) return '#93c5fd';
+    return '#ffffff';
+  }
+
+  function paintSourceBadges(){
+    document.querySelectorAll('.csrc').forEach(function(el){
+      var color=colorForSource(el.textContent||'');
+      el.style.setProperty('--srcdot', color);
+    });
+  }
+
+  var css=document.createElement('style');
+  css.textContent='.csrc::before{background:var(--srcdot,#ffffff);}';
+  document.head.appendChild(css);
+
+  document.addEventListener('DOMContentLoaded', paintSourceBadges);
+  var _origRenderAll = window.renderAll;
+  if(typeof _origRenderAll === 'function'){
+    window.renderAll = function(){
+      var out = _origRenderAll.apply(this, arguments);
+      try{ paintSourceBadges(); }catch(e){}
+      return out;
+    }
+  }
+  var _origDoRefresh = window.doRefresh;
+  if(typeof _origDoRefresh === 'function'){
+    window.doRefresh = function(){
+      var out = _origDoRefresh.apply(this, arguments);
+      setTimeout(function(){ try{ paintSourceBadges(); }catch(e){} }, 250);
+      return out;
+    }
+  }
+})();
+</script>
+
+
+<script>
+(function(){
+  function norm(s){ return (s||'').toLowerCase(); }
+  function classesForSource(name){
+    var n = norm(name);
+    var out = [];
+    if(n.includes('reuters')) out.push('reuters');
+    if(n.includes('associated press') || n==='ap' || n.startsWith('ap ')) out.push('ap');
+    if(n.includes('afp')) out.push('afp');
+    if(n.includes('ansa')) out.push('ansa');
+    if(n.includes('bbc')) out.push('bbc');
+    if(n.includes('financial times')) out.push('ft');
+    if(n.includes('wsj')) out.push('wsj');
+    if(n.includes('bloomberg')) out.push('bloomberg');
+    if(n.includes('guardian')) out.push('guardian');
+
+    if(n.includes('xinhua')) out.push('xinhua');
+    if(n.includes('people')) out.push('people');
+    if(n.includes('pla')) out.push('pla');
+    if(n.includes('beijing')) out.push('beijing');
+    if(n.includes('seeking truth') || n.includes('qstheory')) out.push('qstheory');
+    if(n.includes('pekingnology')) out.push('pekingnology');
+    if(n.includes('wen wei') || n.includes('wenweipo')) out.push('wenweipo');
+    if(n.includes('ming pao') || n.includes('mingpao')) out.push('mingpao');
+    if(n.includes('sing tao') || n.includes('singtao')) out.push('singtao');
+    if(n.includes('zaobao')) out.push('zaobao');
+    if(n.includes('guangming') || n.includes('gmw')) out.push('gmw');
+    if(n.includes('china economic') || n.includes('ce.cn')) out.push('cecn');
+
+    if(n.includes('channel newsasia') || n === 'cna' || n.includes('central news agency')) out.push('cna');
+    if(n.includes('straits times')) out.push('straits');
+    if(n.includes('rappler')) out.push('rappler');
+    if(n.includes('jakarta post')) out.push('jakarta');
+    if(n.includes('bangkok post')) out.push('bangkokpost');
+    if(n.includes('bernama')) out.push('bernama');
+    if(n.includes('viet nam news') || n.includes('vietnam news')) out.push('vietnamnews');
+    if(n.includes('tempo')) out.push('tempo');
+    if(n.includes('kompas')) out.push('kompas');
+    if(n.includes('khmer times')) out.push('khmertimes');
+
+    if(n.includes('intelligence online')) out.push('intelligence');
+    if(n.includes('geopolitical futures')) out.push('gpf');
+    if(n.includes('csis')) out.push('csis');
+    if(n.includes('rand')) out.push('rand');
+    if(n.includes('merics')) out.push('merics');
+    if(n.includes('iiss')) out.push('iiss');
+    if(n.includes('chatham')) out.push('chatham');
+    if(n.includes('ecfr')) out.push('ecfr');
+    return out;
+  }
+
+  function paintSourceClasses(){
+    document.querySelectorAll('.csrc').forEach(function(el){
+      var classes = classesForSource(el.textContent || '');
+      classes.forEach(function(c){ el.classList.add(c); });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', paintSourceClasses);
+
+  if(typeof window.renderAll === 'function'){
+    var _origRenderAll2 = window.renderAll;
+    window.renderAll = function(){
+      var res = _origRenderAll2.apply(this, arguments);
+      try{ paintSourceClasses(); }catch(e){}
+      return res;
+    }
+  }
+
+  if(typeof window.doRefresh === 'function'){
+    var _origDoRefresh2 = window.doRefresh;
+    window.doRefresh = function(){
+      var res = _origDoRefresh2.apply(this, arguments);
+      setTimeout(function(){ try{ paintSourceClasses(); }catch(e){} }, 250);
+      return res;
+    }
+  }
+})();
+</script>
+
+
+<script>
+function toggleSidebar(){
+  try{
+    document.body.classList.toggle('sidebar-collapsed');
+  }catch(e){}
+}
+</script>
+
+
+
+<div id="analisi-chatgpt-panel" style="position:fixed;bottom:20px;left:20px;background:#1b1b1b;border:1px solid #444;padding:14px;border-radius:12px;max-width:460px;width:min(460px,92vw);z-index:9999;box-shadow:0 8px 28px rgba(0,0,0,.35)">
+  <div style="font-size:18px;font-weight:700;color:#f3f4f6;line-height:1.2">Analisi ChatGPT</div>
+  <div style="font-size:14px;color:#d1d5db;margin-top:6px;line-height:1.45">
+    Genera automaticamente un prompt in stile <b>Limes</b> e un riassunto delle notizie più recenti.
+  </div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+    <button onclick="genPromptLimes()" style="padding:10px 14px;border-radius:999px;border:1px solid #4b5563;background:#222;color:#f9fafb;font-size:15px;cursor:pointer">Genera prompt</button>
+    <button onclick="copyPromptLimes()" style="padding:10px 14px;border-radius:999px;border:1px solid #4b5563;background:#222;color:#f9fafb;font-size:15px;cursor:pointer">Copia</button>
+  </div>
+  <textarea id="gptPrompt" style="width:100%;height:220px;margin-top:10px;background:#111827;color:#f9fafb;border:1px solid #4b5563;border-radius:10px;padding:12px;font-size:17px;line-height:1.55"></textarea>
+</div>
+
+<script>
+function collectTopNews(limit){
+  let cards=[...document.querySelectorAll('.card, .alert-card')];
+  let out=[];
+  for(let c of cards){
+    let title=(c.querySelector('.ctlink, .br-item-headline, .alert-title, a')||{}).innerText||'';
+    let src=(c.querySelector('.csrc')||{}).innerText||'';
+    let desc=(c.querySelector('.cdesc')||{}).innerText||'';
+    let time=(c.querySelector('.ctime')||{}).innerText||'';
+    title=title.trim();
+    if(!title) continue;
+    out.push({title,src:src.trim(),desc:desc.trim(),time:time.trim()});
+    if(out.length>=limit) break;
+  }
+  return out;
+}
+
+function genPromptLimes(){
+  let items=collectTopNews(12);
+  let lines=items.map((n,i)=>{
+    let meta=[n.src,n.time].filter(Boolean).join(' | ');
+    let desc=n.desc ? " — "+n.desc : "";
+    return (i+1)+". "+n.title+(meta ? " ("+meta+")" : "")+desc;
+  }).join("\n");
+
+  let summary=items.slice(0,6).map((n,i)=>"- "+n.title).join("\n");
+
+  let prompt = `Agisci come un analista geopolitico in stile Limes: tono asciutto, analitico, non moralistico, attento ai rapporti di forza, alla geografia, alla gerarchia tra attori, ai vincoli strutturali e agli interessi strategici.
+
+Sulla base delle notizie qui sotto, produci:
+
+1. RIASSUNTO (massimo 900 battute)
+   - sintetizza il quadro generale in modo chiaro e compatto
+
+2. KEY JUDGMENTS
+   - 4-6 punti
+   - formula assertiva, non generica
+
+3. ANALISI
+   - spiega poste in gioco, attori, obiettivi, vincoli, rapporto tra livello tattico e strategico
+   - distingui fatti, segnali e possibili inferenze
+
+4. SWOT STRATEGICA
+   - punti di forza
+   - punti di debolezza
+   - opportunità
+   - minacce
+
+5. SCENARI A 3-6 MESI
+   - scenario più probabile
+   - scenario peggiorativo
+   - scenario meno probabile ma ad alto impatto
+
+6. INDICATORI DA MONITORARE
+   - 5 segnali concreti da seguire nei prossimi giorni/settimane
+
+Vincoli stilistici:
+- italiano
+- frasi compatte
+- niente linguaggio motivazionale
+- evita ripetizioni
+- non usare tabelle
+- mantieni ordine temporale e causalità
+- evidenzia nessi geopolitici, non solo cronaca
+
+Notizie considerate:
+${lines}
+
+Mini-riassunto iniziale utile:
+${summary}`;
+  document.getElementById("gptPrompt").value=prompt;
+}
+
+function copyPromptLimes(){
+  const el=document.getElementById("gptPrompt");
+  el.select();
+  el.setSelectionRange(0, 999999);
+  try{ document.execCommand('copy'); }catch(e){}
+}
+</script>
+
+</body>
+</html>
