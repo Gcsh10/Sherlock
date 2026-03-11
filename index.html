@@ -8,26 +8,41 @@
 <meta name="apple-mobile-web-app-title" content="SHERLOCK">
 <meta name="theme-color" content="#09090b">
 <title>SHERLOCK</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.14/dist/hls.min.js"></script>
 <style>
-:root{--bg:#09090b;--bg2:#0f0f11;--s:#111113;--s2:#18181b;--bd:#27272a;--bd2:#3f3f46;--acc:#22d35e;--acc2:#16a34a;--acc3:#052e16;--tx:#f4f4f5;--tx2:#a1a1aa;--mu:#52525b;--re:#ef4444;--am:#f59e0b;}
-[data-theme=light]{--bg:#f4f4f5;--bg2:#e8e8ea;--s:#fff;--s2:#f0f0f0;--bd:#d4d4d8;--bd2:#a1a1aa;--acc:#16a34a;--acc2:#15803d;--acc3:#dcfce7;--tx:#09090b;--tx2:#3f3f46;--mu:#a1a1aa;--re:#dc2626;--am:#d97706;}
+:root{
+  --bg:  #0d1117;
+  --bg2: #111827;
+  --s:   #161d2e;
+  --s2:  #1c2640;
+  --bd:  #1f2d44;
+  --bd2: #2d3f5c;
+  --acc: #00b8ff;
+  --acc2:#0090cc;
+  --acc3:#001830;
+  --tx:  #d8e4f0;
+  --tx2: #7a9ab8;
+  --mu:  #3d5270;
+  --re:  #ff3d57;
+  --am:  #f0a500;
+}
+[data-theme=light]{--bg:#f0f4f8;--bg2:#e2e8f0;--s:#fff;--s2:#f1f5f9;--bd:#cbd5e1;--bd2:#94a3b8;--acc:#0080cc;--acc2:#006099;--acc3:#dbeafe;--tx:#0f172a;--tx2:#334155;--mu:#94a3b8;--re:#dc2626;--am:#d97706;}
 *{box-sizing:border-box;margin:0;padding:0;}
-html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font-family:'Rajdhani',sans-serif;font-size:15px;}
-header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);display:flex;align-items:center;padding:0 12px;gap:10px;flex-shrink:0;z-index:200;}
-.logo{font-family:'Share Tech Mono',monospace;font-size:clamp(16px,1.6vw,20px);color:var(--acc);letter-spacing:.3em;text-shadow:0 0 16px var(--acc2);}
+html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;font-size:15px;}
+header{height:48px;background:var(--bg2);border-bottom:1px solid var(--bd2);display:flex;align-items:center;padding:0 14px;gap:10px;flex-shrink:0;z-index:200;box-shadow:0 1px 0 rgba(0,184,255,.08);}
+.logo{font-family:'Share Tech Mono',monospace;font-size:clamp(15px,1.5vw,18px);color:var(--acc);letter-spacing:.35em;text-shadow:0 0 20px rgba(0,184,255,.35);}
 .hsep{width:1px;height:20px;background:var(--bd2);}
 .live-dot{width:7px;height:7px;border-radius:50%;background:var(--acc);animation:pulse 1.2s infinite;}
-@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(34,211,94,.4)}50%{opacity:.4;box-shadow:0 0 0 4px transparent}}
+@keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,184,255,.4)}50%{opacity:.4;box-shadow:0 0 0 4px transparent}}
 .live-lbl{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--acc);letter-spacing:.15em;}
 .timer-wrap{display:flex;align-items:center;gap:5px;}
 .ring svg{transform:rotate(-90deg);}.ring circle{fill:none;stroke-width:2.5;}
 .bgc{stroke:var(--bd2);}.fgc{stroke:var(--acc);stroke-linecap:round;transition:stroke-dashoffset .9s linear;}
 #tlbl{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--mu);}
 .hright{margin-left:auto;display:flex;align-items:center;gap:5px;}
-.hbtn{background:none;border:1px solid var(--bd2);color:var(--tx2);cursor:pointer;font-size:12px;padding:3px 9px;line-height:1.4;font-family:'Share Tech Mono',monospace;transition:all .15s;letter-spacing:.05em;}
-.hbtn:hover{border-color:var(--acc2);color:var(--acc);}.hbtn.acc{border-color:var(--acc2);color:var(--acc);}
+.hbtn{background:none;border:1px solid var(--bd2);color:var(--tx2);cursor:pointer;font-size:11px;padding:4px 11px;line-height:1.4;font-family:'Inter',sans-serif;font-weight:500;transition:all .15s;letter-spacing:.02em;}
+.hbtn:hover{border-color:var(--acc);color:var(--acc);background:rgba(0,184,255,.06);}.hbtn.acc{border-color:var(--acc);color:var(--acc);background:rgba(0,184,255,.08);}
 #rbtn{font-size:16px;padding:2px 9px;}#rbtn:disabled{opacity:.3;cursor:not-allowed;}
 #clock{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--mu);}
 .shell{display:flex;height:calc(100vh - 46px);overflow:hidden;}
@@ -57,7 +72,7 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .qrow{display:flex;gap:3px;}
 .qsel{flex:1;background:var(--s2);border:1px solid var(--bd);padding:4px 5px;color:var(--tx);font-size:11px;font-family:'Share Tech Mono',monospace;outline:none;}
 .qadd-btn{background:none;border:1px solid var(--acc2);color:var(--acc);cursor:pointer;font-size:14px;padding:3px 10px;font-family:'Share Tech Mono',monospace;flex-shrink:0;transition:all .15s;}
-.qadd-btn:hover{background:rgba(34,211,94,.1);}
+.qadd-btn:hover{background:rgba(0,184,255,.1);}
 .main-area{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;}
 .cols-wrap{display:flex;overflow-x:auto;overflow-y:hidden;gap:0;flex:1;min-height:0;}
 .cols-wrap::-webkit-scrollbar{height:5px;}
@@ -74,12 +89,12 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .col-feed::-webkit-scrollbar{width:3px;}
 .col-feed::-webkit-scrollbar-thumb{background:var(--bd2);}
 .card{padding:7px 10px;border-bottom:1px solid var(--bd);transition:background .12s;}
-.card:hover{background:var(--s);}
+.card:hover{background:rgba(0,184,255,.035);}
 .card[data-sev=critical]{border-left:3px solid var(--re);}
 .card[data-sev=high]{border-left:3px solid var(--am);}
 .card[data-sev=medium]{border-left:3px solid #3b82f6;}
 .ctop{display:flex;align-items:center;gap:5px;margin-bottom:3px;}
-.csrc{display:inline-flex;align-items:center;gap:6px;color:#ffffff !important;font-weight:700;letter-spacing:.04em;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:2px 8px;}
+.csrc{display:inline-flex;align-items:center;gap:6px;color:var(--tx) !important;font-weight:600;letter-spacing:.04em;background:rgba(0,184,255,.07);border:1px solid rgba(0,184,255,.18);border-radius:999px;padding:2px 9px;font-size:11px;}
 .ctlink{display:block;font-size:clamp(16px,1.8vw,20px);font-weight:600;color:var(--tx);text-decoration:none;line-height:1.35;}
 .ctlink:hover{color:var(--acc);}
 .cdesc{color:#c9d1d9;font-size:clamp(13px,1.4vw,15px);color:#c9d1d9;margin-top:3px;line-height:1.4;}
@@ -115,12 +130,12 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .restore-grid{display:flex;flex-direction:column;gap:4px;max-height:300px;overflow-y:auto;}
 .restore-btn{background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px 10px;cursor:pointer;font-size:13px;text-align:left;transition:all .15s;}
 .restore-btn:hover{border-color:var(--acc2);background:var(--acc3);}
-.notif{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--s2);border:1px solid var(--acc2);color:var(--acc);padding:6px 14px;font-family:'Share Tech Mono',monospace;font-size:11px;z-index:600;pointer-events:none;}
-#tv-panel{position:fixed;bottom:12px;right:12px;z-index:450;width:min(420px,42vw);height:min(250px,30vh);background:#000;border:1px solid var(--bd2);border-top:2px solid var(--re);box-shadow:0 6px 32px rgba(0,0,0,.85);display:flex;flex-direction:column;resize:both;overflow:hidden;min-width:260px;min-height:160px;}
+.notif{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--s2);border:1px solid var(--acc);color:var(--acc);padding:7px 16px;font-family:'Share Tech Mono',monospace;font-size:10px;z-index:600;pointer-events:none;letter-spacing:.08em;border-radius:2px;box-shadow:0 0 20px rgba(0,184,255,.15);}
+#tv-panel{position:fixed;bottom:12px;right:12px;z-index:450;width:min(420px,42vw);height:min(250px,30vh);background:#000;border:1px solid var(--bd2);border-top:2px solid var(--acc);box-shadow:0 6px 32px rgba(0,0,0,.85);display:flex;flex-direction:column;resize:both;overflow:hidden;min-width:260px;min-height:160px;}
 #tv-panel.tv-off{display:none!important;}
 .tvhd{display:flex;align-items:center;gap:4px;padding:4px 7px;background:var(--s2);border-bottom:1px solid var(--bd);flex-shrink:0;cursor:move;user-select:none;height:30px;}
-.tvdot{width:7px;height:7px;border-radius:50%;background:var(--re);animation:pulse 1.2s infinite;flex-shrink:0;}
-.tvlbl{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--re);letter-spacing:.06em;flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.tvdot{width:7px;height:7px;border-radius:50%;background:var(--acc);animation:pulse 1.2s infinite;flex-shrink:0;}
+.tvlbl{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--acc);letter-spacing:.06em;flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
 .tvsel{background:var(--s);border:1px solid var(--bd2);color:var(--tx2);font-size:9px;font-family:'Share Tech Mono',monospace;padding:1px 3px;outline:none;cursor:pointer;max-width:110px;}
 .tvbtn2{background:none;border:1px solid var(--bd2);color:var(--mu);cursor:pointer;font-size:9px;padding:1px 5px;font-family:'Share Tech Mono',monospace;flex-shrink:0;white-space:nowrap;transition:all .15s;}
 .tvbtn2:hover{border-color:var(--re);color:var(--re);}
@@ -178,8 +193,8 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 
 /* PAGE SWITCHER */
 .page-tabs{display:flex;gap:2px;margin-left:8px;}
-.page-tab{background:none;border:1px solid var(--bd2);color:var(--mu);cursor:pointer;font-size:11px;padding:3px 10px;font-family:'Share Tech Mono',monospace;transition:all .15s;letter-spacing:.06em;}
-.page-tab.on{border-color:var(--acc2);color:var(--acc);background:var(--acc3);}
+.page-tab{background:none;border:1px solid var(--bd2);color:var(--mu);cursor:pointer;font-size:11px;padding:4px 12px;font-family:'Inter',sans-serif;font-weight:500;transition:all .15s;letter-spacing:.02em;}
+.page-tab.on{border-color:var(--acc);color:var(--acc);background:rgba(0,184,255,.08);}
 .page{display:none;height:100%;width:100%;}
 .page.on{display:flex;}
 
@@ -199,7 +214,7 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .p2-alerts-feed::-webkit-scrollbar{width:3px;}
 .p2-alerts-feed::-webkit-scrollbar-thumb{background:var(--bd2);}
 .alert-card{padding:7px 10px;border-bottom:1px solid var(--bd);transition:background .12s;}
-.alert-card:hover{background:var(--s);}
+.alert-card:hover{background:rgba(0,184,255,.035);}
 .alert-card[data-sev=critical]{border-left:3px solid var(--re);}
 .alert-card[data-sev=high]{border-left:3px solid var(--am);}
 .alert-badge{font-size:9px;font-family:'Share Tech Mono',monospace;padding:1px 5px;text-transform:uppercase;letter-spacing:.06em;margin-right:4px;}
@@ -229,7 +244,7 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .p2-pin.med .dot{background:#3b82f6;border:1.5px solid #93c5fd;}
 .p2-pin.med .dot::after{background:rgba(59,130,246,.25);animation-duration:3s;}
 .p2-pin.low .dot{background:#22d35e;border:1.5px solid #86efac;}
-.p2-pin.low .dot::after{background:rgba(34,211,94,.2);animation-duration:4s;}
+.p2-pin.low .dot::after{background:rgba(0,184,255,.18);animation-duration:4s;}
 .p2-pin .badge{position:absolute;top:-8px;right:-8px;background:#1e293b;color:#e2e8f0;font-size:9px;font-family:'Share Tech Mono',monospace;padding:1px 4px;border-radius:4px;border:1px solid var(--bd);white-space:nowrap;pointer-events:none;}
 .p2-hotspot{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;}
 .p2-hotspot .hs-inner{width:10px;height:10px;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);position:relative;}
@@ -250,13 +265,13 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .p2-rbtn{font-family:'Share Tech Mono',monospace;font-size:10px;padding:3px 8px;border:1px solid var(--bd);border-radius:3px;background:transparent;color:var(--tx2);cursor:pointer;white-space:nowrap;transition:all .15s;}
 .p2-rbtn.active,.p2-rbtn:hover{background:var(--bd2);color:var(--tx);}
 .p2-map-toolbar .p2-lbtn{font-family:'Share Tech Mono',monospace;font-size:10px;padding:3px 7px;border:1px solid var(--bd);border-radius:3px;background:transparent;color:var(--mu);cursor:pointer;white-space:nowrap;transition:all .15s;}
-.p2-map-toolbar .p2-lbtn.on{background:rgba(22,163,74,.15);border-color:var(--acc);color:var(--acc);}
+.p2-map-toolbar .p2-lbtn.on{background:rgba(0,144,204,.15);border-color:var(--acc);color:var(--acc);}
 .p2-stats{margin-left:auto;display:flex;gap:10px;font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--mu);}
 .p2-stats span{display:flex;align-items:center;gap:3px;}
 .p2-stats .dot{width:6px;height:6px;border-radius:50%;}
 /* ── TRANSLATE & LANG BADGE ──────────────────────────────────────*/
-.ctranslate{display:inline-flex;align-items:center;font-size:10px;color:#4ade80;border:1px solid rgba(74,222,128,.35);border-radius:3px;padding:1px 6px;margin-left:6px;cursor:pointer;background:transparent;font-family:'Share Tech Mono',monospace;transition:all .15s;}
-.ctranslate:hover{background:rgba(74,222,128,.18);border-color:#4ade80;}
+.ctranslate{display:inline-flex;align-items:center;font-size:10px;color:#00b8ff;border:1px solid rgba(0,184,255,.3);border-radius:3px;padding:1px 6px;margin-left:6px;cursor:pointer;background:transparent;font-family:'Share Tech Mono',monospace;transition:all .15s;}
+.ctranslate:hover{background:rgba(0,184,255,.15);border-color:#00b8ff;}
 .clang-badge{font-size:9px;color:#f59e0b;border:1px solid rgba(245,158,11,.4);border-radius:2px;padding:0 3px;margin-left:4px;font-family:'Share Tech Mono',monospace;}
 
 @media (max-width: 1200px){
@@ -416,15 +431,15 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 
 
 /* Source badge */
-.csrc{display:inline-flex;align-items:center;gap:6px;color:#ffffff !important;font-weight:700;letter-spacing:.04em;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:2px 8px;}
+.csrc{display:inline-flex;align-items:center;gap:6px;color:var(--tx) !important;font-weight:600;letter-spacing:.04em;background:rgba(0,184,255,.07);border:1px solid rgba(0,184,255,.18);border-radius:999px;padding:2px 9px;font-size:11px;}
 
 .csrc::before{
   content:'';
-  width:8px;
-  height:8px;
+  width:6px;
+  height:6px;
   border-radius:50%;
-  background:#ffffff;
-  opacity:.9;
+  background:var(--acc);
+  opacity:.7;
   flex-shrink:0;
 }
 
@@ -515,7 +530,7 @@ header{
   transition:all .15s ease, box-shadow .15s ease, transform .08s ease;
 }
 .hbtn:hover{
-  box-shadow:0 0 0 1px rgba(34,211,94,.15), 0 0 10px rgba(34,211,94,.12);
+  box-shadow:0 0 0 1px rgba(0,184,255,.15), 0 0 10px rgba(0,184,255,.12);
   transform:translateY(-1px);
 }
 .page-tab{
@@ -523,7 +538,7 @@ header{
   transition:all .15s ease, box-shadow .15s ease;
 }
 .page-tab:hover{
-  box-shadow:0 0 0 1px rgba(34,211,94,.12), 0 0 8px rgba(34,211,94,.10);
+  box-shadow:0 0 0 1px rgba(0,184,255,.12), 0 0 8px rgba(34,211,94,.10);
 }
 
 /* Hide/show left sidebar to widen columns */
@@ -543,22 +558,32 @@ body.sidebar-collapsed #sidebar-toggle-btn{
   background:var(--acc3);
 }
 
-
-/* Analisi panel readability */
-#analisi-chatgpt-panel textarea::placeholder{color:#cbd5e1;}
-#analisi-chatgpt-panel button:hover{box-shadow:0 0 0 1px rgba(255,255,255,.08),0 0 10px rgba(255,255,255,.08);}
-html[data-theme=dark] #analisi-chatgpt-panel,
-[data-theme=dark] #analisi-chatgpt-panel{
-  background:#111827 !important;
-  border-color:#4b5563 !important;
-}
-html[data-theme=dark] #analisi-chatgpt-panel textarea,
-[data-theme=dark] #analisi-chatgpt-panel textarea{
-  background:#0b1220 !important;
-  color:#f9fafb !important;
-  border-color:#6b7280 !important;
 }
 
+
+/* ── PALANTIR OVERRIDES ──────────────────────────────────────────*/
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);}
+.col-name{font-family:'Inter',sans-serif !important;font-size:11px;font-weight:600;
+  color:var(--tx2);letter-spacing:.06em;text-transform:uppercase;flex:1;}
+.ctlink{font-family:'Inter',sans-serif;font-size:clamp(15px,1.7vw,19px);font-weight:600;
+  letter-spacing:-.01em;line-height:1.38;}
+.cdesc{font-family:'Inter',sans-serif;font-size:clamp(12px,1.3vw,14px);color:var(--tx2);
+  line-height:1.5;margin-top:4px;}
+.card[data-sev=critical]{border-left:2px solid var(--re);}
+.card[data-sev=high]{border-left:2px solid var(--am);}
+.card[data-sev=medium]{border-left:2px solid #3b82f6;}
+::-webkit-scrollbar{width:4px;height:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px;}
+::-webkit-scrollbar-thumb:hover{background:var(--acc);}
+.csrc.reuters,.csrc.ap,.csrc.afp,.csrc.ansa,.csrc.bbc,.csrc.ft,.csrc.wsj,.csrc.bloomberg,.csrc.guardian{
+  background:rgba(0,184,255,.12);border-color:rgba(0,184,255,.3);}
+html[data-theme=dark] .ctime,[data-theme=dark] .ctime{color:var(--tx2) !important;font-size:12px;}
+.col-cnt{font-size:10px;color:var(--acc);font-family:'Share Tech Mono',monospace;
+  background:rgba(0,184,255,.1);border:1px solid rgba(0,184,255,.2);padding:1px 6px;}
+.hbtn:hover{box-shadow:0 0 0 1px rgba(0,184,255,.15),0 0 10px rgba(0,184,255,.1) !important;}
+.page-tab:hover{box-shadow:0 0 0 1px rgba(0,184,255,.12),0 0 8px rgba(0,184,255,.08) !important;}
 </style>
 </head>
 <body>
@@ -589,8 +614,7 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
     <button class="hbtn" onclick="openRestoreModal()">&#8617; Colonne</button>
     <button class="hbtn" onclick="hardReset()" title="Reset completo localStorage" style="color:var(--re);border-color:var(--re)">&#9888; Reset</button>
     <button class="hbtn acc" onclick="openBriefing()" title="Genera briefing">&#128196; BRIEFING</button>
-    <button class="hbtn" onclick="openAnalisi()" title="Analisi intelligence" style="border-color:#8b5cf6;color:#8b5cf6">&#129504; ANALISI</button>
-    <button class="hbtn" id="trbtn" onclick="translateAll()" data-alltr="0" title="Traduci articoli cinesi con Google Translate" style="border-color:#4ade80;color:#4ade80">&#127758; TRADUCI</button>
+    <button class="hbtn" id="trbtn" onclick="translateAll()" data-alltr="0" title="Traduci articoli cinesi con Google Translate" style="border-color:#00b8ff;color:#00b8ff">&#127758; TRADUCI</button>
     <button class="hbtn" id="tvbtn" onclick="tvToggle()" style="border-color:var(--re);color:var(--re)">&#9654; LIVE</button>
   </div>
 </header>
@@ -1577,7 +1601,7 @@ function translateAll(){
   });
   if(btn){
     btn.dataset.alltr=active?'0':'1';
-    btn.style.background=active?'':'rgba(74,222,128,.2)';
+    btn.style.background=active?'':'rgba(0,184,255,.2)';
     btn.textContent=active?'🌐 TRADUCI':'↩ ORIGINALE';
   }
 }
@@ -1979,7 +2003,7 @@ function cpRunAnalisi(){
   var dashBtn=document.getElementById('src-dashboard');
   if(dashBtn)analisiSetSrc('dashboard',dashBtn);
   closeCountryPanel();
-  openAnalisi();
+  // analisi removed
 }
 
 // ── Region view presets (zoom + translate on SVG g) ──────────────
@@ -2318,6 +2342,7 @@ var TV_CH=[
   {name:'i24 News',      type:'hls', hls:'https://bcovlive-a.akamaihd.net/6db4a900c00c4f7dac5f1e97ab87a0e4/eu-central-1/5377161796001/profile_0/chunklist.m3u8', yt:''},
   {name:'Bloomberg',     type:'link',link:'https://www.bloomberg.com/live', yt:''},
   {name:'CNN',           type:'link',link:'https://edition.cnn.com/live-tv', yt:''},
+  {name:'CGTN',          type:'hls', hls:'https://news.cgtn.com/resource/live/english/cgtn-news.m3u8', yt:'bwro9RydAqM'},
 ];
 var _tvIdx=0,_tvMuted=true,_hlsInst=null;
 function _buildPlayer(idx){
@@ -2384,400 +2409,6 @@ function hardReset(){
   renderAll();doRefresh();
   notify('Reset completato');
 }
-// ── ANALISI INTELLIGENCE ─────────────────────────────────────────
-var _analisiTab='swot';
-var _analisiSrc='dashboard'; // 'dashboard' | 'urls'
-
-function openAnalisi(){
-  var m=document.getElementById('analisi-modal');
-  if(!m)return;
-  m.style.display='flex';
-  var saved=localStorage.getItem('sh3_apikey')||'';
-  var inp=document.getElementById('analisi-apikey');
-  if(inp&&!inp.value&&saved)inp.value=saved;
-  _updateAnalisiKeyStatus();
-}
-function closeAnalisi(){
-  var m=document.getElementById('analisi-modal');
-  if(m)m.style.display='none';
-}
-function _updateAnalisiKeyStatus(){
-  var inp=document.getElementById('analisi-apikey');
-  var ks=document.getElementById('analisi-key-status');
-  var key=(inp&&inp.value)||localStorage.getItem('sh3_apikey')||'';
-  if(ks){
-    if(key){ks.textContent='✓ Key pronta';ks.style.color='var(--acc)';}
-    else{ks.textContent='Senza key: analisi locale';ks.style.color='var(--mu)';}
-  }
-}
-function selectAnalisiTab(tab,el){
-  _analisiTab=tab;
-  document.querySelectorAll('.analisi-tab').forEach(function(b){b.classList.remove('active');});
-  if(el)el.classList.add('active');
-}
-function analisiSetSrc(src,el){
-  _analisiSrc=src;
-  document.querySelectorAll('.analisi-src-btn').forEach(function(b){b.classList.remove('active');});
-  if(el)el.classList.add('active');
-  var urlPanel=document.getElementById('analisi-url-panel');
-  var txtPanel=document.getElementById('analisi-text-panel');
-  if(urlPanel)urlPanel.style.display=src==='urls'?'block':'none';
-  if(txtPanel)txtPanel.style.display=src==='text'?'block':'none';
-  // Wire up character counter for free text
-  if(src==='text'){
-    var ta=document.getElementById('analisi-freetext');
-    var cnt=document.getElementById('analisi-text-count');
-    if(ta&&cnt){
-      ta.oninput=function(){cnt.textContent=ta.value.length+' caratteri';};
-    }
-  }
-}
-
-// ── URL FETCHING ──────────────────────────────────────────────────
-// Fetches article text via allorigins CORS proxy
-function _fetchArticleText(url){
-  var proxy='https://api.allorigins.win/get?url='+encodeURIComponent(url);
-  return fetch(proxy,{signal:AbortSignal.timeout(12000)})
-    .then(function(r){return r.json();})
-    .then(function(d){
-      var html=d.contents||'';
-      // Strip tags, collapse whitespace, take first ~3000 chars of meaningful text
-      var text=html
-        .replace(/<script[^>]*>[\s\S]*?<\/script>/gi,'')
-        .replace(/<style[^>]*>[\s\S]*?<\/style>/gi,'')
-        .replace(/<[^>]+>/g,' ')
-        .replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>')
-        .replace(/\s{2,}/g,' ').trim();
-      return text.substring(0,4000);
-    });
-}
-
-function _setProgress(pct){
-  var bar=document.getElementById('analisi-progress');
-  var fill=document.getElementById('analisi-progress-bar');
-  if(!bar||!fill)return;
-  if(pct>=100||pct<0){bar.style.display='none';fill.style.width='0%';return;}
-  bar.style.display='block';
-  fill.style.width=pct+'%';
-}
-
-// ── MAIN RUN ──────────────────────────────────────────────────────
-function runAnalisi(){
-  var body=document.getElementById('analisi-body');
-  var status=document.getElementById('analisi-status');
-  if(!body||!status)return;
-  var tab=_analisiTab;
-  var focus=(document.getElementById('analisi-focus')||{}).value||'';
-  var apiKey=((document.getElementById('analisi-apikey')||{}).value||'').trim()||
-             (localStorage.getItem('sh3_apikey')||'').trim();
-
-  if(_analisiSrc==='urls'){
-    _runUrlAnalisi(tab,focus,apiKey,body,status);
-  } else if(_analisiSrc==='text'){
-    _runFreeTextAnalisi(tab,focus,apiKey,body,status);
-  } else {
-    _runDashboardAnalisi(tab,focus,apiKey,body,status);
-  }
-}
-
-// ── FREE TEXT MODE ────────────────────────────────────────────────
-function _runFreeTextAnalisi(tab,focus,apiKey,body,status){
-  var ta=document.getElementById('analisi-freetext');
-  var testo=(ta&&ta.value)||'';
-  testo=testo.trim();
-  if(testo.length<80){
-    body.innerHTML='<div style="padding:20px;color:var(--am);font-family:\'Share Tech Mono\',monospace;font-size:11px;">⚠ Incolla almeno qualche riga di testo nel campo sopra.</div>';
-    return;
-  }
-  var ctx=testo.substring(0,5000);
-  body.innerHTML='<div class="analisi-loading"><div class="analisi-spinner"></div>Analisi in corso…</div>';
-  _setProgress(40);
-  status.textContent='Elaborazione testo libero…';
-  if(!apiKey){
-    setTimeout(function(){
-      _setProgress(-1);
-      body.innerHTML=_buildLocalFromText(tab,ctx,1);
-      status.textContent='Analisi locale — testo libero';
-    },200);
-    return;
-  }
-  _callClaudeAPI(tab,ctx,focus,apiKey,function(result){
-    _setProgress(-1);
-    body.innerHTML=result;
-    status.textContent='Claude API — testo libero — '+new Date().toLocaleTimeString('it-IT');
-  },function(err){
-    _setProgress(-1);
-    body.innerHTML='<div style="padding:10px;color:var(--re);font-size:11px;">Errore API: '+err+'</div>';
-    status.textContent='Errore API';
-  });
-}
-
-// ── URL MODE ──────────────────────────────────────────────────────
-function _runUrlAnalisi(tab,focus,apiKey,body,status){
-  var textarea=document.getElementById('analisi-urls');
-  if(!textarea)return;
-  var rawUrls=textarea.value.trim();
-  if(!rawUrls){
-    body.innerHTML='<div style="padding:20px;color:var(--am);font-family:\'Share Tech Mono\',monospace;font-size:11px;">⚠ Incolla almeno un URL nel campo sopra.</div>';
-    return;
-  }
-  var urls=rawUrls.split('\n').map(function(u){return u.trim();}).filter(function(u){return u.length>10;}).slice(0,6);
-  body.innerHTML='<div class="analisi-loading"><div class="analisi-spinner"></div>Recupero articoli ('+urls.length+')…</div>';
-  _setProgress(5);
-  status.textContent='Fetching '+urls.length+' URL…';
-
-  var urlStatus=document.getElementById('analisi-url-status');
-
-  var fetches=urls.map(function(url,i){
-    return _fetchArticleText(url)
-      .then(function(text){
-        if(urlStatus)urlStatus.textContent='✓ Recuperato: '+url.substring(0,60)+'…';
-        _setProgress(10+Math.round(70*(i+1)/urls.length));
-        return {url:url,text:text,ok:true};
-      })
-      .catch(function(e){
-        return {url:url,text:'',ok:false,err:e.message};
-      });
-  });
-
-  Promise.all(fetches).then(function(results){
-    var ok=results.filter(function(r){return r.ok&&r.text.length>100;});
-    var failed=results.filter(function(r){return !r.ok||r.text.length<=100;});
-
-    if(ok.length===0){
-      _setProgress(-1);
-      body.innerHTML='<div style="padding:20px;color:var(--re);font-size:12px;">'+
-        '<b>⚠ Impossibile recuperare il contenuto degli URL.</b><br><br>'+
-        'Alcuni siti bloccano l\'accesso esterno. Prova con URL di fonti aperte (Reuters, AP, NYT, ecc.).<br><br>'+
-        '<b>URL tentati:</b><ul>'+results.map(function(r){return '<li style="font-size:11px;color:var(--mu)">'+r.url+(r.err?' — '+r.err:'')+'</li>';}).join('')+'</ul>'+
-        '</div>';
-      status.textContent='Errore fetch';
-      return;
-    }
-
-    // Build context string from fetched articles
-    var ctx='';
-    ok.forEach(function(r,i){
-      ctx+='=== ARTICOLO '+(i+1)+' ===\nURL: '+r.url+'\n\n'+r.text+'\n\n';
-    });
-
-    var failNote=failed.length?'\n\n['+failed.length+' URL non accessibili: '+failed.map(function(r){return r.url;}).join(', ')+']':'';
-
-    var warningHtml='';
-    if(failed.length){
-      warningHtml='<div style="font-size:10px;color:var(--am);background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.3);border-radius:4px;padding:6px 10px;margin-bottom:10px;">'+
-        '⚠ '+failed.length+' URL non accessibili (sito protetto o bloccato): '+
-        failed.map(function(r){return '<br>· '+r.url;}).join('')+'</div>';
-    }
-
-    _setProgress(80);
-    status.textContent='Elaborazione con '+(apiKey?'Claude API':'analisi locale')+'…';
-
-    if(!apiKey){
-      _setProgress(-1);
-      body.innerHTML=warningHtml+_buildLocalFromText(tab,ctx,ok.length);
-      status.textContent='Analisi locale completata — '+ok.length+' articoli';
-      return;
-    }
-
-    _callClaudeAPI(tab,ctx,focus,apiKey,function(result){
-      _setProgress(-1);
-      body.innerHTML=warningHtml+result;
-      status.textContent='Claude API — '+ok.length+' art. analizzati — '+new Date().toLocaleTimeString('it-IT');
-    },function(err){
-      _setProgress(-1);
-      body.innerHTML=warningHtml+'<div style="padding:10px;color:var(--re);font-size:11px;">API error: '+err+'</div>';
-      status.textContent='Errore API';
-    });
-  });
-}
-
-// ── DASHBOARD MODE ────────────────────────────────────────────────
-function _runDashboardAnalisi(tab,focus,apiKey,body,status){
-  var arts=articles.slice(0,60);
-  if(focus){
-    var ff=arts.filter(function(a){
-      return (a.title||'').toLowerCase().indexOf(focus)>=0||(a.region||'').toLowerCase().indexOf(focus)>=0;
-    });
-    if(ff.length>5)arts=ff;
-  }
-  body.innerHTML='<div class="analisi-loading"><div class="analisi-spinner"></div>'+(apiKey?'Claude API…':'Analisi locale…')+'</div>';
-  _setProgress(30);
-  if(!apiKey){
-    setTimeout(function(){_setProgress(-1);_runLocalAnalisi(tab,arts,body,status);},300);
-    return;
-  }
-  var headlines=arts.map(function(a,i){
-    return (i+1)+'. ['+(a.sev||'').toUpperCase()+'|'+(a.region||'')+'] '+(a.title||'');
-  }).join('\n');
-  _setProgress(60);
-  var ctx='Le seguenti notizie geopolitiche sono state raccolte dalla dashboard:\n\n'+headlines;
-  _callClaudeAPI(tab,ctx,focus,apiKey,function(result){
-    _setProgress(-1);
-    body.innerHTML=result;
-    status.textContent='Claude API — '+arts.length+' notizie — '+new Date().toLocaleTimeString('it-IT');
-  },function(err){
-    _setProgress(-1);
-    _runLocalAnalisi(tab,arts,body,status);
-    var errDiv=document.createElement('div');
-    errDiv.style.cssText='padding:8px;background:rgba(239,68,68,.08);border:1px solid var(--re);border-radius:4px;font-size:10px;color:var(--re);margin-bottom:10px;';
-    errDiv.textContent='API error (fallback locale): '+err;
-    body.insertBefore(errDiv,body.firstChild);
-    status.textContent='Fallback locale';
-  });
-}
-
-// ── CLAUDE API CALL ───────────────────────────────────────────────
-function _buildPrompt(tab,ctx,focus){
-  var focusStr=focus?' Focus tematico: '+focus+'.':'';
-  var prompts={
-    swot:'Sei un analista geopolitico senior di Limes.'+focusStr+'\nAnalizza il seguente contenuto e produci una SWOT Analysis geopolitica. Per ogni quadrante (Strengths, Weaknesses, Opportunities, Threats) fornisci 4-5 punti concreti e specifici. Rispondi SOLO con JSON valido:\n{"strengths":["..."],"weaknesses":["..."],"opportunities":["..."],"threats":["..."]}\n\n'+ctx,
-    competitive:'Sei un analista geopolitico senior.'+focusStr+'\nAnalizza il seguente contenuto. Identifica e analizza i principali attori geopolitici: per ognuno dai posizione attuale, vantaggi strategici, vulnerabilità. Usa intestazioni ### Nome Attore. Rispondi SOLO in italiano. Max 700 parole.\n\n'+ctx,
-    devil:'Sei un analista che pratica il Devil\'s Advocacy.'+focusStr+'\nAnalizza il seguente contenuto. Identifica le 3-4 narrative dominanti e smontale con argomentazioni rigorose. Struttura: ### Narrativa → controargomentazioni → punto cieco. Rispondi SOLO in italiano. Max 700 parole.\n\n'+ctx,
-    scenario:'Sei un analista strategico.'+focusStr+'\nAnalizza il seguente contenuto. Produci 3 scenari evolutivi per i prossimi 3-6 mesi. SOLO JSON valido:\n[{"label":"...","prob":XX,"drivers":["..."],"implications":"...","type":"low-prob|med-prob|high-prob"}]\n\n'+ctx
-  };
-  return prompts[tab]||prompts.swot;
-}
-
-function _callClaudeAPI(tab,ctx,focus,apiKey,onSuccess,onError){
-  fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{
-      'Content-Type':'application/json',
-      'x-api-key':apiKey,
-      'anthropic-version':'2023-06-01',
-      'anthropic-dangerous-direct-browser-access':'true'
-    },
-    body:JSON.stringify({
-      model:'claude-sonnet-4-6',
-      max_tokens:1400,
-      system:'Sei un analista geopolitico senior di Limes. Rispondi SEMPRE in italiano, in modo preciso e sintetico.',
-      messages:[{role:'user',content:_buildPrompt(tab,ctx,focus)}]
-    })
-  })
-  .then(function(r){
-    if(!r.ok)return r.json().then(function(e){throw new Error((e.error&&e.error.message)||r.status);});
-    return r.json();
-  })
-  .then(function(data){
-    var text=(data.content&&data.content[0]&&data.content[0].text)||'';
-    onSuccess(_renderAnalisiAPI(tab,text));
-  })
-  .catch(function(e){onError(e.message);});
-}
-
-// ── RENDER API RESULT ─────────────────────────────────────────────
-function _renderAnalisiAPI(tab,text){
-  if(tab==='swot'){
-    try{
-      var d=JSON.parse(text.replace(/```json\n?|\n?```/g,'').trim());
-      return '<div class="swot-grid">'+
-        '<div class="swot-cell s"><h4>⬡ STRENGTHS</h4><ul>'+d.strengths.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>'+
-        '<div class="swot-cell w"><h4>⬡ WEAKNESSES</h4><ul>'+d.weaknesses.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>'+
-        '<div class="swot-cell o"><h4>⬡ OPPORTUNITIES</h4><ul>'+d.opportunities.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>'+
-        '<div class="swot-cell t"><h4>⬡ THREATS</h4><ul>'+d.threats.map(function(x){return '<li>'+x+'</li>';}).join('')+'</ul></div>'+
-        '</div>';
-    }catch(e){}
-  }
-  if(tab==='scenario'){
-    try{
-      var sc=JSON.parse(text.replace(/```json\n?|\n?```/g,'').trim());
-      return sc.map(function(s){
-        var col=s.type==='low-prob'?'#3b82f6':s.type==='med-prob'?'#f59e0b':'#ef4444';
-        var icon=s.type==='low-prob'?'▼':s.type==='med-prob'?'►':'▲';
-        return '<div class="scenario-item '+s.type+'" style="margin-bottom:10px">'+
-          '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">'+
-          '<b style="color:'+col+'">'+icon+' '+s.label+'</b>'+
-          '<span style="font-family:monospace;font-size:11px;color:'+col+';background:var(--s2);padding:2px 8px;border-radius:3px">'+s.prob+'%</span>'+
-          '</div>'+
-          '<div style="font-size:11px;color:var(--mu);margin-bottom:4px">Drivers: '+s.drivers.join(' · ')+'</div>'+
-          '<div style="font-size:12px">'+s.implications+'</div></div>';
-      }).join('');
-    }catch(e){}
-  }
-  // Markdown fallback
-  return '<div>'+text
-    .replace(/^### (.+)$/gm,'<h3>$1</h3>')
-    .replace(/^## (.+)$/gm,'<h3>$1</h3>')
-    .replace(/\*\*(.+?)\*\*/g,'<b>$1</b>')
-    .replace(/^[-*] (.+)$/gm,'<li>$1</li>')
-    .replace(/(<li>[^<]+<\/li>\n?)+/g,function(m){return '<ul>'+m+'</ul>';})
-    .replace(/\n\n/g,'</p><p>')+'</div>';
-}
-
-// ── LOCAL ANALYSIS (no API) ───────────────────────────────────────
-function _buildLocalFromText(tab,ctx,count){
-  return '<div style="background:rgba(139,92,246,.07);border:1px solid rgba(139,92,246,.25);border-radius:6px;padding:12px;font-size:12px;line-height:1.6">'+
-    '<b style="color:#a78bfa">&#9872; Analisi locale — '+count+' articoli recuperati</b><br><br>'+
-    '<span style="color:var(--mu)">Inserisci una Anthropic API key per ottenere un\'analisi Claude contestuale sul contenuto degli URL forniti.<br><br>'+
-    'Contenuto estratto: <b>'+Math.round(ctx.length/1000)+'k caratteri</b> da '+count+' articoli.</span>'+
-    '<div style="margin-top:10px;font-size:10px;font-family:\'Share Tech Mono\',monospace;color:var(--mu)">Preview contenuto:</div>'+
-    '<div style="font-size:10px;font-family:\'Share Tech Mono\',monospace;color:var(--tx2);background:var(--s2);padding:8px;border-radius:4px;margin-top:4px;max-height:120px;overflow-y:auto;white-space:pre-wrap">'+
-    esc(ctx.substring(0,600))+'…</div>'+
-    '</div>';
-}
-
-function _runLocalAnalisi(tab,arts,body,status){
-  var byReg={};var bySev={critical:0,high:0,medium:0,low:0};var actors={};
-  arts.forEach(function(a){
-    byReg[a.region]=(byReg[a.region]||0)+1;
-    if(a.sev)bySev[a.sev]=(bySev[a.sev]||0)+1;
-    ['Russia','Ukraine','China','USA','NATO','Iran','Israel','Hamas','Houthi','EU'].forEach(function(k){
-      if((a.title||'').indexOf(k)>=0)actors[k]=(actors[k]||0)+1;
-    });
-  });
-  var topRegs=Object.keys(byReg).sort(function(a,b){return byReg[b]-byReg[a];}).slice(0,5);
-  var topActors=Object.keys(actors).sort(function(a,b){return actors[b]-actors[a];}).slice(0,4);
-  var critZones=[...new Set(arts.filter(function(a){return a.sev==='critical';}).map(function(a){return a.region;}))].slice(0,4);
-  var html='';
-  if(tab==='swot'){
-    html='<div class="swot-grid">'+
-      '<div class="swot-cell s"><h4>⬡ STRENGTHS</h4><ul>'+
-        '<li>Active monitoring on '+topRegs.slice(0,3).join(', ')+'</li>'+
-        '<li>'+arts.length+' sources tracked, '+bySev.high+' high-priority alerts</li>'+
-        (topActors.length?'<li>Key actors tracked: '+topActors.slice(0,3).join(', ')+'</li>':'')+
-        '<li>Early warning architecture across '+Object.keys(byReg).length+' theaters</li>'+
-      '</ul></div>'+
-      '<div class="swot-cell w"><h4>⬡ WEAKNESSES</h4><ul>'+
-        '<li>'+critZones.length+' critical areas with uncertain response capacity</li>'+
-        '<li>Open-source dependency — risk of information lag</li>'+
-        '<li>Narrative fragmentation across '+Object.keys(byReg).length+' theaters</li>'+
-        (bySev.critical>5?'<li>Information overload: '+bySev.critical+' simultaneous critical items</li>':'<li>Coverage gaps in secondary theaters</li>')+
-      '</ul></div>'+
-      '<div class="swot-cell o"><h4>⬡ OPPORTUNITIES</h4><ul>'+
-        '<li>Diplomatic windows in medium-intensity theaters</li>'+
-        '<li>Possible convergence between actors on energy/trade dossiers</li>'+
-        '<li>Space for multilateral mediation absent direct escalation</li>'+
-        '<li>Stabilization potential in low-activity areas</li>'+
-      '</ul></div>'+
-      '<div class="swot-cell t"><h4>⬡ THREATS</h4><ul>'+
-        (critZones.length?'<li>Escalation in critical theaters: '+critZones.join(', ')+'</li>':'<li>Latent instability across multiple areas</li>')+
-        '<li>Spillover risk between adjacent theaters</li>'+
-        '<li>Weaponization of energy and logistics flows</li>'+
-        '<li>Erosion of multilateral system — UN/G20 under pressure</li>'+
-      '</ul></div>'+
-      '</div>';
-  } else if(tab==='scenario'){
-    html=[
-      {label:'De-escalation / Diplomacy',prob:22,type:'low-prob',drivers:['Partial ceasefire agreement','China-US mediation','Economic pressure on belligerents'],impl:'Reduced energy pressure on Europe. Trade negotiations resume. Limited peace dividend.'},
-      {label:'Status Quo / War of attrition',prob:55,type:'med-prob',drivers:['No actor able to win militarily','Coalition fragmentation','Elections deferring decisions'],impl:'Prolonged uncertainty. Growing costs for Europe. Russian war economy adapts. Diplomatic standstill.'},
-      {label:'Escalation / Multiple crises',prob:23,type:'high-prob',drivers:['Incident in Taiwan Strait or South China Sea','Attack on NATO infrastructure','Collapse of negotiations'],impl:'Article 5 activation. Global energy shock. Deep recession. Mass migration crisis toward Europe.'}
-    ].map(function(s){
-      var col=s.type==='low-prob'?'#3b82f6':s.type==='med-prob'?'#f59e0b':'#ef4444';
-      var icon=s.type==='low-prob'?'▼':s.type==='med-prob'?'►':'▲';
-      return '<div class="scenario-item '+s.type+'" style="margin-bottom:10px">'+
-        '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px">'+
-        '<b style="color:'+col+'">'+icon+' '+s.label+'</b>'+
-        '<span style="font-family:monospace;font-size:11px;color:'+col+';background:var(--s2);padding:2px 8px;border-radius:3px">'+s.prob+'%</span>'+
-        '</div><div style="font-size:11px;color:var(--mu);margin-bottom:4px">Drivers: '+s.drivers.join(' · ')+'</div>'+
-        '<div style="font-size:12px">'+s.impl+'</div></div>';
-    }).join('');
-  } else {
-    html='<div style="padding:16px;font-size:12px;line-height:1.7;color:var(--mu)">Analisi locale disponibile solo per SWOT e Scenari.<br>Inserisci API key Claude per analisi '+tab+' contestuale.</div>';
-  }
-  body.innerHTML=html;
-  if(status)status.textContent='Local analysis — '+arts.length+' items — '+new Date().toLocaleTimeString('it-IT');
-}
 
 loadPersist();
 renderAll();
@@ -2786,85 +2417,6 @@ doRefresh();
 
 </script>
 
-<!-- ── ANALISI MODAL ──────────────────────────────────────────────── -->
-<div class="modal-bg" id="analisi-modal" style="display:none" onclick="if(event.target===this)closeAnalisi()">
-  <div class="modal" style="width:820px;max-width:96vw;max-height:90vh;display:flex;flex-direction:column;">
-    <div class="modal-h">
-      <div class="modal-t">&#129504; ANALISI INTELLIGENCE</div>
-      <button class="modal-x" onclick="closeAnalisi()">&#10005;</button>
-    </div>
-
-    <!-- API KEY -->
-    <div style="padding:6px 14px;background:rgba(139,92,246,.07);border-bottom:1px solid var(--bd);flex-shrink:0;display:flex;align-items:center;gap:8px;">
-      <span style="font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--mu);white-space:nowrap;">&#128273; API KEY:</span>
-      <input id="analisi-apikey" type="password" placeholder="sk-ant-api…"
-        style="flex:1;font-size:11px;padding:3px 8px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);border-radius:4px;font-family:'Share Tech Mono',monospace;"
-        oninput="localStorage.setItem('sh3_apikey',this.value);_updateAnalisiKeyStatus()">
-      <span id="analisi-key-status" style="font-size:10px;color:var(--mu);white-space:nowrap;"></span>
-    </div>
-
-    <!-- SOURCE TOGGLE: dashboard / URL / free text -->
-    <div style="padding:8px 14px;border-bottom:1px solid var(--bd);flex-shrink:0;display:flex;gap:6px;align-items:center;flex-wrap:wrap;">
-      <span style="font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--mu);">FONTE:</span>
-      <button class="analisi-src-btn active" id="src-dashboard" onclick="analisiSetSrc('dashboard',this)">&#128240; Dashboard</button>
-      <button class="analisi-src-btn" id="src-urls" onclick="analisiSetSrc('urls',this)">&#128279; URL</button>
-      <button class="analisi-src-btn" id="src-text" onclick="analisiSetSrc('text',this)">&#128203; Testo libero</button>
-    </div>
-
-    <!-- URL INPUT PANEL -->
-    <div id="analisi-url-panel" style="display:none;padding:10px 14px;border-bottom:1px solid var(--bd);flex-shrink:0;">
-      <div style="font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--mu);margin-bottom:6px;">Uno o più URL (uno per riga) — il testo verrà estratto automaticamente:</div>
-      <textarea id="analisi-urls" rows="4"
-        placeholder="https://www.globaltimes.cn/...&#10;https://www.xinhuanet.com/...&#10;https://apnews.com/..."
-        style="width:100%;box-sizing:border-box;font-size:11px;padding:6px 8px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);border-radius:4px;font-family:'Share Tech Mono',monospace;resize:vertical;"></textarea>
-      <div id="analisi-url-status" style="font-size:10px;color:var(--mu);margin-top:4px;font-family:'Share Tech Mono',monospace;"></div>
-    </div>
-
-    <!-- FREE TEXT PANEL -->
-    <div id="analisi-text-panel" style="display:none;padding:10px 14px;border-bottom:1px solid var(--bd);flex-shrink:0;">
-      <div style="font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--mu);margin-bottom:6px;">Incolla direttamente il testo dell'articolo o del documento da analizzare:</div>
-      <textarea id="analisi-freetext" rows="6"
-        placeholder="Incolla qui il testo dell'articolo, del documento o del comunicato stampa…"
-        style="width:100%;box-sizing:border-box;font-size:11px;padding:6px 8px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);border-radius:4px;font-family:inherit;resize:vertical;line-height:1.5;"></textarea>
-      <div id="analisi-text-count" style="font-size:10px;color:var(--mu);margin-top:4px;text-align:right;font-family:'Share Tech Mono',monospace;">0 caratteri</div>
-    </div>
-
-    <!-- ANALYSIS TYPE TABS + FOCUS + RUN -->
-    <div style="padding:8px 14px 6px;display:flex;gap:6px;border-bottom:1px solid var(--bd);flex-shrink:0;flex-wrap:wrap;align-items:center;">
-      <button class="analisi-tab active" data-tab="swot" onclick="selectAnalisiTab('swot',this)">&#9726; SWOT</button>
-      <button class="analisi-tab" data-tab="competitive" onclick="selectAnalisiTab('competitive',this)">&#9651; COMPETITIVA</button>
-      <button class="analisi-tab" data-tab="devil" onclick="selectAnalisiTab('devil',this)">&#9968; DEVIL'S ADVOCACY</button>
-      <button class="analisi-tab" data-tab="scenario" onclick="selectAnalisiTab('scenario',this)">&#9654; SCENARIO</button>
-      <div style="flex:1;min-width:8px;"></div>
-      <select id="analisi-focus" style="font-size:11px;padding:3px 6px;background:var(--s2);border:1px solid var(--bd);color:var(--tx);border-radius:4px;font-family:inherit;">
-        <option value="">— Focus: tutti —</option>
-        <option value="ucraina">Ucraina</option>
-        <option value="medio oriente">Medio Oriente</option>
-        <option value="cina">Cina / Taiwan</option>
-        <option value="iran">Iran</option>
-        <option value="sahel">Sahel / Africa</option>
-        <option value="nato">NATO</option>
-      </select>
-      <button onclick="runAnalisi()" style="background:#7c3aed;color:#fff;border:none;padding:4px 16px;border-radius:4px;font-size:11px;cursor:pointer;font-family:inherit;letter-spacing:.05em;font-weight:600;">&#9654; GENERA</button>
-    </div>
-
-    <!-- OUTPUT BODY -->
-    <div id="analisi-body" style="flex:1;overflow-y:auto;padding:14px;font-size:12.5px;line-height:1.65;min-height:280px;">
-      <div style="color:var(--mu);text-align:center;padding:48px 20px;font-family:'Share Tech Mono',monospace;font-size:11px;">
-        Scegli il tipo di analisi e premi <b>GENERA</b>.<br><br>
-        Puoi analizzare le <b>notizie della dashboard</b> o incollare <b>URL specifici</b> da analizzare.
-      </div>
-    </div>
-
-    <!-- STATUS BAR -->
-    <div style="padding:5px 14px;border-top:1px solid var(--bd);color:var(--mu);font-size:10px;font-family:'Share Tech Mono',monospace;flex-shrink:0;display:flex;align-items:center;gap:8px;">
-      <span id="analisi-status">Pronto</span>
-      <div id="analisi-progress" style="flex:1;height:2px;background:var(--bd);border-radius:1px;display:none;">
-        <div id="analisi-progress-bar" style="height:100%;background:#7c3aed;border-radius:1px;width:0%;transition:width .3s;"></div>
-      </div>
-    </div>
-  </div>
-</div>
 <!-- ── COUNTRY PANEL ─────────────────────────────────────────────── -->
 <div id="country-panel" style="position:fixed;top:0;right:-420px;width:400px;height:100vh;background:var(--bg);border-left:1px solid var(--bd);z-index:900;display:flex;flex-direction:column;transition:right .28s cubic-bezier(.4,0,.2,1);box-shadow:-4px 0 24px rgba(0,0,0,.4);">
   <div style="padding:12px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;">
@@ -3225,17 +2777,7 @@ function toggleSidebar(){
 
 
 
-<div id="analisi-chatgpt-panel" style="position:fixed;bottom:20px;left:20px;background:#1b1b1b;border:1px solid #444;padding:14px;border-radius:12px;max-width:460px;width:min(460px,92vw);z-index:9999;box-shadow:0 8px 28px rgba(0,0,0,.35)">
-  <div style="font-size:18px;font-weight:700;color:#f3f4f6;line-height:1.2">Analisi ChatGPT</div>
-  <div style="font-size:14px;color:#d1d5db;margin-top:6px;line-height:1.45">
-    Genera automaticamente un prompt in stile <b>Limes</b> e un riassunto delle notizie più recenti.
-  </div>
-  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
-    <button onclick="genPromptLimes()" style="padding:10px 14px;border-radius:999px;border:1px solid #4b5563;background:#222;color:#f9fafb;font-size:15px;cursor:pointer">Genera prompt</button>
-    <button onclick="copyPromptLimes()" style="padding:10px 14px;border-radius:999px;border:1px solid #4b5563;background:#222;color:#f9fafb;font-size:15px;cursor:pointer">Copia</button>
-  </div>
-  <textarea id="gptPrompt" style="width:100%;height:220px;margin-top:10px;background:#111827;color:#f9fafb;border:1px solid #4b5563;border-radius:10px;padding:12px;font-size:17px;line-height:1.55"></textarea>
-</div>
+
 
 <script>
 function collectTopNews(limit){
