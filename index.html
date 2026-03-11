@@ -11,27 +11,12 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.14/dist/hls.min.js"></script>
 <style>
-:root{
-  --bg:  #0d1117;
-  --bg2: #111827;
-  --s:   #161d2e;
-  --s2:  #1c2640;
-  --bd:  #1f2d44;
-  --bd2: #2d3f5c;
-  --acc: #00b8ff;
-  --acc2:#0090cc;
-  --acc3:#001830;
-  --tx:  #d8e4f0;
-  --tx2: #7a9ab8;
-  --mu:  #3d5270;
-  --re:  #ff3d57;
-  --am:  #f0a500;
-}
-[data-theme=light]{--bg:#f0f4f8;--bg2:#e2e8f0;--s:#fff;--s2:#f1f5f9;--bd:#cbd5e1;--bd2:#94a3b8;--acc:#0080cc;--acc2:#006099;--acc3:#dbeafe;--tx:#0f172a;--tx2:#334155;--mu:#94a3b8;--re:#dc2626;--am:#d97706;}
+:root{--bg:#0d1117;--bg2:#111827;--s:#161d2e;--s2:#1c2640;--bd:#1f2d44;--bd2:#2d3f5c;--acc:#00b8ff;--acc2:#0090cc;--acc3:#001830;--tx:#d8e4f0;--tx2:#7a9ab8;--mu:#3d5270;--re:#ff3d57;--am:#f0a500;}
+[data-theme=light]{--bg:#f4f4f5;--bg2:#e8e8ea;--s:#fff;--s2:#f0f0f0;--bd:#d4d4d8;--bd2:#a1a1aa;--acc:#16a34a;--acc2:#15803d;--acc3:#dcfce7;--tx:#09090b;--tx2:#3f3f46;--mu:#a1a1aa;--re:#dc2626;--am:#d97706;}
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;overflow:hidden;background:var(--bg);color:var(--tx);font-family:'Inter',sans-serif;font-size:15px;}
-header{height:48px;background:var(--bg2);border-bottom:1px solid var(--bd2);display:flex;align-items:center;padding:0 14px;gap:10px;flex-shrink:0;z-index:200;box-shadow:0 1px 0 rgba(0,184,255,.08);}
-.logo{font-family:'Share Tech Mono',monospace;font-size:clamp(15px,1.5vw,18px);color:var(--acc);letter-spacing:.35em;text-shadow:0 0 20px rgba(0,184,255,.35);}
+header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);display:flex;align-items:center;padding:0 12px;gap:10px;flex-shrink:0;z-index:200;}
+.logo{font-family:'Share Tech Mono',monospace;font-size:clamp(16px,1.6vw,20px);color:var(--acc);letter-spacing:.3em;text-shadow:0 0 16px var(--acc2);}
 .hsep{width:1px;height:20px;background:var(--bd2);}
 .live-dot{width:7px;height:7px;border-radius:50%;background:var(--acc);animation:pulse 1.2s infinite;}
 @keyframes pulse{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,184,255,.4)}50%{opacity:.4;box-shadow:0 0 0 4px transparent}}
@@ -41,8 +26,8 @@ header{height:48px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .bgc{stroke:var(--bd2);}.fgc{stroke:var(--acc);stroke-linecap:round;transition:stroke-dashoffset .9s linear;}
 #tlbl{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--mu);}
 .hright{margin-left:auto;display:flex;align-items:center;gap:5px;}
-.hbtn{background:none;border:1px solid var(--bd2);color:var(--tx2);cursor:pointer;font-size:11px;padding:4px 11px;line-height:1.4;font-family:'Inter',sans-serif;font-weight:500;transition:all .15s;letter-spacing:.02em;}
-.hbtn:hover{border-color:var(--acc);color:var(--acc);background:rgba(0,184,255,.06);}.hbtn.acc{border-color:var(--acc);color:var(--acc);background:rgba(0,184,255,.08);}
+.hbtn{background:none;border:1px solid var(--bd2);color:var(--tx2);cursor:pointer;font-size:12px;padding:3px 9px;line-height:1.4;font-family:'Share Tech Mono',monospace;transition:all .15s;letter-spacing:.05em;}
+.hbtn:hover{border-color:var(--acc2);color:var(--acc);}.hbtn.acc{border-color:var(--acc2);color:var(--acc);}
 #rbtn{font-size:16px;padding:2px 9px;}#rbtn:disabled{opacity:.3;cursor:not-allowed;}
 #clock{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--mu);}
 .shell{display:flex;height:calc(100vh - 46px);overflow:hidden;}
@@ -89,12 +74,12 @@ header{height:48px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .col-feed::-webkit-scrollbar{width:3px;}
 .col-feed::-webkit-scrollbar-thumb{background:var(--bd2);}
 .card{padding:7px 10px;border-bottom:1px solid var(--bd);transition:background .12s;}
-.card:hover{background:rgba(0,184,255,.035);}
+.card:hover{background:var(--s);}
 .card[data-sev=critical]{border-left:3px solid var(--re);}
 .card[data-sev=high]{border-left:3px solid var(--am);}
 .card[data-sev=medium]{border-left:3px solid #3b82f6;}
 .ctop{display:flex;align-items:center;gap:5px;margin-bottom:3px;}
-.csrc{display:inline-flex;align-items:center;gap:6px;color:var(--tx) !important;font-weight:600;letter-spacing:.04em;background:rgba(0,184,255,.07);border:1px solid rgba(0,184,255,.18);border-radius:999px;padding:2px 9px;font-size:11px;}
+.csrc{display:inline-flex;align-items:center;gap:6px;color:#ffffff !important;font-weight:700;letter-spacing:.04em;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:2px 8px;}
 .ctlink{display:block;font-size:clamp(16px,1.8vw,20px);font-weight:600;color:var(--tx);text-decoration:none;line-height:1.35;}
 .ctlink:hover{color:var(--acc);}
 .cdesc{color:#c9d1d9;font-size:clamp(13px,1.4vw,15px);color:#c9d1d9;margin-top:3px;line-height:1.4;}
@@ -130,12 +115,12 @@ header{height:48px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .restore-grid{display:flex;flex-direction:column;gap:4px;max-height:300px;overflow-y:auto;}
 .restore-btn{background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:6px 10px;cursor:pointer;font-size:13px;text-align:left;transition:all .15s;}
 .restore-btn:hover{border-color:var(--acc2);background:var(--acc3);}
-.notif{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--s2);border:1px solid var(--acc);color:var(--acc);padding:7px 16px;font-family:'Share Tech Mono',monospace;font-size:10px;z-index:600;pointer-events:none;letter-spacing:.08em;border-radius:2px;box-shadow:0 0 20px rgba(0,184,255,.15);}
-#tv-panel{position:fixed;bottom:12px;right:12px;z-index:450;width:min(420px,42vw);height:min(250px,30vh);background:#000;border:1px solid var(--bd2);border-top:2px solid var(--acc);box-shadow:0 6px 32px rgba(0,0,0,.85);display:flex;flex-direction:column;resize:both;overflow:hidden;min-width:260px;min-height:160px;}
+.notif{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--s2);border:1px solid var(--acc2);color:var(--acc);padding:6px 14px;font-family:'Share Tech Mono',monospace;font-size:11px;z-index:600;pointer-events:none;}
+#tv-panel{position:fixed;bottom:12px;right:12px;z-index:450;width:min(420px,42vw);height:min(250px,30vh);background:#000;border:1px solid var(--bd2);border-top:2px solid var(--re);box-shadow:0 6px 32px rgba(0,0,0,.85);display:flex;flex-direction:column;resize:both;overflow:hidden;min-width:260px;min-height:160px;}
 #tv-panel.tv-off{display:none!important;}
 .tvhd{display:flex;align-items:center;gap:4px;padding:4px 7px;background:var(--s2);border-bottom:1px solid var(--bd);flex-shrink:0;cursor:move;user-select:none;height:30px;}
-.tvdot{width:7px;height:7px;border-radius:50%;background:var(--acc);animation:pulse 1.2s infinite;flex-shrink:0;}
-.tvlbl{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--acc);letter-spacing:.06em;flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
+.tvdot{width:7px;height:7px;border-radius:50%;background:var(--re);animation:pulse 1.2s infinite;flex-shrink:0;}
+.tvlbl{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--re);letter-spacing:.06em;flex:1;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;}
 .tvsel{background:var(--s);border:1px solid var(--bd2);color:var(--tx2);font-size:9px;font-family:'Share Tech Mono',monospace;padding:1px 3px;outline:none;cursor:pointer;max-width:110px;}
 .tvbtn2{background:none;border:1px solid var(--bd2);color:var(--mu);cursor:pointer;font-size:9px;padding:1px 5px;font-family:'Share Tech Mono',monospace;flex-shrink:0;white-space:nowrap;transition:all .15s;}
 .tvbtn2:hover{border-color:var(--re);color:var(--re);}
@@ -148,43 +133,6 @@ header{height:48px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 /* page switcher removed */
 
 
-
-
-/* BRIEFING MODAL */
-.briefing-bg{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:700;display:flex;align-items:center;justify-content:center;padding:20px;}
-.briefing-modal{background:var(--bg);border:1px solid var(--bd2);width:100%;max-width:780px;max-height:92vh;display:flex;flex-direction:column;}
-.briefing-topbar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--bg2);border-bottom:1px solid var(--bd2);flex-shrink:0;}
-.briefing-topbar-title{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--acc);letter-spacing:.12em;flex:1;}
-.briefing-body{flex:1;overflow-y:auto;padding:24px 28px;}
-.briefing-body::-webkit-scrollbar{width:4px;}
-.briefing-body::-webkit-scrollbar-thumb{background:var(--bd2);}
-.br-header{border-bottom:1px solid var(--bd2);padding-bottom:14px;margin-bottom:20px;}
-.br-title{font-family:'Share Tech Mono',monospace;font-size:16px;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);}
-.br-date{font-size:11px;color:var(--mu);font-family:'Share Tech Mono',monospace;letter-spacing:.08em;margin-top:4px;}
-.br-theater{margin-bottom:24px;}
-.br-theater-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
-.br-theater-num{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--mu);}
-.br-theater-name{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--acc2);border-left:2px solid var(--acc2);padding-left:7px;}
-.br-item{display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--bd);align-items:flex-start;}
-.br-item:last-child{border-bottom:none;}
-.br-sev-badge{font-size:8px;font-family:'Share Tech Mono',monospace;padding:2px 5px;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0;margin-top:3px;}
-.br-sev-badge.critical{background:rgba(239,68,68,.15);color:var(--re);}
-.br-sev-badge.high{background:rgba(245,158,11,.15);color:var(--am);}
-.br-sev-badge.medium{background:rgba(59,130,246,.15);color:#3b82f6;}
-.br-item-body{flex:1;}
-.br-item-headline{font-size:15px;font-weight:600;color:var(--tx);text-decoration:none;display:block;line-height:1.35;}
-.br-item-headline:hover{color:var(--acc);}
-.br-item-meta{font-size:10px;color:var(--mu);font-family:'Share Tech Mono',monospace;margin-top:2px;}
-.br-footer{font-size:10px;color:var(--mu);font-family:'Share Tech Mono',monospace;border-top:1px solid var(--bd2);padding-top:10px;margin-top:8px;text-align:right;letter-spacing:.06em;}
-
-@media print{
-  .briefing-topbar{display:none;}
-  .briefing-modal{max-height:none;border:none;}
-  .briefing-bg{position:static;padding:0;}
-  body > *:not(.briefing-bg){display:none!important;}
-}
-
-
 /* Card nuova — highlight incrementale */
 @keyframes card-in{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
 .card-new{animation:card-in .35s ease;border-left:2px solid var(--acc)!important;}
@@ -193,8 +141,8 @@ header{height:48px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 
 /* PAGE SWITCHER */
 .page-tabs{display:flex;gap:2px;margin-left:8px;}
-.page-tab{background:none;border:1px solid var(--bd2);color:var(--mu);cursor:pointer;font-size:11px;padding:4px 12px;font-family:'Inter',sans-serif;font-weight:500;transition:all .15s;letter-spacing:.02em;}
-.page-tab.on{border-color:var(--acc);color:var(--acc);background:rgba(0,184,255,.08);}
+.page-tab{background:none;border:1px solid var(--bd2);color:var(--mu);cursor:pointer;font-size:11px;padding:3px 10px;font-family:'Share Tech Mono',monospace;transition:all .15s;letter-spacing:.06em;}
+.page-tab.on{border-color:var(--acc2);color:var(--acc);background:var(--acc3);}
 .page{display:none;height:100%;width:100%;}
 .page.on{display:flex;}
 
@@ -214,7 +162,7 @@ header{height:48px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .p2-alerts-feed::-webkit-scrollbar{width:3px;}
 .p2-alerts-feed::-webkit-scrollbar-thumb{background:var(--bd2);}
 .alert-card{padding:7px 10px;border-bottom:1px solid var(--bd);transition:background .12s;}
-.alert-card:hover{background:rgba(0,184,255,.035);}
+.alert-card:hover{background:var(--s);}
 .alert-card[data-sev=critical]{border-left:3px solid var(--re);}
 .alert-card[data-sev=high]{border-left:3px solid var(--am);}
 .alert-badge{font-size:9px;font-family:'Share Tech Mono',monospace;padding:1px 5px;text-transform:uppercase;letter-spacing:.06em;margin-right:4px;}
@@ -244,7 +192,7 @@ header{height:48px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .p2-pin.med .dot{background:#3b82f6;border:1.5px solid #93c5fd;}
 .p2-pin.med .dot::after{background:rgba(59,130,246,.25);animation-duration:3s;}
 .p2-pin.low .dot{background:#22d35e;border:1.5px solid #86efac;}
-.p2-pin.low .dot::after{background:rgba(0,184,255,.18);animation-duration:4s;}
+.p2-pin.low .dot::after{background:rgba(0,184,255,.2);animation-duration:4s;}
 .p2-pin .badge{position:absolute;top:-8px;right:-8px;background:#1e293b;color:#e2e8f0;font-size:9px;font-family:'Share Tech Mono',monospace;padding:1px 4px;border-radius:4px;border:1px solid var(--bd);white-space:nowrap;pointer-events:none;}
 .p2-hotspot{position:absolute;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;}
 .p2-hotspot .hs-inner{width:10px;height:10px;clip-path:polygon(50% 0%,100% 50%,50% 100%,0% 50%);position:relative;}
@@ -270,8 +218,8 @@ header{height:48px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .p2-stats span{display:flex;align-items:center;gap:3px;}
 .p2-stats .dot{width:6px;height:6px;border-radius:50%;}
 /* ── TRANSLATE & LANG BADGE ──────────────────────────────────────*/
-.ctranslate{display:inline-flex;align-items:center;font-size:10px;color:#00b8ff;border:1px solid rgba(0,184,255,.3);border-radius:3px;padding:1px 6px;margin-left:6px;cursor:pointer;background:transparent;font-family:'Share Tech Mono',monospace;transition:all .15s;}
-.ctranslate:hover{background:rgba(0,184,255,.15);border-color:#00b8ff;}
+.ctranslate{display:inline-flex;align-items:center;font-size:10px;color:#00b8ff;border:1px solid rgba(74,222,128,.35);border-radius:3px;padding:1px 6px;margin-left:6px;cursor:pointer;background:transparent;font-family:'Share Tech Mono',monospace;transition:all .15s;}
+.ctranslate:hover{background:rgba(74,222,128,.18);border-color:#00b8ff;}
 .clang-badge{font-size:9px;color:#f59e0b;border:1px solid rgba(245,158,11,.4);border-radius:2px;padding:0 3px;margin-left:4px;font-family:'Share Tech Mono',monospace;}
 
 @media (max-width: 1200px){
@@ -431,15 +379,15 @@ header{height:48px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 
 
 /* Source badge */
-.csrc{display:inline-flex;align-items:center;gap:6px;color:var(--tx) !important;font-weight:600;letter-spacing:.04em;background:rgba(0,184,255,.07);border:1px solid rgba(0,184,255,.18);border-radius:999px;padding:2px 9px;font-size:11px;}
+.csrc{display:inline-flex;align-items:center;gap:6px;color:#ffffff !important;font-weight:700;letter-spacing:.04em;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:2px 8px;}
 
 .csrc::before{
   content:'';
-  width:6px;
-  height:6px;
+  width:8px;
+  height:8px;
   border-radius:50%;
-  background:var(--acc);
-  opacity:.7;
+  background:#ffffff;
+  opacity:.9;
   flex-shrink:0;
 }
 
@@ -538,7 +486,7 @@ header{
   transition:all .15s ease, box-shadow .15s ease;
 }
 .page-tab:hover{
-  box-shadow:0 0 0 1px rgba(0,184,255,.12), 0 0 8px rgba(34,211,94,.10);
+  box-shadow:0 0 0 1px rgba(0,184,255,.12), 0 0 8px rgba(0,184,255,.10);
 }
 
 /* Hide/show left sidebar to widen columns */
@@ -557,33 +505,6 @@ body.sidebar-collapsed #sidebar-toggle-btn{
   color:var(--acc);
   background:var(--acc3);
 }
-
-}
-
-
-/* ── PALANTIR OVERRIDES ──────────────────────────────────────────*/
-body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
-  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.03) 2px,rgba(0,0,0,.03) 4px);}
-.col-name{font-family:'Inter',sans-serif !important;font-size:11px;font-weight:600;
-  color:var(--tx2);letter-spacing:.06em;text-transform:uppercase;flex:1;}
-.ctlink{font-family:'Inter',sans-serif;font-size:clamp(15px,1.7vw,19px);font-weight:600;
-  letter-spacing:-.01em;line-height:1.38;}
-.cdesc{font-family:'Inter',sans-serif;font-size:clamp(12px,1.3vw,14px);color:var(--tx2);
-  line-height:1.5;margin-top:4px;}
-.card[data-sev=critical]{border-left:2px solid var(--re);}
-.card[data-sev=high]{border-left:2px solid var(--am);}
-.card[data-sev=medium]{border-left:2px solid #3b82f6;}
-::-webkit-scrollbar{width:4px;height:4px;}
-::-webkit-scrollbar-track{background:transparent;}
-::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:2px;}
-::-webkit-scrollbar-thumb:hover{background:var(--acc);}
-.csrc.reuters,.csrc.ap,.csrc.afp,.csrc.ansa,.csrc.bbc,.csrc.ft,.csrc.wsj,.csrc.bloomberg,.csrc.guardian{
-  background:rgba(0,184,255,.12);border-color:rgba(0,184,255,.3);}
-html[data-theme=dark] .ctime,[data-theme=dark] .ctime{color:var(--tx2) !important;font-size:12px;}
-.col-cnt{font-size:10px;color:var(--acc);font-family:'Share Tech Mono',monospace;
-  background:rgba(0,184,255,.1);border:1px solid rgba(0,184,255,.2);padding:1px 6px;}
-.hbtn:hover{box-shadow:0 0 0 1px rgba(0,184,255,.15),0 0 10px rgba(0,184,255,.1) !important;}
-.page-tab:hover{box-shadow:0 0 0 1px rgba(0,184,255,.12),0 0 8px rgba(0,184,255,.08) !important;}
 </style>
 </head>
 <body>
@@ -613,8 +534,7 @@ html[data-theme=dark] .ctime,[data-theme=dark] .ctime{color:var(--tx2) !importan
     <button class="hbtn acc" onclick="openSrcModal()">&#8853; FONTE</button>
     <button class="hbtn" onclick="openRestoreModal()">&#8617; Colonne</button>
     <button class="hbtn" onclick="hardReset()" title="Reset completo localStorage" style="color:var(--re);border-color:var(--re)">&#9888; Reset</button>
-    <button class="hbtn acc" onclick="openBriefing()" title="Genera briefing">&#128196; BRIEFING</button>
-    <button class="hbtn" id="trbtn" onclick="translateAll()" data-alltr="0" title="Traduci articoli cinesi con Google Translate" style="border-color:#00b8ff;color:#00b8ff">&#127758; TRADUCI</button>
+    <button class="hbtn" id="trbtn" onclick="translateAll()" data-alltr="0" title="Traduci articoli cinesi con Google Translate" style="border-color:#4ade80;color:#4ade80">&#127758; TRADUCI</button>
     <button class="hbtn" id="tvbtn" onclick="tvToggle()" style="border-color:var(--re);color:var(--re)">&#9654; LIVE</button>
   </div>
 </header>
@@ -650,20 +570,6 @@ html[data-theme=dark] .ctime,[data-theme=dark] .ctime{color:var(--tx2) !importan
       <button style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:18px" onclick="closeRestoreModal()">&#x2715;</button></div>
     <div style="font-size:11px;color:var(--mu);margin-bottom:8px">Riattiva colonne chiuse:</div>
     <div class="restore-grid" id="restore-grid"></div>
-  </div>
-</div>
-
-
-<!-- BRIEFING MODAL -->
-<div class="briefing-bg" id="briefing-bg" style="display:none" onclick="if(event.target===this)closeBriefing()">
-  <div class="briefing-modal">
-    <div class="briefing-topbar">
-      <span class="briefing-topbar-title">&#128196; DAILY BRIEFING</span>
-      <button class="hbtn" onclick="exportBriefingText()">&#128203; Copia</button>
-      <button class="hbtn" onclick="window.print()">&#128424; Stampa</button>
-      <button class="hbtn" onclick="closeBriefing()" style="color:var(--re)">&#x2715;</button>
-    </div>
-    <div class="briefing-body" id="briefing-body"></div>
   </div>
 </div>
 
@@ -772,7 +678,8 @@ html[data-theme=dark] .ctime,[data-theme=dark] .ctime{color:var(--tx2) !importan
       <option value="4">Euronews EN</option><option value="5">TRT World</option>
       <option value="6">Sky News</option><option value="7">NHK World</option>
       <option value="8">RT English</option><option value="9">i24 News</option>
-      <option value="10">Bloomberg</option><option value="11">CNN</option><option value="12">CGTN</option>
+      <option value="10">Bloomberg</option><option value="11">CNN</option>
+              <option value="12">CGTN</option>
     </select>
     <button class="tvbtn2" id="tv-mute-btn" onclick="tvUnmute()">SUONO</button>
     <button class="tvbtn2" onclick="tvOpenYT()">YT &#x2197;</button>
@@ -783,6 +690,7 @@ html[data-theme=dark] .ctime,[data-theme=dark] .ctime{color:var(--tx2) !importan
     <div id="tv-msg" class="tv-msg"><span>Stream non disponibile</span><a href="#" target="_blank">Apri &#x2197;</a></div>
   </div>
 </div>
+
 
 <script>
 
@@ -807,32 +715,28 @@ var DEFAULTS=[
   {id:'khmertimes',name:'Khmer Times',url:'https://news.google.com/rss/search?q=site:khmertimeskh.com&hl=en&gl=KH&ceid=KH:en',cat:'sudest_asia',on:true},
   {id:'myanmarnow',name:'Myanmar Now',url:'https://news.google.com/rss/search?q=site:myanmar-now.org&hl=en&gl=MM&ceid=MM:en',cat:'sudest_asia',on:true},
 
-  {id:'wenweipo',name:'Wen Wei Po',url:'https://news.google.com/rss/search?q=site:wenweipo.com&hl=zh-CN&gl=HK&ceid=HK:zh-Hans',cat:'cina',on:true},
-  {id:'mingpao',name:'Ming Pao Daily',url:'https://news.google.com/rss/search?q=site:mingpao.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',cat:'cina',on:true},
-  {id:'singtao',name:'Sing Tao Daily',url:'https://news.google.com/rss/search?q=site:stheadline.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',cat:'cina',on:true},
-  {id:'applehk',name:'Apple Daily HK',url:'https://news.google.com/rss/search?q=%22Apple+Daily%22+Hong+Kong&hl=en&gl=HK&ceid=HK:en',cat:'cina',on:true},
-  {id:'zaobao',name:'United Morning Post (Zaobao)',url:'https://news.google.com/rss/search?q=site:zaobao.com.sg&hl=zh-CN&gl=SG&ceid=SG:zh-Hans',cat:'cina',on:true},
-  {id:'cna_tw',name:'Central News Agency',url:'https://news.google.com/rss/search?q=site:cna.com.tw&hl=zh-TW&gl=TW&ceid=TW:zh-Hant',cat:'cina',on:true},
-  {id:'pla_daily',name:'PLA Daily',url:'https://news.google.com/rss/search?q=site:81.cn+解放军报&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
+  {id:'wenweipo',name:'Wen Wei Po',url:'https://news.google.com/rss/search?q=site:wenweipo.com&hl=zh-CN&gl=HK&ceid=HK:zh-Hans',cat:'cina',on:true,max:5},
+  {id:'mingpao',name:'Ming Pao Daily',url:'https://news.google.com/rss/search?q=site:mingpao.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',cat:'cina',on:true,max:5},
+  {id:'singtao',name:'Sing Tao Daily',url:'https://news.google.com/rss/search?q=site:stheadline.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',cat:'cina',on:true,max:5},
+  {id:'applehk',name:'Apple Daily HK',url:'https://news.google.com/rss/search?q=%22Apple+Daily%22+Hong+Kong&hl=en&gl=HK&ceid=HK:en',cat:'cina',on:true,max:5},
+  {id:'zaobao',name:'United Morning Post (Zaobao)',url:'https://news.google.com/rss/search?q=site:zaobao.com.sg&hl=zh-CN&gl=SG&ceid=SG:zh-Hans',cat:'cina',on:true,max:5},
+  {id:'cna_tw',name:'Central News Agency',url:'https://news.google.com/rss/search?q=site:cna.com.tw&hl=zh-TW&gl=TW&ceid=TW:zh-Hant',cat:'cina',on:true,max:5},
+  {id:'pla_daily',name:'PLA Daily',url:'https://news.google.com/rss/search?q=site:81.cn+解放军报&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true,max:20},
   {id:'pla_eastern',name:'Eastern Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+东部战区&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
   {id:'pla_southern',name:'Southern Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+南部战区&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
   {id:'pla_western',name:'Western Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+西部战区&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
   {id:'pla_northern',name:'Northern Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+北部战区&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
   {id:'pla_central',name:'Central Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+中部战区&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
-  {id:'qstheory',name:'Seeking Truth',url:'https://news.google.com/rss/search?q=site:qstheory.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
+  {id:'qstheory',name:'Seeking Truth',url:'https://news.google.com/rss/search?q=site:qstheory.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true,max:20},
   {id:'beijingdaily',name:'Beijing Daily',url:'https://news.google.com/rss/search?q=site:bjd.com.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
   {id:'ce_cn',name:'China Economic Net',url:'https://news.google.com/rss/search?q=site:ce.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
   {id:'gmw',name:'Guangming Daily',url:'https://news.google.com/rss/search?q=site:gmw.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
-  {id:'xinhua_cina',  name:'Xinhua',             cat:'cina',    url:'https://news.google.com/rss/search?q=site:xinhuanet.com&hl=en',on:true},
-  {id:'xinhua_cn',    name:'Xinhua CN',          cat:'cina',    url:'https://news.google.com/rss/search?q=site:xinhuanet.com&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
-  {id:'pekingnology',name:'Pekingnology (feed)',url:'https://www.pekingnology.com/feed',cat:'cina',on:true},
-  {id:'globaltimes',   name:'Global Times',          cat:'cina',    url:'https://www.globaltimes.cn/rss/outbrain.xml',on:true},
-  {id:'globaltimes_gn',name:'Global Times (GNews)',  cat:'cina',    url:'https://news.google.com/rss/search?q=site:globaltimes.cn&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'beijingtimes',  name:'Beijing Times',         cat:'cina',    url:'https://news.google.com/rss/search?q=site:thepaper.cn+OR+%22Beijing+Times%22&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
-  {id:'chinadigitaltimes',name:'China Digital Times',url:'https://chinadigitaltimes.net/feed/',cat:'cina',on:true},
+  {id:'xinhua_cina',  name:'Xinhua',             cat:'cina',    url:'https://news.google.com/rss/search?q=site:xinhuanet.com&hl=en',on:true,max:20},
+  {id:'pekingnology',name:'Pekingnology (feed)',url:'https://www.pekingnology.com/feed',cat:'cina',on:true,max:20},
+  {id:'chinadigitaltimes',name:'China Digital Times',url:'https://chinadigitaltimes.net/feed/',cat:'cina',on:true,max:20},
 
-  {id:'reuters',   name:'Reuters',            cat:'agenzie', url:'https://news.google.com/rss/search?q=reuters+world+news&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'ap',        name:'AP',                 cat:'agenzie', url:'https://news.google.com/rss/search?q=associated+press+world&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'reuters',   name:'Reuters',            cat:'agenzie', url:'https://news.google.com/rss/search?q=reuters+world+news&hl=en&gl=US&ceid=US:en',on:true,max:15},
+  {id:'ap',        name:'AP',                 cat:'agenzie', url:'https://news.google.com/rss/search?q=associated+press+world&hl=en&gl=US&ceid=US:en',on:true,max:15},
   {id:'afp',       name:'AFP',                cat:'agenzie', url:'https://news.google.com/rss/search?q=agence+france+presse+AFP&hl=en&gl=US&ceid=US:en',on:true},
   {id:'ansa',      name:'ANSA Mondo',         cat:'agenzie', url:'https://news.google.com/rss/search?q=site:ansa.it+mondo&hl=it&gl=IT&ceid=IT:it',on:true},
   {id:'ansait',    name:'ANSA Italia',        cat:'agenzie', url:'https://news.google.com/rss/search?q=site:ansa.it+politica&hl=it&gl=IT&ceid=IT:it',on:true},
@@ -846,11 +750,11 @@ var DEFAULTS=[
   {id:'wam',       name:'WAM (UAE)',           cat:'agenzie', url:'https://news.google.com/rss/search?q=site:wam.ae&hl=en',on:true},
   {id:'pti',       name:'PTI (India)',        cat:'agenzie', url:'https://news.google.com/rss/search?q=press+trust+india&hl=en',on:true},
   {id:'prensa',    name:'Prensa Latina',      cat:'agenzie', url:'https://news.google.com/rss/search?q=site:plenglish.com&hl=en',on:true},
-  {id:'bbc',       name:'BBC World',          cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+world+news&hl=en&gl=GB&ceid=GB:en',on:true},
+  {id:'bbc',       name:'BBC World',          cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+world+news&hl=en&gl=GB&ceid=GB:en',on:true,max:15},
   {id:'bbcme',     name:'BBC Middle East',    cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+middle+east&hl=en&gl=GB&ceid=GB:en',on:true},
   {id:'bbcasia',   name:'BBC Asia',           cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+asia&hl=en&gl=GB&ceid=GB:en',on:true},
   {id:'bbcafrica', name:'BBC Africa',         cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+africa&hl=en&gl=GB&ceid=GB:en',on:true},
-  {id:'aljazeera', name:'Al Jazeera',         cat:'media',   url:'https://news.google.com/rss/search?q=site:aljazeera.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'aljazeera', name:'Al Jazeera',         cat:'media',   url:'https://news.google.com/rss/search?q=site:aljazeera.com&hl=en&gl=US&ceid=US:en',on:true,max:15},
   {id:'france24',  name:'France 24',          cat:'media',   url:'https://news.google.com/rss/search?q=site:france24.com&hl=en&gl=FR&ceid=FR:en',on:true},
   {id:'dwnews',    name:'DW News',            cat:'media',   url:'https://news.google.com/rss/search?q=site:dw.com&hl=en&gl=DE&ceid=DE:en',on:true},
   {id:'euronews',  name:'Euronews',           cat:'media',   url:'https://news.google.com/rss/search?q=euronews+world&hl=en',on:true},
@@ -873,7 +777,7 @@ var DEFAULTS=[
   {id:'kyivindep', name:'Kyiv Independent',   cat:'regional',url:'https://news.google.com/rss/search?q=site:kyivindependent.com&hl=en',on:true},
   {id:'news24',    name:'News24 Africa',      cat:'regional',url:'https://news.google.com/rss/search?q=site:news24.com&hl=en&gl=ZA&ceid=ZA:en',on:true},
   {id:'dawn',      name:'Dawn Pakistan',      cat:'regional',url:'https://news.google.com/rss/search?q=site:dawn.com&hl=en&gl=PK&ceid=PK:en',on:true},
-  {id:'caixin',    name:'Caixin Global',      cat:'cina',    url:'https://news.google.com/rss/search?q=site:caixinglobal.com&hl=en',on:true},
+  {id:'caixin',    name:'Caixin Global',      cat:'cina',url:'https://news.google.com/rss/search?q=site:caixinglobal.com&hl=en',on:true,max:20},
   {id:'repubblica',name:'La Repubblica',      cat:'italia',  url:'https://news.google.com/rss/search?q=site:repubblica.it+esteri&hl=it&gl=IT&ceid=IT:it',on:true},
   {id:'corriere',  name:'Corriere della S.',  cat:'italia',  url:'https://news.google.com/rss/search?q=site:corriere.it+esteri&hl=it',on:true},
   {id:'rainews',   name:'Rainews 24',         cat:'italia',  url:'https://news.google.com/rss/search?q=site:rainews.it&hl=it',on:true},
@@ -957,7 +861,7 @@ var PRESETS=[
   // English-language Chinese state/official media
   {id:'xinhua_en',   name:'Xinhua (EN)',        cat:'cina', url:'http://www.xinhuanet.com/english/rss/worldrss.xml', on:true},
   {id:'cgtn_en',     name:'CGTN',               cat:'cina', url:'https://news.google.com/rss/search?q=site:cgtn.com&hl=en', on:true},
-  {id:'globaltimes', name:'Global Times (EN)',   cat:'cina', url:'https://www.globaltimes.cn/rss/outbrain.xml', on:true},
+  {id:'globaltimes', name:'Global Times (EN)',   cat:'cina', url:'https://www.globaltimes.cn/rss/outbrain.xml', on:true,max:20},
   {id:'chinadaily',  name:'China Daily (EN)',    cat:'cina', url:'https://rss.chinadaily.com.cn/rss/cndy_topnews.xml', on:true},
   {id:'people_en',   name:'Peoples Daily (EN)',cat:'cina', url:'https://news.google.com/rss/search?q=site:en.people.cn&hl=en', on:true},
   // Chinese-language sources (RSS in 中文)
@@ -986,6 +890,7 @@ var ALL_COLS=[
   {id:'indopacifico',name:'Indo-Pacifico',icon:'&#127759;', regions:['indopacifico']},
   {id:'americas',    name:'Americhe',     icon:'&#127758;', regions:['americas']},
   {id:'osint',       name:'OSINT',        icon:'&#128065;', regions:['osint']},
+  {id:'sudest',      name:'Sud-Est Asia', icon:'&#127757;', regions:['sudest_asia','indopacifico']},
 ];
 
 var sources=[],articles=[],colOrder=[],colClosed=[],timerSec=120,timerInt=null,sourceStatus={},pIdx=0;
@@ -1091,6 +996,7 @@ var CL={
     americas:['usa','united states','america','trump','washington','canada','brazil','mexico','latin','venezuela','colombia','argentina','stati uniti'],
     africa:['africa','sudan','ethiopia','somalia','mali','sahel','congo','nigeria','kenya','libya','mozambique','etiopia','libia'],
     russia:['russia','putin','kremlin','moscow','wagner','cremlino','mosca'],
+    sudest_asia:['thailand','thai','cambodia','laos','malaysia','myanmar','philippines','filipino','indonesia','indonesian','brunei','timor','mekong','asean','bangkok','jakarta','manila','kuala lumpur','yangon','phnom penh','vientiane','hanoi','ho chi minh'],
   }
 };
 function classify(item){
@@ -1107,6 +1013,7 @@ function classify(item){
     ||item.src==='Xinhua'||item.src==='Global Times'
     ||item.src==='Caixin Global'||item.src==='PLA Daily'
     ||item.src==='Seeking Truth'))item.region='cina';
+  if(reg==='global'&&item.cat==='sudest_asia')item.region='sudest_asia';
   if(reg==='global'&&item.cat==='sudest_asia')item.region='indopacifico';
   if(reg==='global'&&item.cat==='italia')item.region='italia';
   return item;
@@ -1128,7 +1035,8 @@ function parseRSS(xml,src){
       out.push(classify({title:title,link:link,description:desc,pub:pub,src:src.name,cat:src.cat,ts:pub?new Date(pub).getTime()||0:0}));
     });
   }catch(e){}
-  return out;
+  var maxItems = src.max || 12;
+  return out.slice(0, maxItems);
 }
 
 function doRefresh(){
@@ -1252,7 +1160,8 @@ function cardHTML(a){
 }
 
 function getForCol(def){return articles.filter(function(a){
-  if(def.regions[0]==='all') return a.cat!=='cina' && a.region!=='cina';
+  if(def.regions[0]==='all') return a.cat!=='cina' && a.region!=='cina' && a.region!=='sudest_asia';
+  if(def.id==='sudest') return a.cat==='sudest_asia' || a.region==='sudest_asia';
   if(def.regions[0]==='osint') return a.cat==='osint';
   // For cina column, also match by cat so even misclassified articles show
   if(def.id==='cina') return a.region==='cina'||a.cat==='cina';
@@ -1388,147 +1297,6 @@ function notify(msg){var n=document.createElement('div');n.className='notif';n.t
 
 
 
-// ── BRIEFING ─────────────────────────────────────────────────────
-var REGION_LABELS = {
-  global:'Globale / Non classificato',
-  europa:'Europa',
-  russia:'Russia e spazio post-sovietico',
-  medioriente:'Medio Oriente e Nord Africa',
-  italia:'Italia',
-  indopacifico:'Indo-Pacifico',
-  cina:'Cina e Taiwan',
-  americas:'Americhe',
-  africa:'Africa subsahariana',
-  osint:'OSINT / Analisi difesa'
-};
-var REGION_ORDER = ['medioriente','russia','europa','cina','indopacifico','americas','africa','global'];
-
-function openBriefing(){
-  if(!articles||!articles.length){notify('Nessuna notizia caricata');return;}
-  document.getElementById('briefing-body').innerHTML = buildBriefingHTML();
-  document.getElementById('briefing-bg').style.display='flex';
-}
-function closeBriefing(){document.getElementById('briefing-bg').style.display='none';}
-
-function buildBriefingHTML(){
-  var now = new Date();
-  var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  var months=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  var dateStr = days[now.getDay()]+', '+months[now.getMonth()]+' '+now.getDate()+', '+now.getFullYear();
-  var timeStr = now.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'})+' CET';
-
-  var arts = articles.filter(function(a){return a.cat!=='italia' && a.region!=='italia';});
-  var srcCount={};
-  arts.forEach(function(a){srcCount[a.src]=(srcCount[a.src]||0)+1;});
-  var srcNum=Object.keys(srcCount).length;
-
-  var TEATRI=[
-    {reg:'medioriente', label:'Middle East & North Africa'},
-    {reg:'russia',      label:'Russia & Post-Soviet Space'},
-    {reg:'europa',      label:'Europe'},
-    {reg:'cina',        label:'China & Taiwan Strait'},
-    {reg:'indopacifico',label:'Indo-Pacific'},
-    {reg:'americas',    label:'Western Hemisphere'},
-    {reg:'africa',      label:'Sub-Saharan Africa'},
-    {reg:'global',      label:'Global'},
-  ];
-
-  var byRegion={};
-  arts.forEach(function(a){var r=a.region||'global';if(!byRegion[r])byRegion[r]=[];byRegion[r].push(a);});
-
-  var html='';
-
-  // Header
-  html+='<div class="br-header">';
-  html+='<div class="br-title">Daily Briefing</div>';
-  html+='<div class="br-date">'+dateStr.toUpperCase()+' &mdash; '+timeStr+'</div>';
-  html+='</div>';
-
-  // Teatri
-  var num=1;
-  TEATRI.forEach(function(t){
-    var regArts=byRegion[t.reg];
-    if(!regArts||!regArts.length)return;
-    var top=regArts.slice().sort(function(a,b){
-      var SO={critical:4,high:3,medium:2,low:1};
-      return(SO[b.sev]||1)-(SO[a.sev]||1)||(b.ts||0)-(a.ts||0);
-    }).filter(function(a){return a.sev!=='low';}).slice(0,5);
-    if(!top.length)return;
-
-    html+='<div class="br-theater">';
-    html+='<div class="br-theater-hd">';
-    html+='<span class="br-theater-num">'+num+'.</span>';
-    html+='<span class="br-theater-name">'+t.label+'</span>';
-    html+='</div>';
-    top.forEach(function(a){
-      html+='<div class="br-item">';
-      html+='<span class="br-sev-badge '+a.sev+'">'+a.sev+'</span>';
-      html+='<div class="br-item-body">';
-      html+='<a class="br-item-headline" href="'+esc(a.link)+'" target="_blank" rel="noopener">'+esc(a.title)+'</a>';
-      html+='<div class="br-item-meta">'+esc(a.src)+(a.pub?' &mdash; '+fmtTime(a.pub):'')+'</div>';
-      html+='</div></div>';
-    });
-    html+='</div>';
-    num++;
-  });
-
-  html+='<div class="br-footer">SHERLOCK &mdash; '+timeStr+' &mdash; '+arts.length+' items &mdash; '+srcNum+' sources</div>';
-  return html;
-}
-
-function exportBriefingText(){
-  var body = document.getElementById('briefing-body');
-  if(!body) return;
-  // Plain text version
-  var lines = [];
-  var now = new Date();
-  lines.push("PRESIDENT'S DAILY BRIEFING");
-  lines.push(now.toLocaleDateString('it-IT',{weekday:'long',year:'numeric',month:'long',day:'numeric'}).toUpperCase());
-  lines.push("ANALISI INTERNA - USO ESCLUSIVO");
-  lines.push("=".repeat(60));
-  lines.push('');
-
-  var critical = articles.filter(function(a){return a.sev==='critical';});
-  var high = articles.filter(function(a){return a.sev==='high';});
-  lines.push('Notizie totali: '+articles.length+' | Critiche: '+critical.length+' | Alta priorità: '+high.length);
-  lines.push('');
-  lines.push("// SITUAZIONE D\u2019URGENZA");
-  lines.push("-".repeat(40));
-  articles.filter(function(a){return a.sev==='critical'||a.sev==='high';}).slice(0,5).forEach(function(a){
-    lines.push('['+a.sev.toUpperCase()+'] '+a.title);
-    lines.push('  Fonte: '+a.src+(a.pub?' - '+fmtTime(a.pub):''));
-    lines.push('  Link: '+a.link);
-    lines.push('');
-  });
-
-  var byRegion = {};
-  articles.forEach(function(a){var r=a.region||'global';if(!byRegion[r])byRegion[r]=[];byRegion[r].push(a);});
-  REGION_ORDER.forEach(function(reg){
-    var arts=byRegion[reg];if(!arts||!arts.length)return;
-    lines.push('');
-    lines.push('// '+(REGION_LABELS[reg]||reg).toUpperCase());
-    lines.push("-".repeat(40));
-    arts.sort(function(a,b){var S={critical:4,high:3,medium:2,low:1};return(S[b.sev]||1)-(S[a.sev]||1)||(b.ts||0)-(a.ts||0);}).slice(0,4).forEach(function(a){
-      lines.push('['+a.sev.toUpperCase()+'] '+a.title);
-      lines.push('  '+a.src+(a.pub?' - '+fmtTime(a.pub):''));
-      lines.push('');
-    });
-  });
-  lines.push("=".repeat(60));
-  lines.push("SHERLOCK GEOPOLITICS MONITOR - "+now.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}));
-
-  var text = lines.join('\n');
-  if(navigator.clipboard){
-    navigator.clipboard.writeText(text).then(function(){notify('Briefing copiato negli appunti');});
-  } else {
-    var ta=document.createElement('textarea');ta.value=text;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
-    notify('Briefing copiato');
-  }
-}
-
-
-
-
 // ── PAGINA 2: SWITCHER ────────────────────────────────────────────
 function switchPage(n){
   var p1=document.getElementById('page-1'),p2=document.getElementById('page-2');
@@ -1613,7 +1381,7 @@ function translateAll(){
   });
   if(btn){
     btn.dataset.alltr=active?'0':'1';
-    btn.style.background=active?'':'rgba(0,184,255,.2)';
+    btn.style.background=active?'':'rgba(74,222,128,.2)';
     btn.textContent=active?'🌐 TRADUCI':'↩ ORIGINALE';
   }
 }
@@ -1725,7 +1493,7 @@ var CONFLICT_ZONES={
   'SS':'high','ET':'med','IQ':'med','AF':'high','LY':'med',
   'TR':'low','IR':'med'
 };
-var CONFLICT_COLORS={crit:'rgba(239,68,68,',high:'rgba(245,158,11,',med:'rgba(59,130,246,',low:'rgba(34,211,94,'};
+var CONFLICT_COLORS={crit:'rgba(239,68,68,',high:'rgba(245,158,11,',med:'rgba(59,130,246,',low:'rgba(0,184,255,'};
 // Opacity levels for conflict zone fill vs stroke
 var CZ_FILL_OP={crit:0.30,high:0.22,med:0.15,low:0.08};
 var CZ_STROKE_OP={crit:0.85,high:0.75,med:0.60,low:0.45};
@@ -2006,18 +1774,6 @@ function closeCountryPanel(){
   _cpCurrentIso='';
 }
 
-function cpRunAnalisi(){
-  // Pre-filter ANALISI to current region and open modal
-  var focusEl=document.getElementById('analisi-focus');
-  var focusMap={europa:'europa',medioriente:'medio oriente',indopacifico:'cina',cina:'cina',americas:'americas',africa:'africa'};
-  if(focusEl&&_cpCurrentReg){focusEl.value=focusMap[_cpCurrentReg]||'';}
-  // Switch to dashboard mode
-  var dashBtn=document.getElementById('src-dashboard');
-  if(dashBtn)analisiSetSrc('dashboard',dashBtn);
-  closeCountryPanel();
-  // analisi removed
-}
-
 // ── Region view presets (zoom + translate on SVG g) ──────────────
 function p2ZoomStep(factor){
   if(!_p2SVG||!_p2ZoomBeh)return;
@@ -2055,7 +1811,7 @@ function p2ToggleLayer(layer,btn){
           var i2=N2I[String(f.id)]||'';
           if(_p2Layers.heatmap) return _heatColor(hm[i2]||0);
           var ic=_buildColors();
-          var TINT={'#ef4444':'rgba(239,68,68,0.14)','#f59e0b':'rgba(245,158,11,0.10)','#3b82f6':'rgba(59,130,246,0.10)','#22d35e':'rgba(34,211,94,0.08)'};
+          var TINT={'#ef4444':'rgba(239,68,68,0.14)','#f59e0b':'rgba(245,158,11,0.10)','#3b82f6':'rgba(59,130,246,0.10)','#22d35e':'rgba(0,184,255,0.08)'};
           return ic[i2]?TINT[ic[i2]]||'var(--s2)':'var(--s2)';
         });
       }
@@ -2224,7 +1980,7 @@ function _drawP2Map(){
           var hm=_buildHeatmap();
           return _heatColor(hm[i2]||0);
         }
-        var TINT={'#ef4444':'rgba(239,68,68,0.14)','#f59e0b':'rgba(245,158,11,0.10)','#3b82f6':'rgba(59,130,246,0.10)','#22d35e':'rgba(34,211,94,0.08)'};
+        var TINT={'#ef4444':'rgba(239,68,68,0.14)','#f59e0b':'rgba(245,158,11,0.10)','#3b82f6':'rgba(59,130,246,0.10)','#22d35e':'rgba(0,184,255,0.08)'};
         return ic[i2]?TINT[ic[i2]]||'var(--s2)':'var(--s2)';
       })
     .attr('stroke','var(--bg)').attr('stroke-width','0.5')
@@ -2352,9 +2108,9 @@ var TV_CH=[
   {name:'NHK World',     type:'hls', hls:'https://nhkworld.webcdn.stream.ne.jp/www11/nhkworld-tv/global/263941/live_wa_s.m3u8', yt:'f0lYfG_vY_U'},
   {name:'RT English',    type:'hls', hls:'https://rt-glb.rttv.com/live/rten/playlist.m3u8', yt:''},
   {name:'i24 News',      type:'hls', hls:'https://bcovlive-a.akamaihd.net/6db4a900c00c4f7dac5f1e97ab87a0e4/eu-central-1/5377161796001/profile_0/chunklist.m3u8', yt:''},
-  {name:'Bloomberg',     type:'link',link:'https://www.bloomberg.com/live', yt:''},
+  {name:'Bloomberg',     type:'yt',  yt:'dp8PhLsUcFE'},
   {name:'CNN',           type:'link',link:'https://edition.cnn.com/live-tv', yt:''},
-  {name:'CGTN',          type:'hls', hls:'https://livees.cgtn.com/1000e/prog_index.m3u8', yt:'8gGEJi5K9w4'},
+  {name:'CGTN',          type:'yt',  yt:'8gGEJi5K9w4'},
 ];
 var _tvIdx=0,_tvMuted=true,_hlsInst=null;
 function _buildPlayer(idx){
@@ -2422,13 +2178,13 @@ function hardReset(){
   renderAll();doRefresh();
   notify('Reset completato');
 }
-
 loadPersist();
 renderAll();
 doRefresh();
 
 
 </script>
+
 
 <!-- ── COUNTRY PANEL ─────────────────────────────────────────────── -->
 <div id="country-panel" style="position:fixed;top:0;right:-420px;width:400px;height:100vh;background:var(--bg);border-left:1px solid var(--bd);z-index:900;display:flex;flex-direction:column;transition:right .28s cubic-bezier(.4,0,.2,1);box-shadow:-4px 0 24px rgba(0,0,0,.4);">
@@ -2443,7 +2199,7 @@ doRefresh();
   <div id="cp-status" style="padding:8px 14px;border-bottom:1px solid var(--bd);flex-shrink:0;"></div>
   <div id="cp-articles" style="flex:1;overflow-y:auto;padding:10px 12px;"></div>
   <div style="padding:10px 14px;border-top:1px solid var(--bd);flex-shrink:0;display:flex;gap:8px;">
-    <button onclick="cpRunAnalisi()" style="flex:1;background:rgba(139,92,246,.15);border:1px solid #8b5cf6;color:#a78bfa;padding:7px;border-radius:5px;cursor:pointer;font-size:12px;font-family:inherit;">&#129504; Analizza con Claude</button>
+    
     <button onclick="closeCountryPanel()" style="background:var(--s2);border:1px solid var(--bd);color:var(--mu);padding:7px 12px;border-radius:5px;cursor:pointer;font-size:12px;">Chiudi</button>
   </div>
 </div>
@@ -2792,86 +2548,6 @@ function toggleSidebar(){
 
 
 
-<script>
-function collectTopNews(limit){
-  let cards=[...document.querySelectorAll('.card, .alert-card')];
-  let out=[];
-  for(let c of cards){
-    let title=(c.querySelector('.ctlink, .br-item-headline, .alert-title, a')||{}).innerText||'';
-    let src=(c.querySelector('.csrc')||{}).innerText||'';
-    let desc=(c.querySelector('.cdesc')||{}).innerText||'';
-    let time=(c.querySelector('.ctime')||{}).innerText||'';
-    title=title.trim();
-    if(!title) continue;
-    out.push({title,src:src.trim(),desc:desc.trim(),time:time.trim()});
-    if(out.length>=limit) break;
-  }
-  return out;
-}
-
-function genPromptLimes(){
-  let items=collectTopNews(12);
-  let lines=items.map((n,i)=>{
-    let meta=[n.src,n.time].filter(Boolean).join(' | ');
-    let desc=n.desc ? " — "+n.desc : "";
-    return (i+1)+". "+n.title+(meta ? " ("+meta+")" : "")+desc;
-  }).join("\n");
-
-  let summary=items.slice(0,6).map((n,i)=>"- "+n.title).join("\n");
-
-  let prompt = `Agisci come un analista geopolitico in stile Limes: tono asciutto, analitico, non moralistico, attento ai rapporti di forza, alla geografia, alla gerarchia tra attori, ai vincoli strutturali e agli interessi strategici.
-
-Sulla base delle notizie qui sotto, produci:
-
-1. RIASSUNTO (massimo 900 battute)
-   - sintetizza il quadro generale in modo chiaro e compatto
-
-2. KEY JUDGMENTS
-   - 4-6 punti
-   - formula assertiva, non generica
-
-3. ANALISI
-   - spiega poste in gioco, attori, obiettivi, vincoli, rapporto tra livello tattico e strategico
-   - distingui fatti, segnali e possibili inferenze
-
-4. SWOT STRATEGICA
-   - punti di forza
-   - punti di debolezza
-   - opportunità
-   - minacce
-
-5. SCENARI A 3-6 MESI
-   - scenario più probabile
-   - scenario peggiorativo
-   - scenario meno probabile ma ad alto impatto
-
-6. INDICATORI DA MONITORARE
-   - 5 segnali concreti da seguire nei prossimi giorni/settimane
-
-Vincoli stilistici:
-- italiano
-- frasi compatte
-- niente linguaggio motivazionale
-- evita ripetizioni
-- non usare tabelle
-- mantieni ordine temporale e causalità
-- evidenzia nessi geopolitici, non solo cronaca
-
-Notizie considerate:
-${lines}
-
-Mini-riassunto iniziale utile:
-${summary}`;
-  document.getElementById("gptPrompt").value=prompt;
-}
-
-function copyPromptLimes(){
-  const el=document.getElementById("gptPrompt");
-  el.select();
-  el.setSelectionRange(0, 999999);
-  try{ document.execCommand('copy'); }catch(e){}
-}
-</script>
 
 </body>
 </html>
