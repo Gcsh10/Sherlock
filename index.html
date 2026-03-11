@@ -772,7 +772,7 @@ html[data-theme=dark] .ctime,[data-theme=dark] .ctime{color:var(--tx2) !importan
       <option value="4">Euronews EN</option><option value="5">TRT World</option>
       <option value="6">Sky News</option><option value="7">NHK World</option>
       <option value="8">RT English</option><option value="9">i24 News</option>
-      <option value="10">Bloomberg</option><option value="11">CNN</option>
+      <option value="10">Bloomberg</option><option value="11">CNN</option><option value="12">CGTN</option>
     </select>
     <button class="tvbtn2" id="tv-mute-btn" onclick="tvUnmute()">SUONO</button>
     <button class="tvbtn2" onclick="tvOpenYT()">YT &#x2197;</button>
@@ -823,7 +823,10 @@ var DEFAULTS=[
   {id:'beijingdaily',name:'Beijing Daily',url:'https://news.google.com/rss/search?q=site:bjd.com.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
   {id:'ce_cn',name:'China Economic Net',url:'https://news.google.com/rss/search?q=site:ce.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
   {id:'gmw',name:'Guangming Daily',url:'https://news.google.com/rss/search?q=site:gmw.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
+  {id:'xinhua_cina',  name:'Xinhua',             cat:'cina',    url:'https://news.google.com/rss/search?q=site:xinhuanet.com&hl=en',on:true},
+  {id:'xinhua_cn',    name:'Xinhua CN',          cat:'cina',    url:'https://news.google.com/rss/search?q=site:xinhuanet.com&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
   {id:'pekingnology',name:'Pekingnology (feed)',url:'https://www.pekingnology.com/feed',cat:'cina',on:true},
+  {id:'chinadigitaltimes',name:'China Digital Times',url:'https://chinadigitaltimes.net/feed/',cat:'cina',on:true},
 
   {id:'reuters',   name:'Reuters',            cat:'agenzie', url:'https://news.google.com/rss/search?q=reuters+world+news&hl=en&gl=US&ceid=US:en',on:true},
   {id:'ap',        name:'AP',                 cat:'agenzie', url:'https://news.google.com/rss/search?q=associated+press+world&hl=en&gl=US&ceid=US:en',on:true},
@@ -857,6 +860,9 @@ var DEFAULTS=[
   {id:'nhk',       name:'NHK World',          cat:'media',   url:'https://news.google.com/rss/search?q=site:nhk.or.jp&hl=en&gl=JP&ceid=JP:en',on:true},
   {id:'thehill',   name:'The Hill',           cat:'media',   url:'https://news.google.com/rss/search?q=site:thehill.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'axios',     name:'Axios World',        cat:'media',   url:'https://news.google.com/rss/search?q=site:axios.com+world&hl=en',on:true},
+  {id:'wsj_world', name:'Wall Street Journal', cat:'media',   url:'https://feeds.a.dj.com/rss/RSSWorldNews.xml',on:true},
+  {id:'nyt_world', name:'New York Times',       cat:'media',   url:'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',on:true},
+  {id:'washpost',  name:'Washington Post',      cat:'media',   url:'https://feeds.washingtonpost.com/rss/world',on:true},
   {id:'nikkei',    name:'Nikkei Asia',        cat:'regional',url:'https://news.google.com/rss/search?q=site:asia.nikkei.com&hl=en',on:true},
   {id:'scmp',      name:'S.China Morning',    cat:'regional',url:'https://news.google.com/rss/search?q=site:scmp.com&hl=en',on:true},
   {id:'haaretz',   name:'Haaretz',            cat:'regional',url:'https://news.google.com/rss/search?q=site:haaretz.com&hl=en',on:true},
@@ -1094,7 +1100,7 @@ function classify(item){
   for(var r=0;r<rks.length;r++){var kw=CL.regions[rks[r]];for(var k=0;k<kw.length;k++){if(txt.indexOf(kw[k])>=0){reg=rks[r];break;}}if(reg!=='global')break;}
   item.sev=sev;item.region=reg;
   // If region still global but source has explicit cat mapping, use it
-  if(reg==='global'&&item.cat==='cina')item.region='cina';
+  if(reg==='global'&&(item.cat==='cina'||item.src==='Xinhua'))item.region='cina';
   if(reg==='global'&&item.cat==='sudest_asia')item.region='indopacifico';
   if(reg==='global'&&item.cat==='italia')item.region='italia';
   return item;
@@ -1240,7 +1246,7 @@ function cardHTML(a){
 }
 
 function getForCol(def){return articles.filter(function(a){
-  if(def.regions[0]==='all') return true;
+  if(def.regions[0]==='all') return a.cat!=='cina' && a.region!=='cina';
   if(def.regions[0]==='osint') return a.cat==='osint';
   // For cina column, also match by cat so even misclassified articles show
   if(def.id==='cina') return a.region==='cina'||a.cat==='cina';
@@ -1311,7 +1317,7 @@ function showTab(id){
 }
 function renderSrcList(){
   var el=document.getElementById('srclist');if(!el)return;
-  var CAT={agenzie:'Agenzie',media:'Media',italia:'Italia',think:'Think tank',ist:'Ist.',cyber:'Cyber',finance:'Finance',regional:'Reg.',osint:'OSINT',cina:'🇨🇳 Cina'};
+  var CAT={agenzie:'Agenzie',media:'Media / Globali',italia:'Italia',think:'Think tank',ist:'Ist.',cyber:'Cyber',finance:'Finance',regional:'Reg.',osint:'OSINT',cina:'🇨🇳 Cina'};
   var catmap={};
   sources.forEach(function(s){var c=s.cat||'media';if(!catmap[c])catmap[c]=[];catmap[c].push(s);});
   var html='';
