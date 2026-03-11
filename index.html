@@ -8,8 +8,9 @@
 <meta name="apple-mobile-web-app-title" content="SHERLOCK">
 <meta name="theme-color" content="#09090b">
 <title>SHERLOCK</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.14/dist/hls.min.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
 <style>
 :root{--bg:#0d1117;--bg2:#111827;--s:#161d2e;--s2:#1c2640;--bd:#1f2d44;--bd2:#2d3f5c;--acc:#00b8ff;--acc2:#0090cc;--acc3:#001830;--tx:#d8e4f0;--tx2:#7a9ab8;--mu:#3d5270;--re:#ff3d57;--am:#f0a500;}
 [data-theme=light]{--bg:#f4f4f5;--bg2:#e8e8ea;--s:#fff;--s2:#f0f0f0;--bd:#d4d4d8;--bd2:#a1a1aa;--acc:#16a34a;--acc2:#15803d;--acc3:#dcfce7;--tx:#09090b;--tx2:#3f3f46;--mu:#a1a1aa;--re:#dc2626;--am:#d97706;}
@@ -133,6 +134,43 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 /* page switcher removed */
 
 
+
+
+/* BRIEFING MODAL */
+.briefing-bg{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:700;display:flex;align-items:center;justify-content:center;padding:20px;}
+.briefing-modal{background:var(--bg);border:1px solid var(--bd2);width:100%;max-width:780px;max-height:92vh;display:flex;flex-direction:column;}
+.briefing-topbar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--bg2);border-bottom:1px solid var(--bd2);flex-shrink:0;}
+.briefing-topbar-title{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--acc);letter-spacing:.12em;flex:1;}
+.briefing-body{flex:1;overflow-y:auto;padding:24px 28px;}
+.briefing-body::-webkit-scrollbar{width:4px;}
+.briefing-body::-webkit-scrollbar-thumb{background:var(--bd2);}
+.br-header{border-bottom:1px solid var(--bd2);padding-bottom:14px;margin-bottom:20px;}
+.br-title{font-family:'Share Tech Mono',monospace;font-size:16px;letter-spacing:.2em;text-transform:uppercase;color:var(--acc);}
+.br-date{font-size:11px;color:var(--mu);font-family:'Share Tech Mono',monospace;letter-spacing:.08em;margin-top:4px;}
+.br-theater{margin-bottom:24px;}
+.br-theater-hd{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
+.br-theater-num{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--mu);}
+.br-theater-name{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--acc2);border-left:2px solid var(--acc2);padding-left:7px;}
+.br-item{display:flex;gap:10px;padding:6px 0;border-bottom:1px solid var(--bd);align-items:flex-start;}
+.br-item:last-child{border-bottom:none;}
+.br-sev-badge{font-size:8px;font-family:'Share Tech Mono',monospace;padding:2px 5px;text-transform:uppercase;letter-spacing:.04em;flex-shrink:0;margin-top:3px;}
+.br-sev-badge.critical{background:rgba(239,68,68,.15);color:var(--re);}
+.br-sev-badge.high{background:rgba(245,158,11,.15);color:var(--am);}
+.br-sev-badge.medium{background:rgba(59,130,246,.15);color:#3b82f6;}
+.br-item-body{flex:1;}
+.br-item-headline{font-size:15px;font-weight:600;color:var(--tx);text-decoration:none;display:block;line-height:1.35;}
+.br-item-headline:hover{color:var(--acc);}
+.br-item-meta{font-size:10px;color:var(--mu);font-family:'Share Tech Mono',monospace;margin-top:2px;}
+.br-footer{font-size:10px;color:var(--mu);font-family:'Share Tech Mono',monospace;border-top:1px solid var(--bd2);padding-top:10px;margin-top:8px;text-align:right;letter-spacing:.06em;}
+
+@media print{
+  .briefing-topbar{display:none;}
+  .briefing-modal{max-height:none;border:none;}
+  .briefing-bg{position:static;padding:0;}
+  body > *:not(.briefing-bg){display:none!important;}
+}
+
+
 /* Card nuova — highlight incrementale */
 @keyframes card-in{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
 .card-new{animation:card-in .35s ease;border-left:2px solid var(--acc)!important;}
@@ -147,28 +185,151 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .page.on{display:flex;}
 
 /* PAGINA 2 */
-.p2-wrap{flex:1;display:flex;gap:0;overflow:hidden;height:100%;}
-.p2-map{flex:1;display:flex;flex-direction:column;border-right:1px solid var(--bd2);overflow:hidden;}
-.p2-alerts{width:340px;flex-shrink:0;display:flex;flex-direction:column;overflow:hidden;}
-.p2-map-hd,.p2-alerts-hd{padding:6px 10px;background:var(--bg2);border-bottom:1px solid var(--bd2);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;flex-shrink:0;display:flex;align-items:center;gap:8px;}
-.p2-map-hd span:first-child{color:var(--acc);}
-.p2-alerts-hd span:first-child{color:var(--re);}
-.p2-legend{display:flex;gap:8px;align-items:center;font-size:9px;margin-left:auto;}
-.p2-legend span{display:flex;align-items:center;gap:3px;}
-.p2-legend i{width:9px;height:9px;display:inline-block;}
-#p2-map-wrap{flex:1;min-height:0;position:relative;overflow:hidden;background:var(--s2);}
-#p2-map-wrap svg{width:100%;height:100%;display:block;}
-.p2-alerts-feed{flex:1;overflow-y:auto;padding:4px 0;}
-.p2-alerts-feed::-webkit-scrollbar{width:3px;}
-.p2-alerts-feed::-webkit-scrollbar-thumb{background:var(--bd2);}
-.alert-card{padding:7px 10px;border-bottom:1px solid var(--bd);transition:background .12s;}
+/* ── OPS MAP LAYOUT ─────────────────────────────────────────────── */
+.p2-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;height:100%;background:var(--bg);}
+
+/* Classification strip */
+.ops-class-bar{
+  background:linear-gradient(90deg,#001a08,#002510,#001a08);
+  border-bottom:1px solid rgba(0,255,80,.18);
+  padding:3px 16px;
+  font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.22em;
+  text-align:center;color:#00d46a;text-transform:uppercase;flex-shrink:0;
+  text-shadow:0 0 8px rgba(0,212,106,.5);
+}
+
+/* Main 3-column row */
+.ops-main{flex:1;min-height:0;display:flex;overflow:hidden;position:relative;}
+
+/* ── LEFT INTEL PANEL ── */
+.ops-intel{
+  width:260px;flex-shrink:0;display:flex;flex-direction:column;
+  background:var(--bg2);border-right:1px solid var(--bd2);overflow:hidden;
+  box-shadow:inset -1px 0 0 rgba(0,184,255,.06);
+}
+.ops-intel-tabs{
+  display:flex;background:var(--bg);border-bottom:1px solid var(--bd2);flex-shrink:0;
+}
+.ops-intel-tab{
+  flex:1;padding:8px 2px;
+  font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.08em;
+  text-transform:uppercase;text-align:center;color:var(--mu);
+  cursor:pointer;border:none;background:none;
+  border-bottom:2px solid transparent;transition:all .15s;
+}
+.ops-intel-tab.active{color:var(--acc);border-bottom-color:var(--acc);}
+.ops-intel-tab:hover:not(.active){color:var(--tx2);}
+.ops-intel-hd{
+  padding:6px 10px;border-bottom:1px solid var(--bd);flex-shrink:0;
+  display:flex;align-items:center;gap:6px;
+  font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;background:rgba(239,68,68,.04);
+}
+.ops-intel-body{flex:1;overflow-y:auto;min-height:0;}
+.ops-intel-body::-webkit-scrollbar{width:3px;}
+.ops-intel-body::-webkit-scrollbar-thumb{background:var(--bd2);}
+
+/* Alert cards */
+.alert-card{
+  padding:8px 10px;border-bottom:1px solid var(--bd);
+  transition:background .12s;cursor:pointer;
+}
 .alert-card:hover{background:var(--s);}
-.alert-card[data-sev=critical]{border-left:3px solid var(--re);}
-.alert-card[data-sev=high]{border-left:3px solid var(--am);}
-.alert-badge{font-size:9px;font-family:'Share Tech Mono',monospace;padding:1px 5px;text-transform:uppercase;letter-spacing:.06em;margin-right:4px;}
+.alert-card[data-sev=critical]{border-left:3px solid var(--re);background:rgba(239,68,68,.03);}
+.alert-card[data-sev=high]{border-left:3px solid var(--am);background:rgba(245,158,11,.03);}
+.alert-card[data-sev=medium]{border-left:3px solid #3b82f6;}
+.alert-badge{
+  font-size:9px;font-family:'Share Tech Mono',monospace;
+  padding:1px 5px;text-transform:uppercase;letter-spacing:.06em;
+  margin-right:4px;border-radius:2px;
+}
 .alert-badge.critical{background:rgba(239,68,68,.15);color:var(--re);}
 .alert-badge.high{background:rgba(245,158,11,.15);color:var(--am);}
-.p2-map-tip{position:fixed;background:var(--s2);border:1px solid var(--bd2);color:var(--tx);font-family:'Share Tech Mono',monospace;font-size:10px;padding:4px 8px;pointer-events:none;z-index:600;display:none;line-height:1.5;}
+.alert-badge.medium{background:rgba(59,130,246,.15);color:#3b82f6;}
+
+/* ── CENTER MAP ── */
+.ops-map-center{flex:1;min-width:0;display:flex;flex-direction:column;overflow:hidden;}
+.p2-map{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.p2-map-hd{
+  padding:6px 12px;background:var(--bg2);border-bottom:1px solid var(--bd2);
+  font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.12em;
+  text-transform:uppercase;flex-shrink:0;display:flex;align-items:center;gap:8px;
+}
+.p2-map-hd>span:first-child{color:var(--acc);text-shadow:0 0 6px rgba(0,184,255,.4);}
+.p2-legend{display:flex;gap:10px;align-items:center;font-size:10px;margin-left:auto;}
+.p2-legend span{display:flex;align-items:center;gap:4px;}
+.p2-legend i{width:8px;height:8px;border-radius:50%;display:inline-block;}
+#p2-map-wrap{flex:1;min-height:0;position:relative;overflow:hidden;background:var(--bg);}
+#p2-map-wrap svg{width:100%;height:100%;display:block;}
+
+/* Map tooltip */
+.p2-map-tip{
+  position:fixed;background:rgba(13,17,23,.95);
+  border:1px solid var(--acc);box-shadow:0 2px 14px rgba(0,184,255,.25);
+  color:var(--tx);font-family:'Share Tech Mono',monospace;font-size:10px;
+  padding:5px 10px;pointer-events:none;z-index:600;display:none;line-height:1.6;
+  border-radius:3px;
+}
+
+/* ── RIGHT COUNTRY/COA PANEL ── */
+#country-panel{
+  position:absolute;top:0;right:-320px;bottom:0;
+  width:300px;z-index:200;
+  display:flex;flex-direction:column;
+  background:var(--bg2);
+  border-left:1px solid var(--bd2);
+  box-shadow:-4px 0 24px rgba(0,0,0,.6),-1px 0 0 rgba(0,184,255,.1);
+  overflow:hidden;
+  transition:right .28s cubic-bezier(.4,0,.2,1);
+}
+#country-panel-overlay{
+  position:absolute;inset:0;background:rgba(0,0,0,.35);
+  z-index:199;display:none;
+}
+.cp-hd{
+  padding:8px 10px;background:var(--bg);border-bottom:1px solid var(--bd2);
+  display:flex;align-items:center;gap:8px;flex-shrink:0;
+}
+.cp-hd-flag{font-size:20px;line-height:1;}
+.cp-hd-info{flex:1;min-width:0;}
+.cp-hd-name{font-size:13px;font-weight:600;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cp-hd-region{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.12em;color:var(--mu);text-transform:uppercase;margin-top:2px;}
+.cp-close{background:none;border:none;color:var(--mu);cursor:pointer;font-size:14px;padding:4px 6px;line-height:1;border-radius:3px;transition:all .12s;}
+.cp-close:hover{background:var(--s);color:var(--tx);}
+.cp-status{padding:6px 10px;border-bottom:1px solid var(--bd);flex-shrink:0;display:flex;flex-wrap:wrap;gap:4px;min-height:30px;align-items:center;}
+.cp-conflict-badge{
+  font-family:'Share Tech Mono',monospace;font-size:9px;padding:2px 6px;
+  background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.3);
+  color:var(--re);letter-spacing:.08em;border-radius:2px;
+}
+
+/* COA metrics row */
+.coa-metrics{display:flex;border-bottom:1px solid var(--bd);flex-shrink:0;}
+.coa-metric{flex:1;padding:8px 4px;text-align:center;border-right:1px solid var(--bd);}
+.coa-metric:last-child{border-right:none;}
+.coa-metric-val{font-family:'Share Tech Mono',monospace;font-size:14px;font-weight:700;color:var(--tx);}
+.coa-metric-lbl{font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:.08em;margin-top:2px;}
+.coa-score{
+  font-family:'Share Tech Mono',monospace;font-size:9px;padding:2px 5px;
+  border-radius:2px;margin-top:4px;display:inline-block;letter-spacing:.08em;
+}
+.coa-score.low{background:rgba(34,211,94,.12);color:#22d36e;border:1px solid rgba(34,211,94,.2);}
+.coa-score.med{background:rgba(245,158,11,.12);color:#f59e0b;border:1px solid rgba(245,158,11,.2);}
+.coa-score.high{background:rgba(239,68,68,.12);color:#ef4444;border:1px solid rgba(239,68,68,.2);}
+
+/* Article cards in cp */
+#cp-articles{flex:1;overflow-y:auto;}
+#cp-articles::-webkit-scrollbar{width:3px;}
+#cp-articles::-webkit-scrollbar-thumb{background:var(--bd2);}
+.cp-card{padding:7px 10px;border-bottom:1px solid var(--bd);cursor:pointer;transition:background .12s;}
+.cp-card:hover{background:var(--s);}
+.cp-card-title{font-size:12px;line-height:1.4;color:var(--tx);display:flex;gap:6px;align-items:flex-start;}
+.cp-card-sev{width:6px;height:6px;border-radius:50%;margin-top:4px;flex-shrink:0;}
+.cp-card-meta{font-size:10px;color:var(--mu);margin-top:2px;font-family:'Share Tech Mono',monospace;padding-left:12px;}
+
+/* ── P2-ALERTS compatibility (hidden, integrated) ── */
+.p2-alerts{display:none;}
+.p2-alerts-feed{display:block;}
 
 @media(max-width:768px){
   .sidebar{display:none;}.main-area{flex-direction:column;}
@@ -176,6 +337,7 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
   .acol{min-width:100%;max-width:100%;height:auto;border-right:none;border-bottom:1px solid var(--bd);}
   .col-feed{max-height:40vh;}
   #tv-panel{width:100%!important;height:200px!important;left:0!important;right:0!important;bottom:0!important;resize:none!important;}
+  .ops-intel{width:220px;}
 }
 
 /* ── MAP MARKERS & OVERLAYS ─────────────────────────────────────── */
@@ -208,18 +370,41 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .p2-lbtn.on{background:var(--acc3);border-color:var(--acc);color:var(--acc2);opacity:1;}
 .p2-lbtn:hover{opacity:1;}
 /* ── MAP TOOLBAR & REGION BUTTONS ────────────────────────────────*/
-.p2-map-toolbar{display:flex;align-items:center;gap:8px;padding:4px 8px;background:var(--bg);border-bottom:1px solid var(--bd2);flex-shrink:0;overflow-x:auto;flex-wrap:nowrap;}
+.p2-map-toolbar{
+  display:flex;align-items:center;gap:6px;padding:5px 10px;
+  background:rgba(17,24,39,.95);border-bottom:1px solid var(--bd2);
+  flex-shrink:0;overflow-x:auto;flex-wrap:nowrap;
+  scrollbar-width:none;
+}
+.p2-map-toolbar::-webkit-scrollbar{display:none;}
 .p2-region-btns,.p2-layer-btns{display:flex;gap:3px;flex-shrink:0;}
-.p2-rbtn{font-family:'Share Tech Mono',monospace;font-size:10px;padding:3px 8px;border:1px solid var(--bd);border-radius:3px;background:transparent;color:var(--tx2);cursor:pointer;white-space:nowrap;transition:all .15s;}
-.p2-rbtn.active,.p2-rbtn:hover{background:var(--bd2);color:var(--tx);}
-.p2-map-toolbar .p2-lbtn{font-family:'Share Tech Mono',monospace;font-size:10px;padding:3px 7px;border:1px solid var(--bd);border-radius:3px;background:transparent;color:var(--mu);cursor:pointer;white-space:nowrap;transition:all .15s;}
-.p2-map-toolbar .p2-lbtn.on{background:rgba(0,144,204,.15);border-color:var(--acc);color:var(--acc);}
-.p2-stats{margin-left:auto;display:flex;gap:10px;font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--mu);}
+.p2-rbtn{
+  font-family:'Share Tech Mono',monospace;font-size:11px;padding:4px 11px;
+  border:1px solid var(--bd);border-radius:2px;
+  background:var(--s);color:var(--tx2);cursor:pointer;white-space:nowrap;transition:all .15s;
+  letter-spacing:.06em;text-transform:uppercase;
+}
+.p2-rbtn:hover{background:var(--s2);border-color:var(--bd2);color:var(--tx);}
+.p2-rbtn.active{background:var(--acc3);border-color:var(--acc);color:var(--acc);box-shadow:0 0 6px rgba(0,184,255,.2);}
+.p2-zoom-btn{padding:4px 9px;font-size:14px;font-weight:700;}
+.p2-map-toolbar .p2-lbtn,.p2-lbtn{
+  font-family:'Share Tech Mono',monospace;font-size:11px;padding:4px 9px;
+  border:1px solid var(--bd);border-radius:2px;
+  background:var(--s);color:var(--mu);cursor:pointer;white-space:nowrap;transition:all .15s;
+  letter-spacing:.04em;text-transform:uppercase;
+}
+.p2-map-toolbar .p2-lbtn.on,.p2-lbtn.on{
+  background:rgba(0,184,255,.08);border-color:rgba(0,184,255,.35);color:var(--acc);
+}
+.p2-map-toolbar .p2-lbtn:hover,.p2-lbtn:hover{color:var(--tx);border-color:var(--bd2);}
+.p2-timeline-bar{display:flex;align-items:center;gap:6px;flex:1;min-width:140px;}
+.p2-tl-label{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--mu);white-space:nowrap;}
+.p2-stats{margin-left:auto;display:flex;gap:10px;font-size:11px;font-family:'Share Tech Mono',monospace;color:var(--mu);}
 .p2-stats span{display:flex;align-items:center;gap:3px;}
 .p2-stats .dot{width:6px;height:6px;border-radius:50%;}
 /* ── TRANSLATE & LANG BADGE ──────────────────────────────────────*/
-.ctranslate{display:inline-flex;align-items:center;font-size:10px;color:#00b8ff;border:1px solid rgba(74,222,128,.35);border-radius:3px;padding:1px 6px;margin-left:6px;cursor:pointer;background:transparent;font-family:'Share Tech Mono',monospace;transition:all .15s;}
-.ctranslate:hover{background:rgba(74,222,128,.18);border-color:#00b8ff;}
+.ctranslate{display:inline-flex;align-items:center;font-size:10px;color:#4ade80;border:1px solid rgba(74,222,128,.35);border-radius:3px;padding:1px 6px;margin-left:6px;cursor:pointer;background:transparent;font-family:'Share Tech Mono',monospace;transition:all .15s;}
+.ctranslate:hover{background:rgba(74,222,128,.18);border-color:#4ade80;}
 .clang-badge{font-size:9px;color:#f59e0b;border:1px solid rgba(245,158,11,.4);border-radius:2px;padding:0 3px;margin-left:4px;font-family:'Share Tech Mono',monospace;}
 
 @media (max-width: 1200px){
@@ -505,6 +690,23 @@ body.sidebar-collapsed #sidebar-toggle-btn{
   color:var(--acc);
   background:var(--acc3);
 }
+
+
+/* Analisi panel readability */
+#analisi-chatgpt-panel textarea::placeholder{color:#cbd5e1;}
+#analisi-chatgpt-panel button:hover{box-shadow:0 0 0 1px rgba(255,255,255,.08),0 0 10px rgba(255,255,255,.08);}
+html[data-theme=dark] #analisi-chatgpt-panel,
+[data-theme=dark] #analisi-chatgpt-panel{
+  background:#111827 !important;
+  border-color:#4b5563 !important;
+}
+html[data-theme=dark] #analisi-chatgpt-panel textarea,
+[data-theme=dark] #analisi-chatgpt-panel textarea{
+  background:#0b1220 !important;
+  color:#f9fafb !important;
+  border-color:#6b7280 !important;
+}
+
 </style>
 </head>
 <body>
@@ -573,6 +775,9 @@ body.sidebar-collapsed #sidebar-toggle-btn{
   </div>
 </div>
 
+
+
+
 <div class="p2-map-tip" id="p2-map-tip"></div>
 <div class="shell" style="flex-direction:column;">
   <!-- PAGINA 1: colonne -->
@@ -599,7 +804,7 @@ body.sidebar-collapsed #sidebar-toggle-btn{
         <input class="qi" id="qi-url" placeholder="URL RSS">
         <div class="qrow">
           <select class="qsel" id="qi-cat">
-            <option value="media">Media</option><option value="italia">Italia</option>
+            <option value="media">Media / Globali</option><option value="italia">Italia</option>
             <option value="agenzie">Agenzia</option><option value="think">Think tank</option>
             <option value="ist">Ist.</option><option value="cyber">Cyber</option>
             <option value="finance">Finance</option><option value="regional">Reg.</option>
@@ -618,53 +823,117 @@ body.sidebar-collapsed #sidebar-toggle-btn{
   </div>
   </div><!-- /page-1 -->
 
-  <!-- PAGINA 2: mappa + alert -->
-  <div class="page" id="page-2" style="flex:1;min-height:0;">
+  <!-- PAGINA 2: OPS MAP -->
+  <div class="page" id="page-2" style="flex:1;min-height:0;flex-direction:column;">
     <div class="p2-wrap">
-      <div class="p2-map">
-        <div class="p2-map-hd">
-          <span>&#127758; MAPPA INTELLIGENCE</span>
-          <div class="p2-legend">
-            <span><i style="background:#ef4444"></i> Critico</span>
-            <span><i style="background:#f59e0b"></i> Alto</span>
-            <span><i style="background:#3b82f6"></i> Medio</span>
-            <span><i style="background:#22d35e"></i> Basso</span>
+
+      <!-- Classification strip -->
+      <div class="ops-class-bar">UNCLASSIFIED // NOTIONAL DATA &nbsp;&#9632;&nbsp; SHERLOCK INTELLIGENCE MONITOR</div>
+
+      <!-- Main 3-panel row -->
+      <div class="ops-main">
+
+        <!-- ── LEFT: Intel Feed ── -->
+        <div class="ops-intel">
+          <div class="ops-intel-tabs">
+            <button class="ops-intel-tab active" onclick="opsTab(this)">&#9888; Situazioni</button>
+            <button class="ops-intel-tab" onclick="opsTab(this)">&#9881; Ops</button>
+            <button class="ops-intel-tab" onclick="opsTab(this)">&#9670; Dati</button>
           </div>
-          <div class="p2-stats" id="p2-stats"></div>
-        </div>
-        <div class="p2-map-toolbar" id="p2-toolbar">
-          <div class="p2-region-btns">
-            <button class="p2-rbtn active" onclick="p2SetView('global')">&#127758; Global</button>
-            <button class="p2-rbtn p2-zoom-btn" onclick="p2ZoomStep(1.5)" title="Zoom in">&#43;</button>
-            <button class="p2-rbtn p2-zoom-btn" onclick="p2ZoomStep(0.67)" title="Zoom out">&#8722;</button>
+          <div class="ops-intel-hd">
+            <span style="color:var(--re)">&#9888;</span>
+            <span style="color:var(--re);letter-spacing:.1em">ALERT FEED</span>
+            <span id="alert-count" style="color:var(--mu);font-size:9px;margin-left:2px">0</span>
+            <div id="p2-stats" style="margin-left:auto;display:flex;gap:8px;font-size:9px;font-family:'Share Tech Mono',monospace;color:var(--mu);"></div>
           </div>
-          <div class="p2-layer-btns">
-            <button class="p2-lbtn on" id="lbtn-pins" onclick="p2ToggleLayer('pins',this)">&#9679; Notizie</button>
-            <button class="p2-lbtn on" id="lbtn-hs" onclick="p2ToggleLayer('hs',this)">&#9671; Hotspot</button>
-            <button class="p2-lbtn on" id="lbtn-cables" onclick="p2ToggleLayer('cables',this)">&#8767; Cavi</button>
-            <button class="p2-lbtn on" id="lbtn-conflict" onclick="p2ToggleLayer('conflict',this)">&#9888; Conflitti</button>
-            <button class="p2-lbtn" id="lbtn-pipes" onclick="p2ToggleLayer('pipes',this)">&#9728; Pipeline</button>
-            <button class="p2-lbtn on" id="lbtn-heatmap" onclick="p2ToggleLayer('heatmap',this)">&#127777; Heatmap</button>
-          </div>
-          <div class="p2-timeline-bar" id="p2-timeline-bar">
-            <span class="p2-tl-label" id="p2-tl-from">72h</span>
-            <input type="range" id="p2-timeline" min="1" max="72" value="72" step="1"
-              style="flex:1;accent-color:var(--acc);"
-              oninput="p2TimelineChange(this.value)">
-            <span class="p2-tl-label">ora</span>
-            <span class="p2-tl-label" id="p2-tl-count" style="color:var(--acc);min-width:60px;text-align:right;"></span>
+          <div class="ops-intel-body">
+            <div class="p2-alerts-feed" id="p2-alerts-feed"></div>
           </div>
         </div>
-        <div id="p2-map-wrap" style="position:relative;"></div>
-      </div>
-      <div class="p2-alerts">
-        <div class="p2-alerts-hd">
-          <span>&#9888; ALERT</span>
-          <span id="alert-count" style="color:var(--mu);margin-left:4px">0</span>
+
+        <!-- ── CENTER: Map ── -->
+        <div class="ops-map-center">
+          <div class="p2-map">
+            <div class="p2-map-hd">
+              <span>&#9670; OPS MAP — INTELLIGENCE OVERVIEW</span>
+              <div class="p2-legend">
+                <span><i style="background:#ef4444"></i> Critico</span>
+                <span><i style="background:#f59e0b"></i> Alto</span>
+                <span><i style="background:#3b82f6"></i> Medio</span>
+                <span><i style="background:#22d35e"></i> Basso</span>
+              </div>
+            </div>
+            <div class="p2-map-toolbar" id="p2-toolbar">
+              <div class="p2-region-btns">
+                <button class="p2-rbtn active" onclick="p2SetView('global')">&#127758; Global</button>
+                <button class="p2-rbtn p2-zoom-btn" onclick="p2ZoomStep(1.5)" title="Zoom in">+</button>
+                <button class="p2-rbtn p2-zoom-btn" onclick="p2ZoomStep(0.67)" title="Zoom out">&minus;</button>
+              </div>
+              <div style="width:1px;height:16px;background:var(--bd2);margin:0 2px;flex-shrink:0;"></div>
+              <div class="p2-layer-btns">
+                <button class="p2-lbtn on" id="lbtn-pins" onclick="p2ToggleLayer('pins',this)">&#9679; News</button>
+                <button class="p2-lbtn on" id="lbtn-hs" onclick="p2ToggleLayer('hs',this)">&#9671; Hotspot</button>
+                <button class="p2-lbtn on" id="lbtn-cables" onclick="p2ToggleLayer('cables',this)">&#8767; Cavi</button>
+                <button class="p2-lbtn on" id="lbtn-conflict" onclick="p2ToggleLayer('conflict',this)">&#9888; Conflitti</button>
+                <button class="p2-lbtn" id="lbtn-pipes" onclick="p2ToggleLayer('pipes',this)">&#9835; Pipeline</button>
+                <button class="p2-lbtn on" id="lbtn-heatmap" onclick="p2ToggleLayer('heatmap',this)">&#9650; Heatmap</button>
+                <button class="p2-lbtn on" id="lbtn-borders" onclick="p2ToggleLayer('borders',this)">&#9644; Confini</button>
+                <button class="p2-lbtn on" id="lbtn-naval" onclick="p2ToggleLayer('naval',this)">&#9875; Flotte</button>
+                <button class="p2-lbtn on" id="lbtn-chokepoints" onclick="p2ToggleLayer('chokepoints',this)">&#9875; Chokepoint</button>
+              </div>
+              <div style="width:1px;height:16px;background:var(--bd2);margin:0 2px;flex-shrink:0;"></div>
+              <div class="p2-timeline-bar" id="p2-timeline-bar">
+                <span class="p2-tl-label" id="p2-tl-from">72h</span>
+                <input type="range" id="p2-timeline" min="1" max="72" value="72" step="1"
+                  style="flex:1;accent-color:var(--acc);"
+                  oninput="p2TimelineChange(this.value)">
+                <span class="p2-tl-label">ora</span>
+                <span class="p2-tl-label" id="p2-tl-count" style="color:var(--acc);min-width:56px;text-align:right;"></span>
+              </div>
+            </div>
+            <div id="p2-map-wrap" style="position:relative;"></div>
+          </div>
         </div>
-        <div class="p2-alerts-feed" id="p2-alerts-feed"></div>
-      </div>
-    </div>
+
+        <!-- ── RIGHT: Country / COA Panel (slide-in) ── -->
+        <div id="country-panel-overlay" onclick="closeCountryPanel()"></div>
+        <div id="country-panel">
+          <div class="cp-hd">
+            <span class="cp-hd-flag" id="cp-flag">&#127758;</span>
+            <div class="cp-hd-info">
+              <div class="cp-hd-name" id="cp-name">Seleziona paese</div>
+              <div class="cp-hd-region" id="cp-region">REGIONE &middot; ISO</div>
+            </div>
+            <button class="cp-close" onclick="closeCountryPanel()" title="Chiudi">&#10005;</button>
+          </div>
+          <div class="cp-status" id="cp-status">
+            <span style="color:var(--mu);font-size:10px;font-family:\'Share Tech Mono\',monospace;">Nessun alert attivo</span>
+          </div>
+          <div class="coa-metrics">
+            <div class="coa-metric">
+              <div class="coa-metric-val" id="cp-art-count">—</div>
+              <div class="coa-metric-lbl">Notizie</div>
+              <div class="coa-score med">ACTIVE</div>
+            </div>
+            <div class="coa-metric">
+              <div class="coa-metric-val" id="cp-crit-count">—</div>
+              <div class="coa-metric-lbl">Critici</div>
+              <div class="coa-score high" id="cp-sev-badge">—</div>
+            </div>
+            <div class="coa-metric">
+              <div class="coa-metric-val">24h</div>
+              <div class="coa-metric-lbl">Finestra</div>
+              <div class="coa-score low">LIVE</div>
+            </div>
+          </div>
+          <div id="cp-articles"></div>
+        </div>
+
+      </div><!-- /ops-main -->
+
+
+
+    </div><!-- /p2-wrap -->
   </div><!-- /page-2 -->
 </div>
 
@@ -672,14 +941,16 @@ body.sidebar-collapsed #sidebar-toggle-btn{
   <div class="tvhd" id="tvhd">
     <div class="tvdot"></div>
     <span class="tvlbl" id="tvlbl">AL JAZEERA EN — LIVE</span>
-    <select class="tvsel" id="tvsel" onchange="tvChange()">
+    <select class="tvsel" id="tvsel" onchange="_buildPlayer(+this.value)">
       <option value="0">Al Jazeera EN</option><option value="1">Al Jazeera AR</option>
-      <option value="2">France 24 EN</option><option value="3">DW News</option>
-      <option value="4">Euronews EN</option><option value="5">TRT World</option>
-      <option value="6">Sky News</option><option value="7">NHK World</option>
-      <option value="8">RT English</option><option value="9">i24 News</option>
-      <option value="10">Bloomberg</option><option value="11">CNN</option>
-              <option value="12">CGTN</option>
+      <option value="2">France 24 EN</option><option value="3">France 24 FR</option>
+      <option value="4">DW News</option><option value="5">Euronews EN</option>
+      <option value="6">Sky News</option><option value="7">BBC News</option>
+      <option value="8">Reuters Now</option><option value="9">TRT World</option>
+      <option value="10">NHK World</option><option value="11">CGTN</option>
+      <option value="12">RT English</option><option value="13">i24 News</option>
+      <option value="14">Bloomberg</option><option value="15">CNN</option>
+      <option value="16">CNBC</option>
     </select>
     <button class="tvbtn2" id="tv-mute-btn" onclick="tvUnmute()">SUONO</button>
     <button class="tvbtn2" onclick="tvOpenYT()">YT &#x2197;</button>
@@ -690,7 +961,6 @@ body.sidebar-collapsed #sidebar-toggle-btn{
     <div id="tv-msg" class="tv-msg"><span>Stream non disponibile</span><a href="#" target="_blank">Apri &#x2197;</a></div>
   </div>
 </div>
-
 
 <script>
 
@@ -715,28 +985,26 @@ var DEFAULTS=[
   {id:'khmertimes',name:'Khmer Times',url:'https://news.google.com/rss/search?q=site:khmertimeskh.com&hl=en&gl=KH&ceid=KH:en',cat:'sudest_asia',on:true},
   {id:'myanmarnow',name:'Myanmar Now',url:'https://news.google.com/rss/search?q=site:myanmar-now.org&hl=en&gl=MM&ceid=MM:en',cat:'sudest_asia',on:true},
 
-  {id:'wenweipo',name:'Wen Wei Po',url:'https://news.google.com/rss/search?q=site:wenweipo.com&hl=zh-CN&gl=HK&ceid=HK:zh-Hans',cat:'cina',on:true,max:5},
-  {id:'mingpao',name:'Ming Pao Daily',url:'https://news.google.com/rss/search?q=site:mingpao.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',cat:'cina',on:true,max:5},
-  {id:'singtao',name:'Sing Tao Daily',url:'https://news.google.com/rss/search?q=site:stheadline.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',cat:'cina',on:true,max:5},
-  {id:'applehk',name:'Apple Daily HK',url:'https://news.google.com/rss/search?q=%22Apple+Daily%22+Hong+Kong&hl=en&gl=HK&ceid=HK:en',cat:'cina',on:true,max:5},
-  {id:'zaobao',name:'United Morning Post (Zaobao)',url:'https://news.google.com/rss/search?q=site:zaobao.com.sg&hl=zh-CN&gl=SG&ceid=SG:zh-Hans',cat:'cina',on:true,max:5},
-  {id:'cna_tw',name:'Central News Agency',url:'https://news.google.com/rss/search?q=site:cna.com.tw&hl=zh-TW&gl=TW&ceid=TW:zh-Hant',cat:'cina',on:true,max:5},
-  {id:'pla_daily',name:'PLA Daily',url:'https://news.google.com/rss/search?q=site:81.cn+解放军报&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true,max:20},
+  {id:'wenweipo',name:'Wen Wei Po',url:'https://news.google.com/rss/search?q=site:wenweipo.com&hl=zh-CN&gl=HK&ceid=HK:zh-Hans',cat:'cina',on:true},
+  {id:'mingpao',name:'Ming Pao Daily',url:'https://news.google.com/rss/search?q=site:mingpao.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',cat:'cina',on:true},
+  {id:'singtao',name:'Sing Tao Daily',url:'https://news.google.com/rss/search?q=site:stheadline.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',cat:'cina',on:true},
+  {id:'applehk',name:'Apple Daily HK',url:'https://news.google.com/rss/search?q=%22Apple+Daily%22+Hong+Kong&hl=en&gl=HK&ceid=HK:en',cat:'cina',on:true},
+  {id:'zaobao',name:'United Morning Post (Zaobao)',url:'https://news.google.com/rss/search?q=site:zaobao.com.sg&hl=zh-CN&gl=SG&ceid=SG:zh-Hans',cat:'cina',on:true},
+  {id:'cna_tw',name:'Central News Agency',url:'https://news.google.com/rss/search?q=site:cna.com.tw&hl=zh-TW&gl=TW&ceid=TW:zh-Hant',cat:'cina',on:true},
+  {id:'pla_daily',name:'PLA Daily',url:'https://news.google.com/rss/search?q=site:81.cn+解放军报&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
   {id:'pla_eastern',name:'Eastern Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+东部战区&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
   {id:'pla_southern',name:'Southern Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+南部战区&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
   {id:'pla_western',name:'Western Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+西部战区&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
   {id:'pla_northern',name:'Northern Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+北部战区&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
   {id:'pla_central',name:'Central Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+中部战区&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
-  {id:'qstheory',name:'Seeking Truth',url:'https://news.google.com/rss/search?q=site:qstheory.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true,max:20},
+  {id:'qstheory',name:'Seeking Truth',url:'https://news.google.com/rss/search?q=site:qstheory.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
   {id:'beijingdaily',name:'Beijing Daily',url:'https://news.google.com/rss/search?q=site:bjd.com.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
   {id:'ce_cn',name:'China Economic Net',url:'https://news.google.com/rss/search?q=site:ce.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
   {id:'gmw',name:'Guangming Daily',url:'https://news.google.com/rss/search?q=site:gmw.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
-  {id:'xinhua_cina',  name:'Xinhua',             cat:'cina',    url:'https://news.google.com/rss/search?q=site:xinhuanet.com&hl=en',on:true,max:20},
-  {id:'pekingnology',name:'Pekingnology (feed)',url:'https://www.pekingnology.com/feed',cat:'cina',on:true,max:20},
-  {id:'chinadigitaltimes',name:'China Digital Times',url:'https://chinadigitaltimes.net/feed/',cat:'cina',on:true,max:20},
+  {id:'pekingnology',name:'Pekingnology (feed)',url:'https://www.pekingnology.com/feed',cat:'cina',on:true},
 
-  {id:'reuters',   name:'Reuters',            cat:'agenzie', url:'https://news.google.com/rss/search?q=reuters+world+news&hl=en&gl=US&ceid=US:en',on:true,max:15},
-  {id:'ap',        name:'AP',                 cat:'agenzie', url:'https://news.google.com/rss/search?q=associated+press+world&hl=en&gl=US&ceid=US:en',on:true,max:15},
+  {id:'reuters',   name:'Reuters',            cat:'agenzie', url:'https://news.google.com/rss/search?q=reuters+world+news&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'ap',        name:'AP',                 cat:'agenzie', url:'https://news.google.com/rss/search?q=associated+press+world&hl=en&gl=US&ceid=US:en',on:true},
   {id:'afp',       name:'AFP',                cat:'agenzie', url:'https://news.google.com/rss/search?q=agence+france+presse+AFP&hl=en&gl=US&ceid=US:en',on:true},
   {id:'ansa',      name:'ANSA Mondo',         cat:'agenzie', url:'https://news.google.com/rss/search?q=site:ansa.it+mondo&hl=it&gl=IT&ceid=IT:it',on:true},
   {id:'ansait',    name:'ANSA Italia',        cat:'agenzie', url:'https://news.google.com/rss/search?q=site:ansa.it+politica&hl=it&gl=IT&ceid=IT:it',on:true},
@@ -750,11 +1018,11 @@ var DEFAULTS=[
   {id:'wam',       name:'WAM (UAE)',           cat:'agenzie', url:'https://news.google.com/rss/search?q=site:wam.ae&hl=en',on:true},
   {id:'pti',       name:'PTI (India)',        cat:'agenzie', url:'https://news.google.com/rss/search?q=press+trust+india&hl=en',on:true},
   {id:'prensa',    name:'Prensa Latina',      cat:'agenzie', url:'https://news.google.com/rss/search?q=site:plenglish.com&hl=en',on:true},
-  {id:'bbc',       name:'BBC World',          cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+world+news&hl=en&gl=GB&ceid=GB:en',on:true,max:15},
+  {id:'bbc',       name:'BBC World',          cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+world+news&hl=en&gl=GB&ceid=GB:en',on:true},
   {id:'bbcme',     name:'BBC Middle East',    cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+middle+east&hl=en&gl=GB&ceid=GB:en',on:true},
   {id:'bbcasia',   name:'BBC Asia',           cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+asia&hl=en&gl=GB&ceid=GB:en',on:true},
   {id:'bbcafrica', name:'BBC Africa',         cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+africa&hl=en&gl=GB&ceid=GB:en',on:true},
-  {id:'aljazeera', name:'Al Jazeera',         cat:'media',   url:'https://news.google.com/rss/search?q=site:aljazeera.com&hl=en&gl=US&ceid=US:en',on:true,max:15},
+  {id:'aljazeera', name:'Al Jazeera',         cat:'media',   url:'https://news.google.com/rss/search?q=site:aljazeera.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'france24',  name:'France 24',          cat:'media',   url:'https://news.google.com/rss/search?q=site:france24.com&hl=en&gl=FR&ceid=FR:en',on:true},
   {id:'dwnews',    name:'DW News',            cat:'media',   url:'https://news.google.com/rss/search?q=site:dw.com&hl=en&gl=DE&ceid=DE:en',on:true},
   {id:'euronews',  name:'Euronews',           cat:'media',   url:'https://news.google.com/rss/search?q=euronews+world&hl=en',on:true},
@@ -767,9 +1035,6 @@ var DEFAULTS=[
   {id:'nhk',       name:'NHK World',          cat:'media',   url:'https://news.google.com/rss/search?q=site:nhk.or.jp&hl=en&gl=JP&ceid=JP:en',on:true},
   {id:'thehill',   name:'The Hill',           cat:'media',   url:'https://news.google.com/rss/search?q=site:thehill.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'axios',     name:'Axios World',        cat:'media',   url:'https://news.google.com/rss/search?q=site:axios.com+world&hl=en',on:true},
-  {id:'wsj_world', name:'Wall Street Journal', cat:'media',   url:'https://feeds.a.dj.com/rss/RSSWorldNews.xml',on:true},
-  {id:'nyt_world', name:'New York Times',       cat:'media',   url:'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',on:true},
-  {id:'washpost',  name:'Washington Post',      cat:'media',   url:'https://feeds.washingtonpost.com/rss/world',on:true},
   {id:'nikkei',    name:'Nikkei Asia',        cat:'regional',url:'https://news.google.com/rss/search?q=site:asia.nikkei.com&hl=en',on:true},
   {id:'scmp',      name:'S.China Morning',    cat:'regional',url:'https://news.google.com/rss/search?q=site:scmp.com&hl=en',on:true},
   {id:'haaretz',   name:'Haaretz',            cat:'regional',url:'https://news.google.com/rss/search?q=site:haaretz.com&hl=en',on:true},
@@ -777,7 +1042,7 @@ var DEFAULTS=[
   {id:'kyivindep', name:'Kyiv Independent',   cat:'regional',url:'https://news.google.com/rss/search?q=site:kyivindependent.com&hl=en',on:true},
   {id:'news24',    name:'News24 Africa',      cat:'regional',url:'https://news.google.com/rss/search?q=site:news24.com&hl=en&gl=ZA&ceid=ZA:en',on:true},
   {id:'dawn',      name:'Dawn Pakistan',      cat:'regional',url:'https://news.google.com/rss/search?q=site:dawn.com&hl=en&gl=PK&ceid=PK:en',on:true},
-  {id:'caixin',    name:'Caixin Global',      cat:'cina',url:'https://news.google.com/rss/search?q=site:caixinglobal.com&hl=en',on:true,max:20},
+  {id:'caixin',    name:'Caixin Global',      cat:'regional',url:'https://news.google.com/rss/search?q=site:caixinglobal.com&hl=en',on:true},
   {id:'repubblica',name:'La Repubblica',      cat:'italia',  url:'https://news.google.com/rss/search?q=site:repubblica.it+esteri&hl=it&gl=IT&ceid=IT:it',on:true},
   {id:'corriere',  name:'Corriere della S.',  cat:'italia',  url:'https://news.google.com/rss/search?q=site:corriere.it+esteri&hl=it',on:true},
   {id:'rainews',   name:'Rainews 24',         cat:'italia',  url:'https://news.google.com/rss/search?q=site:rainews.it&hl=it',on:true},
@@ -818,6 +1083,14 @@ var DEFAULTS=[
   {id:'dis_x',   name:'SicNazionale / X', cat:'ist', url:'https://rsshub.app/twitter/user/SicNazionale',on:true},
   {id:'dgse',    name:'DGSE France',   cat:'ist', url:'https://news.google.com/rss/search?q=DGSE+renseignement+france&hl=fr&gl=FR&ceid=FR:fr',on:true},
   {id:'dgse_x',  name:'DGSE / X',       cat:'ist', url:'https://rsshub.app/twitter/user/dgsefr',on:true},
+  // ── CINA ──────────────────────────────────────────────────────
+  {id:'xinhua_cina',name:'Xinhua EN',url:'https://www.xinhuanet.com/english/rss/worldrss.xml',cat:'cina',max:15},
+  {id:'globaltimes',name:'Global Times',url:'https://www.globaltimes.cn/rss/outbrain.xml',cat:'cina',max:10},
+  {id:'chinadigitaltimes',name:'China Digital Times',url:'https://chinadigitaltimes.net/feed/',cat:'cina',max:10},
+  // ── GLOBAL MEDIA ──────────────────────────────────────────────
+  {id:'wsj_world',name:'WSJ World',url:'https://feeds.a.dj.com/rss/RSSWorldNews.xml',cat:'media',max:15},
+  {id:'nyt_world',name:'NYT World',url:'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',cat:'media',max:15},
+  {id:'washpost',name:'Washington Post',url:'https://feeds.washingtonpost.com/rss/world',cat:'media',max:12},
 ];
 
 var PRESETS=[
@@ -861,7 +1134,7 @@ var PRESETS=[
   // English-language Chinese state/official media
   {id:'xinhua_en',   name:'Xinhua (EN)',        cat:'cina', url:'http://www.xinhuanet.com/english/rss/worldrss.xml', on:true},
   {id:'cgtn_en',     name:'CGTN',               cat:'cina', url:'https://news.google.com/rss/search?q=site:cgtn.com&hl=en', on:true},
-  {id:'globaltimes', name:'Global Times (EN)',   cat:'cina', url:'https://www.globaltimes.cn/rss/outbrain.xml', on:true,max:20},
+  {id:'globaltimes', name:'Global Times (EN)',   cat:'cina', url:'https://www.globaltimes.cn/rss/outbrain.xml', on:true},
   {id:'chinadaily',  name:'China Daily (EN)',    cat:'cina', url:'https://rss.chinadaily.com.cn/rss/cndy_topnews.xml', on:true},
   {id:'people_en',   name:'Peoples Daily (EN)',cat:'cina', url:'https://news.google.com/rss/search?q=site:en.people.cn&hl=en', on:true},
   // Chinese-language sources (RSS in 中文)
@@ -890,7 +1163,7 @@ var ALL_COLS=[
   {id:'indopacifico',name:'Indo-Pacifico',icon:'&#127759;', regions:['indopacifico']},
   {id:'americas',    name:'Americhe',     icon:'&#127758;', regions:['americas']},
   {id:'osint',       name:'OSINT',        icon:'&#128065;', regions:['osint']},
-  {id:'sudest',      name:'Sud-Est Asia', icon:'&#127757;', regions:['sudest_asia','indopacifico']},
+  {id:'sudest',   name:'Sud-Est Asia', icon:'🌏', regions:['sudest_asia','indopacifico']},
 ];
 
 var sources=[],articles=[],colOrder=[],colClosed=[],timerSec=120,timerInt=null,sourceStatus={},pIdx=0;
@@ -996,7 +1269,6 @@ var CL={
     americas:['usa','united states','america','trump','washington','canada','brazil','mexico','latin','venezuela','colombia','argentina','stati uniti'],
     africa:['africa','sudan','ethiopia','somalia','mali','sahel','congo','nigeria','kenya','libya','mozambique','etiopia','libia'],
     russia:['russia','putin','kremlin','moscow','wagner','cremlino','mosca'],
-    sudest_asia:['thailand','thai','cambodia','laos','malaysia','myanmar','philippines','filipino','indonesia','indonesian','brunei','timor','mekong','asean','bangkok','jakarta','manila','kuala lumpur','yangon','phnom penh','vientiane','hanoi','ho chi minh'],
   }
 };
 function classify(item){
@@ -1009,11 +1281,7 @@ function classify(item){
   for(var r=0;r<rks.length;r++){var kw=CL.regions[rks[r]];for(var k=0;k<kw.length;k++){if(txt.indexOf(kw[k])>=0){reg=rks[r];break;}}if(reg!=='global')break;}
   item.sev=sev;item.region=reg;
   // If region still global but source has explicit cat mapping, use it
-  if(reg==='global'&&(item.cat==='cina'
-    ||item.src==='Xinhua'||item.src==='Global Times'
-    ||item.src==='Caixin Global'||item.src==='PLA Daily'
-    ||item.src==='Seeking Truth'))item.region='cina';
-  if(reg==='global'&&item.cat==='sudest_asia')item.region='sudest_asia';
+  if(reg==='global'&&item.cat==='cina')item.region='cina';
   if(reg==='global'&&item.cat==='sudest_asia')item.region='indopacifico';
   if(reg==='global'&&item.cat==='italia')item.region='italia';
   return item;
@@ -1035,8 +1303,7 @@ function parseRSS(xml,src){
       out.push(classify({title:title,link:link,description:desc,pub:pub,src:src.name,cat:src.cat,ts:pub?new Date(pub).getTime()||0:0}));
     });
   }catch(e){}
-  var maxItems = src.max || 12;
-  return out.slice(0, maxItems);
+  return out;
 }
 
 function doRefresh(){
@@ -1160,8 +1427,7 @@ function cardHTML(a){
 }
 
 function getForCol(def){return articles.filter(function(a){
-  if(def.regions[0]==='all') return a.cat!=='cina' && a.region!=='cina' && a.region!=='sudest_asia';
-  if(def.id==='sudest') return a.cat==='sudest_asia' || a.region==='sudest_asia';
+  if(def.regions[0]==='all') return true;
   if(def.regions[0]==='osint') return a.cat==='osint';
   // For cina column, also match by cat so even misclassified articles show
   if(def.id==='cina') return a.region==='cina'||a.cat==='cina';
@@ -1184,6 +1450,7 @@ function buildCol(def,arts){
   var hd=document.createElement('div');hd.className='col-hd';
   hd.innerHTML='<span class="col-icon">'+def.icon+'</span><span class="col-name">'+def.name+'</span>'
     +'<span class="col-cnt" id="colcnt-'+def.id+'">'+arts.length+'</span>'
+    +'<span class="col-new-badge" id="new-badge-'+def.id+'" style="display:none">0 nuovi</span>'
     +'<button class="col-close" onclick="closeCol(\''+def.id+'\')">&#x2715;</button>';
   col.appendChild(hd);
   var feed=document.createElement('div');feed.className='col-feed';feed.id='colfeed-'+def.id;
@@ -1232,7 +1499,7 @@ function showTab(id){
 }
 function renderSrcList(){
   var el=document.getElementById('srclist');if(!el)return;
-  var CAT={agenzie:'Agenzie',media:'Media / Globali',italia:'Italia',think:'Think tank',ist:'Ist.',cyber:'Cyber',finance:'Finance',regional:'Reg.',osint:'OSINT',cina:'🇨🇳 Cina'};
+  var CAT={agenzie:'Agenzie',media:'Media',italia:'Italia',think:'Think tank',ist:'Ist.',cyber:'Cyber',finance:'Finance',regional:'Reg.',osint:'OSINT',cina:'🇨🇳 Cina'};
   var catmap={};
   sources.forEach(function(s){var c=s.cat||'media';if(!catmap[c])catmap[c]=[];catmap[c].push(s);});
   var html='';
@@ -1297,7 +1564,8 @@ function notify(msg){var n=document.createElement('div');n.className='notif';n.t
 
 
 
-// ── PAGINA 2: SWITCHER ────────────────────────────────────────────
+// ── BRIEFING ─────────────────────────────────────────────────────
+
 function switchPage(n){
   var p1=document.getElementById('page-1'),p2=document.getElementById('page-2');
   var t1=document.getElementById('ptab-1'),t2=document.getElementById('ptab-2');
@@ -1387,7 +1655,7 @@ function translateAll(){
 }
 
 
-var _p2Layers={pins:true,hs:true,cables:true,conflict:true,pipes:false,heatmap:true};
+var _p2Layers={pins:true,hs:true,cables:true,conflict:true,pipes:false,heatmap:true,borders:true,naval:true,chokepoints:true};
 var _p2CurrentView='global';
 
 // ── Region → ISO-2 mapping ───────────────────────────────────────
@@ -1689,6 +1957,159 @@ function _drawPipelines(gNode,path){
   });
 }
 
+
+// ══════════════════════════════════════════════════════════════════
+// MAP FEATURE: BORDER STATUS
+// ══════════════════════════════════════════════════════════════════
+var BORDER_STATUS = [
+  ['Ucraina-Russia (fronte)',        'closed',     [[31,52],[33,52],[35,50.5],[36.5,50],[37,49],[38,47.5],[38.5,47],[39,46.5]], 'Linea del fronte attiva — conflitto in corso'],
+  ['Ucraina-Bielorussia',           'closed',     [[24,52],[26,52],[28.2,52],[30,51.5],[31,52]],                               'Chiuso dal 2022 — presenza truppe russe'],
+  ['Gaza-Israele',                  'closed',     [[34.22,31.22],[34.35,31.5],[34.5,31.6]],                                   'Sigillato — operazione militare IDF'],
+  ['Libano-Israele',                'closed',     [[35.1,33.07],[35.4,33.1],[35.6,33.2],[35.9,33.25]],                        'Blue Line — tensioni Hezbollah/IDF'],
+  ['Iran-Iraq (zona kurda)',         'tense',      [[45.8,37.5],[46,36.5],[46.2,35.5],[46.4,34]],                              'Pattugliamento IRGC — sconfinamenti'],
+  ['Corea del Nord-Sud (DMZ)',       'closed',     [[126,38],[127,38],[128,38],[129,38]],                                      'DMZ — zero attraversamenti civili'],
+  ['India-Pakistan (Kashmir LoC)',   'tense',      [[73.8,34.5],[74.5,34.2],[75,33.8],[75.5,33.5],[76,33]],                   'LoC — scambi a fuoco periodici'],
+  ['Myanmar-Bangladesh',             'tense',      [[92.5,22.2],[92.3,21.5],[92.1,21],[92,20.5]],                             'Flusso rifugiati Rohingya — milizie attive'],
+  ['Sudan-Chad',                    'tense',      [[22,22],[22,16],[22,12],[23,11]],                                          'Fuga rifugiati — milizie RSF'],
+  ['Messico-USA',                   'monitored',  [[-117,32.5],[-111,31],[-106,31.5],[-100,29],[-97,26],[-97,25.9]],          'Migrazione intensa — pattugliamento'],
+  ['Venezuela-Colombia',            'tense',      [[-72,7],[-72.5,8],[-72.5,10],[-73,11]],                                   'FARC — chiuso/aperto intermittente'],
+  ['Sahel-Algeria',                 'monitored',  [[-8,19],[-2,19],[4,19],[8,21],[11,23]],                                   'Permeabile — jihadisti e migranti'],
+];
+
+function _drawBorders(gNode, path){
+  var g = d3.select(gNode);
+  g.select('.borders-layer').remove();
+  if(!_p2Layers.borders) return;
+  var layer = g.append('g').attr('class','borders-layer');
+  var STATUS_COLOR = {closed:'#ef4444', tense:'#f59e0b', monitored:'#facc15', open:'#22d35e'};
+  var STATUS_DASH  = {closed:'4 3', tense:'6 2', monitored:'8 4', open:null};
+  BORDER_STATUS.forEach(function(b){
+    var name=b[0], status=b[1], coords=b[2], note=b[3];
+    var color = STATUS_COLOR[status]||'#94a3b8';
+    var dash  = STATUS_DASH[status];
+    var geoj  = {type:'Feature', geometry:{type:'LineString', coordinates:coords}};
+    var glow = layer.append('path').datum(geoj).attr('d',path)
+      .attr('fill','none').attr('stroke',color)
+      .attr('stroke-width','5').attr('stroke-opacity','0.10').attr('stroke-linecap','round');
+    var el = layer.append('path').datum(geoj).attr('d',path)
+      .attr('fill','none').attr('stroke',color)
+      .attr('stroke-width','2').attr('stroke-opacity','0.85').attr('stroke-linecap','round');
+    if(dash) el.attr('stroke-dasharray', dash);
+    el.append('title').text('['+status.toUpperCase()+'] '+name+' — '+note);
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════
+// MAP FEATURE: NAVAL FLEETS (OSINT)
+// ══════════════════════════════════════════════════════════════════
+var NAVAL_GROUPS = [
+  ['USS Harry S. Truman (CVN-75)',    'US','carrier', 38.0, 20.0, 'deployed', 'CSG-8 — Mediterraneo orientale / supporto NATO'],
+  ['USS Carl Vinson (CVN-70)',        'US','carrier', 22.0,130.0, 'deployed', 'Indo-Pacifico — 7a flotta'],
+  ['USS Theodore Roosevelt (CVN-71)','US','carrier', 12.5, 55.0, 'deployed', 'Mar Arabico / operazioni anti-Houthi'],
+  ['USS Dwight D. Eisenhower',        'US','carrier', 15.0, 43.5, 'deployed', 'Mar Rosso — Operazione Prosperity Guardian'],
+  ['HMS Queen Elizabeth (R08)',       'UK','carrier', 36.0, -8.0, 'deployed', 'Atlantico — esercitazioni NATO'],
+  ['Admiral Kuznetsov',              'RU','carrier', 69.5, 33.0, 'port',     'Severomorsk — manutenzione prolungata'],
+  ['Liaoning (CV-16)',               'CN','carrier', 22.3,114.2, 'exercise', 'Mar Cina Merid. — esercitazioni'],
+  ['Shandong (CV-17)',               'CN','carrier', 10.5,115.0, 'exercise', 'Mar Cina Meridionale — pattugliamento ADIZ'],
+  ['Gorshkov (Fregata)',             'RU','surface', 15.0, 60.0, 'deployed', 'Oceano Indiano — Zircon ipersonici'],
+  ['JMSDF DDH Kaga',                'JP','carrier', 26.0,127.0, 'exercise', 'Okinawa — F-35B in addestramento'],
+  ['INS Vikrant (R11)',              'IN','carrier', 14.0, 74.5, 'deployed', 'Oceano Indiano — pattugliamento'],
+  ['FS Charles De Gaulle',           'FR','carrier', 38.5, 14.5, 'deployed', 'Mediterraneo — operazioni CdG'],
+  ['Flotta Nera (RU)',               'RU','surface', 44.6, 33.5, 'limited',  'Sevastopol — ridotta da attacchi UKR'],
+];
+var _navalColors = {US:'#3b82f6', UK:'#60a5fa', RU:'#ef4444', CN:'#f87171', JP:'#a78bfa', IN:'#34d399', FR:'#818cf8'};
+
+function _drawNaval(overlay, toScreen, wrap, tip){
+  if(!_p2Layers.naval) return;
+  NAVAL_GROUPS.forEach(function(ng){
+    var name=ng[0],nation=ng[1],type=ng[2],lat=ng[3],lng=ng[4],status=ng[5],desc=ng[6];
+    var xy = toScreen(lat,lng);
+    if(!xy||xy[0]<-20||xy[0]>wrap.clientWidth+20||xy[1]<-20||xy[1]>wrap.clientHeight+20) return;
+    var color = _navalColors[nation]||'#94a3b8';
+    var opacity = status==='port'?'0.35': status==='limited'?'0.55':'1';
+    var icon = type==='carrier'?'⬡': type==='sub'?'◆':'▲';
+    var el = document.createElement('div');
+    el.style.cssText='position:absolute;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;left:'+xy[0]+'px;top:'+xy[1]+'px;';
+    el.innerHTML='<div style="width:16px;height:16px;border:1.5px solid '+color+';border-radius:3px;'
+      +'background:rgba(0,0,0,0.75);display:flex;align-items:center;justify-content:center;'
+      +'color:'+color+';font-size:8px;opacity:'+opacity+';box-shadow:0 0 5px '+color+'55;">'
+      +icon+'</div>'
+      +'<div style="position:absolute;top:-11px;left:50%;transform:translateX(-50%);'
+      +'font-size:7px;color:'+color+';white-space:nowrap;font-family:\'Share Tech Mono\',monospace;'
+      +'opacity:'+opacity+';text-shadow:0 0 4px #000;background:rgba(0,0,0,0.6);padding:0 2px;">'+nation+'</div>';
+    el.addEventListener('mouseenter',function(e){
+      if(tip){
+        var sc = status==='deployed'?'#22d36e':status==='port'?'#94a3b8':status==='exercise'?'#f59e0b':status==='limited'?'#ef4444':'#94a3b8';
+        tip.innerHTML='<div style="color:'+color+';font-weight:700;font-size:11px">'+name+'</div>'
+          +'<div style="color:var(--mu);font-size:9px;margin:2px 0;letter-spacing:.06em">'+nation+' · '+type.toUpperCase()+'</div>'
+          +'<div style="margin-top:4px;font-size:10px">'+desc+'</div>'
+          +'<div style="margin-top:4px;font-size:9px;color:'+sc+'">&#9654; '+status.toUpperCase()+'</div>';
+        tip.style.display='block';
+      }
+    });
+    el.addEventListener('mousemove',function(e){if(tip){tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';}});
+    el.addEventListener('mouseleave',function(){if(tip)tip.style.display='none';});
+    overlay.appendChild(el);
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════
+// MAP FEATURE: MARITIME CHOKEPOINTS
+// ══════════════════════════════════════════════════════════════════
+var CHOKEPOINTS = [
+  ['Stretto di Hormuz',      26.56, 56.40,'~20% petrolio mondiale', 'tense',     'Pattugliamento IRGC — sequestri sporadici. ~17M bbl/d'],
+  ['Stretto di Malacca',      2.50,102.00,'~40% commercio globale', 'normal',    'Traffico regolare. ~16M bbl/d — pirati residuali'],
+  ['Canale di Suez',         30.00, 32.57,'~12% commercio marittimo','reduced',  'Rotte deviate — Houthi/Mar Rosso. -30% transiti'],
+  ['Bab el-Mandeb',          12.58, 43.40,'~6M bbl/giorno',        'blocked',   'Attacchi Houthi — molti vettori deviano a Capo di Buona Speranza'],
+  ['Bosforo/Dardanelli',     41.10, 29.00,'~2-3M bbl/giorno',      'restricted','Chiuso a navi militari russe (Convenzione Montreux)'],
+  ['Stretto di Gibilterra',  35.98, -5.47,'~9M bbl/giorno',        'normal',    'Traffico Atlantico-Mediterraneo. Normale'],
+  ['Canale della Manica',    51.00,  1.40,'Via mare piu trafficata', 'normal',   'Densita massima — pattugliamento UK/FR'],
+  ['Stretto di Lombok',      -8.80,115.80,'~50 GNL tanker/mese',   'normal',    'Alternativa Malacca per superpetroliere'],
+  ['Capo di Buona Speranza', -34.35,18.47,'Rotta alternativa Suez', 'increased', '+40% traffico per deviazione da Mar Rosso'],
+  ['Passaggio NE (Artico)',  75.00,-20.00,'Rotta emergente',        'monitored', 'Aumento transiti estivi — monitoraggio NATO/RU'],
+];
+var _cpStatusCfg = {
+  normal:    {color:'#22d35e', label:'NORMALE'},
+  tense:     {color:'#f59e0b', label:'TESO'},
+  reduced:   {color:'#fb923c', label:'RIDOTTO'},
+  blocked:   {color:'#ef4444', label:'BLOCCATO'},
+  restricted:{color:'#a78bfa', label:'RISTRETTO'},
+  increased: {color:'#38bdf8', label:'DEVIATO+'},
+  monitored: {color:'#94a3b8', label:'MONITORATO'},
+};
+
+function _drawChokepoints(overlay, toScreen, wrap, tip){
+  if(!_p2Layers.chokepoints) return;
+  CHOKEPOINTS.forEach(function(cp){
+    var name=cp[0],lat=cp[1],lng=cp[2],traffic=cp[3],status=cp[4],desc=cp[5];
+    var xy = toScreen(lat,lng);
+    if(!xy||xy[0]<-30||xy[0]>wrap.clientWidth+30||xy[1]<-30||xy[1]>wrap.clientHeight+30) return;
+    var st = _cpStatusCfg[status]||_cpStatusCfg.normal;
+    var color = st.color;
+    var el = document.createElement('div');
+    el.style.cssText='position:absolute;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;left:'+xy[0]+'px;top:'+xy[1]+'px;z-index:5;';
+    el.innerHTML='<div style="position:relative;width:22px;height:22px;">'
+      +'<div style="position:absolute;inset:0;border-radius:50%;border:1.5px solid '+color+';animation:globe-pulse 2.5s ease-out infinite;opacity:0.7;"></div>'
+      +'<div style="position:absolute;inset:5px;transform:rotate(45deg);border:2px solid '+color+';background:rgba(0,0,0,0.82);box-shadow:0 0 8px '+color+'55;"></div>'
+      +'</div>'
+      +'<div style="position:absolute;bottom:-14px;left:50%;transform:translateX(-50%);white-space:nowrap;font-family:\'Share Tech Mono\',monospace;font-size:7px;color:'+color+';background:rgba(0,0,0,0.8);padding:1px 4px;border-radius:2px;border:1px solid '+color+'33;">'+st.label+'</div>';
+    el.addEventListener('mouseenter',function(e){
+      if(tip){
+        tip.innerHTML='<div style="color:'+color+';font-weight:700;font-size:11px;letter-spacing:.05em">&#9830; '+name+'</div>'
+          +'<div style="margin:3px 0;font-size:10px;color:var(--tx2)">'+desc+'</div>'
+          +'<div style="margin-top:5px;display:flex;gap:10px;font-size:9px;font-family:monospace;">'
+          +'<span style="color:'+color+'">&#9654; '+st.label+'</span>'
+          +'<span style="color:var(--mu)">'+traffic+'</span>'
+          +'</div>';
+        tip.style.display='block';
+      }
+    });
+    el.addEventListener('mousemove',function(e){if(tip){tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';}});
+    el.addEventListener('mouseleave',function(){if(tip)tip.style.display='none';});
+    overlay.appendChild(el);
+  });
+}
+
 // ══════════════════════════════════════════════════════════════════
 // MAP FEATURE 3: TIMELINE SLIDER
 // ══════════════════════════════════════════════════════════════════
@@ -1764,6 +2185,20 @@ function openCountryPanel(iso2, name){
   var overlay=document.getElementById('country-panel-overlay');
   if(panel){panel.style.right='0';}
   if(overlay){overlay.style.display='block';}
+  // Update COA metrics
+  try{
+    var critCount=cpArts.filter(function(a){return a.sev==='critical';}).length;
+    var artCountEl=document.getElementById('cp-art-count');
+    var critEl=document.getElementById('cp-crit-count');
+    var sevBadge=document.getElementById('cp-sev-badge');
+    if(artCountEl)artCountEl.textContent=cpArts.length||'0';
+    if(critEl)critEl.textContent=critCount||'0';
+    if(sevBadge){
+      var topSev=cpArts.length===0?'none':critCount>0?'CRIT':cpArts.some(function(a){return a.sev==='high';})?'HIGH':'MED';
+      sevBadge.textContent=topSev;
+      sevBadge.className='coa-score '+(topSev==='CRIT'?'high':topSev==='HIGH'?'med':'low');
+    }
+  }catch(e){}
 }
 
 function closeCountryPanel(){
@@ -1774,7 +2209,6 @@ function closeCountryPanel(){
   _cpCurrentIso='';
 }
 
-// ── Region view presets (zoom + translate on SVG g) ──────────────
 function p2ZoomStep(factor){
   if(!_p2SVG||!_p2ZoomBeh)return;
   _p2SVG.transition().duration(300).call(_p2ZoomBeh.scaleBy, factor);
@@ -1800,11 +2234,12 @@ function p2SetView(view){
 function p2ToggleLayer(layer,btn){
   _p2Layers[layer]=!_p2Layers[layer];
   if(btn)btn.classList.toggle('on',_p2Layers[layer]);
-  if(layer==='pipes'||layer==='heatmap'){
+  if(layer==='pipes'||layer==='heatmap'||layer==='borders'){
     // These require SVG redraw
     if(_p2G&&_p2Proj){
       var path=d3.geoPath(_p2Proj);
       if(layer==='pipes') _drawPipelines(_p2G.node(),path);
+      if(layer==='borders') _drawBorders(_p2G.node(),path);
       if(layer==='heatmap'){
         var hm=_buildHeatmap();
         _p2G.selectAll('path.country').attr('fill',function(f){
@@ -1891,6 +2326,12 @@ function _redrawOverlay(){
       overlay.appendChild(el);
     });
   }
+
+  // ── Naval groups (OSINT) ──────────────────────────────────────
+  _drawNaval(overlay, toScreen, wrap, tip);
+
+  // ── Maritime chokepoints ──────────────────────────────────────
+  _drawChokepoints(overlay, toScreen, wrap, tip);
 
   wrap.appendChild(overlay);
 }
@@ -2011,6 +2452,9 @@ function _drawP2Map(){
   // Conflict zone highlights
   _drawConflictFills(g.node(),countries,path);
 
+  // Border status layer
+  _drawBorders(g.node(), path);
+
   // Borders
   g.append('path').datum(borders).attr('d',path)
     .attr('fill','none').attr('stroke','var(--bg)').attr('stroke-width','0.5');
@@ -2098,38 +2542,45 @@ function renderAlerts(){
 
 // ── TV PLAYER ─────────────────────────────────────────────────────
 var TV_CH=[
-  {name:'Al Jazeera EN', type:'hls', hls:'https://live-hls-web-aje.getaj.net/AJE/index.m3u8',              yt:'gCNeDWCI0vo'},
-  {name:'Al Jazeera AR', type:'hls', hls:'https://live-hls-web-aja.getaj.net/AJA/index.m3u8',              yt:'rChF468RWrU'},
-  {name:'France 24 EN',  type:'hls', hls:'https://static.france24.com/live/F24_EN_LO_HLS/live_web.m3u8',   yt:'u9foWyMSETk'},
+  // ── HLS nativo (bypass bot-check) ───────────────────────────────
+  {name:'Al Jazeera EN', type:'hls', hls:'https://live-hls-web-aje.getaj.net/AJE/index.m3u8',               yt:'gCNeDWCI0vo'},
+  {name:'Al Jazeera AR', type:'hls', hls:'https://live-hls-web-aja.getaj.net/AJA/index.m3u8',               yt:'rChF468RWrU'},
+  {name:'France 24 EN',  type:'hls', hls:'https://static.france24.com/live/F24_EN_LO_HLS/live_web.m3u8',    yt:'u9foWyMSETk'},
+  {name:'France 24 FR',  type:'hls', hls:'https://static.france24.com/live/F24_FR_LO_HLS/live_web.m3u8',    yt:''},
   {name:'DW News',       type:'hls', hls:'https://dwamdstream102.akamaized.net/hls/live/2015531/dwstream102/index.m3u8', yt:'LuKwFajn37U'},
-  {name:'Euronews EN',   type:'hls', hls:'https://euronews-euronews-1-gb.samsung.wurl.tv/manifest/playlist.m3u8', yt:'pykpO5kQJ98'},
+  {name:'Euronews EN',   type:'hls', hls:'https://jmp2.uk/SamsungTVPlus/GBAJ4900020VP.m3u8',                yt:'pykpO5kQJ98'},
+  {name:'Sky News',      type:'hls', hls:'https://jmp2.uk/SamsungTVPlus/USBB52000022Q.m3u8',                yt:'9Auq9mYxFEE'},
+  {name:'BBC News',      type:'hls', hls:'https://jmp2.uk/SamsungTVPlus/US4000033L.m3u8',                   yt:''},
+  {name:'Reuters Now',   type:'hls', hls:'https://reuters-reutersnow-1-nl.samsung.wurl.tv/playlist.m3u8',   yt:''},
   {name:'TRT World',     type:'hls', hls:'https://trtworldlive.akamaized.net/hls/live/2003168/trtworldlive/index.m3u8', yt:'ABfFhWzWs0s'},
-  {name:'Sky News',      type:'hls', hls:'https://linear417-gb-hls1-prd-ak.cdn.skycdp.com/100e/Content/HLS_001_1080_30/Live/channel(skynews)/index_1080-30.m3u8', yt:'9Auq9mYxFEE'},
   {name:'NHK World',     type:'hls', hls:'https://nhkworld.webcdn.stream.ne.jp/www11/nhkworld-tv/global/263941/live_wa_s.m3u8', yt:'f0lYfG_vY_U'},
-  {name:'RT English',    type:'hls', hls:'https://rt-glb.rttv.com/live/rten/playlist.m3u8', yt:''},
+  {name:'CGTN',          type:'hls', hls:'https://news.cgtn.com/resource/live/english/cgtn-news.m3u8',      yt:'8gGEJi5K9w4'},
+  {name:'RT English',    type:'hls', hls:'https://rt-glb.rttv.com/live/rten/playlist.m3u8',                 yt:''},
   {name:'i24 News',      type:'hls', hls:'https://bcovlive-a.akamaihd.net/6db4a900c00c4f7dac5f1e97ab87a0e4/eu-central-1/5377161796001/profile_0/chunklist.m3u8', yt:''},
+  // ── YouTube IFrame API ───────────────────────────────────────────
   {name:'Bloomberg',     type:'yt',  yt:'dp8PhLsUcFE'},
-  {name:'CNN',           type:'link',link:'https://edition.cnn.com/live-tv', yt:''},
-  {name:'CGTN',          type:'yt',  yt:'8gGEJi5K9w4'},
+  {name:'CNN',           type:'yt',  yt:'ikMiHTbBdw4'},
+  {name:'CNBC',          type:'yt',  yt:'6vetriqYbFE'},
 ];
 var _tvIdx=0,_tvMuted=true,_hlsInst=null;
 function _buildPlayer(idx){
   var ch=TV_CH[idx];if(!ch)return;_tvIdx=idx;
   var lbl=document.getElementById('tvlbl');if(lbl)lbl.textContent=ch.name.toUpperCase()+' \u2014 LIVE';
   if(_hlsInst){try{_hlsInst.destroy();}catch(e){}_hlsInst=null;}
+  if(_ytPlayer){try{_ytPlayer.destroy();}catch(e){}_ytPlayer=null;}
   var wrap=document.getElementById('tv-yt-wrap');
-  if(wrap){wrap.querySelectorAll('iframe').forEach(function(f){f.parentNode.removeChild(f);});}
+  if(wrap){wrap.innerHTML='';}
   var vid=document.getElementById('tv-hls-video');
   if(vid){vid.pause();vid.removeAttribute('src');vid.load();vid.style.display='none';}
   var msg=document.getElementById('tv-msg');if(msg)msg.style.display='none';
   _tvMuted=true;_updateMuteBtn();
-  if(ch.type==='yt'){if(ch.yt)_ytEmbed(ch.yt);return;}
+  if(ch.type==='yt'){if(ch.yt)_ytEmbed(ch.yt);else _showTVMsg('Stream non disponibile');return;}
   if(ch.type==='link'){if(msg){msg.style.display='flex';var a=msg.querySelector('a');if(a){a.href=ch.link;a.textContent='Apri '+ch.name+' \u2197';}}return;}
   _tryHLS(ch.hls,ch.yt);
 }
 function _tryHLS(url,ytId){
   var vid=document.getElementById('tv-hls-video');if(!vid)return;
-  function fallback(){vid.style.display='none';if(ytId)_ytEmbed(ytId);else{var m=document.getElementById('tv-msg');if(m)m.style.display='flex';}}
+  function fallback(){vid.style.display='none';if(ytId)_ytEmbed(ytId);else _showTVMsg('Stream HLS non disponibile');}
   try{vid.pause();}catch(e){}
   vid.style.display='block';
   vid.muted=true;
@@ -2146,14 +2597,49 @@ function _tryHLS(url,ytId){
     vid.addEventListener('error',function(){fallback();},{once:true});
   }else{fallback();}
 }
-function _ytEmbed(id){
+// ── YouTube IFrame Player API ──────────────────────────────────────
+var _ytPlayer=null,_ytAPIReady=false,_ytPendingId=null;
+window.onYouTubeIframeAPIReady=function(){
+  _ytAPIReady=true;
+  if(_ytPendingId){var id=_ytPendingId;_ytPendingId=null;_ytEmbed(id);}
+};
+
+function _ytEmbed(videoId){
+  if(!videoId){_showTVMsg('Stream non disponibile — nessun ID YouTube');return;}
   var wrap=document.getElementById('tv-yt-wrap');if(!wrap)return;
-  var iframe=document.createElement('iframe');
-  iframe.src='https://www.youtube.com/embed/'+id+'?autoplay=1&mute=1&rel=0&playsinline=1';
-  iframe.allow='autoplay;encrypted-media;picture-in-picture';iframe.allowFullscreen=true;
-  iframe.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:none;';
-  wrap.appendChild(iframe);
+  var vid=document.getElementById('tv-hls-video');
+  if(vid){vid.pause();vid.removeAttribute('src');vid.load();vid.style.display='none';}
+  var msg=document.getElementById('tv-msg');if(msg)msg.style.display='none';
+  wrap.style.display='';
+  if(!_ytAPIReady){_ytPendingId=videoId;return;}
+  if(_ytPlayer){try{_ytPlayer.destroy();}catch(e){}_ytPlayer=null;}
+  wrap.innerHTML='';
+  var div=document.createElement('div');div.id='_yt_div';
+  div.style.cssText='position:absolute;inset:0;width:100%;height:100%;';
+  wrap.appendChild(div);
+  var origin='';try{origin=window.location.origin;}catch(e){}
+  _ytPlayer=new YT.Player('_yt_div',{
+    height:'100%',width:'100%',videoId:videoId,
+    playerVars:{autoplay:1,mute:1,rel:0,playsinline:1,modestbranding:1,controls:1,origin:origin||''},
+    events:{
+      onReady:function(e){try{e.target.mute();e.target.playVideo();}catch(ex){}},
+      onError:function(e){
+        var ch=TV_CH[_tvIdx];
+        _showTVMsg('Bot-check YouTube — apri direttamente','Apri '+(ch?ch.name:'stream')+' ↗',
+          ch?'https://www.youtube.com/watch?v='+videoId:'https://www.youtube.com');
+      }
+    }
+  });
 }
+
+function _showTVMsg(txt,btnTxt,btnUrl){
+  var msg=document.getElementById('tv-msg');if(!msg)return;
+  msg.style.display='flex';
+  var a=msg.querySelector('a');
+  if(a){a.href=btnUrl||'https://www.youtube.com';a.textContent=btnTxt||txt+' ↗';}
+}
+
+
 function tvUnmute(){_tvMuted=!_tvMuted;var vid=document.getElementById('tv-hls-video');if(vid&&vid.style.display!=='none'){vid.muted=_tvMuted;if(!_tvMuted)vid.play().catch(function(){});}_updateMuteBtn();}
 function _updateMuteBtn(){var b=document.getElementById('tv-mute-btn');if(b)b.textContent=_tvMuted?'SUONO':'MUTE';}
 function tvChange(){var sel=document.getElementById('tvsel');if(sel)_buildPlayer(parseInt(sel.value,10));}
@@ -2178,52 +2664,106 @@ function hardReset(){
   renderAll();doRefresh();
   notify('Reset completato');
 }
-loadPersist();
-renderAll();
-doRefresh();
+// ── ANALISI INTELLIGENCE ─────────────────────────────────────────
+var _analisiTab='swot';
+var _analisiSrc='dashboard'; // 'dashboard' | 'urls'
 
+function openAnalisi(){
+  var m=document.getElementById('analisi-modal');
+  if(!m)return;
+  m.style.display='flex';
+  var saved=localStorage.getItem('sh3_apikey')||'';
+  var inp=document.getElementById('analisi-apikey');
+  if(inp&&!inp.value&&saved)inp.value=saved;
+  _updateAnalisiKeyStatus();
+}
+function closeAnalisi(){
+  var m=document.getElementById('analisi-modal');
+  if(m)m.style.display='none';
+}
+function _updateAnalisiKeyStatus(){
+  var inp=document.getElementById('analisi-apikey');
+  var ks=document.getElementById('analisi-key-status');
+  var key=(inp&&inp.value)||localStorage.getItem('sh3_apikey')||'';
+  if(ks){
+    if(key){ks.textContent='✓ Key pronta';ks.style.color='var(--acc)';}
+    else{ks.textContent='Senza key: analisi locale';ks.style.color='var(--mu)';}
+  }
+}
+function selectAnalisiTab(tab,el){
+  _analisiTab=tab;
+  document.querySelectorAll('.analisi-tab').forEach(function(b){b.classList.remove('active');});
+  if(el)el.classList.add('active');
+}
+function _buildPrompt(tab,ctx,focus){
+  var focusStr=focus?' Focus tematico: '+focus+'.':'';
+  var prompts={
+    swot:'Sei un analista geopolitico senior di Limes.'+focusStr+'\nAnalizza il seguente contenuto e produci una SWOT Analysis geopolitica. Per ogni quadrante (Strengths, Weaknesses, Opportunities, Threats) fornisci 4-5 punti concreti e specifici. Rispondi SOLO con JSON valido:\n{"strengths":["..."],"weaknesses":["..."],"opportunities":["..."],"threats":["..."]}\n\n'+ctx,
+    competitive:'Sei un analista geopolitico senior.'+focusStr+'\nAnalizza il seguente contenuto. Identifica e analizza i principali attori geopolitici: per ognuno dai posizione attuale, vantaggi strategici, vulnerabilità. Usa intestazioni ### Nome Attore. Rispondi SOLO in italiano. Max 700 parole.\n\n'+ctx,
+    devil:'Sei un analista che pratica il Devil\'s Advocacy.'+focusStr+'\nAnalizza il seguente contenuto. Identifica le 3-4 narrative dominanti e smontale con argomentazioni rigorose. Struttura: ### Narrativa → controargomentazioni → punto cieco. Rispondi SOLO in italiano. Max 700 parole.\n\n'+ctx,
+    scenario:'Sei un analista strategico.'+focusStr+'\nAnalizza il seguente contenuto. Produci 3 scenari evolutivi per i prossimi 3-6 mesi. SOLO JSON valido:\n[{"label":"...","prob":XX,"drivers":["..."],"implications":"...","type":"low-prob|med-prob|high-prob"}]\n\n'+ctx
+  };
+  return prompts[tab]||prompts.swot;
+}
 
-</script>
+function _callClaudeAPI(tab,ctx,focus,apiKey,onSuccess,onError){
+  fetch('https://api.anthropic.com/v1/messages',{
+    method:'POST',
+    headers:{
+      'Content-Type':'application/json',
+      'x-api-key':apiKey,
+      'anthropic-version':'2023-06-01',
+      'anthropic-dangerous-direct-browser-access':'true'
+    },
+    body:JSON.stringify({
+      model:'claude-sonnet-4-6',
+      max_tokens:1400,
+      system:'Sei un analista geopolitico senior di Limes. Rispondi SEMPRE in italiano, in modo preciso e sintetico.',
+      messages:[{role:'user',content:_buildPrompt(tab,ctx,focus)}]
+    })
+  })
+  .then(function(r){
+    if(!r.ok)return r.json().then(function(e){throw new Error((e.error&&e.error.message)||r.status);});
+    return r.json();
+  })
+  .then(function(data){
+    var text=(data.content&&data.content[0]&&data.content[0].text)||'';
+    onSuccess(_renderAnalisiAPI(tab,text));
+  })
+  .catch(function(e){onError(e.message);});
+}
 
+// ── RENDER API RESULT ─────────────────────────────────────────────
+function _buildLocalFromText(tab,ctx,count){
+  return '<div style="background:rgba(139,92,246,.07);border:1px solid rgba(139,92,246,.25);border-radius:6px;padding:12px;font-size:12px;line-height:1.6">'+
+    '<b style="color:#a78bfa">&#9872; Analisi locale — '+count+' articoli recuperati</b><br><br>'+
+    '<span style="color:var(--mu)">Inserisci una Anthropic API key per ottenere un\'analisi Claude contestuale sul contenuto degli URL forniti.<br><br>'+
+    'Contenuto estratto: <b>'+Math.round(ctx.length/1000)+'k caratteri</b> da '+count+' articoli.</span>'+
+    '<div style="margin-top:10px;font-size:10px;font-family:\'Share Tech Mono\',monospace;color:var(--mu)">Preview contenuto:</div>'+
+    '<div style="font-size:10px;font-family:\'Share Tech Mono\',monospace;color:var(--tx2);background:var(--s2);padding:8px;border-radius:4px;margin-top:4px;max-height:120px;overflow-y:auto;white-space:pre-wrap">'+
+    esc(ctx.substring(0,600))+'…</div>'+
+    '</div>';
+}
 
-<!-- ── COUNTRY PANEL ─────────────────────────────────────────────── -->
-<div id="country-panel" style="position:fixed;top:0;right:-420px;width:400px;height:100vh;background:var(--bg);border-left:1px solid var(--bd);z-index:900;display:flex;flex-direction:column;transition:right .28s cubic-bezier(.4,0,.2,1);box-shadow:-4px 0 24px rgba(0,0,0,.4);">
-  <div style="padding:12px 14px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:10px;flex-shrink:0;">
-    <div id="cp-flag" style="font-size:24px;"></div>
-    <div style="flex:1;">
-      <div id="cp-name" style="font-weight:700;font-size:15px;"></div>
-      <div id="cp-region" style="font-size:11px;color:var(--mu);font-family:'Share Tech Mono',monospace;"></div>
-    </div>
-    <button onclick="closeCountryPanel()" style="background:transparent;border:none;color:var(--mu);font-size:18px;cursor:pointer;padding:4px 8px;">&#10005;</button>
-  </div>
-  <div id="cp-status" style="padding:8px 14px;border-bottom:1px solid var(--bd);flex-shrink:0;"></div>
-  <div id="cp-articles" style="flex:1;overflow-y:auto;padding:10px 12px;"></div>
-  <div style="padding:10px 14px;border-top:1px solid var(--bd);flex-shrink:0;display:flex;gap:8px;">
-    
-    <button onclick="closeCountryPanel()" style="background:var(--s2);border:1px solid var(--bd);color:var(--mu);padding:7px 12px;border-radius:5px;cursor:pointer;font-size:12px;">Chiudi</button>
-  </div>
-</div>
-<div id="country-panel-overlay" onclick="closeCountryPanel()" style="display:none;position:fixed;inset:0;z-index:899;background:rgba(0,0,0,.25);"></div>
+// ── OPS MAP UI HELPERS ────────────────────────────────────────────
+function opsTab(btn){
+  try{
+    var tabs=btn.parentElement.querySelectorAll('.ops-intel-tab');
+    tabs.forEach(function(t){t.classList.remove('active');});
+    btn.classList.add('active');
+  }catch(e){}
+}
 
+(function _initGanttClock(){
+  function _tick(){
+    try{
+      // no-op: gantt strip removed
+    }catch(e){}
+  }
+  _tick();
+  setInterval(_tick,1000);
+})();
 
-<script>
-document.addEventListener("DOMContentLoaded",function(){
- if(typeof _buildPlayer === "function"){ _buildPlayer(0); }
-});
-</script>
-
-
-<script>
-document.addEventListener("DOMContentLoaded", function () {
-  try {
-    if (typeof _buildPlayer === "function") {
-      setTimeout(function(){ _buildPlayer(0); }, 300);
-    }
-  } catch(e) {}
-});
-</script>
-
-<script>
 function toggleMobileMenu(){
   try{
     document.body.classList.toggle('mobile-menu-open');
@@ -2236,6 +2776,11 @@ window.addEventListener('resize', function(){
     }
   }catch(e){}
 });
+
+loadPersist();
+renderAll();
+doRefresh();
+
 </script>
 
 
@@ -2302,19 +2847,25 @@ function updateNewBadge(colId, n){
   }
 }
 function insertArticleIntoColumn(colId, article){
-  var feed=document.querySelector('[data-col-feed="'+colId+'"]');
+  var feed=document.getElementById('colfeed-'+colId);
   if(!feed) return false;
   var wrapper=document.createElement('div');
   wrapper.innerHTML=cardHTML(article);
   var card=wrapper.firstElementChild;
   if(!card) return false;
   card.classList.add('card-new');
+  // Remove "empty" placeholder if present
+  var empty=feed.querySelector('.empty');
+  if(empty)feed.removeChild(empty);
   feed.prepend(card);
   setTimeout(function(){card.classList.remove('card-new');card.classList.add('card-new-flash');},350);
   setTimeout(function(){card.classList.remove('card-new-flash');},3200);
   while(feed.children.length>120){
     feed.removeChild(feed.lastElementChild);
   }
+  // Update counter
+  var cnt=document.getElementById('colcnt-'+colId);
+  if(cnt)cnt.textContent=feed.children.length;
   return true;
 }
 function refreshIncremental(){
@@ -2346,6 +2897,20 @@ function refreshIncremental(){
             return (SO[b.sev]||1)-(SO[a.sev]||1);
           });
 
+          // FIRST LOAD: full render, then seed the seen-set
+          if(!_initialRenderDone){
+            articles=uniq;
+            renderAll();
+            try{ensureSeenFromArticles();}catch(e){}
+            _initialRenderDone=true;
+            try{renderSrcList();}catch(e){}
+            try{_refreshP2Overlay();}catch(e){}
+            if(btn){btn.disabled=false;btn.textContent='↻';}
+            startTimer();
+            return;
+          }
+
+          // SUBSEQUENT: TweetDeck incremental insert
           var fresh=uniq.filter(function(a){
             var k=articleKey(a);
             if(_seenArticleKeys.has(k)) return false;
@@ -2543,6 +3108,7 @@ function toggleSidebar(){
   }catch(e){}
 }
 </script>
+
 
 
 
