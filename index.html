@@ -826,6 +826,9 @@ var DEFAULTS=[
   {id:'xinhua_cina',  name:'Xinhua',             cat:'cina',    url:'https://news.google.com/rss/search?q=site:xinhuanet.com&hl=en',on:true},
   {id:'xinhua_cn',    name:'Xinhua CN',          cat:'cina',    url:'https://news.google.com/rss/search?q=site:xinhuanet.com&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
   {id:'pekingnology',name:'Pekingnology (feed)',url:'https://www.pekingnology.com/feed',cat:'cina',on:true},
+  {id:'globaltimes',   name:'Global Times',          cat:'cina',    url:'https://www.globaltimes.cn/rss/outbrain.xml',on:true},
+  {id:'globaltimes_gn',name:'Global Times (GNews)',  cat:'cina',    url:'https://news.google.com/rss/search?q=site:globaltimes.cn&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'beijingtimes',  name:'Beijing Times',         cat:'cina',    url:'https://news.google.com/rss/search?q=site:thepaper.cn+OR+%22Beijing+Times%22&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
   {id:'chinadigitaltimes',name:'China Digital Times',url:'https://chinadigitaltimes.net/feed/',cat:'cina',on:true},
 
   {id:'reuters',   name:'Reuters',            cat:'agenzie', url:'https://news.google.com/rss/search?q=reuters+world+news&hl=en&gl=US&ceid=US:en',on:true},
@@ -870,7 +873,7 @@ var DEFAULTS=[
   {id:'kyivindep', name:'Kyiv Independent',   cat:'regional',url:'https://news.google.com/rss/search?q=site:kyivindependent.com&hl=en',on:true},
   {id:'news24',    name:'News24 Africa',      cat:'regional',url:'https://news.google.com/rss/search?q=site:news24.com&hl=en&gl=ZA&ceid=ZA:en',on:true},
   {id:'dawn',      name:'Dawn Pakistan',      cat:'regional',url:'https://news.google.com/rss/search?q=site:dawn.com&hl=en&gl=PK&ceid=PK:en',on:true},
-  {id:'caixin',    name:'Caixin Global',      cat:'regional',url:'https://news.google.com/rss/search?q=site:caixinglobal.com&hl=en',on:true},
+  {id:'caixin',    name:'Caixin Global',      cat:'cina',    url:'https://news.google.com/rss/search?q=site:caixinglobal.com&hl=en',on:true},
   {id:'repubblica',name:'La Repubblica',      cat:'italia',  url:'https://news.google.com/rss/search?q=site:repubblica.it+esteri&hl=it&gl=IT&ceid=IT:it',on:true},
   {id:'corriere',  name:'Corriere della S.',  cat:'italia',  url:'https://news.google.com/rss/search?q=site:corriere.it+esteri&hl=it',on:true},
   {id:'rainews',   name:'Rainews 24',         cat:'italia',  url:'https://news.google.com/rss/search?q=site:rainews.it&hl=it',on:true},
@@ -1100,7 +1103,10 @@ function classify(item){
   for(var r=0;r<rks.length;r++){var kw=CL.regions[rks[r]];for(var k=0;k<kw.length;k++){if(txt.indexOf(kw[k])>=0){reg=rks[r];break;}}if(reg!=='global')break;}
   item.sev=sev;item.region=reg;
   // If region still global but source has explicit cat mapping, use it
-  if(reg==='global'&&(item.cat==='cina'||item.src==='Xinhua'))item.region='cina';
+  if(reg==='global'&&(item.cat==='cina'
+    ||item.src==='Xinhua'||item.src==='Global Times'
+    ||item.src==='Caixin Global'||item.src==='PLA Daily'
+    ||item.src==='Seeking Truth'))item.region='cina';
   if(reg==='global'&&item.cat==='sudest_asia')item.region='indopacifico';
   if(reg==='global'&&item.cat==='italia')item.region='italia';
   return item;
@@ -2348,7 +2354,7 @@ var TV_CH=[
   {name:'i24 News',      type:'hls', hls:'https://bcovlive-a.akamaihd.net/6db4a900c00c4f7dac5f1e97ab87a0e4/eu-central-1/5377161796001/profile_0/chunklist.m3u8', yt:''},
   {name:'Bloomberg',     type:'link',link:'https://www.bloomberg.com/live', yt:''},
   {name:'CNN',           type:'link',link:'https://edition.cnn.com/live-tv', yt:''},
-  {name:'CGTN',          type:'hls', hls:'https://news.cgtn.com/resource/live/english/cgtn-news.m3u8', yt:'bwro9RydAqM'},
+  {name:'CGTN',          type:'hls', hls:'https://livees.cgtn.com/1000e/prog_index.m3u8', yt:'8gGEJi5K9w4'},
 ];
 var _tvIdx=0,_tvMuted=true,_hlsInst=null;
 function _buildPlayer(idx){
@@ -2361,6 +2367,7 @@ function _buildPlayer(idx){
   if(vid){vid.pause();vid.removeAttribute('src');vid.load();vid.style.display='none';}
   var msg=document.getElementById('tv-msg');if(msg)msg.style.display='none';
   _tvMuted=true;_updateMuteBtn();
+  if(ch.type==='yt'){if(ch.yt)_ytEmbed(ch.yt);return;}
   if(ch.type==='link'){if(msg){msg.style.display='flex';var a=msg.querySelector('a');if(a){a.href=ch.link;a.textContent='Apri '+ch.name+' \u2197';}}return;}
   _tryHLS(ch.hls,ch.yt);
 }
