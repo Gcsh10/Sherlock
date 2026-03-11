@@ -40,11 +40,11 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .pane.hidden{display:none!important;}
 .slbl{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);padding:7px 8px 2px;font-family:'Share Tech Mono',monospace;border-left:2px solid var(--acc2);flex-shrink:0;}
 .src-hd{display:flex;align-items:center;justify-content:space-between;padding:5px 8px;border-bottom:1px solid var(--bd);flex-shrink:0;}
-.src-hd span{font-size:11px;color:var(--mu);font-family:'Share Tech Mono',monospace;}
+.src-hd span{font-size:13px;color:var(--tx2);font-family:'Share Tech Mono',monospace;font-weight:600;}
 .src-item{display:flex;align-items:center;gap:5px;padding:4px 8px;border-bottom:1px solid var(--bd);flex-shrink:0;}
 .src-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
 .src-nm{flex:1;font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.src-st{font-size:10px;font-family:'Share Tech Mono',monospace;}
+.src-st{font-size:12px;font-family:'Share Tech Mono',monospace;font-weight:600;}
 .src-st.ok{color:#22c55e;}.src-st.err{color:var(--re);}.src-st.lo{color:var(--mu);}
 .tog{width:26px;height:14px;border:none;cursor:pointer;position:relative;flex-shrink:0;border-radius:2px;transition:background .2s;}
 .tog.on{background:var(--acc2);}.tog.off{background:var(--bd2);}
@@ -68,7 +68,7 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .acol.drag-over{border-right:2px solid var(--acc);}
 .col-hd{display:flex;align-items:center;gap:5px;padding:6px 8px;background:var(--bg2);border-bottom:1px solid var(--bd2);flex-shrink:0;cursor:grab;user-select:none;}
 .col-icon{font-size:14px;}.col-name{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:11px;font-weight:700;color:var(--tx2);letter-spacing:.08em;text-transform:uppercase;flex:1;}
-.col-cnt{font-size:10px;color:var(--mu);font-family:'Share Tech Mono',monospace;background:var(--s2);padding:1px 5px;}
+.col-cnt{font-size:13px;color:var(--tx);font-family:'Share Tech Mono',monospace;font-weight:700;background:var(--s2);padding:1px 5px;}
 .col-close{background:none;border:none;color:var(--mu);cursor:pointer;font-size:13px;padding:0 2px;transition:color .15s;flex-shrink:0;}
 .col-close:hover{color:var(--re);}
 .col-feed{flex:1;overflow-y:auto;overflow-x:hidden;padding:4px 0;}
@@ -1073,7 +1073,8 @@ var DEFAULTS=[
   {id:'osint_rferl',  name:'RFE/RL',          cat:'osint',   url:'https://news.google.com/rss/search?q=site:rferl.org&hl=en&gl=US&ceid=US:en',on:true},
   {id:'osint_twz',    name:'The War Zone',    cat:'osint',   url:'https://news.google.com/rss/search?q=site:twz.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'osint_defone', name:'Defense One',     cat:'osint',   url:'https://news.google.com/rss/search?q=site:defenseone.com&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'osint_janes',  name:'Janes',           cat:'osint',   url:'https://news.google.com/rss/search?q=site:janes.com&hl=en',on:true},
+  {id:'osint_janes',  name:'Janes',           cat:'osint',   url:'https://news.google.com/rss/search?q=janes+defense+intelligence&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'osint_rane',   name:'RANE Worldview',  cat:'osint',   url:'https://worldview.ranenetwork.com/feed',on:true},
   {id:'osint_oryx',   name:'Oryx',            cat:'osint',   url:'https://news.google.com/rss/search?q=site:oryxspioenkop.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'osint_geopol', name:'Geopolitical Monitor',cat:'osint',url:'https://news.google.com/rss/search?q=site:geopoliticalmonitor.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'osint_acled',  name:'ACLED',           cat:'osint',   url:'https://news.google.com/rss/search?q=site:acleddata.com&hl=en',on:true},
@@ -1159,11 +1160,10 @@ var ALL_COLS=[
   {id:'europa',      name:'Europa',       icon:'&#127466;&#127482;', regions:['europa']},
   {id:'medioriente', name:'Medio Oriente',icon:'&#128332;', regions:['medioriente']},
   {id:'italia',      name:'Italia',       icon:'&#127470;&#127481;', regions:['italia']},
-  {id:'cina',        name:'Cina',           icon:'&#127464;&#127475;', regions:['cina','indopacifico']},
-  {id:'indopacifico',name:'Indo-Pacifico',icon:'&#127759;', regions:['indopacifico']},
+  {id:'cina',        name:'Cina',           icon:'&#127464;&#127475;', regions:['cina']},
+  {id:'indopacifico',name:'Indo-Pacifico',icon:'&#127759;', regions:['indopacifico','sudest_asia']},
   {id:'americas',    name:'Americhe',     icon:'&#127758;', regions:['americas']},
   {id:'osint',       name:'OSINT',        icon:'&#128065;', regions:['osint']},
-  {id:'sudest',   name:'Sud-Est Asia', icon:'🌏', regions:['sudest_asia','indopacifico']},
 ];
 
 var sources=[],articles=[],colOrder=[],colClosed=[],timerSec=120,timerInt=null,sourceStatus={},pIdx=0;
@@ -1426,13 +1426,50 @@ function cardHTML(a){
     +'<div class="cfoot">'+time+trBtn+'</div></div>';
 }
 
+// Sources exclusive to a specific column (not shown elsewhere)
+var COL_EXCLUSIVE = {
+  'indopacifico': ['bernama','straitstime','rappler','jakarta','bangkokpost','vietnamnews','khmertimes','tempo','kompas','bernama_my']
+};
+// Build reverse map: srcId → colId
+var _srcExclusiveCol = {};
+Object.keys(COL_EXCLUSIVE).forEach(function(colId){
+  COL_EXCLUSIVE[colId].forEach(function(srcId){ _srcExclusiveCol[srcId] = colId; });
+});
+
+function _isExclusiveTo(article, colId){
+  // Returns true if this article belongs EXCLUSIVELY to another column
+  var sid = (article.src||'').toLowerCase().replace(/[\s\-\.]/g,'');
+  var ownerCol = null;
+  for(var key in _srcExclusiveCol){
+    if(sid.indexOf(key) >= 0){ ownerCol = _srcExclusiveCol[key]; break; }
+  }
+  // Also detect by cat
+  if(!ownerCol && article.cat === 'sudest_asia') ownerCol = 'indopacifico';
+  // If the source has an exclusive column AND this is not that column → exclude
+  return ownerCol !== null && ownerCol !== colId;
+}
+
 function getForCol(def){return articles.filter(function(a){
-  if(def.regions[0]==='all') return true;
+  if(def.regions[0]==='all'){
+    // Exclude sources exclusive to a specific column (e.g. Bernama → sudest only)
+    if(_isExclusiveTo(a, def.id)) return false;
+    return true;
+  }
   if(def.regions[0]==='osint') return a.cat==='osint';
   // For cina column, also match by cat so even misclassified articles show
   if(def.id==='cina') return a.region==='cina'||a.cat==='cina';
   return def.regions.indexOf(a.region)>=0;
 });}
+function inCol(col, a){
+  if(col.regions[0]==='all'){
+    if(_isExclusiveTo(a, col.id)) return false;
+    return true;
+  }
+  if(col.regions[0]==='osint') return a.cat==='osint';
+  if(col.id==='cina') return a.region==='cina'||a.cat==='cina';
+  return col.regions.indexOf(a.region)>=0;
+}
+
 function renderAll(){renderColumns();updateColList();}
 function renderColumns(){
   var wrap=document.getElementById('cols-wrap');if(!wrap)return;
