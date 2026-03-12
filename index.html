@@ -2578,14 +2578,15 @@ function renderAlerts(){
 
 // ── TV PLAYER ─────────────────────────────────────────────────────
 var TV_CH=[
-  // ── HLS nativo (bypass bot-check) ───────────────────────────────
+  // ── HLS nativo — CDN diretti (migliore compatibilità CORS) ──────
   {name:'Al Jazeera EN', type:'hls', hls:'https://live-hls-web-aje.getaj.net/AJE/index.m3u8',               yt:'gCNeDWCI0vo'},
   {name:'Al Jazeera AR', type:'hls', hls:'https://live-hls-web-aja.getaj.net/AJA/index.m3u8',               yt:'rChF468RWrU'},
   {name:'France 24 EN',  type:'hls', hls:'https://static.france24.com/live/F24_EN_LO_HLS/live_web.m3u8',    yt:'u9foWyMSETk'},
   {name:'France 24 FR',  type:'hls', hls:'https://static.france24.com/live/F24_FR_LO_HLS/live_web.m3u8',    yt:''},
   {name:'DW News',       type:'hls', hls:'https://dwamdstream102.akamaized.net/hls/live/2015531/dwstream102/index.m3u8', yt:'LuKwFajn37U'},
   {name:'Euronews EN',   type:'hls', hls:'https://jmp2.uk/SamsungTVPlus/GBAJ4900020VP.m3u8',                yt:'pykpO5kQJ98'},
-  {name:'Sky News',      type:'hls', hls:'https://jmp2.uk/SamsungTVPlus/USBB52000022Q.m3u8',                yt:'9Auq9mYxFEE'},
+  // Sky News — HLS diretto Akamai (non Samsung relay, meno CORS)
+  {name:'Sky News',      type:'hls', hls:'https://skynews-i.akamaihd.net/hls/live/221665/skynews/skynews/master.m3u8', yt:'9Auq9mYxFEE'},
   {name:'BBC News',      type:'hls', hls:'https://jmp2.uk/SamsungTVPlus/US4000033L.m3u8',                   yt:''},
   {name:'Reuters Now',   type:'hls', hls:'https://reuters-reutersnow-1-nl.samsung.wurl.tv/playlist.m3u8',   yt:''},
   {name:'TRT World',     type:'hls', hls:'https://trtworldlive.akamaized.net/hls/live/2003168/trtworldlive/index.m3u8', yt:'ABfFhWzWs0s'},
@@ -2593,8 +2594,8 @@ var TV_CH=[
   {name:'CGTN',          type:'hls', hls:'https://news.cgtn.com/resource/live/english/cgtn-news.m3u8',      yt:'8gGEJi5K9w4'},
   {name:'RT English',    type:'hls', hls:'https://rt-glb.rttv.com/live/rten/playlist.m3u8',                 yt:''},
   {name:'i24 News',      type:'hls', hls:'https://bcovlive-a.akamaihd.net/6db4a900c00c4f7dac5f1e97ab87a0e4/eu-central-1/5377161796001/profile_0/chunklist.m3u8', yt:''},
-  // ── YouTube IFrame API ───────────────────────────────────────────
-  {name:'Bloomberg',     type:'yt',  yt:'dp8PhLsUcFE'},
+  // Bloomberg — HLS diretto con fallback YT
+  {name:'Bloomberg',     type:'hls', hls:'https://livepkg.akamaized.net/bloombergmediaserver/ngrp:bloomberg_web_desktop_main_all/master.m3u8', yt:'dp8PhLsUcFE'},
   {name:'CNN',           type:'yt',  yt:'ikMiHTbBdw4'},
   {name:'CNBC',          type:'yt',  yt:'6vetriqYbFE'},
 ];
@@ -2684,6 +2685,12 @@ function _ytEmbed(videoId, muted){
   iframe.allowFullscreen=true;
   iframe.src='https://www.youtube-nocookie.com/embed/'+videoId
     +'?autoplay=1&mute='+muteParam+'&rel=0&playsinline=1&modestbranding=1&controls=1';
+  // Fallback: if iframe fails to load after 8s, show open-in-YT button
+  var _ytLoadTimer=setTimeout(function(){
+    var ch=TV_CH[_tvIdx];
+    if(ch&&ch.yt) _showTVMsg('Apri su YouTube','Apri '+ch.name+' ↗','https://www.youtube.com/watch?v='+videoId);
+  },8000);
+  iframe.addEventListener('load',function(){clearTimeout(_ytLoadTimer);});
   wrap.appendChild(iframe);
   _ytCurrentId=videoId;
 }
