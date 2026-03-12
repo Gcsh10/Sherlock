@@ -10,6 +10,7 @@
 <title>SHERLOCK</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.14/dist/hls.min.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
 <style>
 :root{--bg:#0d1117;--bg2:#111827;--s:#161d2e;--s2:#1c2640;--bd:#1f2d44;--bd2:#2d3f5c;--acc:#00b8ff;--acc2:#0090cc;--acc3:#001830;--tx:#d8e4f0;--tx2:#7a9ab8;--mu:#3d5270;--re:#ff3d57;--am:#f0a500;}
 [data-theme=light]{--bg:#f4f4f5;--bg2:#e8e8ea;--s:#fff;--s2:#f0f0f0;--bd:#d4d4d8;--bd2:#a1a1aa;--acc:#16a34a;--acc2:#15803d;--acc3:#dcfce7;--tx:#09090b;--tx2:#3f3f46;--mu:#a1a1aa;--re:#dc2626;--am:#d97706;}
@@ -39,11 +40,11 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .pane.hidden{display:none!important;}
 .slbl{font-size:9px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--mu);padding:7px 8px 2px;font-family:'Share Tech Mono',monospace;border-left:2px solid var(--acc2);flex-shrink:0;}
 .src-hd{display:flex;align-items:center;justify-content:space-between;padding:5px 8px;border-bottom:1px solid var(--bd);flex-shrink:0;}
-.src-hd span{font-size:13px;color:var(--tx2);font-family:'Share Tech Mono',monospace;font-weight:600;}
+.src-hd span{font-size:11px;color:var(--mu);font-family:'Share Tech Mono',monospace;}
 .src-item{display:flex;align-items:center;gap:5px;padding:4px 8px;border-bottom:1px solid var(--bd);flex-shrink:0;}
 .src-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
 .src-nm{flex:1;font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.src-st{font-size:12px;font-family:'Share Tech Mono',monospace;font-weight:600;}
+.src-st{font-size:10px;font-family:'Share Tech Mono',monospace;}
 .src-st.ok{color:#22c55e;}.src-st.err{color:var(--re);}.src-st.lo{color:var(--mu);}
 .tog{width:26px;height:14px;border:none;cursor:pointer;position:relative;flex-shrink:0;border-radius:2px;transition:background .2s;}
 .tog.on{background:var(--acc2);}.tog.off{background:var(--bd2);}
@@ -66,8 +67,8 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .acol{min-width:clamp(220px,28vw,280px);max-width:100%;flex:1 1 300px;display:flex;flex-direction:column;border-right:1px solid var(--bd);height:100%;overflow:hidden;background:var(--bg);}
 .acol.drag-over{border-right:2px solid var(--acc);}
 .col-hd{display:flex;align-items:center;gap:5px;padding:6px 8px;background:var(--bg2);border-bottom:1px solid var(--bd2);flex-shrink:0;cursor:grab;user-select:none;}
-.col-icon{font-size:14px;}.col-name{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;font-weight:700;color:var(--tx);letter-spacing:.08em;text-transform:uppercase;flex:1;}
-.col-cnt{font-size:13px;color:var(--tx);font-family:'Share Tech Mono',monospace;font-weight:700;background:var(--s2);padding:1px 5px;}
+.col-icon{font-size:14px;}.col-name{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:11px;font-weight:700;color:var(--tx2);letter-spacing:.08em;text-transform:uppercase;flex:1;}
+.col-cnt{font-size:10px;color:var(--mu);font-family:'Share Tech Mono',monospace;background:var(--s2);padding:1px 5px;}
 .col-close{background:none;border:none;color:var(--mu);cursor:pointer;font-size:13px;padding:0 2px;transition:color .15s;flex-shrink:0;}
 .col-close:hover{color:var(--re);}
 .col-feed{flex:1;overflow-y:auto;overflow-x:hidden;padding:4px 0;}
@@ -1072,9 +1073,7 @@ var DEFAULTS=[
   {id:'osint_rferl',  name:'RFE/RL',          cat:'osint',   url:'https://news.google.com/rss/search?q=site:rferl.org&hl=en&gl=US&ceid=US:en',on:true},
   {id:'osint_twz',    name:'The War Zone',    cat:'osint',   url:'https://news.google.com/rss/search?q=site:twz.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'osint_defone', name:'Defense One',     cat:'osint',   url:'https://news.google.com/rss/search?q=site:defenseone.com&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'osint_janes',  name:'Janes',           cat:'osint',   url:'https://news.google.com/rss/search?q=janes+defense+intelligence&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'osint_rane',   name:'RANE Worldview',  cat:'osint',   url:'https://worldview.ranenetwork.com/feed',on:true},
-  {id:'osint_miltimes',name:'Military Times', cat:'osint',   url:'https://www.militarytimes.com/arc/outboundfeeds/rss/?outputType=xml',on:true},
+  {id:'osint_janes',  name:'Janes',           cat:'osint',   url:'https://news.google.com/rss/search?q=site:janes.com&hl=en',on:true},
   {id:'osint_oryx',   name:'Oryx',            cat:'osint',   url:'https://news.google.com/rss/search?q=site:oryxspioenkop.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'osint_geopol', name:'Geopolitical Monitor',cat:'osint',url:'https://news.google.com/rss/search?q=site:geopoliticalmonitor.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'osint_acled',  name:'ACLED',           cat:'osint',   url:'https://news.google.com/rss/search?q=site:acleddata.com&hl=en',on:true},
@@ -1160,10 +1159,11 @@ var ALL_COLS=[
   {id:'europa',      name:'Europa',       icon:'&#127466;&#127482;', regions:['europa']},
   {id:'medioriente', name:'Medio Oriente',icon:'&#128332;', regions:['medioriente']},
   {id:'italia',      name:'Italia',       icon:'&#127470;&#127481;', regions:['italia']},
-  {id:'cina',        name:'Cina',           icon:'&#127464;&#127475;', regions:['cina']},
-  {id:'indopacifico',name:'Indo-Pacifico',icon:'&#127759;', regions:['indopacifico','sudest_asia']},
+  {id:'cina',        name:'Cina',           icon:'&#127464;&#127475;', regions:['cina','indopacifico']},
+  {id:'indopacifico',name:'Indo-Pacifico',icon:'&#127759;', regions:['indopacifico']},
   {id:'americas',    name:'Americhe',     icon:'&#127758;', regions:['americas']},
   {id:'osint',       name:'OSINT',        icon:'&#128065;', regions:['osint']},
+  {id:'sudest',   name:'Sud-Est Asia', icon:'🌏', regions:['sudest_asia','indopacifico']},
 ];
 
 var sources=[],articles=[],colOrder=[],colClosed=[],timerSec=120,timerInt=null,sourceStatus={},pIdx=0;
@@ -1428,7 +1428,7 @@ function cardHTML(a){
 
 // Sources exclusive to a specific column (not shown elsewhere)
 var COL_EXCLUSIVE = {
-  'indopacifico': ['bernama','straitstime','rappler','jakarta','bangkokpost','vietnamnews','khmertimes','tempo','kompas','bernama_my']
+  'sudest': ['bernama','straitstime','rappler','jakarta','bangkokpost','vietnamnews','khmertimes','tempo','kompas','bernama_my']
 };
 // Build reverse map: srcId → colId
 var _srcExclusiveCol = {};
@@ -1444,7 +1444,7 @@ function _isExclusiveTo(article, colId){
     if(sid.indexOf(key) >= 0){ ownerCol = _srcExclusiveCol[key]; break; }
   }
   // Also detect by cat
-  if(!ownerCol && article.cat === 'sudest_asia') ownerCol = 'indopacifico';
+  if(!ownerCol && article.cat === 'sudest_asia') ownerCol = 'sudest';
   // If the source has an exclusive column AND this is not that column → exclude
   return ownerCol !== null && ownerCol !== colId;
 }
@@ -1467,6 +1467,7 @@ function inCol(col, a){
   }
   if(col.regions[0]==='osint') return a.cat==='osint';
   if(col.id==='cina') return a.region==='cina'||a.cat==='cina';
+  if(col.id==='sudest') return a.region==='sudest_asia'||a.cat==='sudest_asia';
   return col.regions.indexOf(a.region)>=0;
 }
 
@@ -1485,7 +1486,7 @@ function buildCol(def,arts){
   var col=document.createElement('div');
   col.className='acol';col.id='col-'+def.id;col.setAttribute('data-colid',def.id);col.setAttribute('draggable','true');
   var hd=document.createElement('div');hd.className='col-hd';
-  hd.innerHTML='<span class="col-name">'+def.name+'</span>'
+  hd.innerHTML='<span class="col-icon">'+def.icon+'</span><span class="col-name">'+def.name+'</span>'
     +'<span class="col-cnt" id="colcnt-'+def.id+'">'+arts.length+'</span>'
     +'<span class="col-new-badge" id="new-badge-'+def.id+'" style="display:none">0 nuovi</span>'
     +'<button class="col-close" onclick="closeCol(\''+def.id+'\')">&#x2715;</button>';
@@ -1506,8 +1507,9 @@ function updateColList(){
   el.innerHTML=colOrder.filter(function(cid){return colClosed.indexOf(cid)<0;}).map(function(cid){
     var def=ALL_COLS.find(function(c){return c.id===cid;});if(!def)return '';
     return '<div style="display:flex;align-items:center;gap:5px;padding:3px 8px">'
-      +'<span style="flex:1;font-size:14px;font-weight:700;color:var(--tx);letter-spacing:.06em;text-transform:uppercase;">'+def.name+'</span>'
-      +'<span style="font-size:13px;color:var(--tx);font-weight:700;font-family:\'Share Tech Mono\',monospace">'+getForCol(def).length+'</span>'
+      +'<span style="font-size:12px">'+def.icon+'</span>'
+      +'<span style="flex:1;font-size:13px;font-weight:600;color:var(--tx2)">'+def.name+'</span>'
+      +'<span style="font-size:10px;color:var(--mu);font-family:Share Tech Mono,monospace">'+getForCol(def).length+'</span>'
       +'</div>';
   }).join('');
 }
@@ -2578,158 +2580,193 @@ function renderAlerts(){
 
 // ── TV PLAYER ─────────────────────────────────────────────────────
 var TV_CH=[
-  // type:'hls' → try HLS first, fall back to YT channel embed
-  // type:'yt'  → direct YouTube channel embed (live_stream?channel=UC...)
-  // yt field: if starts with 'UC' = channel ID (auto-resolves live), else = video ID (legacy)
-  {name:'Al Jazeera EN', type:'hls', hls:'https://live-hls-web-aje.getaj.net/AJE/index.m3u8',               yt:'UCNye-wNBqNL5ZzHSJj3l8Bg'},
-  {name:'Al Jazeera AR', type:'hls', hls:'https://live-hls-web-aja.getaj.net/AJA/index.m3u8',               yt:'UCrkhBOQMNMDHn_JKjYkLVBw'},
-  {name:'France 24 EN',  type:'hls', hls:'https://static.france24.com/live/F24_EN_LO_HLS/live_web.m3u8',    yt:'UCQfwfsi5VrQ8yKZ-UWmAoBw'},
-  {name:'France 24 FR',  type:'hls', hls:'https://static.france24.com/live/F24_FR_LO_HLS/live_web.m3u8',    yt:'UCRuFT3p0mIGmQ9mGKGNR3CA'},
-  {name:'DW News',       type:'hls', hls:'https://dwamdstream102.akamaized.net/hls/live/2015531/dwstream102/index.m3u8', yt:'UCknLrEdhRCp1aegoMqRaCZg'},
-  {name:'Euronews EN',   type:'hls', hls:'https://jmp2.uk/SamsungTVPlus/GBAJ4900020VP.m3u8',                yt:'UCDmvDqeX7b3XVsrk7AYVVGQ'},
-  {name:'Sky News',      type:'hls', hls:'https://skynews-i.akamaihd.net/hls/live/221665/skynews/skynews/master.m3u8', yt:'UCoMdktPbSTixAyNGwb-UYkQ'},
-  {name:'BBC News',      type:'hls', hls:'https://jmp2.uk/SamsungTVPlus/US4000033L.m3u8',                   yt:'UC16niRr0-5to4smwo4zbJAA'},
-  {name:'Reuters Now',   type:'hls', hls:'https://reuters-reutersnow-1-nl.samsung.wurl.tv/playlist.m3u8',   yt:'UCGNbRkbmRYlhiMH_pUdF2Bg'},
-  {name:'TRT World',     type:'hls', hls:'https://trtworldlive.akamaized.net/hls/live/2003168/trtworldlive/index.m3u8', yt:'UC7fWeaHhqgM4Ry-RMpM2YYw'},
-  {name:'NHK World',     type:'hls', hls:'https://nhkworld.webcdn.stream.ne.jp/www11/nhkworld-tv/global/263941/live_wa_s.m3u8', yt:'UCbmNph6atAoGfqLoCL_duAg'},
-  {name:'CGTN',          type:'hls', hls:'https://news.cgtn.com/resource/live/english/cgtn-news.m3u8',      yt:'UCocl1LMrxiHEP7wj64o7BxQ'},
-  {name:'RT English',    type:'hls', hls:'https://rt-glb.rttv.com/live/rten/playlist.m3u8',                 yt:'UCpwvZwUam-URkxB7g4USKpg'},
-  {name:'i24 News',      type:'hls', hls:'https://bcovlive-a.akamaihd.net/6db4a900c00c4f7dac5f1e97ab87a0e4/eu-central-1/5377161796001/profile_0/chunklist.m3u8', yt:'UCKzSlHMKb0r0B2nRpUaTHrg'},
-  // YouTube channel embed (no HLS) — always live via channel ID
-  {name:'Bloomberg',     type:'yt',  yt:'UCIALMKvObZNtJ6AmdCLP7Lg'},
-  {name:'CNN',           type:'yt',  yt:'UCupvZG-5ko_eiXAupbDfxWw'},
-  {name:'CNBC',          type:'yt',  yt:'UCvJJ_dzjViJCoLf5uKUTwoA'},
-];var _tvIdx=0,_tvMuted=true,_hlsInst=null;
+  // ── HLS nativo (bypass bot-check) ───────────────────────────────
+  {name:'Al Jazeera EN', type:'hls', hls:'https://live-hls-web-aje.getaj.net/AJE/index.m3u8',               yt:'gCNeDWCI0vo', link:'https://www.youtube.com/watch?v=gCNeDWCI0vo'},
+  {name:'Al Jazeera AR', type:'hls', hls:'https://live-hls-web-aja.getaj.net/AJA/index.m3u8',               yt:'rChF468RWrU', link:'https://www.youtube.com/watch?v=rChF468RWrU'},
+  {name:'France 24 EN',  type:'hls', hls:'https://static.france24.com/live/F24_EN_LO_HLS/live_web.m3u8',    yt:'u9foWyMSETk', link:'https://www.youtube.com/watch?v=u9foWyMSETk'},
+  {name:'France 24 FR',  type:'hls', hls:'https://static.france24.com/live/F24_FR_LO_HLS/live_web.m3u8',    yt:'', link:'https://www.france24.com/fr/direct'},
+  {name:'DW News',       type:'hls', hls:'https://dwamdstream102.akamaized.net/hls/live/2015531/dwstream102/index.m3u8', yt:'LuKwFajn37U', link:'https://www.youtube.com/watch?v=LuKwFajn37U'},
+  {name:'Euronews EN',   type:'hls', hls:'https://jmp2.uk/SamsungTVPlus/GBAJ4900020VP.m3u8',                yt:'pykpO5kQJ98', link:'https://www.youtube.com/watch?v=pykpO5kQJ98'},
+  {name:'Sky News',      type:'hls', hls:'https://jmp2.uk/SamsungTVPlus/USBB52000022Q.m3u8',                yt:'9Auq9mYxFEE', link:'https://www.youtube.com/watch?v=9Auq9mYxFEE'},
+  {name:'BBC News',      type:'hls', hls:'https://jmp2.uk/SamsungTVPlus/US4000033L.m3u8',                   yt:'', link:'https://www.youtube.com/@BBCNews/streams'},
+  {name:'Reuters Now',   type:'hls', hls:'https://reuters-reutersnow-1-nl.samsung.wurl.tv/playlist.m3u8',   yt:'', link:'https://www.youtube.com/@Reuters/streams'},
+  {name:'TRT World',     type:'hls', hls:'https://trtworldlive.akamaized.net/hls/live/2003168/trtworldlive/index.m3u8', yt:'ABfFhWzWs0s', link:'https://www.youtube.com/watch?v=ABfFhWzWs0s'},
+  {name:'NHK World',     type:'hls', hls:'https://nhkworld.webcdn.stream.ne.jp/www11/nhkworld-tv/global/263941/live_wa_s.m3u8', yt:'f0lYfG_vY_U', link:'https://www.youtube.com/watch?v=f0lYfG_vY_U'},
+  {name:'CGTN',          type:'hls', hls:'https://news.cgtn.com/resource/live/english/cgtn-news.m3u8',      yt:'8gGEJi5K9w4', link:'https://www.youtube.com/watch?v=8gGEJi5K9w4'},
+  {name:'RT English',    type:'hls', hls:'https://rt-glb.rttv.com/live/rten/playlist.m3u8',                 yt:'', link:'https://www.bnonews.com/index.php/live-feeds/rt/'},
+  {name:'i24 News',      type:'hls', hls:'https://bcovlive-a.akamaihd.net/6db4a900c00c4f7dac5f1e97ab87a0e4/eu-central-1/5377161796001/profile_0/chunklist.m3u8', yt:'', link:'https://video.i24news.tv/'},
+  // ── YouTube IFrame API ───────────────────────────────────────────
+  {name:'Bloomberg',     type:'yt',  yt:'dp8PhLsUcFE', link:'https://www.youtube.com/watch?v=dp8PhLsUcFE'},
+  {name:'CNN',           type:'yt',  yt:'ikMiHTbBdw4', link:'https://www.youtube.com/watch?v=ikMiHTbBdw4'},
+  {name:'CNBC',          type:'yt',  yt:'6vetriqYbFE', link:'https://www.youtube.com/watch?v=6vetriqYbFE'},
+];
+var _tvIdx=0,_tvMuted=true,_hlsInst=null,_tvHlsTimeout=null;
+
+function _tvWrap(){return document.getElementById('tv-yt-wrap');}
+function _tvGetVideo(){return document.getElementById('tv-hls-video');}
+function _tvGetMsg(){return document.getElementById('tv-msg');}
+function _tvCleanupEmbeds(){
+  var wrap=_tvWrap(); if(!wrap) return;
+  wrap.querySelectorAll('iframe,#_yt_div').forEach(function(el){try{el.remove();}catch(e){}});
+}
+function _tvEnsureBaseDom(){
+  var wrap=_tvWrap(); if(!wrap) return {};
+  var vid=_tvGetVideo();
+  if(!vid){
+    vid=document.createElement('video');
+    vid.id='tv-hls-video';
+    vid.setAttribute('webkit-playsinline','');
+    vid.setAttribute('playsinline','');
+    vid.setAttribute('autoplay','');
+    vid.setAttribute('controls','');
+    vid.muted=true;
+    vid.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:none;';
+    wrap.appendChild(vid);
+  }
+  var msg=_tvGetMsg();
+  if(!msg){
+    msg=document.createElement('div');
+    msg.id='tv-msg';
+    msg.className='tv-msg';
+    msg.innerHTML='<span>Stream non disponibile</span><a href="#" target="_blank" rel="noopener">Apri ↗</a>';
+    wrap.appendChild(msg);
+  }
+  return {wrap:wrap, vid:vid, msg:msg};
+}
+function _tvResetSurface(){
+  var base=_tvEnsureBaseDom(), vid=base.vid, msg=base.msg;
+  if(_tvHlsTimeout){clearTimeout(_tvHlsTimeout);_tvHlsTimeout=null;}
+  if(_hlsInst){try{_hlsInst.destroy();}catch(e){} _hlsInst=null;}
+  if(_ytPlayer){try{_ytPlayer.destroy();}catch(e){} _ytPlayer=null;}
+  _tvCleanupEmbeds();
+  if(vid){
+    try{vid.pause();}catch(e){}
+    try{vid.removeAttribute('src');vid.load();}catch(e){}
+    vid.style.display='none';
+    vid.muted=true;
+  }
+  if(msg) msg.style.display='none';
+  return base;
+}
+function _tvOpenUrlFor(idx, videoId){
+  var ch=TV_CH[(typeof idx==='number'?idx:_tvIdx)]||{};
+  return ch.link || (videoId ? 'https://www.youtube.com/watch?v='+videoId : (ch.yt ? 'https://www.youtube.com/watch?v='+ch.yt : 'https://www.youtube.com'));
+}
+
 function _buildPlayer(idx){
   var ch=TV_CH[idx];if(!ch)return;_tvIdx=idx;
   var lbl=document.getElementById('tvlbl');if(lbl)lbl.textContent=ch.name.toUpperCase()+' \u2014 LIVE';
-  if(_hlsInst){try{_hlsInst.destroy();}catch(e){}_hlsInst=null;}
-  _ytCurrentId=null;
-  // Remove any YT iframe without destroying the video element
-  var existingIframe=document.getElementById('_yt_iframe');
-  if(existingIframe&&existingIframe.parentNode)existingIframe.parentNode.removeChild(existingIframe);
-  var vid=document.getElementById('tv-hls-video');
-  if(vid){try{vid.pause();}catch(e){}vid.removeAttribute('src');try{vid.load();}catch(e){}vid.style.display='none';}
-  var msg=document.getElementById('tv-msg');if(msg)msg.style.display='none';
+  _tvResetSurface();
   _tvMuted=true;_updateMuteBtn();
-  if(ch.type==='yt'){if(ch.yt)_ytEmbed(ch.yt);else _showTVMsg('Stream non disponibile');return;}
-  if(ch.type==='link'){if(msg){msg.style.display='flex';var a=msg.querySelector('a');if(a){a.href=ch.link;a.textContent='Apri '+ch.name+' \u2197';}}return;}
-  _tryHLS(ch.hls,ch.yt);
+  if(ch.type==='yt'){if(ch.yt)_ytEmbed(ch.yt);else _showTVMsg('Stream non disponibile','Apri '+ch.name+' \u2197',_tvOpenUrlFor(idx));return;}
+  if(ch.type==='link'){_showTVMsg('Apri lo stream nel sito sorgente','Apri '+ch.name+' \u2197',_tvOpenUrlFor(idx));return;}
+  _tryHLS(ch.hls,ch.yt,idx);
 }
-function _tryHLS(url,ytId){
-  var vid=document.getElementById('tv-hls-video');if(!vid)return;
+function _tryHLS(url,ytId,idx){
+  var base=_tvEnsureBaseDom(), vid=base.vid;
+  if(!vid)return;
   function fallback(){
-    try{if(_hlsInst){_hlsInst.destroy();_hlsInst=null;}}catch(e){}
+    if(_tvHlsTimeout){clearTimeout(_tvHlsTimeout);_tvHlsTimeout=null;}
     vid.style.display='none';
-    if(ytId) _ytEmbed(ytId);
-    else _showTVMsg('Stream HLS non disponibile',ytId?null:'Nessun fallback disponibile');
+    if(ytId)_ytEmbed(ytId);
+    else _showTVMsg('Stream HLS non disponibile','Apri '+((TV_CH[idx]&&TV_CH[idx].name)||'stream')+' \u2197',_tvOpenUrlFor(idx));
   }
   try{vid.pause();}catch(e){}
   vid.style.display='block';
   vid.muted=true;
   vid.setAttribute('playsinline','');
   vid.setAttribute('webkit-playsinline','');
-  // If YT ID exists, set a short timer — if HLS hasn't started in 5s, use YT
-  var _fallbackTimer = ytId ? setTimeout(fallback, 5000) : null;
+  _tvHlsTimeout=setTimeout(fallback,12000);
   if(typeof Hls!=='undefined'&&Hls.isSupported()){
     _hlsInst=new Hls({
-      maxBufferLength:20, liveSyncDurationCount:3,
-      manifestLoadingTimeOut:4000, levelLoadingTimeOut:4000, fragLoadingTimeOut:8000,
+      maxBufferLength:20,
+      liveSyncDurationCount:3,
+      manifestLoadingTimeOut:10000,
+      levelLoadingTimeOut:10000,
+      fragLoadingTimeOut:20000,
       enableWorker:true
     });
-    _hlsInst.loadSource(url);
-    _hlsInst.attachMedia(vid);
+    _hlsInst.loadSource(url);_hlsInst.attachMedia(vid);
     _hlsInst.on(Hls.Events.MANIFEST_PARSED,function(){
-      if(_fallbackTimer){clearTimeout(_fallbackTimer);_fallbackTimer=null;}
+      if(_tvHlsTimeout){clearTimeout(_tvHlsTimeout);_tvHlsTimeout=null;}
       vid.play().catch(function(){});
     });
     _hlsInst.on(Hls.Events.ERROR,function(ev,data){
-      if(data&&data.fatal){
-        if(_fallbackTimer){clearTimeout(_fallbackTimer);_fallbackTimer=null;}
-        fallback();
+      if(!data) return;
+      if(data.fatal && _hlsInst){
+        try{
+          if(data.type===Hls.ErrorTypes.NETWORK_ERROR){_hlsInst.startLoad();}
+          else if(data.type===Hls.ErrorTypes.MEDIA_ERROR){_hlsInst.recoverMediaError();}
+          else {throw new Error('fatal');}
+        }catch(e){
+          try{_hlsInst.destroy();}catch(ex){}
+          _hlsInst=null;
+          fallback();
+        }
       }
     });
   }else if(vid.canPlayType('application/vnd.apple.mpegurl')){
-    // Safari native HLS
     vid.src=url;
     vid.addEventListener('loadedmetadata',function(){
-      if(_fallbackTimer){clearTimeout(_fallbackTimer);_fallbackTimer=null;}
+      if(_tvHlsTimeout){clearTimeout(_tvHlsTimeout);_tvHlsTimeout=null;}
       vid.play().catch(function(){});
     },{once:true});
-    vid.addEventListener('error',function(){
-      if(_fallbackTimer){clearTimeout(_fallbackTimer);_fallbackTimer=null;}
-      fallback();
-    },{once:true});
-  }else{
-    if(_fallbackTimer){clearTimeout(_fallbackTimer);_fallbackTimer=null;}
-    fallback();
-  }
+    vid.addEventListener('error',function(){fallback();},{once:true});
+  }else{fallback();}
 }
 // ── YouTube IFrame Player API ──────────────────────────────────────
-var _ytPlayer=null,_ytCurrentId=null; // iframe approach — no API needed
+var _ytPlayer=null,_ytAPIReady=false,_ytPendingId=null;
+window.onYouTubeIframeAPIReady=function(){
+  _ytAPIReady=true;
+  if(_ytPendingId){var id=_ytPendingId;_ytPendingId=null;_ytEmbed(id);}
+};
 
-function _ytEmbed(ytId, muted){
-  if(!ytId){_showTVMsg('Stream non disponibile — nessun ID YouTube');return;}
-  var wrap=document.getElementById('tv-yt-wrap');if(!wrap)return;
-  var vid=document.getElementById('tv-hls-video');
-  if(vid){try{vid.pause();}catch(e){}vid.removeAttribute('src');vid.style.display='none';}
-  var msg=document.getElementById('tv-msg');if(msg)msg.style.display='none';
-  // Remove existing iframe
-  var old=document.getElementById('_yt_iframe');
-  if(old&&old.parentNode)old.parentNode.removeChild(old);
-  var muteParam=(muted===false)?'0':'1';
-  var embedUrl;
-  // If ytId starts with 'UC' it's a channel ID → use live_stream redirect (always current)
-  // Otherwise it's a legacy video ID
-  if(ytId.indexOf('UC')===0){
-    embedUrl='https://www.youtube-nocookie.com/embed/live_stream?channel='+ytId
-      +'&autoplay=1&mute='+muteParam+'&rel=0&playsinline=1&modestbranding=1';
-  } else {
-    embedUrl='https://www.youtube-nocookie.com/embed/'+ytId
-      +'?autoplay=1&mute='+muteParam+'&rel=0&playsinline=1&modestbranding=1&controls=1';
+function _ytEmbed(videoId){
+  if(!videoId){_showTVMsg('Stream non disponibile — nessun ID YouTube','Apri stream ↗',_tvOpenUrlFor(_tvIdx));return;}
+  var base=_tvEnsureBaseDom(), wrap=base.wrap, vid=base.vid, msg=base.msg;
+  if(vid){
+    try{vid.pause();}catch(e){}
+    try{vid.removeAttribute('src');vid.load();}catch(e){}
+    vid.style.display='none';
   }
-  var iframe=document.createElement('iframe');
-  iframe.id='_yt_iframe';
-  iframe.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:none;z-index:2;';
-  iframe.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';
-  iframe.allowFullscreen=true;
-  iframe.src=embedUrl;
-  // Fallback: if iframe fails to load in 10s, show open-in-YT button
-  var _ytLoadTimer=setTimeout(function(){
-    var ch=TV_CH[_tvIdx];
-    var ytUrl=ytId.indexOf('UC')===0
-      ?'https://www.youtube.com/channel/'+ytId+'/live'
-      :'https://www.youtube.com/watch?v='+ytId;
-    _showTVMsg('Apri su YouTube','Apri '+(ch?ch.name:'stream')+' ↗',ytUrl);
-  },10000);
-  iframe.addEventListener('load',function(){clearTimeout(_ytLoadTimer);});
-  wrap.appendChild(iframe);
-  _ytCurrentId=ytId;
+  if(msg)msg.style.display='none';
+  _tvCleanupEmbeds();
+  wrap.style.display='';
+  if(!_ytAPIReady){_ytPendingId=videoId;return;}
+  if(_ytPlayer){try{_ytPlayer.destroy();}catch(e){}_ytPlayer=null;}
+  var div=document.createElement('div');div.id='_yt_div';
+  div.style.cssText='position:absolute;inset:0;width:100%;height:100%;';
+  wrap.appendChild(div);
+  var origin='';try{origin=window.location.origin;}catch(e){}
+  _ytPlayer=new YT.Player('_yt_div',{
+    height:'100%',width:'100%',videoId:videoId,
+    playerVars:{autoplay:1,mute:1,rel:0,playsinline:1,modestbranding:1,controls:1,origin:origin||''},
+    events:{
+      onReady:function(e){try{e.target.mute();e.target.playVideo();}catch(ex){}},
+      onError:function(e){
+        var ch=TV_CH[_tvIdx];
+        _showTVMsg('YouTube non disponibile in embed','Apri '+(ch?ch.name:'stream')+' ↗',_tvOpenUrlFor(_tvIdx, videoId));
+      }
+    }
+  });
 }
-
 
 function _showTVMsg(txt,btnTxt,btnUrl){
-  var msg=document.getElementById('tv-msg');if(!msg)return;
+  var base=_tvEnsureBaseDom(), msg=base.msg;
+  if(!msg)return;
   msg.style.display='flex';
+  var span=msg.querySelector('span');
+  if(span) span.textContent=txt||'Stream non disponibile';
   var a=msg.querySelector('a');
-  if(a){a.href=btnUrl||'https://www.youtube.com';a.textContent=btnTxt||txt+' ↗';}
+  if(a){a.href=btnUrl||'https://www.youtube.com';a.textContent=btnTxt||((txt||'Apri')+' ↗');}
 }
 
-
-function tvUnmute(){
-  _tvMuted=!_tvMuted;
-  var vid=document.getElementById('tv-hls-video');
-  if(vid&&vid.style.display!=='none'){vid.muted=_tvMuted;if(!_tvMuted)vid.play().catch(function(){});}
-  // For YT iframe: recreate with new mute param (browsers block postMessage mute)
-  var iframe=document.getElementById('_yt_iframe');
-  if(iframe&&_ytCurrentId) _ytEmbed(_ytCurrentId, _tvMuted);
-  _updateMuteBtn();
-}
+function tvUnmute(){_tvMuted=!_tvMuted;var vid=_tvGetVideo();if(vid&&vid.style.display!=='none'){vid.muted=_tvMuted;if(!_tvMuted)vid.play().catch(function(){});}_updateMuteBtn();}
 function _updateMuteBtn(){var b=document.getElementById('tv-mute-btn');if(b)b.textContent=_tvMuted?'SUONO':'MUTE';}
 function tvChange(){var sel=document.getElementById('tvsel');if(sel)_buildPlayer(parseInt(sel.value,10));}
 function tvToggle(){var panel=document.getElementById('tv-panel');if(!panel)return;if(panel.classList.contains('tv-off')){panel.classList.remove('tv-off');_buildPlayer(_tvIdx);}else{tvClose();}}
-function tvClose(){if(_hlsInst){try{_hlsInst.destroy();}catch(e){}_hlsInst=null;}var vid=document.getElementById('tv-hls-video');if(vid){vid.pause();vid.removeAttribute('src');vid.load();}var wrap=document.getElementById('tv-yt-wrap');if(wrap){wrap.querySelectorAll('iframe').forEach(function(f){f.parentNode.removeChild(f);});}var panel=document.getElementById('tv-panel');if(panel)panel.classList.add('tv-off');}
-function tvOpenYT(){var ch=TV_CH[_tvIdx];if(!ch)return;var url=ch.link||(ch.yt?'https://www.youtube.com/watch?v='+ch.yt:'');if(url)window.open(url,'_blank');}
+function tvClose(){_tvResetSurface();var panel=document.getElementById('tv-panel');if(panel)panel.classList.add('tv-off');}
+function tvOpenYT(){var ch=TV_CH[_tvIdx];if(!ch)return;var url=_tvOpenUrlFor(_tvIdx);if(url)window.open(url,'_blank');}
 (function(){
   var hd=document.getElementById('tvhd'),panel=document.getElementById('tv-panel');
   if(!hd||!panel)return;
