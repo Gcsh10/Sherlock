@@ -66,7 +66,7 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .acol{min-width:clamp(220px,28vw,280px);max-width:100%;flex:1 1 300px;display:flex;flex-direction:column;border-right:1px solid var(--bd);height:100%;overflow:hidden;background:var(--bg);}
 .acol.drag-over{border-right:2px solid var(--acc);}
 .col-hd{display:flex;align-items:center;gap:5px;padding:6px 8px;background:var(--bg2);border-bottom:1px solid var(--bd2);flex-shrink:0;cursor:grab;user-select:none;}
-.col-icon{font-size:14px;}.col-name{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:11px;font-weight:700;color:var(--tx2);letter-spacing:.08em;text-transform:uppercase;flex:1;}
+.col-icon{font-size:14px;}.col-name{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:13px;font-weight:700;color:var(--tx);letter-spacing:.08em;text-transform:uppercase;flex:1;}
 .col-cnt{font-size:13px;color:var(--tx);font-family:'Share Tech Mono',monospace;font-weight:700;background:var(--s2);padding:1px 5px;}
 .col-close{background:none;border:none;color:var(--mu);cursor:pointer;font-size:13px;padding:0 2px;transition:color .15s;flex-shrink:0;}
 .col-close:hover{color:var(--re);}
@@ -1485,7 +1485,7 @@ function buildCol(def,arts){
   var col=document.createElement('div');
   col.className='acol';col.id='col-'+def.id;col.setAttribute('data-colid',def.id);col.setAttribute('draggable','true');
   var hd=document.createElement('div');hd.className='col-hd';
-  hd.innerHTML='<span class="col-icon">'+def.icon+'</span><span class="col-name">'+def.name+'</span>'
+  hd.innerHTML='<span class="col-name">'+def.name+'</span>'
     +'<span class="col-cnt" id="colcnt-'+def.id+'">'+arts.length+'</span>'
     +'<span class="col-new-badge" id="new-badge-'+def.id+'" style="display:none">0 nuovi</span>'
     +'<button class="col-close" onclick="closeCol(\''+def.id+'\')">&#x2715;</button>';
@@ -1506,9 +1506,8 @@ function updateColList(){
   el.innerHTML=colOrder.filter(function(cid){return colClosed.indexOf(cid)<0;}).map(function(cid){
     var def=ALL_COLS.find(function(c){return c.id===cid;});if(!def)return '';
     return '<div style="display:flex;align-items:center;gap:5px;padding:3px 8px">'
-      +'<span style="font-size:12px">'+def.icon+'</span>'
-      +'<span style="flex:1;font-size:13px;font-weight:600;color:var(--tx2)">'+def.name+'</span>'
-      +'<span style="font-size:10px;color:var(--mu);font-family:Share Tech Mono,monospace">'+getForCol(def).length+'</span>'
+      +'<span style="flex:1;font-size:14px;font-weight:700;color:var(--tx);letter-spacing:.06em;text-transform:uppercase;">'+def.name+'</span>'
+      +'<span style="font-size:13px;color:var(--tx);font-weight:700;font-family:\'Share Tech Mono\',monospace">'+getForCol(def).length+'</span>'
       +'</div>';
   }).join('');
 }
@@ -2605,10 +2604,11 @@ function _buildPlayer(idx){
   var lbl=document.getElementById('tvlbl');if(lbl)lbl.textContent=ch.name.toUpperCase()+' \u2014 LIVE';
   if(_hlsInst){try{_hlsInst.destroy();}catch(e){}_hlsInst=null;}
   _ytCurrentId=null;
-  var wrap=document.getElementById('tv-yt-wrap');
-  if(wrap){wrap.innerHTML='';}
+  // Remove any YT iframe without destroying the video element
+  var existingIframe=document.getElementById('_yt_iframe');
+  if(existingIframe&&existingIframe.parentNode)existingIframe.parentNode.removeChild(existingIframe);
   var vid=document.getElementById('tv-hls-video');
-  if(vid){try{vid.pause();}catch(e){}vid.removeAttribute('src');vid.load();vid.style.display='none';}
+  if(vid){try{vid.pause();}catch(e){}vid.removeAttribute('src');try{vid.load();}catch(e){}vid.style.display='none';}
   var msg=document.getElementById('tv-msg');if(msg)msg.style.display='none';
   _tvMuted=true;_updateMuteBtn();
   if(ch.type==='yt'){if(ch.yt)_ytEmbed(ch.yt);else _showTVMsg('Stream non disponibile');return;}
@@ -2673,13 +2673,13 @@ function _ytEmbed(videoId, muted){
   var vid=document.getElementById('tv-hls-video');
   if(vid){try{vid.pause();}catch(e){}vid.removeAttribute('src');vid.style.display='none';}
   var msg=document.getElementById('tv-msg');if(msg)msg.style.display='none';
-  if(_ytPlayer){try{_ytPlayer.destroy();}catch(e){}_ytPlayer=null;}
-  wrap.innerHTML='';
-  // Simple iframe — works from any domain, no API race condition
+  // Remove existing iframe if any
+  var old=document.getElementById('_yt_iframe');
+  if(old&&old.parentNode)old.parentNode.removeChild(old);
   var muteParam=(muted===false)?'0':'1';
   var iframe=document.createElement('iframe');
   iframe.id='_yt_iframe';
-  iframe.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:none;';
+  iframe.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:none;z-index:2;';
   iframe.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';
   iframe.allowFullscreen=true;
   iframe.src='https://www.youtube-nocookie.com/embed/'+videoId
