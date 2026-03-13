@@ -2607,9 +2607,9 @@ var TV_CH=[
   {name:'RT English',    type:'hls', hls:'https://rt-glb.rttv.com/live/rten/playlist.m3u8',                 yt:'', link:'https://www.bnonews.com/index.php/live-feeds/rt/'},
   {name:'i24 News',      type:'hls', hls:'https://bcovlive-a.akamaihd.net/6db4a900c00c4f7dac5f1e97ab87a0e4/eu-central-1/5377161796001/profile_0/chunklist.m3u8', yt:'', link:'https://video.i24news.tv/'},
   // ── YouTube IFrame API ───────────────────────────────────────────
-  {name:'Bloomberg',     type:'yt',  yt:'dp8PhLsUcFE', link:'https://www.youtube.com/watch?v=dp8PhLsUcFE'},
-  {name:'CNN',           type:'yt',  yt:'ikMiHTbBdw4', link:'https://www.youtube.com/watch?v=ikMiHTbBdw4'},
-  {name:'CNBC',          type:'yt',  yt:'6vetriqYbFE', link:'https://www.youtube.com/watch?v=6vetriqYbFE'},
+  {name:'Bloomberg',     type:'ytlive', ytc:'UCIALMKvObZNtJ6AmdCLP7Lg', yt:'iEpJwprxDdk', link:'https://www.bloomberg.com/live'},
+  {name:'CNN',           type:'ytlive', ytc:'UCupvZG-5ko_eiXAupbDfxWw', yt:'ikMiHTbBdw4', link:'https://www.youtube.com/channel/UCupvZG-5ko_eiXAupbDfxWw'},
+  {name:'CNBC',          type:'ytlive', ytc:'UCrp_UI8XtuYfpiqluWLD7Lw', yt:'6vetriqYbFE', link:'https://www.youtube.com/channel/UCrp_UI8XtuYfpiqluWLD7Lw/live'},
 ];
 var _tvIdx=0,_tvMuted=true,_hlsInst=null,_tvHlsTimeout=null;
 
@@ -2732,8 +2732,10 @@ window.onYouTubeIframeAPIReady=function(){
   if(_ytPendingId){var id=_ytPendingId;_ytPendingId=null;_ytEmbed(id);}
 };
 
-function _ytEmbed(videoId){
-  if(!videoId){_showTVMsg('Stream non disponibile — nessun ID YouTube','Apri stream ↗',_tvOpenUrlFor(_tvIdx));return;}
+function _ytEmbed(videoId, channelId){
+  var ch=TV_CH[_tvIdx]||{};
+  var embedUrl=_tvEmbedUrlFor({yt:videoId,ytc:channelId,link:ch.link}, videoId);
+  if(!embedUrl){_showTVMsg('Stream non disponibile — nessun riferimento YouTube','Apri stream ↗',_tvOpenUrlFor(_tvIdx, videoId));return;}
   var base=_tvEnsureBaseDom(), wrap=base.wrap, vid=base.vid, msg=base.msg;
   if(vid){
     try{vid.pause();}catch(e){}
@@ -2743,23 +2745,27 @@ function _ytEmbed(videoId){
   if(msg)msg.style.display='none';
   _tvCleanupEmbeds();
   wrap.style.display='';
-  if(!_ytAPIReady){_ytPendingId=videoId;return;}
-  if(_ytPlayer){try{_ytPlayer.destroy();}catch(e){}_ytPlayer=null;}
-  var div=document.createElement('div');div.id='_yt_div';
-  div.style.cssText='position:absolute;inset:0;width:100%;height:100%;';
-  wrap.appendChild(div);
-  var origin='';try{origin=window.location.origin;}catch(e){}
-  _ytPlayer=new YT.Player('_yt_div',{
-    height:'100%',width:'100%',videoId:videoId,
-    playerVars:{autoplay:1,mute:1,rel:0,playsinline:1,modestbranding:1,controls:1,origin:origin||''},
-    events:{
-      onReady:function(e){try{e.target.mute();e.target.playVideo();}catch(ex){}},
-      onError:function(e){
-        var ch=TV_CH[_tvIdx];
-        _showTVMsg('YouTube non disponibile in embed','Apri '+(ch?ch.name:'stream')+' ↗',_tvOpenUrlFor(_tvIdx, videoId));
-      }
-    }
-  });
+
+  var iframe=document.createElement('iframe');
+  iframe.src=embedUrl;
+  iframe.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';
+  iframe.allowFullscreen=true;
+  iframe.referrerPolicy='strict-origin-when-cross-origin';
+  iframe.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:none;background:#000;';
+  iframe.addEventListener('error',function(){
+    _showTVMsg('YouTube non disponibile in embed','Apri '+(ch.name||'stream')+' ↗',_tvOpenUrlFor(_tvIdx, videoId));
+  },{once:true});
+  wrap.appendChild(iframe);
+
+  // Fallback soft: se dopo alcuni secondi l'embed è ancora bloccato o vuoto, dai uscita diretta.
+  setTimeout(function(){
+    var panel=document.getElementById('tv-panel');
+    if(!panel || panel.classList.contains('tv-off')) return;
+    if(_tvIdx!==TV_CH.indexOf(ch)) return;
+    // se l'iframe esiste, non forziamo il fallback: lasciamo disponibile il tasto Apri.
+    var openBtn=document.getElementById('tv-msg');
+    if(openBtn && openBtn.style.display==='flex') return;
+  },5000);
 }
 
 function _showTVMsg(txt,btnTxt,btnUrl){
