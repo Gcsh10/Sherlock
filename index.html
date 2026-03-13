@@ -10,6 +10,7 @@
 <title>SHERLOCK</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.14/dist/hls.min.js"></script>
+<script src="https://www.youtube.com/iframe_api"></script>
 <style>
 :root{--bg:#0d1117;--bg2:#111827;--s:#161d2e;--s2:#1c2640;--bd:#1f2d44;--bd2:#2d3f5c;--acc:#00b8ff;--acc2:#0090cc;--acc3:#001830;--tx:#d8e4f0;--tx2:#7a9ab8;--mu:#3d5270;--re:#ff3d57;--am:#f0a500;}
 [data-theme=light]{--bg:#f4f4f5;--bg2:#e8e8ea;--s:#fff;--s2:#f0f0f0;--bd:#d4d4d8;--bd2:#a1a1aa;--acc:#16a34a;--acc2:#15803d;--acc3:#dcfce7;--tx:#09090b;--tx2:#3f3f46;--mu:#a1a1aa;--re:#dc2626;--am:#d97706;}
@@ -977,6 +978,7 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
 
 var DEFAULTS=[
   {id:'gpf',name:'Geopolitical Futures (feed)',url:'https://geopoliticalfutures.com/feed',cat:'osint',on:true},
+  {id:'rane_worldview',name:'RANE Worldview',url:'https://news.google.com/rss/search?q=(site:worldview.stratfor.com+OR+site:ranenetwork.com)+worldview&hl=en&gl=US&ceid=US:en',cat:'osint',on:true},
 
   {id:'intelligence_online',name:'Intelligence Online',url:'https://news.google.com/rss/search?q=site:intelligenceonline.com&hl=en&gl=US&ceid=US:en',cat:'osint',on:true},
 
@@ -1079,7 +1081,6 @@ var DEFAULTS=[
   {id:'ft',        name:'Financial Times',    cat:'finance', url:'https://news.google.com/rss/search?q=site:ft.com+world&hl=en',on:true},
   {id:'bloomberg', name:'Bloomberg',          cat:'finance', url:'https://news.google.com/rss/search?q=site:bloomberg.com+geopolitics&hl=en',on:true},
   {id:'wsj',       name:'WSJ World',          cat:'finance', url:'https://feeds.a.dj.com/rss/RSSWorldNews.xml',on:true},
-  {id:'rane',      name:'RANE Worldview',      cat:'think',   url:'https://news.google.com/rss/search?q=(site:worldview.stratfor.com+OR+site:ranenetwork.com)+geopolitics&hl=en&gl=US&ceid=US:en',on:true},
   {id:'therecord', name:'The Record',         cat:'cyber',   url:'https://news.google.com/rss/search?q=site:therecord.media&hl=en&gl=US&ceid=US:en',on:true},
   {id:'bellingcat',name:'Bellingcat',         cat:'cyber',   url:'https://news.google.com/rss/search?q=site:bellingcat.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'osint_rferl',  name:'RFE/RL',          cat:'osint',   url:'https://news.google.com/rss/search?q=site:rferl.org&hl=en&gl=US&ceid=US:en',on:true},
@@ -1180,25 +1181,6 @@ var ALL_COLS=[
 
 var sources=[],articles=[],colOrder=[],colClosed=[],timerSec=120,timerInt=null,sourceStatus={},pIdx=0;
 
-var SOURCE_MIGRATIONS={
-  wsj:'https://feeds.a.dj.com/rss/RSSWorldNews.xml',
-  wsj_world:'https://feeds.a.dj.com/rss/RSSWorldNews.xml',
-  bloomberg:'https://news.google.com/rss/search?q=site:bloomberg.com+geopolitics&hl=en&gl=US&ceid=US:en',
-  rane:'https://news.google.com/rss/search?q=(site:worldview.stratfor.com+OR+site:ranenetwork.com)+geopolitics&hl=en&gl=US&ceid=US:en'
-};
-function migrateSources(list){
-  list=(Array.isArray(list)?list:[]).map(function(src){
-    if(!src||!src.id) return src;
-    if(SOURCE_MIGRATIONS[src.id]) src.url=SOURCE_MIGRATIONS[src.id];
-    if(src.id==='applehk') src.on=false;
-    return src;
-  }).filter(Boolean);
-  if(!list.find(function(s){return s.id==='rane';})){
-    list.push({id:'rane',name:'RANE Worldview',cat:'think',url:SOURCE_MIGRATIONS.rane,on:true});
-  }
-  return list;
-}
-
 function persist(){try{localStorage.setItem('sh3_sources',JSON.stringify(sources));localStorage.setItem('sh3_colorder',JSON.stringify(colOrder));localStorage.setItem('sh3_colclosed',JSON.stringify(colClosed));}catch(e){}}
 function loadPersist(){
   try{
@@ -1211,12 +1193,17 @@ function loadPersist(){
         var saved=JSON.parse(s);
         // Merge: keep saved prefs (on/off) but add any new DEFAULTS not yet saved
         var savedIds={};saved.forEach(function(x){savedIds[x.id]=x;});
-        var merged=DEFAULTS.map(function(d){return savedIds[d.id]?savedIds[d.id]:d;});
+        var merged=DEFAULTS.map(function(d){
+          var existing=savedIds[d.id]?savedIds[d.id]:d;
+          if(d.id==='wsj') existing.url='https://feeds.a.dj.com/rss/RSSWorldNews.xml';
+          if(d.id==='rane_worldview') existing.url='https://news.google.com/rss/search?q=(site:worldview.stratfor.com+OR+site:ranenetwork.com)+worldview&hl=en&gl=US&ceid=US:en';
+          return existing;
+        });
         // Also keep any custom user-added sources not in DEFAULTS
         saved.forEach(function(x){if(!DEFAULTS.find(function(d){return d.id===x.id;}))merged.push(x);});
-        sources=migrateSources(merged);
-      }catch(e){sources=migrateSources(DEFAULTS.slice());}
-    } else { sources=migrateSources(DEFAULTS.slice()); }
+        sources=merged;
+      }catch(e){sources=DEFAULTS.slice();}
+    } else { sources=DEFAULTS.slice(); }
     var co=localStorage.getItem('sh3_colorder'); colOrder=co?JSON.parse(co):ALL_COLS.map(function(c){return c.id;});
     var cc=localStorage.getItem('sh3_colclosed'); colClosed=cc?JSON.parse(cc):[];
     DEFAULTS.forEach(function(d){if(!sources.find(function(s){return s.id===d.id;}))sources.push(d);});
@@ -1231,12 +1218,10 @@ function loadPersist(){
     if(visibleCols.length===0){colClosed=[];}
     // Salva subito per pulire localStorage corrotto
     persist();
-  }catch(e){sources=migrateSources(DEFAULTS.slice());colOrder=ALL_COLS.map(function(c){return c.id;});colClosed=[];}
+  }catch(e){sources=DEFAULTS.slice();colOrder=ALL_COLS.map(function(c){return c.id;});colClosed=[];}
 }
 
 var PROXIES=[
-  // cors.isomorphic-git.org
-  function(u){return 'https://cors.isomorphic-git.org/'+u;},
   // allorigins /raw - risposta diretta (più veloce)
   function(u){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(u);},
   // allorigins /get - risposta JSON con .contents
@@ -2628,9 +2613,9 @@ var TV_CH=[
   {name:'RT English',    type:'hls', hls:'https://rt-glb.rttv.com/live/rten/playlist.m3u8',                 yt:'', link:'https://www.bnonews.com/index.php/live-feeds/rt/'},
   {name:'i24 News',      type:'hls', hls:'https://bcovlive-a.akamaihd.net/6db4a900c00c4f7dac5f1e97ab87a0e4/eu-central-1/5377161796001/profile_0/chunklist.m3u8', yt:'', link:'https://video.i24news.tv/'},
   // ── YouTube IFrame API ───────────────────────────────────────────
-  {name:'Bloomberg',     type:'yt_channel', channel:'UCIALMKvObZNtJ6AmdCLP7Lg', link:'https://www.youtube.com/@markets/live'},
-  {name:'CNN',           type:'link', link:'https://www.youtube.com/@CNN/live'},
-  {name:'CNBC',          type:'yt_channel', channel:'UCrp_UI8XtuYfpiqluWLD7Lw', link:'https://www.youtube.com/@CNBCtelevision/live'},
+  {name:'Bloomberg',     type:'embed', embed:'https://www.youtube-nocookie.com/embed/live_stream?channel=UCIALMKvObZNtJ6AmdCLP7Lg&autoplay=1&mute=1&playsinline=1', link:'https://www.youtube.com/@BloombergTelevision/streams'},
+  {name:'CNN',           type:'link', yt:'', link:'https://www.youtube.com/@CNN/streams'},
+  {name:'CNBC',          type:'embed', embed:'https://www.youtube-nocookie.com/embed/live_stream?channel=UCrp_UI8XtuYfpiqluWLD7Lw&autoplay=1&mute=1&playsinline=1', link:'https://www.youtube.com/@CNBCTelevision/streams'},
 ];
 var _tvIdx=0,_tvMuted=true,_hlsInst=null,_tvHlsTimeout=null;
 
@@ -2682,14 +2667,7 @@ function _tvResetSurface(){
 }
 function _tvOpenUrlFor(idx, videoId){
   var ch=TV_CH[(typeof idx==='number'?idx:_tvIdx)]||{};
-  if(ch.link) return ch.link;
-  if(ch.channel) return 'https://www.youtube.com/channel/'+ch.channel+'/live';
-  return videoId ? 'https://www.youtube.com/watch?v='+videoId : (ch.yt ? 'https://www.youtube.com/watch?v='+ch.yt : 'https://www.youtube.com');
-}
-function _ytEmbedUrl(videoId, channelId){
-  var base='https://www.youtube-nocookie.com/embed/';
-  if(channelId) return base+'live_stream?channel='+encodeURIComponent(channelId)+'&autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1';
-  return base+encodeURIComponent(videoId)+'?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1';
+  return ch.link || (videoId ? 'https://www.youtube.com/watch?v='+videoId : (ch.yt ? 'https://www.youtube.com/watch?v='+ch.yt : 'https://www.youtube.com'));
 }
 
 function _buildPlayer(idx){
@@ -2697,8 +2675,8 @@ function _buildPlayer(idx){
   var lbl=document.getElementById('tvlbl');if(lbl)lbl.textContent=ch.name.toUpperCase()+' \u2014 LIVE';
   _tvResetSurface();
   _tvMuted=true;_updateMuteBtn();
-  if(ch.type==='yt_channel'){if(ch.channel)_ytEmbed(null,ch.channel);else _showTVMsg('Stream non disponibile','Apri '+ch.name+' \u2197',_tvOpenUrlFor(idx));return;}
-  if(ch.type==='yt'){if(ch.yt)_ytEmbed(ch.yt,null);else _showTVMsg('Stream non disponibile','Apri '+ch.name+' \u2197',_tvOpenUrlFor(idx));return;}
+  if(ch.type==='yt'){if(ch.yt)_ytEmbed(ch.yt);else _showTVMsg('Stream non disponibile','Apri '+ch.name+' \u2197',_tvOpenUrlFor(idx));return;}
+  if(ch.type==='embed'){_tvEmbedIframe(ch.embed, ch.name);return;}
   if(ch.type==='link'){_showTVMsg('Apri lo stream nel sito sorgente','Apri '+ch.name+' \u2197',_tvOpenUrlFor(idx));return;}
   _tryHLS(ch.hls,ch.yt,idx);
 }
@@ -2754,10 +2732,15 @@ function _tryHLS(url,ytId,idx){
     vid.addEventListener('error',function(){fallback();},{once:true});
   }else{fallback();}
 }
-// ── YouTube embed semplificato (più robusto su GitHub Pages) ──────────────────────────────────────
-var _ytPlayer=null;
-function _ytEmbed(videoId, channelId){
-  if(!videoId && !channelId){_showTVMsg('Stream non disponibile — nessun riferimento YouTube','Apri stream ↗',_tvOpenUrlFor(_tvIdx));return;}
+// ── YouTube IFrame Player API ──────────────────────────────────────
+var _ytPlayer=null,_ytAPIReady=false,_ytPendingId=null;
+window.onYouTubeIframeAPIReady=function(){
+  _ytAPIReady=true;
+  if(_ytPendingId){var id=_ytPendingId;_ytPendingId=null;_ytEmbed(id);}
+};
+
+function _ytEmbed(videoId){
+  if(!videoId){_showTVMsg('Stream non disponibile — nessun ID YouTube','Apri stream ↗',_tvOpenUrlFor(_tvIdx));return;}
   var base=_tvEnsureBaseDom(), wrap=base.wrap, vid=base.vid, msg=base.msg;
   if(vid){
     try{vid.pause();}catch(e){}
@@ -2767,17 +2750,42 @@ function _ytEmbed(videoId, channelId){
   if(msg)msg.style.display='none';
   _tvCleanupEmbeds();
   wrap.style.display='';
+  if(!_ytAPIReady){_ytPendingId=videoId;return;}
+  if(_ytPlayer){try{_ytPlayer.destroy();}catch(e){}_ytPlayer=null;}
+  var div=document.createElement('div');div.id='_yt_div';
+  div.style.cssText='position:absolute;inset:0;width:100%;height:100%;';
+  wrap.appendChild(div);
+  var origin='';try{origin=window.location.origin;}catch(e){}
+  _ytPlayer=new YT.Player('_yt_div',{
+    height:'100%',width:'100%',videoId:videoId,
+    playerVars:{autoplay:1,mute:1,rel:0,playsinline:1,modestbranding:1,controls:1,origin:origin||''},
+    events:{
+      onReady:function(e){try{e.target.mute();e.target.playVideo();}catch(ex){}},
+      onError:function(e){
+        var ch=TV_CH[_tvIdx];
+        _showTVMsg('YouTube non disponibile in embed','Apri '+(ch?ch.name:'stream')+' ↗',_tvOpenUrlFor(_tvIdx, videoId));
+      }
+    }
+  });
+}
+
+
+function _tvEmbedIframe(url,name){
+  if(!url){_showTVMsg('Stream non disponibile','Apri '+(name||'stream')+' ↗',_tvOpenUrlFor(_tvIdx));return;}
+  var base=_tvEnsureBaseDom(), wrap=base.wrap, vid=base.vid, msg=base.msg;
+  if(vid){
+    try{vid.pause();}catch(e){}
+    try{vid.removeAttribute('src');vid.load();}catch(e){}
+    vid.style.display='none';
+  }
+  if(msg)msg.style.display='none';
+  _tvCleanupEmbeds();
   var iframe=document.createElement('iframe');
-  iframe.src=_ytEmbedUrl(videoId, channelId);
-  iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+  iframe.src=url;
+  iframe.allow='autoplay; encrypted-media; picture-in-picture; fullscreen';
   iframe.allowFullscreen=true;
   iframe.referrerPolicy='strict-origin-when-cross-origin';
-  iframe.loading='eager';
-  iframe.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:none;';
-  iframe.onerror=function(){
-    var ch=TV_CH[_tvIdx];
-    _showTVMsg('YouTube non disponibile in embed','Apri '+(ch?ch.name:'stream')+' ↗',_tvOpenUrlFor(_tvIdx, videoId));
-  };
+  iframe.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:0;';
   wrap.appendChild(iframe);
 }
 
@@ -3278,6 +3286,29 @@ function toggleSidebar(){
 .live-status.wait{color:var(--acc);}
 .live-status.off{color:var(--mu);}
 </style>
+
+
+<script>
+(function(){
+  var APP_VERSION='2.3';
+  var VERSION_KEY='sh3_app_version';
+  try{
+    var savedVersion=localStorage.getItem(VERSION_KEY)||'';
+    if(savedVersion!==APP_VERSION){
+      [
+        'sh3_sources',
+        'sh3_colorder',
+        'sh3_colclosed',
+        'sh3_live_cfg_v1'
+      ].forEach(function(key){
+        try{localStorage.removeItem(key);}catch(e){}
+      });
+      localStorage.setItem(VERSION_KEY, APP_VERSION);
+      console.log('SHERLOCK config reset for version', APP_VERSION);
+    }
+  }catch(e){}
+})();
+</script>
 
 <script>
 (function(){
