@@ -10,7 +10,6 @@
 <title>SHERLOCK</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.14/dist/hls.min.js"></script>
-<script src="https://www.youtube.com/iframe_api"></script>
 <style>
 :root{--bg:#0d1117;--bg2:#111827;--s:#161d2e;--s2:#1c2640;--bd:#1f2d44;--bd2:#2d3f5c;--acc:#00b8ff;--acc2:#0090cc;--acc3:#001830;--tx:#d8e4f0;--tx2:#7a9ab8;--mu:#3d5270;--re:#ff3d57;--am:#f0a500;}
 [data-theme=light]{--bg:#f4f4f5;--bg2:#e8e8ea;--s:#fff;--s2:#f0f0f0;--bd:#d4d4d8;--bd2:#a1a1aa;--acc:#16a34a;--acc2:#15803d;--acc3:#dcfce7;--tx:#09090b;--tx2:#3f3f46;--mu:#a1a1aa;--re:#dc2626;--am:#d97706;}
@@ -1000,7 +999,7 @@ var DEFAULTS=[
   {id:'wenweipo',name:'Wen Wei Po',url:'https://news.google.com/rss/search?q=site:wenweipo.com&hl=zh-CN&gl=HK&ceid=HK:zh-Hans',cat:'cina',on:true},
   {id:'mingpao',name:'Ming Pao Daily',url:'https://news.google.com/rss/search?q=site:mingpao.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',cat:'cina',on:true},
   {id:'singtao',name:'Sing Tao Daily',url:'https://news.google.com/rss/search?q=site:stheadline.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',cat:'cina',on:true},
-  {id:'applehk',name:'Apple Daily HK (archivio)',url:'https://news.google.com/rss/search?q=%22Apple+Daily%22+Hong+Kong&hl=en&gl=HK&ceid=HK:en',cat:'cina',on:false},
+  {id:'applehk',name:'Apple Daily HK',url:'https://news.google.com/rss/search?q=%22Apple+Daily%22+Hong+Kong&hl=en&gl=HK&ceid=HK:en',cat:'cina',on:true},
   {id:'zaobao',name:'United Morning Post (Zaobao)',url:'https://news.google.com/rss/search?q=site:zaobao.com.sg&hl=zh-CN&gl=SG&ceid=SG:zh-Hans',cat:'cina',on:true},
   {id:'cna_tw',name:'Central News Agency',url:'https://news.google.com/rss/search?q=site:cna.com.tw&hl=zh-TW&gl=TW&ceid=TW:zh-Hant',cat:'cina',on:true},
   {id:'pla_daily',name:'PLA Daily',url:'https://news.google.com/rss/search?q=site:81.cn+解放军报&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
@@ -1015,8 +1014,8 @@ var DEFAULTS=[
   {id:'gmw',name:'Guangming Daily',url:'https://news.google.com/rss/search?q=site:gmw.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
   {id:'pekingnology',name:'Pekingnology (feed)',url:'https://www.pekingnology.com/feed',cat:'cina',on:true},
 
-  {id:'reuters',   name:'Reuters',            cat:'agenzie', url:'https://news.google.com/rss/search?q=site:reuters.com/world&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'ap',        name:'AP',                 cat:'agenzie', url:'https://news.google.com/rss/search?q=site:apnews.com/world-news&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'reuters',   name:'Reuters',            cat:'agenzie', url:'https://news.google.com/rss/search?q=reuters+world+news&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'ap',        name:'AP',                 cat:'agenzie', url:'https://news.google.com/rss/search?q=associated+press+world&hl=en&gl=US&ceid=US:en',on:true},
   {id:'afp',       name:'AFP',                cat:'agenzie', url:'https://news.google.com/rss/search?q=agence+france+presse+AFP&hl=en&gl=US&ceid=US:en',on:true},
   {id:'ansa',      name:'ANSA Mondo',         cat:'agenzie', url:'https://news.google.com/rss/search?q=site:ansa.it+mondo&hl=it&gl=IT&ceid=IT:it',on:true},
   {id:'ansait',    name:'ANSA Italia',        cat:'agenzie', url:'https://news.google.com/rss/search?q=site:ansa.it+politica&hl=it&gl=IT&ceid=IT:it',on:true},
@@ -1030,10 +1029,10 @@ var DEFAULTS=[
   {id:'wam',       name:'WAM (UAE)',           cat:'agenzie', url:'https://news.google.com/rss/search?q=site:wam.ae&hl=en',on:true},
   {id:'pti',       name:'PTI (India)',        cat:'agenzie', url:'https://news.google.com/rss/search?q=press+trust+india&hl=en',on:true},
   {id:'prensa',    name:'Prensa Latina',      cat:'agenzie', url:'https://news.google.com/rss/search?q=site:plenglish.com&hl=en',on:true},
-  {id:'bbc',       name:'BBC World',          cat:'media',   url:'https://feeds.bbci.co.uk/news/world/rss.xml',on:true},
-  {id:'bbcme',     name:'BBC Middle East',    cat:'media',   url:'https://feeds.bbci.co.uk/news/world/middle_east/rss.xml',on:true},
-  {id:'bbcasia',   name:'BBC Asia',           cat:'media',   url:'https://feeds.bbci.co.uk/news/world/asia/rss.xml',on:true},
-  {id:'bbcafrica', name:'BBC Africa',         cat:'media',   url:'https://feeds.bbci.co.uk/news/world/africa/rss.xml',on:true},
+  {id:'bbc',       name:'BBC World',          cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+world+news&hl=en&gl=GB&ceid=GB:en',on:true},
+  {id:'bbcme',     name:'BBC Middle East',    cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+middle+east&hl=en&gl=GB&ceid=GB:en',on:true},
+  {id:'bbcasia',   name:'BBC Asia',           cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+asia&hl=en&gl=GB&ceid=GB:en',on:true},
+  {id:'bbcafrica', name:'BBC Africa',         cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+africa&hl=en&gl=GB&ceid=GB:en',on:true},
   {id:'aljazeera', name:'Al Jazeera',         cat:'media',   url:'https://news.google.com/rss/search?q=site:aljazeera.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'france24',  name:'France 24',          cat:'media',   url:'https://news.google.com/rss/search?q=site:france24.com&hl=en&gl=FR&ceid=FR:en',on:true},
   {id:'dwnews',    name:'DW News',            cat:'media',   url:'https://news.google.com/rss/search?q=site:dw.com&hl=en&gl=DE&ceid=DE:en',on:true},
@@ -1079,7 +1078,8 @@ var DEFAULTS=[
   {id:'nato',      name:'NATO',               cat:'ist',     url:'https://news.google.com/rss/search?q=NATO+statement&hl=en',on:true},
   {id:'ft',        name:'Financial Times',    cat:'finance', url:'https://news.google.com/rss/search?q=site:ft.com+world&hl=en',on:true},
   {id:'bloomberg', name:'Bloomberg',          cat:'finance', url:'https://news.google.com/rss/search?q=site:bloomberg.com+geopolitics&hl=en',on:true},
-  {id:'wsj',       name:'WSJ World',          cat:'finance', url:'https://news.google.com/rss/search?q=site:wsj.com+world&hl=en',on:true},
+  {id:'wsj',       name:'WSJ World',          cat:'finance', url:'https://feeds.a.dj.com/rss/RSSWorldNews.xml',on:true},
+  {id:'rane',      name:'RANE Worldview',      cat:'think',   url:'https://news.google.com/rss/search?q=(site:worldview.stratfor.com+OR+site:ranenetwork.com)+geopolitics&hl=en&gl=US&ceid=US:en',on:true},
   {id:'therecord', name:'The Record',         cat:'cyber',   url:'https://news.google.com/rss/search?q=site:therecord.media&hl=en&gl=US&ceid=US:en',on:true},
   {id:'bellingcat',name:'Bellingcat',         cat:'cyber',   url:'https://news.google.com/rss/search?q=site:bellingcat.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'osint_rferl',  name:'RFE/RL',          cat:'osint',   url:'https://news.google.com/rss/search?q=site:rferl.org&hl=en&gl=US&ceid=US:en',on:true},
@@ -1180,6 +1180,25 @@ var ALL_COLS=[
 
 var sources=[],articles=[],colOrder=[],colClosed=[],timerSec=120,timerInt=null,sourceStatus={},pIdx=0;
 
+var SOURCE_MIGRATIONS={
+  wsj:'https://feeds.a.dj.com/rss/RSSWorldNews.xml',
+  wsj_world:'https://feeds.a.dj.com/rss/RSSWorldNews.xml',
+  bloomberg:'https://news.google.com/rss/search?q=site:bloomberg.com+geopolitics&hl=en&gl=US&ceid=US:en',
+  rane:'https://news.google.com/rss/search?q=(site:worldview.stratfor.com+OR+site:ranenetwork.com)+geopolitics&hl=en&gl=US&ceid=US:en'
+};
+function migrateSources(list){
+  list=(Array.isArray(list)?list:[]).map(function(src){
+    if(!src||!src.id) return src;
+    if(SOURCE_MIGRATIONS[src.id]) src.url=SOURCE_MIGRATIONS[src.id];
+    if(src.id==='applehk') src.on=false;
+    return src;
+  }).filter(Boolean);
+  if(!list.find(function(s){return s.id==='rane';})){
+    list.push({id:'rane',name:'RANE Worldview',cat:'think',url:SOURCE_MIGRATIONS.rane,on:true});
+  }
+  return list;
+}
+
 function persist(){try{localStorage.setItem('sh3_sources',JSON.stringify(sources));localStorage.setItem('sh3_colorder',JSON.stringify(colOrder));localStorage.setItem('sh3_colclosed',JSON.stringify(colClosed));}catch(e){}}
 function loadPersist(){
   try{
@@ -1195,9 +1214,9 @@ function loadPersist(){
         var merged=DEFAULTS.map(function(d){return savedIds[d.id]?savedIds[d.id]:d;});
         // Also keep any custom user-added sources not in DEFAULTS
         saved.forEach(function(x){if(!DEFAULTS.find(function(d){return d.id===x.id;}))merged.push(x);});
-        sources=normalizeSources(merged);
-      }catch(e){sources=normalizeSources(DEFAULTS.slice());}
-    } else { sources=normalizeSources(DEFAULTS.slice()); }
+        sources=migrateSources(merged);
+      }catch(e){sources=migrateSources(DEFAULTS.slice());}
+    } else { sources=migrateSources(DEFAULTS.slice()); }
     var co=localStorage.getItem('sh3_colorder'); colOrder=co?JSON.parse(co):ALL_COLS.map(function(c){return c.id;});
     var cc=localStorage.getItem('sh3_colclosed'); colClosed=cc?JSON.parse(cc):[];
     DEFAULTS.forEach(function(d){if(!sources.find(function(s){return s.id===d.id;}))sources.push(d);});
@@ -1212,16 +1231,16 @@ function loadPersist(){
     if(visibleCols.length===0){colClosed=[];}
     // Salva subito per pulire localStorage corrotto
     persist();
-  }catch(e){sources=normalizeSources(DEFAULTS.slice());colOrder=ALL_COLS.map(function(c){return c.id;});colClosed=[];}
+  }catch(e){sources=migrateSources(DEFAULTS.slice());colOrder=ALL_COLS.map(function(c){return c.id;});colClosed=[];}
 }
 
 var PROXIES=[
+  // cors.isomorphic-git.org
+  function(u){return 'https://cors.isomorphic-git.org/'+u;},
   // allorigins /raw - risposta diretta (più veloce)
   function(u){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(u);},
   // allorigins /get - risposta JSON con .contents
   function(u){return 'https://api.allorigins.win/get?url='+encodeURIComponent(u);},
-  // cors.isomorphic-git.org
-  function(u){return 'https://cors.isomorphic-git.org/'+u;},
   // corsproxy.io
   function(u){return 'https://corsproxy.io/?'+encodeURIComponent(u);},
   // rss2json - ritorna JSON pre-parsato
@@ -1229,23 +1248,6 @@ var PROXIES=[
   // codetabs
   function(u){return 'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(u);},
 ];
-var SOURCE_URL_UPDATES={
-  reuters:'https://news.google.com/rss/search?q=site:reuters.com/world&hl=en&gl=US&ceid=US:en',
-  ap:'https://news.google.com/rss/search?q=site:apnews.com/world-news&hl=en&gl=US&ceid=US:en',
-  bbc:'https://feeds.bbci.co.uk/news/world/rss.xml',
-  bbcme:'https://feeds.bbci.co.uk/news/world/middle_east/rss.xml',
-  bbcasia:'https://feeds.bbci.co.uk/news/world/asia/rss.xml',
-  bbcafrica:'https://feeds.bbci.co.uk/news/world/africa/rss.xml',
-  applehk:'https://news.google.com/rss/search?q=%22Apple+Daily%22+Hong+Kong&hl=en&gl=HK&ceid=HK:en'
-};
-function normalizeSources(list){
-  return (list||[]).map(function(s){
-    if(!s||!s.id)return s;
-    if(SOURCE_URL_UPDATES[s.id]) s.url=SOURCE_URL_UPDATES[s.id];
-    if(s.id==='applehk' && typeof s.on!=='boolean') s.on=false;
-    return s;
-  });
-}
 function fetchRSS(url){
   var TIMEOUT_MS=12000;
   function makeOpts(){
@@ -1253,10 +1255,11 @@ function fetchRSS(url){
   }
   function parseResult(t,proxyIdx){
     // rss2json returns JSON with .items
-    if(proxyIdx===4){
+    if(proxyIdx===3){
       try{
         var j=JSON.parse(t);
         if(j&&j.items&&j.items.length){
+          // Rebuild RSS-like XML from rss2json response
           var items=j.items.map(function(it){
             return '<item><title>'+esc(it.title||'')+'</title><link>'+esc(it.link||it.url||'')+'</link>'
               +'<description>'+esc(it.description||it.content||'')+'</description>'
@@ -1271,16 +1274,16 @@ function fetchRSS(url){
     if(proxyIdx===1){
       try{var j=JSON.parse(t);if(j&&j.contents&&j.contents.length>30)return j.contents;}catch(e){}
     }
+    // Direct text (proxy 0,2,4)
     if(!t||t.trim().length<30)throw new Error('empty');
-    if(/<html/i.test(t) && !/(<rss|<feed|<rdf)/i.test(t)) throw new Error('html instead of feed');
     return t;
   }
-  function tryNext(i,lastErr){
-    if(i>=PROXIES.length)return Promise.reject(lastErr||new Error('all failed'));
+  function tryNext(i){
+    if(i>=PROXIES.length)return Promise.reject(new Error('all failed'));
     return fetch(PROXIES[i](url),makeOpts())
-      .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.text();})
+      .then(function(r){if(!r.ok)throw new Error(r.status);return r.text();})
       .then(function(t){return parseResult(t,i);})
-      .catch(function(e){return tryNext(i+1,e);});
+      .catch(function(e){return tryNext(i+1);});
   }
   return tryNext(0);
 }
@@ -2609,7 +2612,7 @@ function renderAlerts(){
 
 // ── TV PLAYER ─────────────────────────────────────────────────────
 var TV_CH=[
-  // ── HLS nativo (più stabile) ────────────────────────────────────
+  // ── HLS nativo (bypass bot-check) ───────────────────────────────
   {name:'Al Jazeera EN', type:'hls', hls:'https://live-hls-web-aje.getaj.net/AJE/index.m3u8',               yt:'gCNeDWCI0vo', link:'https://www.youtube.com/watch?v=gCNeDWCI0vo'},
   {name:'Al Jazeera AR', type:'hls', hls:'https://live-hls-web-aja.getaj.net/AJA/index.m3u8',               yt:'rChF468RWrU', link:'https://www.youtube.com/watch?v=rChF468RWrU'},
   {name:'France 24 EN',  type:'hls', hls:'https://static.france24.com/live/F24_EN_LO_HLS/live_web.m3u8',    yt:'u9foWyMSETk', link:'https://www.youtube.com/watch?v=u9foWyMSETk'},
@@ -2618,16 +2621,16 @@ var TV_CH=[
   {name:'Euronews EN',   type:'hls', hls:'https://jmp2.uk/SamsungTVPlus/GBAJ4900020VP.m3u8',                yt:'pykpO5kQJ98', link:'https://www.youtube.com/watch?v=pykpO5kQJ98'},
   {name:'Sky News',      type:'hls', hls:'https://jmp2.uk/SamsungTVPlus/USBB52000022Q.m3u8',                yt:'9Auq9mYxFEE', link:'https://www.youtube.com/watch?v=9Auq9mYxFEE'},
   {name:'BBC News',      type:'hls', hls:'https://jmp2.uk/SamsungTVPlus/US4000033L.m3u8',                   yt:'', link:'https://www.youtube.com/@BBCNews/streams'},
-  {name:'Reuters Now',   type:'hls', hls:'https://reuters-reutersnow-1-nl.samsung.wurl.tv/playlist.m3u8',   yt:'', link:'https://www.youtube.com/@Reuters/live'},
+  {name:'Reuters Now',   type:'hls', hls:'https://reuters-reutersnow-1-nl.samsung.wurl.tv/playlist.m3u8',   yt:'', link:'https://www.youtube.com/@Reuters/streams'},
   {name:'TRT World',     type:'hls', hls:'https://trtworldlive.akamaized.net/hls/live/2003168/trtworldlive/index.m3u8', yt:'ABfFhWzWs0s', link:'https://www.youtube.com/watch?v=ABfFhWzWs0s'},
   {name:'NHK World',     type:'hls', hls:'https://nhkworld.webcdn.stream.ne.jp/www11/nhkworld-tv/global/263941/live_wa_s.m3u8', yt:'f0lYfG_vY_U', link:'https://www.youtube.com/watch?v=f0lYfG_vY_U'},
   {name:'CGTN',          type:'hls', hls:'https://news.cgtn.com/resource/live/english/cgtn-news.m3u8',      yt:'8gGEJi5K9w4', link:'https://www.youtube.com/watch?v=8gGEJi5K9w4'},
   {name:'RT English',    type:'hls', hls:'https://rt-glb.rttv.com/live/rten/playlist.m3u8',                 yt:'', link:'https://www.bnonews.com/index.php/live-feeds/rt/'},
   {name:'i24 News',      type:'hls', hls:'https://bcovlive-a.akamaihd.net/6db4a900c00c4f7dac5f1e97ab87a0e4/eu-central-1/5377161796001/profile_0/chunklist.m3u8', yt:'', link:'https://video.i24news.tv/'},
-  // ── YouTube live channel embeds / external fallbacks ────────────
-  {name:'Bloomberg',     type:'yt_channel', ytChannel:'UCIALMKvObZNtJ6AmdCLP7Lg', link:'https://www.bloomberg.com/live/us'},
-  {name:'CNBC',          type:'yt_channel', ytChannel:'UCvJJ_dzjViJCoLf5uKUTwoA', link:'https://www.youtube.com/@CNBCtelevision/live'},
-  {name:'CNN',           type:'link',       link:'https://www.youtube.com/@CNN/streams'},
+  // ── YouTube IFrame API ───────────────────────────────────────────
+  {name:'Bloomberg',     type:'yt_channel', channel:'UCIALMKvObZNtJ6AmdCLP7Lg', link:'https://www.youtube.com/@markets/live'},
+  {name:'CNN',           type:'link', link:'https://www.youtube.com/@CNN/live'},
+  {name:'CNBC',          type:'yt_channel', channel:'UCrp_UI8XtuYfpiqluWLD7Lw', link:'https://www.youtube.com/@CNBCtelevision/live'},
 ];
 var _tvIdx=0,_tvMuted=true,_hlsInst=null,_tvHlsTimeout=null;
 
@@ -2637,35 +2640,6 @@ function _tvGetMsg(){return document.getElementById('tv-msg');}
 function _tvCleanupEmbeds(){
   var wrap=_tvWrap(); if(!wrap) return;
   wrap.querySelectorAll('iframe,#_yt_div').forEach(function(el){try{el.remove();}catch(e){}});
-}
-function _tvEmbedIframe(src){
-  var base=_tvEnsureBaseDom(), wrap=base.wrap, vid=base.vid, msg=base.msg;
-  if(vid){
-    try{vid.pause();}catch(e){}
-    try{vid.removeAttribute('src');vid.load();}catch(e){}
-    vid.style.display='none';
-  }
-  if(msg) msg.style.display='none';
-  _tvCleanupEmbeds();
-  var iframe=document.createElement('iframe');
-  iframe.src=src;
-  iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
-  iframe.allowFullscreen=true;
-  iframe.referrerPolicy='strict-origin-when-cross-origin';
-  wrap.appendChild(iframe);
-  return iframe;
-}
-function _ytChannelEmbed(channelId){
-  if(!channelId){_showTVMsg('Canale YouTube non disponibile','Apri stream ↗',_tvOpenUrlFor(_tvIdx));return;}
-  var src='https://www.youtube-nocookie.com/embed/live_stream?channel='+encodeURIComponent(channelId)+'&autoplay=1&mute=1&playsinline=1';
-  var frame=_tvEmbedIframe(src);
-  setTimeout(function(){
-    try{
-      if(frame && frame.contentWindow==null){
-        _showTVMsg('Embed YouTube bloccato','Apri stream ↗',_tvOpenUrlFor(_tvIdx));
-      }
-    }catch(e){}
-  }, 4500);
 }
 function _tvEnsureBaseDom(){
   var wrap=_tvWrap(); if(!wrap) return {};
@@ -2708,7 +2682,14 @@ function _tvResetSurface(){
 }
 function _tvOpenUrlFor(idx, videoId){
   var ch=TV_CH[(typeof idx==='number'?idx:_tvIdx)]||{};
-  return ch.link || (videoId ? 'https://www.youtube.com/watch?v='+videoId : (ch.yt ? 'https://www.youtube.com/watch?v='+ch.yt : 'https://www.youtube.com'));
+  if(ch.link) return ch.link;
+  if(ch.channel) return 'https://www.youtube.com/channel/'+ch.channel+'/live';
+  return videoId ? 'https://www.youtube.com/watch?v='+videoId : (ch.yt ? 'https://www.youtube.com/watch?v='+ch.yt : 'https://www.youtube.com');
+}
+function _ytEmbedUrl(videoId, channelId){
+  var base='https://www.youtube-nocookie.com/embed/';
+  if(channelId) return base+'live_stream?channel='+encodeURIComponent(channelId)+'&autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1';
+  return base+encodeURIComponent(videoId)+'?autoplay=1&mute=1&playsinline=1&rel=0&modestbranding=1';
 }
 
 function _buildPlayer(idx){
@@ -2716,7 +2697,8 @@ function _buildPlayer(idx){
   var lbl=document.getElementById('tvlbl');if(lbl)lbl.textContent=ch.name.toUpperCase()+' \u2014 LIVE';
   _tvResetSurface();
   _tvMuted=true;_updateMuteBtn();
-  if(ch.type==='yt'){if(ch.yt)_ytEmbed(ch.yt);else _showTVMsg('Stream non disponibile','Apri '+ch.name+' \u2197',_tvOpenUrlFor(idx));return;}
+  if(ch.type==='yt_channel'){if(ch.channel)_ytEmbed(null,ch.channel);else _showTVMsg('Stream non disponibile','Apri '+ch.name+' \u2197',_tvOpenUrlFor(idx));return;}
+  if(ch.type==='yt'){if(ch.yt)_ytEmbed(ch.yt,null);else _showTVMsg('Stream non disponibile','Apri '+ch.name+' \u2197',_tvOpenUrlFor(idx));return;}
   if(ch.type==='link'){_showTVMsg('Apri lo stream nel sito sorgente','Apri '+ch.name+' \u2197',_tvOpenUrlFor(idx));return;}
   _tryHLS(ch.hls,ch.yt,idx);
 }
@@ -2772,15 +2754,10 @@ function _tryHLS(url,ytId,idx){
     vid.addEventListener('error',function(){fallback();},{once:true});
   }else{fallback();}
 }
-// ── YouTube IFrame Player API ──────────────────────────────────────
-var _ytPlayer=null,_ytAPIReady=false,_ytPendingId=null;
-window.onYouTubeIframeAPIReady=function(){
-  _ytAPIReady=true;
-  if(_ytPendingId){var id=_ytPendingId;_ytPendingId=null;_ytEmbed(id);}
-};
-
-function _ytEmbed(videoId){
-  if(!videoId){_showTVMsg('Stream non disponibile — nessun ID YouTube','Apri stream ↗',_tvOpenUrlFor(_tvIdx));return;}
+// ── YouTube embed semplificato (più robusto su GitHub Pages) ──────────────────────────────────────
+var _ytPlayer=null;
+function _ytEmbed(videoId, channelId){
+  if(!videoId && !channelId){_showTVMsg('Stream non disponibile — nessun riferimento YouTube','Apri stream ↗',_tvOpenUrlFor(_tvIdx));return;}
   var base=_tvEnsureBaseDom(), wrap=base.wrap, vid=base.vid, msg=base.msg;
   if(vid){
     try{vid.pause();}catch(e){}
@@ -2790,23 +2767,18 @@ function _ytEmbed(videoId){
   if(msg)msg.style.display='none';
   _tvCleanupEmbeds();
   wrap.style.display='';
-  if(!_ytAPIReady){_ytPendingId=videoId;return;}
-  if(_ytPlayer){try{_ytPlayer.destroy();}catch(e){}_ytPlayer=null;}
-  var div=document.createElement('div');div.id='_yt_div';
-  div.style.cssText='position:absolute;inset:0;width:100%;height:100%;';
-  wrap.appendChild(div);
-  var origin='';try{origin=window.location.origin;}catch(e){}
-  _ytPlayer=new YT.Player('_yt_div',{
-    height:'100%',width:'100%',videoId:videoId,
-    playerVars:{autoplay:1,mute:1,rel:0,playsinline:1,modestbranding:1,controls:1,origin:origin||''},
-    events:{
-      onReady:function(e){try{e.target.mute();e.target.playVideo();}catch(ex){}},
-      onError:function(e){
-        var ch=TV_CH[_tvIdx];
-        _showTVMsg('YouTube non disponibile in embed','Apri '+(ch?ch.name:'stream')+' ↗',_tvOpenUrlFor(_tvIdx, videoId));
-      }
-    }
-  });
+  var iframe=document.createElement('iframe');
+  iframe.src=_ytEmbedUrl(videoId, channelId);
+  iframe.allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+  iframe.allowFullscreen=true;
+  iframe.referrerPolicy='strict-origin-when-cross-origin';
+  iframe.loading='eager';
+  iframe.style.cssText='position:absolute;inset:0;width:100%;height:100%;border:none;';
+  iframe.onerror=function(){
+    var ch=TV_CH[_tvIdx];
+    _showTVMsg('YouTube non disponibile in embed','Apri '+(ch?ch.name:'stream')+' ↗',_tvOpenUrlFor(_tvIdx, videoId));
+  };
+  wrap.appendChild(iframe);
 }
 
 function _showTVMsg(txt,btnTxt,btnUrl){
@@ -2837,7 +2809,7 @@ function tvOpenYT(){var ch=TV_CH[_tvIdx];if(!ch)return;var url=_tvOpenUrlFor(_tv
 // ── INIT ──────────────────────────────────────────────────────────
 function hardReset(){
   try{localStorage.removeItem('sh3_sources');localStorage.removeItem('sh3_colorder');localStorage.removeItem('sh3_colclosed');}catch(e){}
-  sources=normalizeSources(DEFAULTS.slice());
+  sources=DEFAULTS.slice();
   colOrder=ALL_COLS.map(function(c){return c.id;});
   colClosed=[];
   renderAll();doRefresh();
@@ -2957,7 +2929,6 @@ window.addEventListener('resize', function(){
 });
 
 loadPersist();
-sources=normalizeSources(sources);
 renderAll();
 doRefresh();
 
