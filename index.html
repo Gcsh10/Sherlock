@@ -271,8 +271,9 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .p2-legend{display:flex;gap:10px;align-items:center;font-size:10px;margin-left:auto;}
 .p2-legend span{display:flex;align-items:center;gap:4px;}
 .p2-legend i{width:8px;height:8px;border-radius:50%;display:inline-block;}
-#p2-map-wrap{flex:1;min-height:0;position:relative;overflow:hidden;background:var(--bg);}
+#p2-map-wrap{flex:1;min-height:0;position:relative;overflow:hidden;background:radial-gradient(circle at 50% 42%,rgba(120,82,58,.16),transparent 44%),linear-gradient(180deg,#121417,#0d0f12);border-top:1px solid rgba(255,255,255,.04);}
 #p2-map-wrap svg{width:100%;height:100%;display:block;}
+#p2-map-wrap::after{content:'';position:absolute;inset:10px;pointer-events:none;border:1px solid rgba(214,91,49,.12);box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);}
 
 /* Map tooltip */
 .p2-map-tip{
@@ -997,10 +998,9 @@ var DEFAULTS=[
   {id:'bernama',name:'BernAMA',url:'https://news.google.com/rss/search?q=site:bernama.com&hl=en&gl=MY&ceid=MY:en',cat:'sudest_asia',on:true},
   {id:'khmertimes',name:'Khmer Times',url:'https://news.google.com/rss/search?q=site:khmertimeskh.com&hl=en&gl=KH&ceid=KH:en',cat:'sudest_asia',on:true},
   {id:'myanmarnow',name:'Myanmar Now',url:'https://news.google.com/rss/search?q=site:myanmar-now.org&hl=en&gl=MM&ceid=MM:en',cat:'sudest_asia',on:true},
+  {id:'diplomat_indo',name:'The Diplomat Indo-Pacific',url:'https://news.google.com/rss/search?q=site:thediplomat.com+(%22Indo-Pacific%22+OR+ASEAN+OR+South+China+Sea+OR+Taiwan)&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
 
-  {id:'wenweipo',name:'Wen Wei Po',url:'https://news.google.com/rss/search?q=site:wenweipo.com&hl=zh-CN&gl=HK&ceid=HK:zh-Hans',cat:'cina',on:true},
-  {id:'mingpao',name:'Ming Pao Daily',url:'https://news.google.com/rss/search?q=site:mingpao.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',cat:'cina',on:true},
-  {id:'singtao',name:'Sing Tao Daily',url:'https://news.google.com/rss/search?q=site:stheadline.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',cat:'cina',on:true},
+  {id:'diplomat_cina',name:'The Diplomat China',url:'https://news.google.com/rss/search?q=site:thediplomat.com+(China+OR+Taiwan+PLA+OR+Beijing)&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
   {id:'applehk',name:'Apple Daily HK',url:'https://news.google.com/rss/search?q=%22Apple+Daily%22+Hong+Kong&hl=en&gl=HK&ceid=HK:en',cat:'cina',on:true},
   {id:'zaobao',name:'United Morning Post (Zaobao)',url:'https://news.google.com/rss/search?q=site:zaobao.com.sg&hl=zh-CN&gl=SG&ceid=SG:zh-Hans',cat:'cina',on:true},
   {id:'cna_tw',name:'Central News Agency',url:'https://news.google.com/rss/search?q=site:cna.com.tw&hl=zh-TW&gl=TW&ceid=TW:zh-Hant',cat:'cina',on:true},
@@ -1120,7 +1120,6 @@ var PRESETS=[
   {id:'rsshub_zhihu_tw',name:'RSSHub 知乎 台湾话题',cat:'cina',url:'https://rsshub.app/zhihu/topic/19553789',on:true},
   {id:'rsshub_bilibili_guancha',name:'RSSHub B站 观察者网',cat:'cina',url:'https://rsshub.app/bilibili/user/video/10330740',on:true},
   {id:'baidu_huanqiu',name:'Baidu 环球时报/环球网',cat:'cina',url:'https://news.baidu.com/n?cmd=4&class=chnnews&tn=rss&word=%E7%8E%AF%E7%90%83%E6%97%B6%E6%8A%A5+OR+%E7%8E%AF%E7%90%83%E7%BD%91',on:true},
-  {id:'baidu_wenweipo',name:'Baidu 文汇报',cat:'cina',url:'https://news.baidu.com/n?cmd=4&class=chnnews&tn=rss&word=%E6%96%87%E6%B1%87%E6%8A%A5',on:true},
   {id:'baidu_gmw',name:'Baidu 光明网',cat:'cina',url:'https://news.baidu.com/n?cmd=4&class=chnnews&tn=rss&word=%E5%85%89%E6%98%8E%E7%BD%91',on:true},
   {id:'baidu_bjd',name:'Baidu 北京日报',cat:'cina',url:'https://news.baidu.com/n?cmd=4&class=chnnews&tn=rss&word=%E5%8C%97%E4%BA%AC%E6%97%A5%E6%8A%A5',on:true},
   {id:'baidu_qst',name:'Baidu 求是',cat:'cina',url:'https://news.baidu.com/n?cmd=4&class=chnnews&tn=rss&word=%E6%B1%82%E6%98%AF',on:true},
@@ -1131,9 +1130,6 @@ var PRESETS=[
   {id:'thepaper_zh',name:'澎湃新闻 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:thepaper.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
   {id:'hk01_zh',name:'HK01 香港01 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:hk01.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',on:true},
   {id:'lianhezaobao_zh',name:'联合早报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:zaobao.com.sg&hl=zh-CN&gl=SG&ceid=SG:zh-Hans',on:true},
-  {id:'wenweipo_zh',name:'文汇报 Wenweipo (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:wenweipo.com&hl=zh-CN&gl=HK&ceid=HK:zh-Hans',on:true},
-  {id:'mingpao_zh',name:'明报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:mingpao.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',on:true},
-  {id:'singtao_zh',name:'星岛日报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:stheadline.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',on:true},
   {id:'gmw_zh',name:'光明网 Guangming (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:gmw.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
   {id:'beijingdaily_zh',name:'北京日报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:bjd.com.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
   {id:'qstheory_zh',name:'求是理论网 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:qstheory.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
@@ -2445,26 +2441,36 @@ function _drawP2Map(){
   var ic=_buildColors();
   var tip=document.getElementById('p2-map-tip');
 
-  _p2Proj=d3.geoNaturalEarth1().scale(W/6.2).translate([W/2,H/2]).precision(0.5);
+  _p2Proj=d3.geoEqualEarth().fitExtent([[18,18],[W-18,H-18]],countries).precision(0.5);
   var path=d3.geoPath(_p2Proj);
   var NS=document.createElementNS.bind(document,'http://www.w3.org/2000/svg');
 
   // SVG root
   var svg=d3.select(document.createElementNS('http://www.w3.org/2000/svg','svg'))
     .attr('viewBox','0 0 '+W+' '+H)
+    .attr('preserveAspectRatio','xMidYMid meet')
     .style('width','100%').style('height','100%').style('display','block').style('overflow','hidden');
 
-  // Sphere background
-  svg.append('path').datum({type:'Sphere'}).attr('d',path)
-    .attr('fill','var(--bg2)');
+  var defs=svg.append('defs');
+  defs.append('clipPath').attr('id','p2-map-clip').append('rect')
+    .attr('x',12).attr('y',12).attr('width',Math.max(0,W-24)).attr('height',Math.max(0,H-24));
+
+  svg.append('rect').attr('x',0).attr('y',0).attr('width',W).attr('height',H)
+    .attr('fill','#0d0f12');
+
+  // Zoom group: all map layers stay coherent while zooming
+  var g=svg.append('g').attr('class','zoom-group').attr('clip-path','url(#p2-map-clip)');
+  _p2G=g;
+
+  // Sphere background inside zoom group so the frame scales with the map
+  g.append('path').datum({type:'Sphere'}).attr('d',path)
+    .attr('fill','#171b1f').attr('stroke','rgba(214,91,49,.24)').attr('stroke-width','0.9')
+    .attr('vector-effect','non-scaling-stroke');
 
   // Graticule
-  svg.append('path').datum(d3.geoGraticule()()).attr('d',path)
-    .attr('fill','none').attr('stroke','var(--bd)').attr('stroke-width','0.3').attr('opacity','0.45');
-
-  // Zoom group
-  var g=svg.append('g').attr('class','zoom-group');
-  _p2G=g;
+  g.append('path').datum(d3.geoGraticule()()).attr('d',path)
+    .attr('fill','none').attr('stroke','rgba(255,255,255,.12)').attr('stroke-width','0.35').attr('opacity','0.55')
+    .attr('vector-effect','non-scaling-stroke');
 
   // Countries fill
   g.selectAll('path.country').data(countries.features).enter().append('path')
@@ -2520,9 +2526,9 @@ function _drawP2Map(){
   // Energy pipelines
   _drawPipelines(g.node(),path);
 
-  // Globe outline
-  svg.append('path').datum({type:'Sphere'}).attr('d',path)
-    .attr('fill','none').attr('stroke','var(--bd2)').attr('stroke-width','0.8');
+  g.append('rect').attr('x',12).attr('y',12).attr('width',Math.max(0,W-24)).attr('height',Math.max(0,H-24))
+    .attr('fill','none').attr('stroke','rgba(214,91,49,.12)').attr('stroke-width','0.8')
+    .attr('vector-effect','non-scaling-stroke');
 
   // D3 zoom
   _p2ZoomBeh=d3.zoom()
@@ -3290,7 +3296,7 @@ function toggleSidebar(){
 
 <script>
 (function(){
-  var APP_VERSION='2.3';
+  var APP_VERSION='2.5';
   var VERSION_KEY='sh3_app_version';
   try{
     var savedVersion=localStorage.getItem(VERSION_KEY)||'';
@@ -3305,6 +3311,15 @@ function toggleSidebar(){
       });
       localStorage.setItem(VERSION_KEY, APP_VERSION);
       console.log('SHERLOCK config reset for version', APP_VERSION);
+    }
+
+    var staleIds={wenweipo:1,mingpao:1,singtao:1,baidu_wenweipo:1,wenweipo_zh:1,mingpao_zh:1,singtao_zh:1};
+    var savedSources=JSON.parse(localStorage.getItem('sh3_sources')||'[]');
+    if(Array.isArray(savedSources) && savedSources.length){
+      var cleaned=savedSources.filter(function(src){ return src && !staleIds[src.id]; });
+      if(cleaned.length!==savedSources.length){
+        localStorage.setItem('sh3_sources', JSON.stringify(cleaned));
+      }
     }
   }catch(e){}
 })();
