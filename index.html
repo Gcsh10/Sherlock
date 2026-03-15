@@ -273,7 +273,7 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .p2-legend i{width:8px;height:8px;border-radius:50%;display:inline-block;}
 #p2-map-wrap{flex:1;min-height:0;position:relative;overflow:hidden;background:radial-gradient(circle at 50% 42%,rgba(120,82,58,.16),transparent 44%),linear-gradient(180deg,#121417,#0d0f12);border-top:1px solid rgba(255,255,255,.04);}
 #p2-map-wrap svg{width:100%;height:100%;display:block;}
-#p2-map-wrap::after{content:'';position:absolute;inset:10px;pointer-events:none;border:1px solid rgba(214,91,49,.12);box-shadow:inset 0 0 0 1px rgba(255,255,255,.02);}
+#p2-map-wrap::after{display:none;}
 
 /* Map tooltip */
 .p2-map-tip{
@@ -720,6 +720,51 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
   border-color:#6b7280 !important;
 }
 
+
+
+.p2-hubs-bar{display:flex;gap:8px;align-items:center;padding:8px 10px;border-top:1px solid rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.04);background:rgba(0,0,0,.18);overflow:auto;scrollbar-width:none;}
+.p2-hubs-bar::-webkit-scrollbar{display:none;}
+.p2-hub-chip{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(214,91,49,.24);background:rgba(255,255,255,.03);color:var(--tx);padding:6px 10px;border-radius:999px;font-size:11px;font-family:'Share Tech Mono',monospace;cursor:pointer;white-space:nowrap;transition:all .15s ease;}
+.p2-hub-chip:hover,.p2-hub-chip.active{border-color:rgba(214,91,49,.45);background:rgba(214,91,49,.10);transform:translateY(-1px);}
+.p2-hub-chip .sev{width:7px;height:7px;border-radius:50%;display:inline-block;}
+.p2-map-note{position:absolute;left:12px;bottom:12px;z-index:9;padding:8px 10px;border-radius:12px;border:1px solid rgba(214,91,49,.18);background:rgba(10,12,16,.8);backdrop-filter:blur(8px);font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--tx2);max-width:240px;line-height:1.45;}
+.timeline-page{display:flex;flex-direction:column;height:100%;background:var(--bg);}
+.timeline-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid var(--bd2);background:var(--bg2);}
+.timeline-toolbar-left{display:flex;gap:8px;flex-wrap:wrap;}
+.timeline-toolbar-right{display:flex;align-items:center;gap:8px;}
+.timeline-kpi{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--acc);letter-spacing:.08em;}
+.tl-filter.on{border-color:rgba(214,91,49,.45)!important;background:linear-gradient(180deg,rgba(214,91,49,.18),rgba(214,91,49,.08))!important;color:#fff6f0;}
+.timeline-wrap{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:0;height:100%;min-height:0;}
+.timeline-list{overflow:auto;padding:18px 20px 24px;position:relative;}
+.timeline-list::before{content:'';position:absolute;left:87px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,rgba(214,91,49,.32),transparent);}
+.timeline-item{position:relative;display:grid;grid-template-columns:72px 18px minmax(0,1fr);gap:14px;padding:0 0 18px 0;}
+.timeline-time{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--tx2);padding-top:4px;text-align:right;}
+.timeline-node{position:relative;width:18px;display:flex;justify-content:center;}
+.timeline-node::before{content:'';position:absolute;top:7px;width:10px;height:10px;border-radius:50%;background:var(--bd2);border:2px solid var(--bg);box-shadow:0 0 0 2px rgba(214,91,49,.14);}
+.timeline-item[data-sev='critical'] .timeline-node::before{background:var(--re);} 
+.timeline-item[data-sev='high'] .timeline-node::before{background:var(--am);} 
+.timeline-item[data-sev='medium'] .timeline-node::before{background:#3b82f6;} 
+.timeline-card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));border:1px solid rgba(122,154,184,.16);border-radius:16px;padding:14px 15px;box-shadow:0 8px 22px rgba(0,0,0,.14);}
+.timeline-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+.timeline-badge{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:3px 6px;border-radius:999px;border:1px solid transparent;}
+.timeline-badge.critical{color:var(--re);background:rgba(255,61,87,.12);border-color:rgba(255,61,87,.25);} 
+.timeline-badge.high{color:var(--am);background:rgba(240,165,0,.12);border-color:rgba(240,165,0,.25);} 
+.timeline-badge.medium{color:#7fb1ff;background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.25);} 
+.timeline-src{font-size:10px;color:var(--mu);font-family:'Share Tech Mono',monospace;}
+.timeline-title{font-size:17px;line-height:1.4;color:var(--tx);text-decoration:none;font-weight:650;display:block;}
+.timeline-title:hover{color:#fff;}
+.timeline-desc{margin-top:7px;font-size:13px;line-height:1.5;color:var(--tx2);}
+.timeline-meta{margin-top:8px;font-size:10px;color:var(--mu);font-family:'Share Tech Mono',monospace;display:flex;gap:10px;flex-wrap:wrap;}
+.timeline-side{border-left:1px solid var(--bd2);background:rgba(255,255,255,.02);padding:18px 16px;overflow:auto;display:flex;flex-direction:column;gap:12px;}
+.timeline-side-card{border:1px solid rgba(122,154,184,.14);border-radius:16px;padding:14px;background:rgba(255,255,255,.03);}
+.timeline-side-title{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--acc);text-transform:uppercase;margin-bottom:8px;}
+.timeline-side-text{font-size:13px;line-height:1.55;color:var(--tx2);}
+.briefing-bg{position:fixed;inset:0;z-index:900;background:rgba(5,7,10,.72);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px;}
+.briefing-modal{border-radius:18px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.45);} 
+.briefing-controls{display:flex;gap:8px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--bd);background:rgba(255,255,255,.02);} 
+.briefing-controls .hbtn.on{border-color:rgba(214,91,49,.45)!important;background:linear-gradient(180deg,rgba(214,91,49,.18),rgba(214,91,49,.08))!important;color:#fff6f0;} 
+@media (max-width: 1100px){.timeline-wrap{grid-template-columns:1fr;}.timeline-side{display:none;}}
+
 </style>
 </head>
 <body>
@@ -740,6 +785,7 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
   <div class="page-tabs">
     <button class="page-tab on" id="ptab-1" onclick="switchPage(1)">Notizie</button>
     <button class="page-tab" id="ptab-2" onclick="switchPage(2)">Mappa</button>
+    <button class="page-tab" id="ptab-3" onclick="switchPage(3)">Timeline</button>
   </div>
   <button class="hbtn mobile-menu-btn" id="mobile-menu-btn" onclick="toggleMobileMenu()">☰ MENU</button>
   <div class="hright">
@@ -748,6 +794,7 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
     <button class="hbtn" id="sidebar-toggle-btn" onclick="toggleSidebar()" title="Mostra/Nascondi filtri e fonti">Pannello</button>
     <button class="hbtn acc" onclick="openSrcModal()">Fonte</button>
     <button class="hbtn" onclick="openRestoreModal()">Colonne</button>
+    <button class="hbtn" onclick="openBriefing()">Briefing</button>
     <button class="hbtn" onclick="hardReset()" title="Reset completo localStorage">Reset</button>
     <button class="hbtn" id="trbtn" onclick="translateAll()" data-alltr="0" title="Traduci articoli cinesi con Google Translate">Traduci</button>
     <button class="hbtn" id="tvbtn" onclick="tvToggle()">Live TV</button>
@@ -904,6 +951,7 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
                 <span class="p2-tl-label" id="p2-tl-count" style="color:var(--acc);min-width:56px;text-align:right;"></span>
               </div>
             </div>
+            <div class="p2-hubs-bar" id="p2-hubs-bar"></div>
             <div id="p2-map-wrap" style="position:relative;"></div>
           </div>
         </div>
@@ -948,6 +996,37 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
 
     </div><!-- /p2-wrap -->
   </div><!-- /page-2 -->
+
+  <div class="page" id="page-3">
+    <div class="timeline-page">
+      <div class="timeline-toolbar">
+        <div class="timeline-toolbar-left">
+          <button class="hbtn tl-filter on" data-filter="all" onclick="setTimelineFilter('all',this)">Tutto</button>
+          <button class="hbtn tl-filter" data-filter="critical" onclick="setTimelineFilter('critical',this)">Critico</button>
+          <button class="hbtn tl-filter" data-filter="high" onclick="setTimelineFilter('high',this)">Alto</button>
+          <button class="hbtn tl-filter" data-filter="indopacifico" onclick="setTimelineFilter('indopacifico',this)">Indo-Pacifico</button>
+          <button class="hbtn tl-filter" data-filter="cina" onclick="setTimelineFilter('cina',this)">Cina</button>
+          <button class="hbtn tl-filter" data-filter="medioriente" onclick="setTimelineFilter('medioriente',this)">Medio Oriente</button>
+        </div>
+        <div class="timeline-toolbar-right">
+          <span class="timeline-kpi" id="timeline-kpi">0 eventi</span>
+        </div>
+      </div>
+      <div class="timeline-wrap">
+        <div class="timeline-list" id="timeline-list"></div>
+        <aside class="timeline-side">
+          <div class="timeline-side-card">
+            <div class="timeline-side-title">Cronologia strategica</div>
+            <div class="timeline-side-text">Ordina gli sviluppi per orario, filtra per teatro e apri subito le notizie più recenti. Pensata per lettura operativa, non per scorrimento social.</div>
+          </div>
+          <div class="timeline-side-card">
+            <div class="timeline-side-title">Uso consigliato</div>
+            <div class="timeline-side-text">Apri Timeline per seguire il flusso; passa a Mappa per vedere dove si concentra la pressione; chiudi con Briefing per estrarre il quadro del giorno.</div>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </div><!-- /page-3 -->
 </div>
 
 <div id="tv-panel" class="tv-off">
@@ -965,8 +1044,11 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
       <option value="14">Bloomberg</option><option value="15">CNN</option>
       <option value="16">CNBC</option>
     </select>
+    <button class="tvbtn2" onclick="tvPrev()" title="Canale precedente">&#9664;</button>
+    <button class="tvbtn2" onclick="tvNext()" title="Canale successivo">&#9654;</button>
     <button class="tvbtn2" id="tv-mute-btn" onclick="tvUnmute()">SUONO</button>
-    <button class="tvbtn2" onclick="tvOpenYT()">YT &#x2197;</button>
+    <button class="tvbtn2" onclick="tvPiP()" title="Picture in Picture">PiP</button>
+    <button class="tvbtn2" onclick="tvOpenYT()">Apri &#x2197;</button>
     <button class="tvbtn2" onclick="tvClose()" style="color:var(--re)">&#x2715;</button>
   </div>
   <div id="tv-yt-wrap">
@@ -1001,7 +1083,9 @@ var DEFAULTS=[
   {id:'diplomat_indo',name:'The Diplomat Indo-Pacific',url:'https://news.google.com/rss/search?q=site:thediplomat.com+(%22Indo-Pacific%22+OR+ASEAN+OR+South+China+Sea+OR+Taiwan)&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
 
   {id:'diplomat_cina',name:'The Diplomat China',url:'https://news.google.com/rss/search?q=site:thediplomat.com+(China+OR+Taiwan+PLA+OR+Beijing)&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
-  {id:'applehk',name:'Apple Daily HK',url:'https://news.google.com/rss/search?q=%22Apple+Daily%22+Hong+Kong&hl=en&gl=HK&ceid=HK:en',cat:'cina',on:true},
+  {id:'nikkei_asia',name:'Nikkei Asia',url:'https://news.google.com/rss/search?q=site:asia.nikkei.com+(China+OR+Taiwan+OR+ASEAN+OR+Japan)&hl=en&gl=JP&ceid=JP:en',cat:'indopacifico',on:true},
+  {id:'scmp_china',name:'SCMP China',url:'https://news.google.com/rss/search?q=site:scmp.com+(china+OR+taiwan+OR+south+china+sea)&hl=en&gl=HK&ceid=HK:en',cat:'cina',on:true},
+  {id:'lowy',name:'Lowy Interpreter',url:'https://news.google.com/rss/search?q=site:lowyinstitute.org+Interpreter+Indo-Pacific&hl=en&gl=AU&ceid=AU:en',cat:'indopacifico',on:true},
   {id:'zaobao',name:'United Morning Post (Zaobao)',url:'https://news.google.com/rss/search?q=site:zaobao.com.sg&hl=zh-CN&gl=SG&ceid=SG:zh-Hans',cat:'cina',on:true},
   {id:'cna_tw',name:'Central News Agency',url:'https://news.google.com/rss/search?q=site:cna.com.tw&hl=zh-TW&gl=TW&ceid=TW:zh-Hant',cat:'cina',on:true},
   {id:'pla_daily',name:'PLA Daily',url:'https://news.google.com/rss/search?q=site:81.cn+解放军报&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
@@ -1090,6 +1174,12 @@ var DEFAULTS=[
   {id:'osint_oryx',   name:'Oryx',            cat:'osint',   url:'https://news.google.com/rss/search?q=site:oryxspioenkop.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'osint_geopol', name:'Geopolitical Monitor',cat:'osint',url:'https://news.google.com/rss/search?q=site:geopoliticalmonitor.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'osint_acled',  name:'ACLED',           cat:'osint',   url:'https://news.google.com/rss/search?q=site:acleddata.com&hl=en',on:true},
+  {id:'warontherocks',name:'War on the Rocks',cat:'osint',url:'https://news.google.com/rss/search?q=site:warontherocks.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'defensenews',name:'Defense News',cat:'osint',url:'https://news.google.com/rss/search?q=site:defensenews.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'foreignaffairs',name:'Foreign Affairs',cat:'osint',url:'https://news.google.com/rss/search?q=site:foreignaffairs.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'csis',name:'CSIS',cat:'osint',url:'https://news.google.com/rss/search?q=site:csis.org+geopolitics&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'cfr',name:'CFR',cat:'osint',url:'https://news.google.com/rss/search?q=site:cfr.org+global+conflict&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'isw',name:'ISW',cat:'osint',url:'https://news.google.com/rss/search?q=site:understandingwar.org&hl=en&gl=US&ceid=US:en',on:true},
   {id:'cia',     name:'CIA Newsroom',  cat:'ist', url:'https://news.google.com/rss/search?q=site:cia.gov&hl=en&gl=US&ceid=US:en',on:true},
   {id:'cia_x',   name:'CIA / X',        cat:'ist', url:'https://rsshub.app/twitter/user/CIA',on:true},
   {id:'dis',     name:'Sic.Naz. IT',   cat:'ist', url:'https://news.google.com/rss/search?q=sicurezzanazionale+DIS+AISE+AISI&hl=it&gl=IT&ceid=IT:it',on:true},
@@ -1485,7 +1575,7 @@ function inCol(col, a){
   return col.regions.indexOf(a.region)>=0;
 }
 
-function renderAll(){renderColumns();updateColList();}
+function renderAll(){renderColumns();updateColList();renderTimeline();}
 function renderColumns(){
   var wrap=document.getElementById('cols-wrap');if(!wrap)return;
   var addBtn=document.getElementById('add-col-btn');
@@ -1613,18 +1703,105 @@ setInterval(tickClock,1000);tickClock();
 function toggleTheme(){var h=document.documentElement;h.setAttribute('data-theme',h.getAttribute('data-theme')==='light'?'dark':'light');}
 function notify(msg){var n=document.createElement('div');n.className='notif';n.textContent=msg;document.body.appendChild(n);setTimeout(function(){if(n.parentNode)n.parentNode.removeChild(n);},2500);}
 
+var _timelineFilter='all';
+function _timelineMatches(a){
+  if(_timelineFilter==='all') return true;
+  if(_timelineFilter==='critical'||_timelineFilter==='high') return a.sev===_timelineFilter;
+  return a.region===_timelineFilter || a.cat===_timelineFilter;
+}
+function setTimelineFilter(filter,btn){
+  _timelineFilter=filter||'all';
+  document.querySelectorAll('.tl-filter').forEach(function(b){b.classList.toggle('on', b===btn || b.getAttribute('data-filter')===_timelineFilter);});
+  renderTimeline();
+}
+function renderTimeline(){
+  var list=document.getElementById('timeline-list'), kpi=document.getElementById('timeline-kpi');
+  if(!list) return;
+  var items=(articles||[]).slice().filter(_timelineMatches).sort(function(a,b){return (b.ts||0)-(a.ts||0);}).slice(0,120);
+  if(kpi) kpi.textContent=items.length+' eventi';
+  if(!items.length){list.innerHTML='<div class="empty">Nessun evento nella timeline</div>';return;}
+  list.innerHTML=items.map(function(a){
+    var dt=a.pub?new Date(a.pub):null;
+    var time=(dt && !isNaN(dt))?dt.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'}):'--:--';
+    var full=(dt && !isNaN(dt))?dt.toLocaleDateString('it-IT',{day:'2-digit',month:'short'})+' · '+time:fmtTime(a.pub);
+    return '<div class="timeline-item" data-sev="'+a.sev+'">'
+      +'<div class="timeline-time">'+time+'</div>'
+      +'<div class="timeline-node"></div>'
+      +'<div class="timeline-card">'
+      +'<div class="timeline-head"><span class="timeline-badge '+a.sev+'">'+a.sev+'</span><span class="timeline-src">'+esc(a.src)+'</span></div>'
+      +'<a class="timeline-title" href="'+esc(a.link||'')+'" target="_blank" rel="noopener">'+esc(a.title)+'</a>'
+      +(a.description?'<div class="timeline-desc">'+esc(a.description)+'</div>':'')
+      +'<div class="timeline-meta"><span>'+full+'</span><span>'+(a.region||'global')+'</span></div>'
+      +'</div></div>';
+  }).join('');
+}
 
+var _briefingMode='global';
+function _briefingFilter(a){
+  if(_briefingMode==='global') return true;
+  if(_briefingMode==='alerts') return a.sev==='critical'||a.sev==='high';
+  return a.region===_briefingMode || a.cat===_briefingMode;
+}
+function openBriefing(mode){
+  if(mode) _briefingMode=mode;
+  var ex=document.getElementById('briefing-root');
+  if(!ex){
+    var root=document.createElement('div');
+    root.id='briefing-root';
+    root.className='briefing-bg';
+    root.innerHTML=`<div class="briefing-modal">
+      <div class="briefing-topbar"><div class="briefing-topbar-title">BRIEFING MODE</div><button class="hbtn" onclick="print()">Stampa</button><button class="hbtn" onclick="closeBriefing()">Chiudi</button></div>
+      <div class="briefing-controls">
+        <button class="hbtn br-mode" data-mode="global" onclick="setBriefingMode('global',this)">Globale</button>
+        <button class="hbtn br-mode" data-mode="alerts" onclick="setBriefingMode('alerts',this)">Alert</button>
+        <button class="hbtn br-mode" data-mode="medioriente" onclick="setBriefingMode('medioriente',this)">Medio Oriente</button>
+        <button class="hbtn br-mode" data-mode="cina" onclick="setBriefingMode('cina',this)">Cina</button>
+        <button class="hbtn br-mode" data-mode="indopacifico" onclick="setBriefingMode('indopacifico',this)">Indo-Pacifico</button>
+      </div>
+      <div class="briefing-body" id="briefing-body"></div>
+    </div>`;
+    root.addEventListener('click',function(e){if(e.target===root)closeBriefing();});
+    document.body.appendChild(root);
+  }
+  document.getElementById('briefing-root').style.display='flex';
+  renderBriefing();
+}
+function closeBriefing(){var el=document.getElementById('briefing-root');if(el)el.style.display='none';}
+function setBriefingMode(mode,btn){_briefingMode=mode;document.querySelectorAll('.br-mode').forEach(function(b){b.classList.toggle('on',b===btn||b.getAttribute('data-mode')===mode);});renderBriefing();}
+function renderBriefing(){
+  var body=document.getElementById('briefing-body'); if(!body) return;
+  document.querySelectorAll('.br-mode').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-mode')===_briefingMode);});
+  var items=(articles||[]).filter(_briefingFilter).sort(function(a,b){var SO={critical:4,high:3,medium:2,low:1};return (SO[b.sev]||0)-(SO[a.sev]||0)||((b.ts||0)-(a.ts||0));}).slice(0,12);
+  var titleMap={global:'Morning Brief — Globale',alerts:'Critical Brief — Alert',medioriente:'Theater Brief — Medio Oriente',cina:'Theater Brief — Cina',indopacifico:'Theater Brief — Indo-Pacifico'};
+  var now=new Date();
+  var summary='';
+  if(items.length){
+    var sevCount={critical:0,high:0,medium:0,low:0};
+    var regs={};
+    items.forEach(function(a){sevCount[a.sev]=(sevCount[a.sev]||0)+1;regs[a.region]=(regs[a.region]||0)+1;});
+    var topRegs=Object.keys(regs).sort(function(a,b){return regs[b]-regs[a];}).slice(0,3).map(function(r){return r+' ('+regs[r]+')';}).join(' · ');
+    summary='<div class="br-header"><div class="br-title">'+titleMap[_briefingMode]+'</div><div class="br-date">'+now.toLocaleDateString('it-IT',{weekday:'long',day:'2-digit',month:'long',year:'numeric'})+' · '+now.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'})+'</div><div style="margin-top:14px;font-size:14px;line-height:1.6;color:var(--tx2)">Quadro rapido: '+items.length+' sviluppi prioritari. Focus prevalente su '+topRegs+'. Gli eventi critici sono '+sevCount.critical+', quelli ad alta rilevanza '+sevCount.high+'.</div></div>';
+  } else {
+    summary='<div class="br-header"><div class="br-title">'+titleMap[_briefingMode]+'</div><div class="br-date">Nessun elemento disponibile</div></div>';
+  }
+  body.innerHTML=summary + items.map(function(a,i){
+    return '<div class="br-item"><div class="br-sev-badge '+a.sev+'">'+a.sev+'</div><div class="br-item-body"><a class="br-item-headline" href="'+esc(a.link||'')+'" target="_blank" rel="noopener">'+esc((i+1)+'. '+a.title)+'</a><div class="br-item-meta">'+esc(a.src)+' · '+fmtTime(a.pub)+' · '+esc(a.region||'global')+'</div>'+(a.description?'<div style="margin-top:6px;color:var(--tx2);line-height:1.55;font-size:14px">'+esc(a.description)+'</div>':'')+'</div></div>';
+  }).join('') + '<div class="br-footer">Briefing generato da Sherlock sulla base delle notizie disponibili in dashboard.</div>';
+}
 
 // ── BRIEFING ─────────────────────────────────────────────────────
 
 function switchPage(n){
-  var p1=document.getElementById('page-1'),p2=document.getElementById('page-2');
-  var t1=document.getElementById('ptab-1'),t2=document.getElementById('ptab-2');
+  var p1=document.getElementById('page-1'),p2=document.getElementById('page-2'),p3=document.getElementById('page-3');
+  var t1=document.getElementById('ptab-1'),t2=document.getElementById('ptab-2'),t3=document.getElementById('ptab-3');
   if(p1)p1.classList.toggle('on',n===1);
   if(p2)p2.classList.toggle('on',n===2);
+  if(p3)p3.classList.toggle('on',n===3);
   if(t1)t1.classList.toggle('on',n===1);
   if(t2)t2.classList.toggle('on',n===2);
-  if(n===2){renderAlerts();if(!_p2MapWorld)initP2Map();else _drawP2Map();}
+  if(t3)t3.classList.toggle('on',n===3);
+  if(n===2){renderAlerts();if(!_p2MapWorld)initP2Map();else _drawP2Map();renderHubBar();}
+  if(n===3){renderTimeline();}
 }
 
 // ── MAPPA PAGINA 2 ────────────────────────────────────────────────
@@ -2308,6 +2485,33 @@ function p2ToggleLayer(layer,btn){
 }
 
 // ── Draw overlay (pins + hotspots) — called on each data update ──
+function renderHubBar(){
+  var bar=document.getElementById('p2-hubs-bar');
+  if(!bar) return;
+  var clusters=_geolocateArticles();
+  var rows=Object.keys(clusters).map(function(k){
+    var cl=clusters[k];
+    var sev=0;cl.items.forEach(function(a){sev=Math.max(sev,{critical:4,high:3,medium:2,low:1}[a.sev]||1);});
+    return {key:k,name:cl.hub.name,count:cl.items.length,sev:sev,hub:cl.hub};
+  }).sort(function(a,b){return b.count-a.count || b.sev-a.sev;}).slice(0,12);
+  if(!rows.length){bar.innerHTML='<div class="p2-hub-chip">Nessun cluster geolocalizzato</div>';return;}
+  var col=function(sev){return sev>=4?'#ef4444':sev>=3?'#f59e0b':sev>=2?'#3b82f6':'#22d35e';};
+  bar.innerHTML=rows.map(function(r){return '<button class="p2-hub-chip" onclick="p2FocusHub(\''+r.key+'\')"><span class="sev" style="background:'+col(r.sev)+'"></span><span>'+esc(r.name)+'</span><span style="color:var(--tx2)">'+r.count+'</span></button>';}).join('');
+}
+function p2FocusHub(key){
+  var clusters=_geolocateArticles();
+  var cl=clusters[key]; if(!cl||!_p2Proj||!_p2SVG||!_p2ZoomBeh) return;
+  document.querySelectorAll('.p2-hub-chip').forEach(function(el){el.classList.toggle('active', el.getAttribute('onclick')==="p2FocusHub('"+key+"')");});
+  var wrap=document.getElementById('p2-map-wrap'); var W=wrap?wrap.clientWidth:900, H=wrap?wrap.clientHeight:420;
+  var xy=_p2Proj([cl.hub.lng, cl.hub.lat]); if(!xy) return;
+  var scale=cl.items.length>=4?4.2:3.3;
+  var t=d3.zoomIdentity.translate(W/2-xy[0]*scale,H/2-xy[1]*scale).scale(scale);
+  _p2SVG.transition().duration(650).call(_p2ZoomBeh.transform,t);
+  var note=wrap.querySelector('.p2-map-note');
+  if(!note){note=document.createElement('div');note.className='p2-map-note';wrap.appendChild(note);}
+  note.innerHTML='<b style="color:#fff">'+esc(cl.hub.name)+'</b><br>'+cl.items.length+' notizie correlate nelle ultime '+document.getElementById('p2-timeline').value+'h';
+}
+
 function _redrawOverlay(){
   if(!_p2Proj)return;
   var wrap=document.getElementById('p2-map-wrap');if(!wrap)return;
@@ -2549,6 +2753,7 @@ function _drawP2Map(){
   // Draw HTML overlay (pins + hotspots)
   _redrawOverlay();
   _updateStats();
+  renderHubBar();
   // Restore previous view
   if(_p2CurrentView!=='global')p2SetView(_p2CurrentView);
 }
@@ -2556,6 +2761,7 @@ function _drawP2Map(){
 function _refreshP2Overlay(){
   _redrawOverlay();
   _updateStats();
+  renderHubBar();
 }
 
 function initP2Map(){
@@ -2811,6 +3017,9 @@ function tvChange(){var sel=document.getElementById('tvsel');if(sel)_buildPlayer
 function tvToggle(){var panel=document.getElementById('tv-panel');if(!panel)return;if(panel.classList.contains('tv-off')){panel.classList.remove('tv-off');_buildPlayer(_tvIdx);}else{tvClose();}}
 function tvClose(){_tvResetSurface();var panel=document.getElementById('tv-panel');if(panel)panel.classList.add('tv-off');}
 function tvOpenYT(){var ch=TV_CH[_tvIdx];if(!ch)return;var url=_tvOpenUrlFor(_tvIdx);if(url)window.open(url,'_blank');}
+function tvPrev(){_tvIdx=(_tvIdx-1+TV_CH.length)%TV_CH.length;var sel=document.getElementById('tvsel');if(sel)sel.value=String(_tvIdx);_buildPlayer(_tvIdx);}
+function tvNext(){_tvIdx=(_tvIdx+1)%TV_CH.length;var sel=document.getElementById('tvsel');if(sel)sel.value=String(_tvIdx);_buildPlayer(_tvIdx);}
+async function tvPiP(){var vid=_tvGetVideo();if(vid&&vid.style.display!=='none'&&document.pictureInPictureEnabled&& !vid.disablePictureInPicture){try{if(document.pictureInPictureElement){await document.exitPictureInPicture();}else{await vid.requestPictureInPicture();}return;}catch(e){}}notify('PiP disponibile sui canali HLS; per gli embed apro il live esterno');tvOpenYT();}
 (function(){
   var hd=document.getElementById('tvhd'),panel=document.getElementById('tv-panel');
   if(!hd||!panel)return;
@@ -3291,12 +3500,57 @@ function toggleSidebar(){
 .live-status.ok{color:#22c55e;}
 .live-status.wait{color:var(--acc);}
 .live-status.off{color:var(--mu);}
+
+
+.p2-hubs-bar{display:flex;gap:8px;align-items:center;padding:8px 10px;border-top:1px solid rgba(255,255,255,.04);border-bottom:1px solid rgba(255,255,255,.04);background:rgba(0,0,0,.18);overflow:auto;scrollbar-width:none;}
+.p2-hubs-bar::-webkit-scrollbar{display:none;}
+.p2-hub-chip{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(214,91,49,.24);background:rgba(255,255,255,.03);color:var(--tx);padding:6px 10px;border-radius:999px;font-size:11px;font-family:'Share Tech Mono',monospace;cursor:pointer;white-space:nowrap;transition:all .15s ease;}
+.p2-hub-chip:hover,.p2-hub-chip.active{border-color:rgba(214,91,49,.45);background:rgba(214,91,49,.10);transform:translateY(-1px);}
+.p2-hub-chip .sev{width:7px;height:7px;border-radius:50%;display:inline-block;}
+.p2-map-note{position:absolute;left:12px;bottom:12px;z-index:9;padding:8px 10px;border-radius:12px;border:1px solid rgba(214,91,49,.18);background:rgba(10,12,16,.8);backdrop-filter:blur(8px);font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--tx2);max-width:240px;line-height:1.45;}
+.timeline-page{display:flex;flex-direction:column;height:100%;background:var(--bg);}
+.timeline-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 14px;border-bottom:1px solid var(--bd2);background:var(--bg2);}
+.timeline-toolbar-left{display:flex;gap:8px;flex-wrap:wrap;}
+.timeline-toolbar-right{display:flex;align-items:center;gap:8px;}
+.timeline-kpi{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--acc);letter-spacing:.08em;}
+.tl-filter.on{border-color:rgba(214,91,49,.45)!important;background:linear-gradient(180deg,rgba(214,91,49,.18),rgba(214,91,49,.08))!important;color:#fff6f0;}
+.timeline-wrap{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:0;height:100%;min-height:0;}
+.timeline-list{overflow:auto;padding:18px 20px 24px;position:relative;}
+.timeline-list::before{content:'';position:absolute;left:87px;top:0;bottom:0;width:1px;background:linear-gradient(180deg,transparent,rgba(214,91,49,.32),transparent);}
+.timeline-item{position:relative;display:grid;grid-template-columns:72px 18px minmax(0,1fr);gap:14px;padding:0 0 18px 0;}
+.timeline-time{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--tx2);padding-top:4px;text-align:right;}
+.timeline-node{position:relative;width:18px;display:flex;justify-content:center;}
+.timeline-node::before{content:'';position:absolute;top:7px;width:10px;height:10px;border-radius:50%;background:var(--bd2);border:2px solid var(--bg);box-shadow:0 0 0 2px rgba(214,91,49,.14);}
+.timeline-item[data-sev='critical'] .timeline-node::before{background:var(--re);} 
+.timeline-item[data-sev='high'] .timeline-node::before{background:var(--am);} 
+.timeline-item[data-sev='medium'] .timeline-node::before{background:#3b82f6;} 
+.timeline-card{background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));border:1px solid rgba(122,154,184,.16);border-radius:16px;padding:14px 15px;box-shadow:0 8px 22px rgba(0,0,0,.14);}
+.timeline-head{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px;}
+.timeline-badge{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;padding:3px 6px;border-radius:999px;border:1px solid transparent;}
+.timeline-badge.critical{color:var(--re);background:rgba(255,61,87,.12);border-color:rgba(255,61,87,.25);} 
+.timeline-badge.high{color:var(--am);background:rgba(240,165,0,.12);border-color:rgba(240,165,0,.25);} 
+.timeline-badge.medium{color:#7fb1ff;background:rgba(59,130,246,.12);border-color:rgba(59,130,246,.25);} 
+.timeline-src{font-size:10px;color:var(--mu);font-family:'Share Tech Mono',monospace;}
+.timeline-title{font-size:17px;line-height:1.4;color:var(--tx);text-decoration:none;font-weight:650;display:block;}
+.timeline-title:hover{color:#fff;}
+.timeline-desc{margin-top:7px;font-size:13px;line-height:1.5;color:var(--tx2);}
+.timeline-meta{margin-top:8px;font-size:10px;color:var(--mu);font-family:'Share Tech Mono',monospace;display:flex;gap:10px;flex-wrap:wrap;}
+.timeline-side{border-left:1px solid var(--bd2);background:rgba(255,255,255,.02);padding:18px 16px;overflow:auto;display:flex;flex-direction:column;gap:12px;}
+.timeline-side-card{border:1px solid rgba(122,154,184,.14);border-radius:16px;padding:14px;background:rgba(255,255,255,.03);}
+.timeline-side-title{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--acc);text-transform:uppercase;margin-bottom:8px;}
+.timeline-side-text{font-size:13px;line-height:1.55;color:var(--tx2);}
+.briefing-bg{position:fixed;inset:0;z-index:900;background:rgba(5,7,10,.72);backdrop-filter:blur(8px);display:none;align-items:center;justify-content:center;padding:20px;}
+.briefing-modal{border-radius:18px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.45);} 
+.briefing-controls{display:flex;gap:8px;flex-wrap:wrap;padding:10px 14px;border-bottom:1px solid var(--bd);background:rgba(255,255,255,.02);} 
+.briefing-controls .hbtn.on{border-color:rgba(214,91,49,.45)!important;background:linear-gradient(180deg,rgba(214,91,49,.18),rgba(214,91,49,.08))!important;color:#fff6f0;} 
+@media (max-width: 1100px){.timeline-wrap{grid-template-columns:1fr;}.timeline-side{display:none;}}
+
 </style>
 
 
 <script>
 (function(){
-  var APP_VERSION='2.5';
+  var APP_VERSION='2.6';
   var VERSION_KEY='sh3_app_version';
   try{
     var savedVersion=localStorage.getItem(VERSION_KEY)||'';
