@@ -274,7 +274,8 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 #p2-map-wrap{flex:1;min-height:0;position:relative;overflow:hidden;background:var(--bg);}
 #p2-map-wrap svg{width:100%;height:100%;display:block;}
 #p2-map-wrap{border:none!important;box-shadow:none!important;outline:none!important;}
-#p2-map-wrap .map-shell{width:100%;height:100%;position:relative;overflow:hidden;border-radius:28px;border:1px solid rgba(61,92,127,.42);background:radial-gradient(circle at 50% 45%,rgba(16,65,126,.14),rgba(2,10,24,.0) 52%),var(--bg);}
+#p2-map-wrap .map-shell{width:100%;height:100%;position:relative;overflow:hidden;border-radius:0;border:none;background:#121417;cursor:grab;touch-action:none;}
+#p2-map-wrap .map-shell:active{cursor:grabbing;}
 #p2-map-wrap .map-shell svg{display:block;width:100%;height:100%;}
 .theater-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 8px 2px;font-family:Share Tech Mono,monospace;text-transform:uppercase;letter-spacing:.12em;font-size:9px;color:var(--tx2);}
 .theater-add{border:1px solid rgba(122,154,184,.22);background:rgba(255,255,255,.03);color:var(--tx2);border-radius:999px;padding:3px 8px;font-size:9px;font-family:Share Tech Mono,monospace;cursor:pointer;}
@@ -912,8 +913,8 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
             <div class="p2-map-toolbar" id="p2-toolbar">
               <div class="p2-region-btns">
                 <button class="p2-rbtn active" onclick="p2SetView('global')">&#127758; Global</button>
-                <button class="p2-rbtn p2-zoom-btn" onclick="p2ZoomStep(1.5)" title="Zoom in">+</button>
-                <button class="p2-rbtn p2-zoom-btn" onclick="p2ZoomStep(0.67)" title="Zoom out">&minus;</button>
+                <button class="p2-rbtn p2-zoom-btn" onclick="p2ZoomStep(1.25)" title="Zoom in">+</button>
+                <button class="p2-rbtn p2-zoom-btn" onclick="p2ZoomStep(0.8)" title="Zoom out">&minus;</button>
               </div>
               <div style="width:1px;height:16px;background:var(--bd2);margin:0 2px;flex-shrink:0;"></div>
               <div class="p2-layer-btns">
@@ -2697,8 +2698,14 @@ function _drawP2Map(){
 
   // D3 zoom
   _p2ZoomBeh=d3.zoom()
-    .scaleExtent([0.7,15])
+    .scaleExtent([0.85,8])
     .translateExtent([[-W*2,-H*2],[W*3,H*3]])
+    .wheelDelta(function(event){
+      return -event.deltaY * (event.ctrlKey ? 0.003 : 0.0022);
+    })
+    .filter(function(event){
+      return !event.button;
+    })
     .on('zoom',function(event){
       g.attr('transform',event.transform);
       _redrawOverlay(); // reposition HTML pins on zoom/pan
