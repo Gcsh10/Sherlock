@@ -1902,6 +1902,8 @@ function translateAll(){
 
 var _p2Layers={pins:true,hs:true,cables:false,conflict:true,pipes:false,heatmap:false,borders:true,naval:true,chokepoints:true};
 var _p2CurrentView='global';
+var _p2Schematic=false;
+var _p2FallbackTransform={scale:1,tx:0,ty:0};
 
 // ── Region → ISO-2 mapping ───────────────────────────────────────
 var RC={
@@ -2454,20 +2456,36 @@ function closeCountryPanel(){
   _cpCurrentIso='';
 }
 
+function _p2ApplyFallbackTransform(animate){
+  var inner=document.querySelector('#p2-map-wrap .p2-fallback-inner');
+  if(!inner)return;
+  inner.style.transition=animate?'transform .55s ease':'none';
+  inner.style.transform='translate('+_p2FallbackTransform.tx+'px,'+_p2FallbackTransform.ty+'px) scale('+_p2FallbackTransform.scale+')';
+}
+
 function p2ZoomStep(factor){
+  if(_p2Schematic){
+    _p2FallbackTransform.scale=Math.max(1,Math.min(6,(_p2FallbackTransform.scale||1)*factor));
+    _p2ApplyFallbackTransform(true);
+    return;
+  }
   if(!_p2SVG||!_p2ZoomBeh)return;
   _p2SVG.transition().duration(300).call(_p2ZoomBeh.scaleBy, factor);
 }
 
 function p2SetView(view){
   _p2CurrentView=view;
-  // Update button state
   document.querySelectorAll('.p2-rbtn').forEach(function(b){b.classList.remove('active');});
   var pressed=document.querySelector('[onclick="p2SetView(\''+view+'\')"]');
   if(pressed)pressed.classList.add('active');
-  if(!_p2SVG||!_p2ZoomBeh)return;
   var vp=P2_VIEWS[view];
   if(!vp)return;
+  if(_p2Schematic){
+    _p2FallbackTransform={scale:vp.s,tx:vp.tx,ty:vp.ty};
+    _p2ApplyFallbackTransform(true);
+    return;
+  }
+  if(!_p2SVG||!_p2ZoomBeh)return;
   var wrap=document.getElementById('p2-map-wrap');
   var W=wrap?wrap.clientWidth:900, H=wrap?wrap.clientHeight:420;
   var cx=W/2, cy=H/2;
@@ -2478,6 +2496,7 @@ function p2SetView(view){
 
 function p2ToggleLayer(layer,btn){
   _p2Layers[layer]=!_p2Layers[layer];
+  if(_p2Schematic){ if(btn)btn.classList.toggle('on',_p2Layers[layer]); _drawP2FallbackMap(); return; }
   if(btn)btn.classList.toggle('on',_p2Layers[layer]);
   if(layer==='pipes'||layer==='heatmap'||layer==='borders'){
     // These require SVG redraw
@@ -2752,42 +2771,85 @@ function _refreshP2Overlay(){
   _updateStats();
 }
 
-function initP2Map(){
-  function _fetchJSON(urls, idx){
-    idx=idx||0;
-    if(idx>=urls.length) return Promise.reject(new Error('atlas unavailable'));
-    return fetch(urls[idx], {cache:'no-store'}).then(function(r){ if(!r.ok) throw new Error(r.status); return r.json(); }).catch(function(){ return _fetchJSON(urls, idx+1); });
-  }
-  function _doLoad(){
-    _fetchJSON([
-      'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json',
-      'https://unpkg.com/world-atlas@2/countries-110m.json',
-      'https://fastly.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
-    ]).then(function(w){_p2MapWorld=w;_drawP2Map();})
-      .catch(function(){
-        var wrap=document.getElementById('p2-map-wrap');
-        if(wrap)wrap.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:#cbd5e1;font-size:11px;font-family:Share Tech Mono,monospace;letter-spacing:.08em">MAP DATA OFFLINE</div>';
-      });
-  }
-  function _loadScript(urls, globalName, cb, idx){
-    idx=idx||0;
-    if(window[globalName]){cb();return;}
-    if(idx>=urls.length) return;
-    var s=document.createElement('script');
-    s.src=urls[idx];
-    s.onload=function(){ if(window[globalName]) cb(); else _loadScript(urls, globalName, cb, idx+1); };
-    s.onerror=function(){ _loadScript(urls, globalName, cb, idx+1); };
-    document.head.appendChild(s);
-  }
-  _loadScript([
-    'https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js',
-    'https://unpkg.com/d3@7/dist/d3.min.js'
-  ], 'd3', function(){
-    _loadScript([
-      'https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js',
-      'https://unpkg.com/topojson-client@3/dist/topojson-client.min.js'
-    ], 'topojson', _doLoad);
+function _fallbackProjection(lat,lng,W,H){
+  return {x:((lng+180)/360)*W,y:((90-lat)/180)*H};
+}
+function _buildFallbackPins(){
+  if(!_p2Layers.pins && !_p2Layers.hs) return '';
+  var W=1200,H=600; var html='';
+  var clusters=clusterArticlesByHub?clusterArticlesByHub():{};
+  Object.keys(clusters).forEach(function(key){
+    var cl=clusters[key], hub=cl.hub, items=cl.items||[];
+    var p=_fallbackProjection(hub.lat,hub.lng,W,H);
+    var sev=0; items.forEach(function(it){ sev=Math.max(sev, SEV_SCORE[it.sev]||1); });
+    var col=sev>=4?'#ff5a5f':sev>=3?'#ffb347':sev>=2?'#68c8ff':'#7df0c5';
+    var sz=Math.min(26,10+items.length*2.2);
+    html += '<div class="p2-fallback-pin" style="position:absolute;left:'+p.x+'px;top:'+p.y+'px;width:'+sz+'px;height:'+sz+'px;border-radius:999px;transform:translate(-50%,-50%);background:radial-gradient(circle, '+col+' 0%, rgba(255,255,255,.92) 18%, '+col+' 36%, rgba(0,0,0,0) 72%);border:1px solid rgba(255,255,255,.55);box-shadow:0 0 0 1px rgba(255,255,255,.08),0 0 18px '+col+'55"></div>';
   });
+  return html;
+}
+function _buildFallbackMap(){
+  return ''
+  +'<div class="p2-fallback-viewport" style="position:absolute;inset:0;overflow:hidden;background:radial-gradient(circle at 50% 40%,rgba(18,53,88,.28),transparent 50%),linear-gradient(180deg,#09101a 0%, #08111d 100%)">'
+  +  '<div class="p2-fallback-inner" style="position:absolute;left:0;top:0;width:1200px;height:600px;transform-origin:50% 50%;">'
+  +    '<svg viewBox="0 0 1200 600" preserveAspectRatio="none" style="position:absolute;inset:0;width:100%;height:100%;display:block">'
+  +      '<defs><filter id="softGlow"><feGaussianBlur stdDeviation="10" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'
+  +      '<rect x="10" y="10" width="1180" height="580" rx="30" fill="none" stroke="rgba(156,177,201,.18)" stroke-width="2"/>'
+  +      '<g opacity=".22" stroke="#7aa1c8" stroke-width="1">'
+  +      Array.from({length:13},(_,i)=>'<line x1="'+(70+i*88)+'" y1="35" x2="'+(70+i*88)+'" y2="565"/>').join('')
+  +      +Array.from({length:7},(_,i)=>'<line x1="25" y1="'+(55+i*85)+'" x2="1175" y2="'+(55+i*85)+'"/>').join('')
+  +      +'</g>'
+  +      '<g stroke="rgba(120,147,177,.65)" stroke-width="1.4" fill="#5a7088">'
+  +        '<path d="M38,112 L96,74 L154,58 L229,60 L314,76 L380,112 L422,154 L425,188 L386,228 L326,246 L275,269 L234,255 L199,228 L174,198 L156,162 L138,136 L108,125 L81,128 L65,145 L46,129 Z"/>'
+  +        '<path d="M353,36 L461,40 L543,58 L522,84 L459,104 L393,95 Z"/>'
+  +        '<path d="M324,286 L364,304 L436,332 L454,367 L451,420 L425,470 L388,505 L364,455 L357,390 L350,336 Z"/>'
+  +        '<path d="M537,178 L627,201 L688,257 L707,310 L694,359 L666,401 L620,437 L588,447 L552,432 L531,399 L512,347 L506,301 L515,253 Z"/>'
+  +        '<path d="M547,92 L556,72 L624,61 L700,65 L786,72 L868,82 L942,94 L1015,118 L1102,149 L1146,172 L1162,188 L1137,211 L1081,233 L995,246 L903,246 L829,237 L764,227 L706,225 L660,240 L610,258 L565,249 L531,223 L507,196 Z"/>'
+  +        '<path d="M674,192 L708,220 L752,220 L784,242 L778,258 L754,270 L728,262 L708,242 L684,226 Z"/>'
+  +        '<path d="M806,210 L840,230 L852,246 L838,266 L818,281 L800,261 L792,235 Z"/>'
+  +        '<path d="M862,246 L898,263 L927,306 L930,325 L919,334 L892,318 L866,290 L858,268 Z"/>'
+  +        '<path d="M907,286 L937,294 L963,320 L961,336 L928,329 L900,314 L889,298 Z"/>'
+  +        '<path d="M952,310 L1006,300 L1045,306 L1065,319 L1059,333 L1021,342 L980,338 L954,326 Z"/>'
+  +        '<path d="M980,483 L1030,479 L1065,487 L1091,507 L1110,534 L1104,558 L1076,580 L1028,592 L984,584 L950,563 L928,536 L930,512 L946,492 Z"/>'
+  +        '<path d="M828,488 L842,501 L846,522 L840,548 L826,566 L810,565 L798,548 L798,518 L807,489 Z"/>'
+  +        '<path d="M709,355 L722,369 L719,386 L706,404 L699,380 Z"/>'
+  +      '</g>'
+  +      '<g stroke="rgba(188,208,228,.18)" stroke-width="2" fill="none">'
+  +        '<path d="M137,129 L186,160 L222,190 L280,190 L334,202"/>'
+  +        '<path d="M560,90 L628,112 L688,145 L749,157"/>'
+  +        '<path d="M751,204 L791,223 L838,236 L888,246 L938,267"/>'
+  +        '<path d="M608,201 L585,234 L575,266 L575,299 L598,354"/>'
+  +        '<path d="M665,196 L625,241 L612,281 L617,323 L645,346"/>'
+  +        '<path d="M368,310 L392,360 L398,425"/>'
+  +        '<path d="M843,248 L864,287 L874,313"/>'
+  +      '</g>'
+  +      '<g stroke="#3f84c6" stroke-width="4.5" stroke-linecap="round" stroke-dasharray="18 14" opacity=".7" fill="none">'
+  +        '<path d="M106,214 C254,198 415,194 585,197 C736,199 878,200 1126,222"/>'
+  +        '<path d="M188,286 C345,276 548,274 704,278 C827,282 942,285 1011,300"/>'
+  +        '<path d="M314,387 C424,365 571,362 708,367 C809,371 906,385 968,403"/>'
+  +      '</g>'
+  +      '<g fill="#d9e3ee" font-family="Share Tech Mono, monospace" font-size="18" letter-spacing="4">'
+  +        '<text x="128" y="84">NORD AMERICA</text>'
+  +        '<text x="685" y="78">EUROPA · ASIA</text>'
+  +        '<text x="278" y="500">SUD AMERICA</text>'
+  +        '<text x="575" y="516">AFRICA</text>'
+  +        '<text x="978" y="540">AUSTRALIA</text>'
+  +      '</g>'
+  +    '</svg>'
+  +    _buildFallbackPins()
+  +  '</div>'
+  +'</div>';
+}
+function _drawP2FallbackMap(){
+  var wrap=document.getElementById('p2-map-wrap'); if(!wrap) return;
+  _p2Schematic=true;
+  wrap.innerHTML=_buildFallbackMap();
+  _p2SVG=null; _p2ZoomBeh=null; _p2G=null; _p2Proj=null;
+  if(_p2CurrentView!=='global') p2SetView(_p2CurrentView); else {_p2FallbackTransform={scale:1,tx:0,ty:0}; _p2ApplyFallbackTransform(false);} 
+  _updateStats(); renderHubBar();
+}
+function initP2Map(){
+  _drawP2FallbackMap();
 }
 // ── ALERT FEED ────────────────────────────────────────────────────
 function renderAlerts(){
