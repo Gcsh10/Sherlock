@@ -277,6 +277,9 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 #p2-map-wrap{flex:1;min-height:0;position:relative;overflow:hidden;background:radial-gradient(circle at 50% 42%,rgba(120,82,58,.16),transparent 44%),linear-gradient(180deg,#121417,#0d0f12);border-top:1px solid rgba(255,255,255,.04);}
 #p2-map-wrap svg{width:100%;height:100%;display:block;}
 #p2-map-wrap::after{display:none;}
+.p2-schematic-stage{position:absolute;inset:0;}
+.p2-land{fill:rgba(124,146,171,.22);stroke:rgba(214,91,49,.22);stroke-width:.5;vector-effect:non-scaling-stroke;}
+.p2-land.p2-eu{fill:rgba(145,122,92,.18);}
 
 /* Map tooltip */
 .p2-map-tip{
@@ -1075,8 +1078,7 @@ var DEFAULTS=[
   {id:'vietnamnews',name:'Viet Nam News',url:'https://news.google.com/rss/search?q=site:vietnamnews.vn&hl=en&gl=VN&ceid=VN:en',cat:'sudest_asia',on:true},
   {id:'tuoitre',name:'Tuoi Tre News',url:'https://news.google.com/rss/search?q=site:tuoitrenews.vn&hl=en&gl=VN&ceid=VN:en',cat:'sudest_asia',on:true},
   {id:'jakartapost',name:'The Jakarta Post',url:'https://news.google.com/rss/search?q=site:thejakartapost.com&hl=en&gl=ID&ceid=ID:en',cat:'sudest_asia',on:true},
-  {id:'kompas',name:'Kompas',url:'https://news.google.com/rss/search?q=site:kompas.com&hl=id&gl=ID&ceid=ID:id',cat:'sudest_asia',on:true},
-  {id:'tempo',name:'Tempo',url:'https://news.google.com/rss/search?q=site:tempo.co+OR+site:en.tempo.co&hl=en&gl=ID&ceid=ID:en',cat:'sudest_asia',on:true},
+    {id:'tempo',name:'Tempo',url:'https://news.google.com/rss/search?q=site:tempo.co+OR+site:en.tempo.co&hl=en&gl=ID&ceid=ID:en',cat:'sudest_asia',on:true},
   {id:'rappler',name:'Rappler',url:'https://news.google.com/rss/search?q=site:rappler.com&hl=en&gl=PH&ceid=PH:en',cat:'sudest_asia',on:true},
   {id:'inquirer',name:'Philippine Daily Inquirer',url:'https://news.google.com/rss/search?q=site:inquirer.net&hl=en&gl=PH&ceid=PH:en',cat:'sudest_asia',on:true},
   {id:'starmalaysia',name:'The Star Malaysia',url:'https://news.google.com/rss/search?q=site:thestar.com.my&hl=en&gl=MY&ceid=MY:en',cat:'sudest_asia',on:true},
@@ -1809,7 +1811,7 @@ function switchPage(n){
   if(t1)t1.classList.toggle('on',n===1);
   if(t2)t2.classList.toggle('on',n===2);
   if(t3)t3.classList.toggle('on',n===3);
-  if(n===2){renderAlerts();if(!_p2MapWorld)initP2Map();else _drawP2Map();renderHubBar();}
+  if(n===2){renderAlerts();setTimeout(function(){if(!_p2MapWorld)initP2Map();else _drawP2Map();renderHubBar();},30);}
   if(n===3){renderTimeline();}
 }
 
@@ -2446,59 +2448,27 @@ function closeCountryPanel(){
   _cpCurrentIso='';
 }
 
+
 function p2ZoomStep(factor){
-  if(_p2Schematic){
-    _p2ScScale=Math.max(0.8,Math.min(5,_p2ScScale*factor));
-    _p2ApplySchematicTransform();
-    return;
-  }
-  if(!_p2SVG||!_p2ZoomBeh)return;
-  _p2SVG.transition().duration(300).call(_p2ZoomBeh.scaleBy, factor);
+  _p2ScScale=Math.max(0.9,Math.min(4.8,_p2ScScale*factor));
+  _p2ApplySchematicTransform();
 }
 
 function p2SetView(view){
   _p2CurrentView=view;
-  // Update button state
   document.querySelectorAll('.p2-rbtn').forEach(function(b){b.classList.remove('active');});
   var pressed=document.querySelector('[onclick="p2SetView(\''+view+'\')"]');
   if(pressed)pressed.classList.add('active');
-  if(!_p2SVG||!_p2ZoomBeh)return;
-  var vp=P2_VIEWS[view];
-  if(!vp)return;
-  var wrap=document.getElementById('p2-map-wrap');
-  var W=wrap?wrap.clientWidth:900, H=wrap?wrap.clientHeight:420;
-  var cx=W/2, cy=H/2;
-  var tx=cx+vp.tx*vp.s/2, ty=cy+vp.ty*vp.s/2;
-  var t=d3.zoomIdentity.translate(tx,ty).scale(vp.s);
-  _p2SVG.transition().duration(700).call(_p2ZoomBeh.transform,t);
+  _p2SetSchematicView(view);
+  _redrawOverlay();
 }
 
 function p2ToggleLayer(layer,btn){
   _p2Layers[layer]=!_p2Layers[layer];
   if(btn)btn.classList.toggle('on',_p2Layers[layer]);
-  if(layer==='pipes'||layer==='heatmap'||layer==='borders'){
-    // These require SVG redraw
-    if(_p2G&&_p2Proj){
-      var path=d3.geoPath(_p2Proj);
-      if(layer==='pipes') _drawPipelines(_p2G.node(),path);
-      if(layer==='borders') _drawBorders(_p2G.node(),path);
-      if(layer==='heatmap'){
-        var hm=_buildHeatmap();
-        _p2G.selectAll('path.country').attr('fill',function(f){
-          var i2=N2I[String(f.id)]||'';
-          if(_p2Layers.heatmap) return _heatColor(hm[i2]||0);
-          var ic=_buildColors();
-          var TINT={'#ef4444':'rgba(239,68,68,0.14)','#f59e0b':'rgba(245,158,11,0.10)','#3b82f6':'rgba(59,130,246,0.10)','#22d35e':'rgba(0,184,255,0.08)'};
-          return ic[i2]?TINT[ic[i2]]||'var(--s2)':'var(--s2)';
-        });
-      }
-    }
-  } else {
-    _redrawOverlay();
-  }
+  _drawP2SchematicMap();
 }
 
-// ── Draw overlay (pins + hotspots) — called on each data update ──
 function renderHubBar(){
   var bar=document.getElementById('p2-hubs-bar');
   if(!bar) return;
@@ -2512,269 +2482,82 @@ function renderHubBar(){
   var col=function(sev){return sev>=4?'#ef4444':sev>=3?'#f59e0b':sev>=2?'#3b82f6':'#22d35e';};
   bar.innerHTML=rows.map(function(r){return '<button class="p2-hub-chip" onclick="p2FocusHub(\''+r.key+'\')"><span class="sev" style="background:'+col(r.sev)+'"></span><span>'+esc(r.name)+'</span><span style="color:var(--tx2)">'+r.count+'</span></button>';}).join('');
 }
+
 function p2FocusHub(key){
   var clusters=_geolocateArticles();
   var cl=clusters[key]; if(!cl) return;
   document.querySelectorAll('.p2-hub-chip').forEach(function(el){el.classList.toggle('active', el.getAttribute('onclick')==="p2FocusHub('"+key+"')");});
   var wrap=document.getElementById('p2-map-wrap'); var W=wrap?wrap.clientWidth:900, H=wrap?wrap.clientHeight:420;
-  if(_p2Schematic){
-    var xy=_p2GeoToXY(cl.hub.lat,cl.hub.lng,W,H); var scale=cl.items.length>=4?3.3:2.6;
-    _p2ScScale=scale; _p2ScTx=W/2-xy[0]*scale; _p2ScTy=H/2-xy[1]*scale; _p2ApplySchematicTransform();
-  } else if(_p2Proj&&_p2SVG&&_p2ZoomBeh){
-    var xy=_p2Proj([cl.hub.lng, cl.hub.lat]); if(!xy) return;
-    var scale=cl.items.length>=4?4.2:3.3;
-    var t=d3.zoomIdentity.translate(W/2-xy[0]*scale,H/2-xy[1]*scale).scale(scale);
-    _p2SVG.transition().duration(650).call(_p2ZoomBeh.transform,t);
-  }
+  var xy=_p2GeoToXY(cl.hub.lat,cl.hub.lng,W,H); var scale=cl.items.length>=4?3.2:2.6;
+  _p2ScScale=scale; _p2ScTx=W/2-xy[0]*scale; _p2ScTy=H/2-xy[1]*scale; _p2ApplySchematicTransform();
   var note=wrap.querySelector('.p2-map-note');
   if(!note){note=document.createElement('div');note.className='p2-map-note';wrap.appendChild(note);}
   note.innerHTML='<b style="color:#fff">'+esc(cl.hub.name)+'</b><br>'+cl.items.length+' notizie correlate nelle ultime '+document.getElementById('p2-timeline').value+'h';
 }
 
 function _redrawOverlay(){
-  if(!_p2Proj)return;
   var wrap=document.getElementById('p2-map-wrap');if(!wrap)return;
   var tip=document.getElementById('p2-map-tip');
-
-  // Remove existing HTML overlay
   var old=wrap.querySelector('.p2-map-pins');
   if(old)wrap.removeChild(old);
-
   var overlay=document.createElement('div');
   overlay.className='p2-map-pins';
-  // Use current transform to position pins correctly
-  var curT=_p2G?d3.zoomTransform(_p2SVG.node()):null;
 
   function toScreen(lat,lng){
-    var xy=_p2Proj([lng,lat]);
-    if(!xy)return null;
-    if(curT)return [curT.applyX(xy[0]),curT.applyY(xy[1])];
-    return xy;
+    var W=wrap.clientWidth||900,H=wrap.clientHeight||420;
+    var xy=_p2GeoToXY(lat,lng,W,H);
+    return [xy[0]*_p2ScScale+_p2ScTx,xy[1]*_p2ScScale+_p2ScTy];
   }
 
-  // ── News pins ─────────────────────────────────────────────────
   if(_p2Layers.pins){
     var clusters=_geolocateArticles();
     Object.keys(clusters).forEach(function(key){
       var cl=clusters[key], items=cl.items, hub=cl.hub;
       var xy=toScreen(hub.lat,hub.lng);
-      if(!xy||xy[0]<-20||xy[0]>wrap.clientWidth+20||xy[1]<-20||xy[1]>wrap.clientHeight+20)return;
+      if(!xy||xy[0]<-30||xy[0]>wrap.clientWidth+30||xy[1]<-30||xy[1]>wrap.clientHeight+30)return;
       var maxSev=0;
       items.forEach(function(a){var s={critical:4,high:3,medium:2,low:1}[a.sev]||0;if(s>maxSev)maxSev=s;});
       var cls=maxSev>=4?'crit':maxSev>=3?'high':maxSev>=2?'med':'low';
-      var pin=document.createElement('div');
+      var pin=document.createElement('button');
       pin.className='p2-pin '+cls;
-      pin.style.cssText='position:absolute;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;left:'+xy[0]+'px;top:'+xy[1]+'px;';
+      pin.type='button';
+      pin.style.cssText='position:absolute;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;left:'+xy[0]+'px;top:'+xy[1]+'px;background:transparent;border:none;padding:0;';
       var badge=items.length>1?'<span class="badge">'+items.length+'</span>':'';
       pin.innerHTML='<div class="dot"></div>'+badge;
       pin.addEventListener('mouseenter',function(e){
         if(tip){
           var names=items.slice(0,4).map(function(a){
             var col=a.sev==='critical'?'#ef4444':a.sev==='high'?'#f59e0b':'#94a3b8';
-            return '<li style="color:'+col+';margin:2px 0">'+a.title.substring(0,60)+'…</li>';
+            return '<li style="color:'+col+';margin:2px 0">'+esc(a.title.substring(0,60))+'…</li>';
           }).join('');
-          tip.innerHTML='<b style="font-size:11px;color:var(--acc)">&#9679; '+hub.name+'</b><div style="color:var(--mu);font-size:10px;margin:2px 0">'+items.length+' notizie correlate</div><ul style="margin:4px 0 0;padding:0 0 0 14px;font-size:10px">'+names+'</ul>';
+          tip.innerHTML='<b style="font-size:11px;color:var(--acc)">&#9679; '+esc(hub.name)+'</b><div style="color:var(--mu);font-size:10px;margin:2px 0">'+items.length+' notizie correlate</div><ul style="margin:4px 0 0;padding:0 0 0 14px;font-size:10px">'+names+'</ul>';
           tip.style.display='block';
         }
       });
       pin.addEventListener('mousemove',function(e){if(tip){tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';}});
       pin.addEventListener('mouseleave',function(){if(tip)tip.style.display='none';});
+      pin.addEventListener('click',function(){p2FocusHub(key);});
       overlay.appendChild(pin);
     });
   }
 
-  // ── Hotspot markers ───────────────────────────────────────────
   if(_p2Layers.hs){
     HOTSPOTS.forEach(function(hs){
       var xy=toScreen(hs.lat,hs.lng);
       if(!xy||xy[0]<-20||xy[0]>wrap.clientWidth+20||xy[1]<-20||xy[1]>wrap.clientHeight+20)return;
-      var el=document.createElement('div');
+      var el=document.createElement('button');
+      el.type='button';
       el.className='p2-hotspot '+hs.sev;
-      el.style.cssText='position:absolute;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;left:'+xy[0]+'px;top:'+xy[1]+'px;';
+      el.style.cssText='position:absolute;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;left:'+xy[0]+'px;top:'+xy[1]+'px;background:transparent;border:none;padding:0;';
       el.innerHTML='<div class="hs-ring"></div><div class="hs-inner"></div>';
-      el.addEventListener('mouseenter',function(){
-        if(tip){tip.innerHTML='<b style="color:#ff6b6b">&#9671; '+hs.name+'</b><div style="color:var(--mu);font-size:10px;margin-top:3px">'+hs.desc+'</div>';tip.style.display='block';}
-      });
+      el.addEventListener('mouseenter',function(e){if(tip){tip.innerHTML='<b>'+esc(hs.name)+'</b><div style="font-size:10px;color:var(--mu);margin-top:3px">'+esc(hs.text||'Hotspot geopolitico')+'</div>';tip.style.display='block';}});
       el.addEventListener('mousemove',function(e){if(tip){tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';}});
       el.addEventListener('mouseleave',function(){if(tip)tip.style.display='none';});
       overlay.appendChild(el);
     });
   }
 
-  // ── Naval groups (OSINT) ──────────────────────────────────────
-  _drawNaval(overlay, toScreen, wrap, tip);
-
-  // ── Maritime chokepoints ──────────────────────────────────────
-  _drawChokepoints(overlay, toScreen, wrap, tip);
-
   wrap.appendChild(overlay);
-}
-
-// ── Draw undersea cables on SVG ──────────────────────────────────
-function _drawCables(g, path){
-  if(!_p2Layers.cables)return;
-  var NS=document.createElementNS.bind(document,'http://www.w3.org/2000/svg');
-  var cableG=NS('g');cableG.setAttribute('class','cables-layer');
-  CABLES.forEach(function(cable){
-    var lineData={type:'LineString',coordinates:cable.pts.map(function(p){return [p[1],p[0]];})};
-    var d=path(lineData);if(!d)return;
-    var el=NS('path');
-    el.setAttribute('d',d);
-    el.style.cssText='fill:none;stroke:'+cable.col+';stroke-width:1.5px;stroke-linecap:round;';
-    el.setAttribute('title',cable.name);
-    cableG.appendChild(el);
-  });
-  g.appendChild(cableG);
-}
-
-// ── Draw conflict zone fills on SVG ──────────────────────────────
-function _drawConflictFills(g, countries, path){
-  if(!_p2Layers.conflict)return;
-  var NS=document.createElementNS.bind(document,'http://www.w3.org/2000/svg');
-  var czG=NS('g');czG.setAttribute('class','conflict-fills-layer');
-  countries.features.forEach(function(f){
-    var i2=N2I[String(f.id)]||'';
-    if(!CONFLICT_ZONES[i2])return;
-    var lvl=CONFLICT_ZONES[i2];
-    var baseCol=CONFLICT_COLORS[lvl]||'rgba(239,68,68,';
-    // Very subtle fill + distinct stroke border — no red wash
-    var fillOp={crit:0.12,high:0.08,med:0.05,low:0.03}[lvl]||0.08;
-    var strokeOp={crit:0.80,high:0.65,med:0.50,low:0.35}[lvl]||0.6;
-    var strokeW={crit:1.8,high:1.4,med:1.1,low:0.8}[lvl]||1.4;
-    var fill=baseCol+fillOp+')';
-    var stroke=baseCol+strokeOp+')';
-    var d=path(f);if(!d)return;
-    var el=NS('path');
-    el.setAttribute('d',d);
-    el.style.cssText='fill:'+fill+';stroke:'+stroke+';stroke-width:'+strokeW+'px;stroke-linejoin:round;pointer-events:none;';
-    czG.appendChild(el);
-  });
-  g.appendChild(czG);
-}
-
-// ── Main draw function ────────────────────────────────────────────
-function _drawP2Map(){
-  if(!_p2MapWorld||!window.topojson||!window.d3)return;
-  var wrap=document.getElementById('p2-map-wrap');if(!wrap)return;
-  var W=wrap.clientWidth||900,H=wrap.clientHeight||420;
-  if(W<10||H<10){setTimeout(_drawP2Map,200);return;}
-
-  var countries=topojson.feature(_p2MapWorld,_p2MapWorld.objects.countries);
-  var borders=topojson.mesh(_p2MapWorld,_p2MapWorld.objects.countries,function(a,b){return a!==b;});
-  var ic=_buildColors();
-  var tip=document.getElementById('p2-map-tip');
-
-  _p2Proj=d3.geoEqualEarth().fitExtent([[18,18],[W-18,H-18]],countries).precision(0.5);
-  var path=d3.geoPath(_p2Proj);
-  var NS=document.createElementNS.bind(document,'http://www.w3.org/2000/svg');
-
-  // SVG root
-  var svg=d3.select(document.createElementNS('http://www.w3.org/2000/svg','svg'))
-    .attr('viewBox','0 0 '+W+' '+H)
-    .attr('preserveAspectRatio','xMidYMid meet')
-    .style('width','100%').style('height','100%').style('display','block').style('overflow','hidden');
-
-  var defs=svg.append('defs');
-  defs.append('clipPath').attr('id','p2-map-clip').append('rect')
-    .attr('x',12).attr('y',12).attr('width',Math.max(0,W-24)).attr('height',Math.max(0,H-24));
-
-  svg.append('rect').attr('x',0).attr('y',0).attr('width',W).attr('height',H)
-    .attr('fill','#0d0f12');
-
-  // Zoom group: all map layers stay coherent while zooming
-  var g=svg.append('g').attr('class','zoom-group').attr('clip-path','url(#p2-map-clip)');
-  _p2G=g;
-
-  // Sphere background inside zoom group so the frame scales with the map
-  g.append('path').datum({type:'Sphere'}).attr('d',path)
-    .attr('fill','#171b1f').attr('stroke','rgba(214,91,49,.24)').attr('stroke-width','0.9')
-    .attr('vector-effect','non-scaling-stroke');
-
-  // Graticule
-  g.append('path').datum(d3.geoGraticule()()).attr('d',path)
-    .attr('fill','none').attr('stroke','rgba(255,255,255,.12)').attr('stroke-width','0.35').attr('opacity','0.55')
-    .attr('vector-effect','non-scaling-stroke');
-
-  // Countries fill
-  g.selectAll('path.country').data(countries.features).enter().append('path')
-    .attr('class','country')
-    .attr('d',path)
-    .attr('fill',function(f){
-        var i2=N2I[String(f.id)]||'';
-        if(_p2Layers.heatmap){
-          var hm=_buildHeatmap();
-          return _heatColor(hm[i2]||0);
-        }
-        var TINT={'#ef4444':'rgba(239,68,68,0.14)','#f59e0b':'rgba(245,158,11,0.10)','#3b82f6':'rgba(59,130,246,0.10)','#22d35e':'rgba(0,184,255,0.08)'};
-        return ic[i2]?TINT[ic[i2]]||'var(--s2)':'var(--s2)';
-      })
-    .attr('stroke','var(--bg)').attr('stroke-width','0.5')
-    .attr('vector-effect','non-scaling-stroke')
-    .attr('cursor',function(f){return N2I[String(f.id)]?'pointer':'default';})
-    .on('mouseenter',function(event,f){
-      var i2=N2I[String(f.id)]||'';
-      if(!i2)return;
-      d3.select(this).attr('opacity','0.7');
-      if(tip){
-        var name=CN2[i2]||i2;
-        var reg=Object.keys(RC).find(function(r){return RC[r].indexOf(i2)>=0;})||'';
-        var cnt=reg?articles.filter(function(a){return a.region===reg;}).length:0;
-        var cz=CONFLICT_ZONES[i2]?'<span style="color:#ef4444;margin-left:6px">&#9888; zona conflitto</span>':'';
-        tip.innerHTML='<b>'+name+'</b>'+cz+(cnt?' &mdash; <span style="color:var(--acc)">'+cnt+' notizie</span>':'');
-        tip.style.display='block';
-      }
-    })
-    .on('mousemove',function(event){if(tip){tip.style.left=(event.clientX+14)+'px';tip.style.top=(event.clientY-10)+'px';}})
-    .on('mouseleave',function(){d3.select(this).attr('opacity','1');if(tip)tip.style.display='none';})
-    .on('click',function(event,f){
-      var i2=N2I[String(f.id)]||'';
-      if(!i2)return;
-      event.stopPropagation();
-      openCountryPanel(i2, CN2[i2]||i2);
-    });
-
-  // Conflict zone highlights
-  _drawConflictFills(g.node(),countries,path);
-
-  // Border status layer
-  _drawBorders(g.node(), path);
-
-  // Borders
-  g.append('path').datum(borders).attr('d',path)
-    .attr('fill','none').attr('stroke','var(--bg)').attr('stroke-width','0.5');
-
-  // Undersea cables
-  _drawCables(g.node(),path);
-
-  // Energy pipelines
-  _drawPipelines(g.node(),path);
-
-  g.append('rect').attr('x',12).attr('y',12).attr('width',Math.max(0,W-24)).attr('height',Math.max(0,H-24))
-    .attr('fill','none').attr('stroke','rgba(214,91,49,.12)').attr('stroke-width','0.8')
-    .attr('vector-effect','non-scaling-stroke');
-
-  // D3 zoom
-  _p2ZoomBeh=d3.zoom()
-    .scaleExtent([0.7,15])
-    .translateExtent([[-W*2,-H*2],[W*3,H*3]])
-    .on('zoom',function(event){
-      g.attr('transform',event.transform);
-      _redrawOverlay(); // reposition HTML pins on zoom/pan
-    });
-
-  var svgNode=svg.node();
-  svgNode.style.cssText='width:100%;height:100%;display:block;overflow:hidden;';
-  wrap.innerHTML='';
-  wrap.appendChild(svgNode);
-  _p2SVG=d3.select(svgNode);
-  _p2SVG.call(_p2ZoomBeh);
-
-  // Draw HTML overlay (pins + hotspots)
-  _redrawOverlay();
-  _updateStats();
-  renderHubBar();
-  // Restore previous view
-  if(_p2CurrentView!=='global')p2SetView(_p2CurrentView);
 }
 
 function _refreshP2Overlay(){
@@ -2783,9 +2566,7 @@ function _refreshP2Overlay(){
   renderHubBar();
 }
 
-
-
-var _p2Schematic=false, _p2ScScale=1, _p2ScTx=0, _p2ScTy=0;
+var _p2Schematic=true, _p2ScScale=1, _p2ScTx=0, _p2ScTy=0;
 var P2_SCHEMATIC_VIEWS={
   global:{scale:1,center:[10,15]},
   europe:{scale:2.2,center:[18,50]},
@@ -2797,13 +2578,14 @@ var P2_SCHEMATIC_VIEWS={
 function _p2GeoToXY(lat,lng,W,H){
   var x=(lng+180)/360*W;
   var y=((90-lat)/180)*H;
-  y=H*0.08 + y*0.84;
+  y=H*0.09 + y*0.82;
   return [x,y];
 }
 function _p2ApplySchematicTransform(){
   var inner=document.querySelector('#p2-map-wrap .p2-schematic-inner');
   if(!inner)return;
   inner.style.transform='translate('+_p2ScTx+'px,'+_p2ScTy+'px) scale('+_p2ScScale+')';
+  _redrawOverlay();
 }
 function _p2SetSchematicView(view){
   var wrap=document.getElementById('p2-map-wrap'); if(!wrap)return;
@@ -2815,117 +2597,107 @@ function _p2SetSchematicView(view){
   _p2ScTy=H/2-xy[1]*_p2ScScale;
   _p2ApplySchematicTransform();
 }
+function _continentPath(name){
+  var paths={
+    northAmerica:'M8,20 C12,10 24,8 30,13 C36,18 37,27 34,33 C31,38 28,42 24,46 C20,50 14,49 12,43 C10,37 6,30 8,20 Z',
+    southAmerica:'M29,49 C33,48 37,51 39,56 C41,62 39,69 35,75 C32,81 29,87 25,85 C22,82 22,75 24,68 C25,61 25,53 29,49 Z',
+    eurasia:'M39,16 C47,9 59,8 68,12 C77,16 84,18 92,18 C98,18 103,20 107,24 C111,28 110,34 105,37 C100,40 96,43 91,44 C85,45 81,43 76,42 C70,41 66,43 61,46 C56,49 51,48 47,45 C43,42 39,38 38,31 C37,25 37,20 39,16 Z',
+    africa:'M60,48 C64,46 69,48 73,52 C76,56 77,61 75,67 C73,73 69,77 64,77 C60,77 57,73 56,68 C55,63 56,58 57,53 C57,50 58,49 60,48 Z',
+    australia:'M88,66 C92,64 97,65 100,68 C103,71 103,75 100,77 C96,80 91,80 87,77 C84,74 84,69 88,66 Z',
+    greenland:'M24,6 C27,4 31,4 33,7 C34,10 32,13 29,14 C26,15 23,13 22,10 C22,8 23,7 24,6 Z',
+    madagascar:'M74,69 C76,70 77,73 76,76 C75,79 73,81 71,79 C70,77 70,73 71,71 C72,70 73,69 74,69 Z'
+  };
+  return paths[name]||'';
+}
+function _buildMapLayerMarkup(){
+  var glow='<filter id="p2glow2"><feGaussianBlur stdDeviation="1.8" result="b"></feGaussianBlur><feMerge><feMergeNode in="b"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter>';
+  var graticule='';
+  for(var gx=10; gx<100; gx+=10){ graticule+='<line x1="'+gx+'" y1="10" x2="'+gx+'" y2="90" stroke="rgba(255,255,255,.06)" stroke-width="0.25" />'; }
+  for(var gy=18; gy<85; gy+=11){ graticule+='<line x1="6" y1="'+gy+'" x2="94" y2="'+gy+'" stroke="rgba(255,255,255,.06)" stroke-width="0.25" />'; }
+  var land=''
+    +'<path d="'+_continentPath('northAmerica')+'" class="p2-land p2-na" />'
+    +'<path d="'+_continentPath('southAmerica')+'" class="p2-land p2-sa" />'
+    +'<path d="'+_continentPath('eurasia')+'" class="p2-land p2-eu" />'
+    +'<path d="'+_continentPath('africa')+'" class="p2-land p2-af" />'
+    +'<path d="'+_continentPath('australia')+'" class="p2-land p2-au" />'
+    +'<path d="'+_continentPath('greenland')+'" class="p2-land p2-gr" />'
+    +'<path d="'+_continentPath('madagascar')+'" class="p2-land p2-md" />';
+  var cables='';
+  if(_p2Layers.cables){
+    [
+      ['12,31','30,29','46,30','63,29','79,31'],
+      ['17,39','31,39','47,40','62,39','77,40'],
+      ['23,55','39,51','58,51','78,55']
+    ].forEach(function(row){
+      cables+='<polyline points="'+row.join(' ')+'" fill="none" stroke="rgba(0,184,255,.28)" stroke-width="0.55" stroke-linecap="round" stroke-dasharray="1.4 1.4" />';
+    });
+  }
+  var conflict='';
+  if(_p2Layers.conflict){
+    [
+      {x:57,y:33,r:2.9,c:'rgba(239,68,68,.18)'},
+      {x:50,y:28,r:2.3,c:'rgba(245,158,11,.16)'},
+      {x:65,y:31,r:2.4,c:'rgba(239,68,68,.14)'},
+      {x:60,y:43,r:2.1,c:'rgba(245,158,11,.16)'}
+    ].forEach(function(z){ conflict+='<circle cx="'+z.x+'" cy="'+z.y+'" r="'+z.r+'" fill="'+z.c+'" stroke="rgba(255,255,255,.06)" stroke-width="0.25" />'; });
+  }
+  var pipes='';
+  if(_p2Layers.pipes){
+    pipes+='<path d="M58,46 C61,43 66,40 72,39 C78,38 83,39 88,40" fill="none" stroke="rgba(214,91,49,.46)" stroke-width="0.7" stroke-linecap="round" />';
+    pipes+='<path d="M56,49 C52,47 47,45 43,42 C39,39 33,38 28,39" fill="none" stroke="rgba(214,91,49,.34)" stroke-width="0.7" stroke-linecap="round" />';
+  }
+  var borders='';
+  if(_p2Layers.borders){
+    borders+='<path d="M52,19 C55,24 57,29 57,34" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="0.35" />';
+    borders+='<path d="M60,22 C64,24 68,26 72,28" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="0.35" />';
+    borders+='<path d="M63,47 C67,54 69,61 67,68" fill="none" stroke="rgba(255,255,255,.18)" stroke-width="0.35" />';
+  }
+  var heat='';
+  if(_p2Layers.heatmap){
+    heat='<g opacity=".55"><ellipse cx="58" cy="32" rx="14" ry="8" fill="rgba(239,68,68,.08)"/><ellipse cx="70" cy="28" rx="16" ry="9" fill="rgba(245,158,11,.08)"/><ellipse cx="82" cy="33" rx="18" ry="10" fill="rgba(59,130,246,.08)"/><ellipse cx="31" cy="28" rx="12" ry="8" fill="rgba(59,130,246,.06)"/></g>';
+  }
+  return '<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet" style="width:100%;height:100%;display:block">'
+    +'<defs>'+glow+'</defs>'
+    +'<rect x="0" y="0" width="100" height="100" fill="#0d0f12"/>'
+    +'<ellipse cx="50" cy="50" rx="45" ry="33" fill="#14191e" stroke="rgba(214,91,49,.28)" stroke-width="0.45"/>'
+    +'<g>'+graticule+heat+cables+conflict+pipes+borders+'</g>'
+    +'<g filter="url(#p2glow2)">'+land+'</g>'
+    +'</svg>';
+}
 function _drawP2SchematicMap(){
   var wrap=document.getElementById('p2-map-wrap');if(!wrap)return;
-  var W=wrap.clientWidth||900,H=wrap.clientHeight||420;
   _p2Schematic=true;
-  var clusters=_geolocateArticles();
-  var lines='';
-  for(var i=1;i<=5;i++){
-    var y=H*(0.16+i*0.11);
-    lines+='<line x1="'+(W*0.08)+'" y1="'+y+'" x2="'+(W*0.92)+'" y2="'+y+'" stroke="rgba(255,255,255,.08)" stroke-width="0.8"></line>';
-  }
-  for(var j=1;j<=8;j++){
-    var x=W*(0.1+j*0.09);
-    lines+='<line x1="'+x+'" y1="'+(H*0.15)+'" x2="'+x+'" y2="'+(H*0.85)+'" stroke="rgba(255,255,255,.06)" stroke-width="0.8"></line>';
-  }
-  var continents=[
-    {d:'M 120 95 C 150 60, 230 42, 285 68 C 315 82, 330 110, 323 145 C 317 174, 286 196, 265 222 C 245 248, 221 286, 185 285 C 152 284, 129 246, 132 215 C 136 180, 117 156, 112 128 C 110 116, 111 104, 120 95 Z'},
-    {d:'M 302 238 C 323 230, 347 240, 354 262 C 364 292, 354 326, 334 349 C 320 364, 302 356, 295 334 C 287 307, 286 268, 302 238 Z'},
-    {d:'M 392 84 C 445 58, 528 54, 586 78 C 650 105, 707 115, 768 106 C 802 101, 842 111, 861 133 C 880 154, 870 183, 843 197 C 808 214, 795 240, 760 250 C 726 259, 699 241, 673 241 C 643 241, 624 266, 596 275 C 564 285, 537 269, 504 267 C 470 265, 427 248, 408 217 C 391 188, 379 141, 392 84 Z'},
-    {d:'M 545 286 C 576 278, 613 289, 638 309 C 663 329, 669 355, 651 376 C 630 399, 593 407, 562 397 C 533 388, 518 357, 523 328 C 527 308, 530 292, 545 286 Z'},
-    {d:'M 748 304 C 776 292, 814 297, 836 317 C 850 330, 851 349, 838 362 C 815 384, 781 389, 753 377 C 731 367, 723 339, 732 320 C 736 312, 741 307, 748 304 Z'}
-  ];
-  var land=continents.map(function(c){return '<path d="'+c.d+'" fill="rgba(83,117,148,.18)" stroke="rgba(214,91,49,.16)" stroke-width="1"></path>';}).join('');
   wrap.innerHTML=''
+    +'<div class="p2-schematic-stage" style="position:absolute;inset:0;overflow:hidden;">'
     +'<div class="p2-schematic-inner" style="position:absolute;inset:0;transform-origin:0 0;transition:transform .45s ease;">'
-    +'<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" style="width:100%;height:100%;display:block">'
-    +'<defs><filter id="p2glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'
-    +'<rect x="0" y="0" width="'+W+'" height="'+H+'" fill="#0d0f12"></rect>'
-    +'<ellipse cx="'+(W*0.5)+'" cy="'+(H*0.5)+'" rx="'+(W*0.46)+'" ry="'+(H*0.36)+'" fill="#171b1f" stroke="rgba(214,91,49,.24)" stroke-width="1.1"></ellipse>'
-    + lines + land + '</svg></div>';
-  var inner=wrap.querySelector('.p2-schematic-inner');
-  var svgNode=inner.querySelector('svg');
-  var note=wrap.querySelector('.p2-map-note');
-  if(!note){ note=document.createElement('div'); note.className='p2-map-note'; wrap.appendChild(note); }
-  note.innerHTML='Mappa schematica offline attiva';
-  var NS='http://www.w3.org/2000/svg';
-  if(_p2Layers.hs){
-    HOTSPOTS.forEach(function(hs){
-      var xy=_p2GeoToXY(hs.lat,hs.lng,W,H); var color=hs.sev==='crit'?'#ef4444':hs.sev==='high'?'#f59e0b':hs.sev==='med'?'#3b82f6':'#22d35e';
-      var g=document.createElementNS(NS,'g');
-      g.setAttribute('transform','translate('+xy[0]+' '+xy[1]+')');
-      g.innerHTML='<circle r="10" fill="none" stroke="'+color+'" stroke-opacity=".35"></circle><circle r="4.2" fill="'+color+'" fill-opacity=".85"></circle>';
-      svgNode.appendChild(g);
-    });
-  }
-  if(_p2Layers.pins){
-    Object.keys(clusters).forEach(function(key){
-      var cl=clusters[key],xy=_p2GeoToXY(cl.hub.lat,cl.hub.lng,W,H),sev=0; cl.items.forEach(function(a){sev=Math.max(sev,{critical:4,high:3,medium:2,low:1}[a.sev]||1);});
-      var color=sev>=4?'#ef4444':sev>=3?'#f59e0b':sev>=2?'#3b82f6':'#22d35e';
-      var g=document.createElementNS(NS,'g');
-      g.setAttribute('transform','translate('+xy[0]+' '+xy[1]+')');
-      g.setAttribute('data-key',key);
-      g.style.cursor='pointer';
-      g.innerHTML='<circle r="12" fill="'+color+'" fill-opacity=".16" stroke="'+color+'" stroke-opacity=".6" filter="url(#p2glow)"></circle><circle r="5" fill="'+color+'"></circle>'+(cl.items.length>1?'<text x="10" y="-10" fill="#fff" font-size="10" font-family="Share Tech Mono, monospace">'+cl.items.length+'</text>':'');
-      g.addEventListener('click',function(){p2FocusHub(key);});
-      svgNode.appendChild(g);
-    });
-  }
+    +_buildMapLayerMarkup()
+    +'</div></div>';
+  var note=document.createElement('div');
+  note.className='p2-map-note';
+  note.innerHTML='Mappa locale attiva';
+  wrap.appendChild(note);
   _updateStats();
   renderHubBar();
   _p2SetSchematicView(_p2CurrentView||'global');
 }
+function _drawP2Map(){
+  _drawP2SchematicMap();
+}
 function initP2Map(){
-  function _renderUnavailable(msg){
+  _p2MapWorld={schematic:true};
+  var attempt=0;
+  (function boot(){
     var wrap=document.getElementById('p2-map-wrap');
-    if(wrap)wrap.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;padding:24px;color:var(--mu);font-size:11px;text-align:center">'+(msg||'Mappa non disponibile')+'</div>';
-  }
-  function _loadScript(urls, cb, fail){
-    var i=0;
-    (function next(){
-      if(i>=urls.length){ if(fail) fail(); return; }
-      var url=urls[i++];
-      var s=document.createElement('script');
-      s.src=url; s.async=true;
-      s.onload=function(){cb();};
-      s.onerror=function(){s.remove(); next();};
-      document.head.appendChild(s);
-    })();
-  }
-  function _loadJSON(urls, cb, fail){
-    var i=0;
-    (function next(){
-      if(i>=urls.length){ if(fail) fail(); return; }
-      fetch(urls[i++], {cache:'force-cache'}).then(function(r){
-        if(!r.ok) throw new Error('HTTP '+r.status);
-        return r.json();
-      }).then(cb).catch(next);
-    })();
-  }
-  function _doLoad(){
-    _loadJSON([
-      'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json',
-      'https://unpkg.com/world-atlas@2/countries-110m.json',
-      'https://fastly.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
-    ] , function(w){ _p2MapWorld=w; _drawP2Map(); }, function(){ _drawP2SchematicMap(); });
-  }
-  function _loadD3(cb){
-    if(window.d3){cb();return;}
-    _loadScript([
-      'https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js',
-      'https://unpkg.com/d3@7/dist/d3.min.js'
-    ], cb, function(){ _drawP2SchematicMap(); });
-  }
-  function _loadTopo(cb){
-    if(window.topojson){cb();return;}
-    _loadScript([
-      'https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js',
-      'https://unpkg.com/topojson-client@3/dist/topojson-client.min.js'
-    ], cb, function(){ _drawP2SchematicMap(); });
-  }
-  _loadD3(function(){_loadTopo(_doLoad);});
-}// ── ALERT FEED ────────────────────────────────────────────────────
+    if(!wrap){ if(attempt++<12) return setTimeout(boot,120); return; }
+    if((wrap.clientWidth||0)<40 || (wrap.clientHeight||0)<40){ if(attempt++<12) return setTimeout(boot,120); }
+    _drawP2SchematicMap();
+  })();
+}
+window.addEventListener('resize',function(){
+  clearTimeout(window._p2ResizeT);
+  window._p2ResizeT=setTimeout(function(){ if(document.getElementById('page-2') && document.getElementById('page-2').classList.contains('on')) _drawP2SchematicMap(); },140);
+});
+// ── ALERT FEED ────────────────────────────────────────────────────
 function renderAlerts(){
   var feed=document.getElementById('p2-alerts-feed');
   var cnt=document.getElementById('alert-count');
@@ -3291,6 +3063,15 @@ window.addEventListener('resize', function(){
 loadPersist();
 renderAll();
 doRefresh();
+
+window.addEventListener('resize', function(){
+  try{
+    if(document.getElementById('page-2') && document.getElementById('page-2').classList.contains('on')){
+      if(_p2MapWorld && _p2MapWorld.schematic){ _drawP2SchematicMap(); }
+      else if(_p2MapWorld){ _drawP2Map(); }
+    }
+  }catch(e){}
+});
 
 </script>
 
@@ -3686,7 +3467,7 @@ function toggleSidebar(){
 
 <script>
 (function(){
-  var APP_VERSION='2.8';
+  var APP_VERSION='3.0';
   var VERSION_KEY='sh3_app_version';
   try{
     var savedVersion=localStorage.getItem(VERSION_KEY)||'';
@@ -3866,6 +3647,7 @@ function toggleSidebar(){
     var lbl=document.getElementById('tlbl');
     if(lbl && liveCfg.enabled) lbl.textContent=(liveCfg.interval||30)+'s';
     if(liveCfg.enabled) setStatus('attivo','ok');
+    setTimeout(function(){ try{ initP2Map(); }catch(e){} }, 180);
   });
 
   setTimeout(function(){
