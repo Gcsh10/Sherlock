@@ -273,6 +273,13 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .p2-legend i{width:8px;height:8px;border-radius:50%;display:inline-block;}
 #p2-map-wrap{flex:1;min-height:0;position:relative;overflow:hidden;background:var(--bg);}
 #p2-map-wrap svg{width:100%;height:100%;display:block;}
+#p2-map-wrap{border:none!important;box-shadow:none!important;outline:none!important;}
+#p2-map-wrap .map-shell{width:100%;height:100%;position:relative;overflow:hidden;border-radius:28px;border:1px solid rgba(61,92,127,.42);background:radial-gradient(circle at 50% 45%,rgba(16,65,126,.14),rgba(2,10,24,.0) 52%),var(--bg);}
+#p2-map-wrap .map-shell svg{display:block;width:100%;height:100%;}
+.theater-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 8px 2px;font-family:Share Tech Mono,monospace;text-transform:uppercase;letter-spacing:.12em;font-size:9px;color:var(--tx2);}
+.theater-add{border:1px solid rgba(122,154,184,.22);background:rgba(255,255,255,.03);color:var(--tx2);border-radius:999px;padding:3px 8px;font-size:9px;font-family:Share Tech Mono,monospace;cursor:pointer;}
+.theater-add:hover{color:var(--tx);border-color:rgba(0,184,255,.42);}
+
 
 /* Map tooltip */
 .p2-map-tip{
@@ -1056,10 +1063,8 @@ var DEFAULTS=[
   {id:'starmalaysia',name:'The Star Malaysia',url:'https://news.google.com/rss/search?q=site:thestar.com.my&hl=en&gl=MY&ceid=MY:en',cat:'sudest_asia',on:true},
   {id:'khmertimes',name:'Khmer Times',url:'https://news.google.com/rss/search?q=site:khmertimeskh.com&hl=en&gl=KH&ceid=KH:en',cat:'sudest_asia',on:true},
   {id:'myanmarnow',name:'Myanmar Now',url:'https://news.google.com/rss/search?q=site:myanmar-now.org&hl=en&gl=MM&ceid=MM:en',cat:'sudest_asia',on:true},
-  {id:'mingpao',name:'Ming Pao Daily',url:'https://news.google.com/rss/search?q=site:mingpao.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',cat:'cina',on:true},
   {id:'singtao',name:'Sing Tao Daily',url:'https://news.google.com/rss/search?q=site:stheadline.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',cat:'cina',on:true},
   {id:'applehk',name:'Apple Daily HK',url:'https://news.google.com/rss/search?q=%22Apple+Daily%22+Hong+Kong&hl=en&gl=HK&ceid=HK:en',cat:'cina',on:true},
-  {id:'zaobao',name:'United Morning Post (Zaobao)',url:'https://news.google.com/rss/search?q=site:zaobao.com.sg&hl=zh-CN&gl=SG&ceid=SG:zh-Hans',cat:'cina',on:true},
   {id:'cna_tw',name:'Central News Agency',url:'https://news.google.com/rss/search?q=site:cna.com.tw&hl=zh-TW&gl=TW&ceid=TW:zh-Hant',cat:'cina',on:true},
   {id:'pla_daily',name:'PLA Daily',url:'https://news.google.com/rss/search?q=site:81.cn+解放军报&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
   {id:'pla_eastern',name:'Eastern Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+东部战区&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
@@ -1080,6 +1085,10 @@ var DEFAULTS=[
   {id:'ansait',    name:'ANSA Italia',        cat:'agenzie', url:'https://news.google.com/rss/search?q=site:ansa.it+politica&hl=it&gl=IT&ceid=IT:it',on:true},
   {id:'tass',      name:'TASS',               cat:'agenzie', url:'https://news.google.com/rss/search?q=site:tass.com&hl=en',on:true},
   {id:'xinhua',    name:'Xinhua',             cat:'agenzie', url:'https://news.google.com/rss/search?q=site:xinhuanet.com&hl=en',on:true},
+  {id:'peoples_daily', name:"People's Daily",      cat:'cina',    url:'https://news.google.com/rss/search?q=site:en.people.cn&hl=en&gl=CN&ceid=CN:en',on:true},
+  {id:'cgtn_default',   name:'CGTN',              cat:'cina',    url:'https://www.cgtn.com/subscribe/rss/section/world.xml',on:true},
+  {id:'globaltimes_default',name:'Global Times',  cat:'cina',    url:'https://www.globaltimes.cn/rss/outbrain.xml',on:true},
+  {id:'chinadaily_default', name:'China Daily',   cat:'cina',    url:'https://www.chinadaily.com.cn/rss/world_rss.xml',on:true},
   {id:'kyodo',     name:'Kyodo News',         cat:'agenzie', url:'https://news.google.com/rss/search?q=kyodo+news&hl=en',on:true},
   {id:'yonhap',    name:'Yonhap (KR)',        cat:'agenzie', url:'https://news.google.com/rss/search?q=site:yna.co.kr&hl=en',on:true},
   {id:'dpa',       name:'DPA (DE)',           cat:'agenzie', url:'https://news.google.com/rss/search?q=dpa+news+agency&hl=en',on:true},
@@ -1154,7 +1163,7 @@ var DEFAULTS=[
   {id:'dgse',    name:'DGSE France',   cat:'ist', url:'https://news.google.com/rss/search?q=DGSE+renseignement+france&hl=fr&gl=FR&ceid=FR:fr',on:true},
   {id:'dgse_x',  name:'DGSE / X',       cat:'ist', url:'https://rsshub.app/twitter/user/dgsefr',on:true},
   // ── CINA ──────────────────────────────────────────────────────
-  {id:'xinhua_cina',name:'Xinhua EN',url:'https://www.xinhuanet.com/english/rss/worldrss.xml',cat:'cina',max:15},
+  {id:'xinhua_cina',name:'Xinhua EN',url:'https://www.xinhuanet.com/english/rss/worldrss.xml',cat:'cina',max:15,on:true},
   {id:'globaltimes',name:'Global Times',url:'https://www.globaltimes.cn/rss/outbrain.xml',cat:'cina',max:10},
   {id:'chinadigitaltimes',name:'China Digital Times',url:'https://chinadigitaltimes.net/feed/',cat:'cina',max:10},
   // ── GLOBAL MEDIA ──────────────────────────────────────────────
@@ -1186,8 +1195,6 @@ var PRESETS=[
   {id:'people_world_zh',name:'人民网 国际 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:people.com.cn+国际&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
   {id:'thepaper_zh',name:'澎湃新闻 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:thepaper.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
   {id:'hk01_zh',name:'HK01 香港01 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:hk01.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',on:true},
-  {id:'lianhezaobao_zh',name:'联合早报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:zaobao.com.sg&hl=zh-CN&gl=SG&ceid=SG:zh-Hans',on:true},
-  {id:'mingpao_zh',name:'明报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:mingpao.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',on:true},
   {id:'singtao_zh',name:'星岛日报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:stheadline.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',on:true},
   {id:'gmw_zh',name:'光明网 Guangming (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:gmw.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
   {id:'beijingdaily_zh',name:'北京日报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:bjd.com.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
@@ -1252,6 +1259,7 @@ function loadPersist(){
           var existing=savedIds[d.id]?savedIds[d.id]:d;
           if(d.id==='wsj') existing.url='https://feeds.a.dj.com/rss/RSSWorldNews.xml';
           if(d.id==='rane_worldview') existing.url='https://news.google.com/rss/search?q=(site:worldview.stratfor.com+OR+site:ranenetwork.com)+worldview&hl=en&gl=US&ceid=US:en';
+          if(['xinhua','peoples_daily','cgtn_default','globaltimes_default','chinadaily_default'].indexOf(d.id)>=0) existing.on=true;
           return existing;
         });
         // Also keep any custom user-added sources not in DEFAULTS
@@ -1607,9 +1615,39 @@ function showTab(id){
   var t=document.getElementById('tab-'+id),p=document.getElementById('pane-'+id);
   if(t)t.classList.add('on');if(p)p.classList.remove('hidden');
 }
+var THEATER_META={
+  global:{label:'Globale', cats:['agenzie','media','finance']},
+  europa:{label:'Europa', cats:['italia']},
+  medioriente:{label:'Medio Oriente', ids:['almonitor','mei','mideasteye','arabnews','aljazeera','bbcme','arabiya','trtworld']},
+  russia:{label:'Russia / Eurasia', ids:['meduza','moscowtimes','carnegie_russia','tass']},
+  indopacifico:{label:'Indo-Pacifico', cats:['sudest_asia'], ids:['thediplomat','nikkeiasia','lowy','scmp','scmp_cn','rappler','jakartapost','straitstimes','cna_sg','cna_tw','nhk','kyodo','yonhap','pti','rti_tw']},
+  cina:{label:'Cina', cats:['cina'], ids:['globaltimes','globaltimes_zh','xinhua','xinhua_cina','xinhua_en','xinhua_zh','pekingnology','people_en','people_zh','pla_daily','pla_eastern','pla_southern','pla_western','pla_northern','pla_central','caixin','chinadaily','chinadigitaltimes','csis_china','merics','qstheory','beijingdaily','ce_cn','gmw']},
+  africa:{label:'Africa', ids:['bbcafrica']},
+  difesa:{label:'Difesa / OSINT', cats:['osint','ist','cyber','think'], ids:['warontherocks','defensenews','breakingdefense','janes','isw','acled','gpf','rane_worldview','intelligence_online']}
+};
+function sourceTheater(s){
+  var id=(s.id||'').toLowerCase(), cat=(s.cat||'').toLowerCase();
+  if(THEATER_META.cina.ids.indexOf(id)>=0 || THEATER_META.cina.cats.indexOf(cat)>=0) return 'cina';
+  if(THEATER_META.indopacifico.ids.indexOf(id)>=0 || THEATER_META.indopacifico.cats.indexOf(cat)>=0) return 'indopacifico';
+  if(THEATER_META.medioriente.ids.indexOf(id)>=0) return 'medioriente';
+  if(THEATER_META.russia.ids.indexOf(id)>=0) return 'russia';
+  if(THEATER_META.africa.ids.indexOf(id)>=0) return 'africa';
+  if(THEATER_META.difesa.ids.indexOf(id)>=0 || THEATER_META.difesa.cats.indexOf(cat)>=0) return 'difesa';
+  if(THEATER_META.europa.cats.indexOf(cat)>=0) return 'europa';
+  if(THEATER_META.global.cats.indexOf(cat)>=0) return 'global';
+  return 'global';
+}
+function activateTheater(theater){
+  var touched=0;
+  sources.forEach(function(s){ if(sourceTheater(s)===theater && !s.on){ s.on=true; touched++; }});
+  persist(); renderSrcList();
+  notify(touched?('Attivate '+touched+' fonti: '+THEATER_META[theater].label):('Fonti già attive: '+THEATER_META[theater].label));
+  if(touched) doRefresh();
+}
+
 function renderSrcList(){
   var el=document.getElementById('srclist');if(!el)return;
-  var CAT={agenzie:'Agenzie',media:'Media',italia:'Italia',think:'Think tank',ist:'Ist.',cyber:'Cyber',finance:'Finance',regional:'Reg.',osint:'OSINT',cina:'Cina'};
+  var CAT={agenzie:'Agenzie',media:'Media',italia:'Italia',think:'Think tank',ist:'Ist.',cyber:'Cyber',finance:'Finance',regional:'Reg.',osint:'OSINT',cina:'Cina',sudest_asia:'Sud-est Asia'};
   var catmap={};
   sources.forEach(function(s){var c=s.cat||'media';if(!catmap[c])catmap[c]=[];catmap[c].push(s);});
   var html='';
@@ -2669,7 +2707,10 @@ function _drawP2Map(){
   var svgNode=svg.node();
   svgNode.style.cssText='width:100%;height:100%;display:block;overflow:hidden;';
   wrap.innerHTML='';
-  wrap.appendChild(svgNode);
+  var shell=document.createElement('div');
+  shell.className='map-shell';
+  shell.appendChild(svgNode);
+  wrap.appendChild(shell);
   _p2SVG=d3.select(svgNode);
   _p2SVG.call(_p2ZoomBeh);
 
@@ -2708,6 +2749,10 @@ function initP2Map(){
     s.onload=cb;document.head.appendChild(s);
   }
   _loadD3(function(){_loadTopo(_doLoad);});
+  if(!window._p2ResizeBound){
+    window._p2ResizeBound=true;
+    window.addEventListener('resize', function(){ if(document.getElementById('page-2') && document.getElementById('page-2').classList.contains('on')) setTimeout(function(){ try{_drawP2Map();}catch(e){} },80); });
+  }
 }
 // ── ALERT FEED ────────────────────────────────────────────────────
 function renderAlerts(){
@@ -3334,9 +3379,7 @@ function refreshIncremental(){
     if(n.includes('beijing')) out.push('beijing');
     if(n.includes('seeking truth') || n.includes('qstheory')) out.push('qstheory');
     if(n.includes('pekingnology')) out.push('pekingnology');
-    if(n.includes('ming pao') || n.includes('mingpao')) out.push('mingpao');
     if(n.includes('sing tao') || n.includes('singtao')) out.push('singtao');
-    if(n.includes('zaobao')) out.push('zaobao');
     if(n.includes('guangming') || n.includes('gmw')) out.push('gmw');
     if(n.includes('china economic') || n.includes('ce.cn')) out.push('cecn');
 
@@ -3445,7 +3488,7 @@ function toggleSidebar(){
 
 <script>
 (function(){
-  var APP_VERSION='2.4';
+  var APP_VERSION='2.5';
   var VERSION_KEY='sh3_app_version';
   try{
     var savedVersion=localStorage.getItem(VERSION_KEY)||'';
