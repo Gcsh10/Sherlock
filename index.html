@@ -193,6 +193,9 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .page-tab{appearance:none;background:transparent;border:1px solid transparent;color:var(--tx2);cursor:pointer;font-size:11px;padding:6px 12px;font-family:'Inter',sans-serif;font-weight:600;transition:all .15s ease;letter-spacing:.02em;border-radius:999px;}
 .page-tab:hover{color:var(--tx);background:rgba(255,255,255,.04);}
 .page-tab.on{border-color:rgba(0,184,255,.32);color:#eaf6ff;background:linear-gradient(180deg,rgba(0,184,255,.2),rgba(0,184,255,.08));box-shadow:0 8px 20px rgba(0,0,0,.16);}
+.page-tab.aux-tab{opacity:.96;}
+.page-tab.aux-tab:hover{transform:translateY(-1px);}
+
 .page{display:none;height:100%;width:100%;}
 .page.on{display:flex;}
 
@@ -786,6 +789,8 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
     <button class="page-tab on" id="ptab-1" onclick="switchPage(1)">Notizie</button>
     <button class="page-tab" id="ptab-2" onclick="switchPage(2)">Mappa</button>
     <button class="page-tab" id="ptab-3" onclick="switchPage(3)">Timeline</button>
+    <button class="page-tab aux-tab" onclick="openBriefing()">Briefing</button>
+    <button class="page-tab aux-tab" id="tvbtn" onclick="tvToggle()">Live TV</button>
   </div>
   <button class="hbtn mobile-menu-btn" id="mobile-menu-btn" onclick="toggleMobileMenu()">☰ MENU</button>
   <div class="hright">
@@ -794,10 +799,8 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
     <button class="hbtn" id="sidebar-toggle-btn" onclick="toggleSidebar()" title="Mostra/Nascondi filtri e fonti">Pannello</button>
     <button class="hbtn acc" onclick="openSrcModal()">Fonte</button>
     <button class="hbtn" onclick="openRestoreModal()">Colonne</button>
-    <button class="hbtn" onclick="openBriefing()">Briefing</button>
     <button class="hbtn" onclick="hardReset()" title="Reset completo localStorage">Reset</button>
     <button class="hbtn" id="trbtn" onclick="translateAll()" data-alltr="0" title="Traduci articoli cinesi con Google Translate">Traduci</button>
-    <button class="hbtn" id="tvbtn" onclick="tvToggle()">Live TV</button>
   </div>
 </header>
 
@@ -1188,7 +1191,7 @@ var DEFAULTS=[
   {id:'dgse_x',  name:'DGSE / X',       cat:'ist', url:'https://rsshub.app/twitter/user/dgsefr',on:true},
   // ── CINA ──────────────────────────────────────────────────────
   {id:'xinhua_cina',name:'Xinhua EN',url:'https://www.xinhuanet.com/english/rss/worldrss.xml',cat:'cina',max:15},
-  {id:'globaltimes',name:'Global Times',url:'https://www.globaltimes.cn/rss/outbrain.xml',cat:'cina',max:10},
+  {id:'globaltimes',name:'Global Times',url:'https://news.google.com/rss/search?q=site:globaltimes.cn&hl=en&gl=US&ceid=US:en',cat:'cina',max:10},
   {id:'chinadigitaltimes',name:'China Digital Times',url:'https://chinadigitaltimes.net/feed/',cat:'cina',max:10},
   // ── GLOBAL MEDIA ──────────────────────────────────────────────
   {id:'wsj_world',name:'WSJ World',url:'https://feeds.a.dj.com/rss/RSSWorldNews.xml',cat:'media',max:15},
@@ -1233,7 +1236,7 @@ var PRESETS=[
   // English-language Chinese state/official media
   {id:'xinhua_en',   name:'Xinhua (EN)',        cat:'cina', url:'http://www.xinhuanet.com/english/rss/worldrss.xml', on:true},
   {id:'cgtn_en',     name:'CGTN',               cat:'cina', url:'https://news.google.com/rss/search?q=site:cgtn.com&hl=en', on:true},
-  {id:'globaltimes', name:'Global Times (EN)',   cat:'cina', url:'https://www.globaltimes.cn/rss/outbrain.xml', on:true},
+  {id:'globaltimes', name:'Global Times (EN)',   cat:'cina', url:'https://news.google.com/rss/search?q=site:globaltimes.cn&hl=en&gl=US&ceid=US:en', on:true},
   {id:'chinadaily',  name:'China Daily (EN)',    cat:'cina', url:'https://rss.chinadaily.com.cn/rss/cndy_topnews.xml', on:true},
   {id:'people_en',   name:'Peoples Daily (EN)',cat:'cina', url:'https://news.google.com/rss/search?q=site:en.people.cn&hl=en', on:true},
   // Chinese-language sources (RSS in 中文)
@@ -1737,9 +1740,16 @@ function renderTimeline(){
 }
 
 var _briefingMode='global';
+function _isAlertArticle(a){
+  var txt=((a.title||'')+' '+(a.description||'')+' '+(a.src||'')).toLowerCase();
+  var kw=['alert','breaking','missile','strike','attacco','raid','explosion','escalation','sanction','sanzion','exercise','drill','nuclear','carrier','incursion','launch','cyber','ceasefire','summit'];
+  var hit=kw.some(function(k){return txt.indexOf(k)>=0;});
+  var fresh=(Date.now()-(a.ts||0))<36*3600*1000;
+  return (a.sev==='critical' || (a.sev==='high' && hit)) && fresh;
+}
 function _briefingFilter(a){
   if(_briefingMode==='global') return true;
-  if(_briefingMode==='alerts') return a.sev==='critical'||a.sev==='high';
+  if(_briefingMode==='alerts') return _isAlertArticle(a);
   return a.region===_briefingMode || a.cat===_briefingMode;
 }
 function openBriefing(mode){
@@ -1772,7 +1782,7 @@ function renderBriefing(){
   var body=document.getElementById('briefing-body'); if(!body) return;
   document.querySelectorAll('.br-mode').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-mode')===_briefingMode);});
   var items=(articles||[]).filter(_briefingFilter).sort(function(a,b){var SO={critical:4,high:3,medium:2,low:1};return (SO[b.sev]||0)-(SO[a.sev]||0)||((b.ts||0)-(a.ts||0));}).slice(0,12);
-  var titleMap={global:'Morning Brief — Globale',alerts:'Critical Brief — Alert',medioriente:'Theater Brief — Medio Oriente',cina:'Theater Brief — Cina',indopacifico:'Theater Brief — Indo-Pacifico'};
+  var titleMap={global:'Morning Brief — Globale',alerts:'Critical Brief — Alert strategici',medioriente:'Theater Brief — Medio Oriente',cina:'Theater Brief — Cina',indopacifico:'Theater Brief — Indo-Pacifico'};
   var now=new Date();
   var summary='';
   if(items.length){
@@ -1786,7 +1796,7 @@ function renderBriefing(){
   }
   body.innerHTML=summary + items.map(function(a,i){
     return '<div class="br-item"><div class="br-sev-badge '+a.sev+'">'+a.sev+'</div><div class="br-item-body"><a class="br-item-headline" href="'+esc(a.link||'')+'" target="_blank" rel="noopener">'+esc((i+1)+'. '+a.title)+'</a><div class="br-item-meta">'+esc(a.src)+' · '+fmtTime(a.pub)+' · '+esc(a.region||'global')+'</div>'+(a.description?'<div style="margin-top:6px;color:var(--tx2);line-height:1.55;font-size:14px">'+esc(a.description)+'</div>':'')+'</div></div>';
-  }).join('') + '<div class="br-footer">Briefing generato da Sherlock sulla base delle notizie disponibili in dashboard.</div>';
+  }).join('') + '<div class="br-footer">Briefing generato da Sherlock sulla base delle notizie disponibili in dashboard. La modalità Alert seleziona solo eventi critici o ad alta rilevanza con indicatori di escalation nelle ultime 36 ore.</div>';
 }
 
 // ── BRIEFING ─────────────────────────────────────────────────────
@@ -2765,30 +2775,55 @@ function _refreshP2Overlay(){
 }
 
 function initP2Map(){
+  function _renderUnavailable(msg){
+    var wrap=document.getElementById('p2-map-wrap');
+    if(wrap)wrap.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;padding:24px;color:var(--mu);font-size:11px;text-align:center">'+(msg||'Mappa non disponibile')+'</div>';
+  }
+  function _loadScript(urls, cb, fail){
+    var i=0;
+    (function next(){
+      if(i>=urls.length){ if(fail) fail(); return; }
+      var url=urls[i++];
+      var s=document.createElement('script');
+      s.src=url; s.async=true;
+      s.onload=function(){cb();};
+      s.onerror=function(){s.remove(); next();};
+      document.head.appendChild(s);
+    })();
+  }
+  function _loadJSON(urls, cb, fail){
+    var i=0;
+    (function next(){
+      if(i>=urls.length){ if(fail) fail(); return; }
+      fetch(urls[i++], {cache:'force-cache'}).then(function(r){
+        if(!r.ok) throw new Error('HTTP '+r.status);
+        return r.json();
+      }).then(cb).catch(next);
+    })();
+  }
   function _doLoad(){
-    fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
-      .then(function(r){return r.json();})
-      .then(function(w){_p2MapWorld=w;_drawP2Map();})
-      .catch(function(){
-        var wrap=document.getElementById('p2-map-wrap');
-        if(wrap)wrap.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--mu);font-size:11px">Mappa non disponibile</div>';
-      });
+    _loadJSON([
+      'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json',
+      'https://unpkg.com/world-atlas@2/countries-110m.json',
+      'https://fastly.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
+    ], function(w){ _p2MapWorld=w; _drawP2Map(); }, function(){ _renderUnavailable('Mappa non disponibile: atlante geografico non raggiungibile'); });
   }
   function _loadD3(cb){
     if(window.d3){cb();return;}
-    var s=document.createElement('script');
-    s.src='https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js';
-    s.onload=cb;document.head.appendChild(s);
+    _loadScript([
+      'https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js',
+      'https://unpkg.com/d3@7/dist/d3.min.js'
+    ], cb, function(){ _renderUnavailable('Mappa non disponibile: libreria D3 non raggiungibile'); });
   }
   function _loadTopo(cb){
     if(window.topojson){cb();return;}
-    var s=document.createElement('script');
-    s.src='https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js';
-    s.onload=cb;document.head.appendChild(s);
+    _loadScript([
+      'https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js',
+      'https://unpkg.com/topojson-client@3/dist/topojson-client.min.js'
+    ], cb, function(){ _renderUnavailable('Mappa non disponibile: libreria TopoJSON non raggiungibile'); });
   }
   _loadD3(function(){_loadTopo(_doLoad);});
-}
-// ── ALERT FEED ────────────────────────────────────────────────────
+}// ── ALERT FEED ────────────────────────────────────────────────────
 function renderAlerts(){
   var feed=document.getElementById('p2-alerts-feed');
   var cnt=document.getElementById('alert-count');
@@ -3550,7 +3585,7 @@ function toggleSidebar(){
 
 <script>
 (function(){
-  var APP_VERSION='2.6';
+  var APP_VERSION='2.7';
   var VERSION_KEY='sh3_app_version';
   try{
     var savedVersion=localStorage.getItem(VERSION_KEY)||'';
