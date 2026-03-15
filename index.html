@@ -620,7 +620,7 @@ body.theme-light .cdesc{
   background:rgba(239,68,68,.14);
   border-color:rgba(239,68,68,.34);
 }
-.csrc.cna, .csrc.straits, .csrc.rappler, .csrc.jakarta, .csrc.bangkokpost, .csrc.bernama, .csrc.vietnamnews, .csrc.tempo, .csrc.kompas, .csrc.khmertimes{
+.csrc.cna, .csrc.straits, .csrc.rappler, .csrc.jakarta, .csrc.bangkokpost, .csrc.vietnamnews, .csrc.tempo, .csrc.kompas, .csrc.khmertimes{
   background:rgba(16,185,129,.16);
   border-color:rgba(16,185,129,.34);
 }
@@ -1080,7 +1080,6 @@ var DEFAULTS=[
   {id:'rappler',name:'Rappler',url:'https://news.google.com/rss/search?q=site:rappler.com&hl=en&gl=PH&ceid=PH:en',cat:'sudest_asia',on:true},
   {id:'inquirer',name:'Philippine Daily Inquirer',url:'https://news.google.com/rss/search?q=site:inquirer.net&hl=en&gl=PH&ceid=PH:en',cat:'sudest_asia',on:true},
   {id:'starmalaysia',name:'The Star Malaysia',url:'https://news.google.com/rss/search?q=site:thestar.com.my&hl=en&gl=MY&ceid=MY:en',cat:'sudest_asia',on:true},
-  {id:'bernama',name:'BernAMA',url:'https://news.google.com/rss/search?q=site:bernama.com&hl=en&gl=MY&ceid=MY:en',cat:'sudest_asia',on:true},
   {id:'khmertimes',name:'Khmer Times',url:'https://news.google.com/rss/search?q=site:khmertimeskh.com&hl=en&gl=KH&ceid=KH:en',cat:'sudest_asia',on:true},
   {id:'myanmarnow',name:'Myanmar Now',url:'https://news.google.com/rss/search?q=site:myanmar-now.org&hl=en&gl=MM&ceid=MM:en',cat:'sudest_asia',on:true},
   {id:'diplomat_indo',name:'The Diplomat Indo-Pacific',url:'https://news.google.com/rss/search?q=site:thediplomat.com+(%22Indo-Pacific%22+OR+ASEAN+OR+South+China+Sea+OR+Taiwan)&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
@@ -1535,7 +1534,7 @@ function cardHTML(a){
 
 // Sources exclusive to a specific column (not shown elsewhere)
 var COL_EXCLUSIVE = {
-  'sudest': ['bernama','straitstime','rappler','jakarta','bangkokpost','vietnamnews','khmertimes','tempo','kompas','bernama_my']
+  'sudest': ['straitstime','rappler','jakarta','bangkokpost','vietnamnews','khmertimes','tempo','kompas']
 };
 // Build reverse map: srcId → colId
 var _srcExclusiveCol = {};
@@ -2448,6 +2447,11 @@ function closeCountryPanel(){
 }
 
 function p2ZoomStep(factor){
+  if(_p2Schematic){
+    _p2ScScale=Math.max(0.8,Math.min(5,_p2ScScale*factor));
+    _p2ApplySchematicTransform();
+    return;
+  }
   if(!_p2SVG||!_p2ZoomBeh)return;
   _p2SVG.transition().duration(300).call(_p2ZoomBeh.scaleBy, factor);
 }
@@ -2510,13 +2514,18 @@ function renderHubBar(){
 }
 function p2FocusHub(key){
   var clusters=_geolocateArticles();
-  var cl=clusters[key]; if(!cl||!_p2Proj||!_p2SVG||!_p2ZoomBeh) return;
+  var cl=clusters[key]; if(!cl) return;
   document.querySelectorAll('.p2-hub-chip').forEach(function(el){el.classList.toggle('active', el.getAttribute('onclick')==="p2FocusHub('"+key+"')");});
   var wrap=document.getElementById('p2-map-wrap'); var W=wrap?wrap.clientWidth:900, H=wrap?wrap.clientHeight:420;
-  var xy=_p2Proj([cl.hub.lng, cl.hub.lat]); if(!xy) return;
-  var scale=cl.items.length>=4?4.2:3.3;
-  var t=d3.zoomIdentity.translate(W/2-xy[0]*scale,H/2-xy[1]*scale).scale(scale);
-  _p2SVG.transition().duration(650).call(_p2ZoomBeh.transform,t);
+  if(_p2Schematic){
+    var xy=_p2GeoToXY(cl.hub.lat,cl.hub.lng,W,H); var scale=cl.items.length>=4?3.3:2.6;
+    _p2ScScale=scale; _p2ScTx=W/2-xy[0]*scale; _p2ScTy=H/2-xy[1]*scale; _p2ApplySchematicTransform();
+  } else if(_p2Proj&&_p2SVG&&_p2ZoomBeh){
+    var xy=_p2Proj([cl.hub.lng, cl.hub.lat]); if(!xy) return;
+    var scale=cl.items.length>=4?4.2:3.3;
+    var t=d3.zoomIdentity.translate(W/2-xy[0]*scale,H/2-xy[1]*scale).scale(scale);
+    _p2SVG.transition().duration(650).call(_p2ZoomBeh.transform,t);
+  }
   var note=wrap.querySelector('.p2-map-note');
   if(!note){note=document.createElement('div');note.className='p2-map-note';wrap.appendChild(note);}
   note.innerHTML='<b style="color:#fff">'+esc(cl.hub.name)+'</b><br>'+cl.items.length+' notizie correlate nelle ultime '+document.getElementById('p2-timeline').value+'h';
@@ -2774,6 +2783,99 @@ function _refreshP2Overlay(){
   renderHubBar();
 }
 
+
+
+var _p2Schematic=false, _p2ScScale=1, _p2ScTx=0, _p2ScTy=0;
+var P2_SCHEMATIC_VIEWS={
+  global:{scale:1,center:[10,15]},
+  europe:{scale:2.2,center:[18,50]},
+  mena:{scale:2.35,center:[35,28]},
+  asia:{scale:2.05,center:[95,28]},
+  americas:{scale:1.85,center:[-75,15]},
+  africa:{scale:2.15,center:[20,5]}
+};
+function _p2GeoToXY(lat,lng,W,H){
+  var x=(lng+180)/360*W;
+  var y=((90-lat)/180)*H;
+  y=H*0.08 + y*0.84;
+  return [x,y];
+}
+function _p2ApplySchematicTransform(){
+  var inner=document.querySelector('#p2-map-wrap .p2-schematic-inner');
+  if(!inner)return;
+  inner.style.transform='translate('+_p2ScTx+'px,'+_p2ScTy+'px) scale('+_p2ScScale+')';
+}
+function _p2SetSchematicView(view){
+  var wrap=document.getElementById('p2-map-wrap'); if(!wrap)return;
+  var cfg=P2_SCHEMATIC_VIEWS[view]||P2_SCHEMATIC_VIEWS.global;
+  var W=wrap.clientWidth||900, H=wrap.clientHeight||420;
+  var xy=_p2GeoToXY(cfg.center[1],cfg.center[0],W,H);
+  _p2ScScale=cfg.scale;
+  _p2ScTx=W/2-xy[0]*_p2ScScale;
+  _p2ScTy=H/2-xy[1]*_p2ScScale;
+  _p2ApplySchematicTransform();
+}
+function _drawP2SchematicMap(){
+  var wrap=document.getElementById('p2-map-wrap');if(!wrap)return;
+  var W=wrap.clientWidth||900,H=wrap.clientHeight||420;
+  _p2Schematic=true;
+  var clusters=_geolocateArticles();
+  var lines='';
+  for(var i=1;i<=5;i++){
+    var y=H*(0.16+i*0.11);
+    lines+='<line x1="'+(W*0.08)+'" y1="'+y+'" x2="'+(W*0.92)+'" y2="'+y+'" stroke="rgba(255,255,255,.08)" stroke-width="0.8"></line>';
+  }
+  for(var j=1;j<=8;j++){
+    var x=W*(0.1+j*0.09);
+    lines+='<line x1="'+x+'" y1="'+(H*0.15)+'" x2="'+x+'" y2="'+(H*0.85)+'" stroke="rgba(255,255,255,.06)" stroke-width="0.8"></line>';
+  }
+  var continents=[
+    {d:'M 120 95 C 150 60, 230 42, 285 68 C 315 82, 330 110, 323 145 C 317 174, 286 196, 265 222 C 245 248, 221 286, 185 285 C 152 284, 129 246, 132 215 C 136 180, 117 156, 112 128 C 110 116, 111 104, 120 95 Z'},
+    {d:'M 302 238 C 323 230, 347 240, 354 262 C 364 292, 354 326, 334 349 C 320 364, 302 356, 295 334 C 287 307, 286 268, 302 238 Z'},
+    {d:'M 392 84 C 445 58, 528 54, 586 78 C 650 105, 707 115, 768 106 C 802 101, 842 111, 861 133 C 880 154, 870 183, 843 197 C 808 214, 795 240, 760 250 C 726 259, 699 241, 673 241 C 643 241, 624 266, 596 275 C 564 285, 537 269, 504 267 C 470 265, 427 248, 408 217 C 391 188, 379 141, 392 84 Z'},
+    {d:'M 545 286 C 576 278, 613 289, 638 309 C 663 329, 669 355, 651 376 C 630 399, 593 407, 562 397 C 533 388, 518 357, 523 328 C 527 308, 530 292, 545 286 Z'},
+    {d:'M 748 304 C 776 292, 814 297, 836 317 C 850 330, 851 349, 838 362 C 815 384, 781 389, 753 377 C 731 367, 723 339, 732 320 C 736 312, 741 307, 748 304 Z'}
+  ];
+  var land=continents.map(function(c){return '<path d="'+c.d+'" fill="rgba(83,117,148,.18)" stroke="rgba(214,91,49,.16)" stroke-width="1"></path>';}).join('');
+  wrap.innerHTML=''
+    +'<div class="p2-schematic-inner" style="position:absolute;inset:0;transform-origin:0 0;transition:transform .45s ease;">'
+    +'<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="none" style="width:100%;height:100%;display:block">'
+    +'<defs><filter id="p2glow"><feGaussianBlur stdDeviation="5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>'
+    +'<rect x="0" y="0" width="'+W+'" height="'+H+'" fill="#0d0f12"></rect>'
+    +'<ellipse cx="'+(W*0.5)+'" cy="'+(H*0.5)+'" rx="'+(W*0.46)+'" ry="'+(H*0.36)+'" fill="#171b1f" stroke="rgba(214,91,49,.24)" stroke-width="1.1"></ellipse>'
+    + lines + land + '</svg></div>';
+  var inner=wrap.querySelector('.p2-schematic-inner');
+  var svgNode=inner.querySelector('svg');
+  var note=wrap.querySelector('.p2-map-note');
+  if(!note){ note=document.createElement('div'); note.className='p2-map-note'; wrap.appendChild(note); }
+  note.innerHTML='Mappa schematica offline attiva';
+  var NS='http://www.w3.org/2000/svg';
+  if(_p2Layers.hs){
+    HOTSPOTS.forEach(function(hs){
+      var xy=_p2GeoToXY(hs.lat,hs.lng,W,H); var color=hs.sev==='crit'?'#ef4444':hs.sev==='high'?'#f59e0b':hs.sev==='med'?'#3b82f6':'#22d35e';
+      var g=document.createElementNS(NS,'g');
+      g.setAttribute('transform','translate('+xy[0]+' '+xy[1]+')');
+      g.innerHTML='<circle r="10" fill="none" stroke="'+color+'" stroke-opacity=".35"></circle><circle r="4.2" fill="'+color+'" fill-opacity=".85"></circle>';
+      svgNode.appendChild(g);
+    });
+  }
+  if(_p2Layers.pins){
+    Object.keys(clusters).forEach(function(key){
+      var cl=clusters[key],xy=_p2GeoToXY(cl.hub.lat,cl.hub.lng,W,H),sev=0; cl.items.forEach(function(a){sev=Math.max(sev,{critical:4,high:3,medium:2,low:1}[a.sev]||1);});
+      var color=sev>=4?'#ef4444':sev>=3?'#f59e0b':sev>=2?'#3b82f6':'#22d35e';
+      var g=document.createElementNS(NS,'g');
+      g.setAttribute('transform','translate('+xy[0]+' '+xy[1]+')');
+      g.setAttribute('data-key',key);
+      g.style.cursor='pointer';
+      g.innerHTML='<circle r="12" fill="'+color+'" fill-opacity=".16" stroke="'+color+'" stroke-opacity=".6" filter="url(#p2glow)"></circle><circle r="5" fill="'+color+'"></circle>'+(cl.items.length>1?'<text x="10" y="-10" fill="#fff" font-size="10" font-family="Share Tech Mono, monospace">'+cl.items.length+'</text>':'');
+      g.addEventListener('click',function(){p2FocusHub(key);});
+      svgNode.appendChild(g);
+    });
+  }
+  _updateStats();
+  renderHubBar();
+  _p2SetSchematicView(_p2CurrentView||'global');
+}
 function initP2Map(){
   function _renderUnavailable(msg){
     var wrap=document.getElementById('p2-map-wrap');
@@ -2806,21 +2908,21 @@ function initP2Map(){
       'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json',
       'https://unpkg.com/world-atlas@2/countries-110m.json',
       'https://fastly.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
-    ], function(w){ _p2MapWorld=w; _drawP2Map(); }, function(){ _renderUnavailable('Mappa non disponibile: atlante geografico non raggiungibile'); });
+    ] , function(w){ _p2MapWorld=w; _drawP2Map(); }, function(){ _drawP2SchematicMap(); });
   }
   function _loadD3(cb){
     if(window.d3){cb();return;}
     _loadScript([
       'https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js',
       'https://unpkg.com/d3@7/dist/d3.min.js'
-    ], cb, function(){ _renderUnavailable('Mappa non disponibile: libreria D3 non raggiungibile'); });
+    ], cb, function(){ _drawP2SchematicMap(); });
   }
   function _loadTopo(cb){
     if(window.topojson){cb();return;}
     _loadScript([
       'https://cdn.jsdelivr.net/npm/topojson-client@3/dist/topojson-client.min.js',
       'https://unpkg.com/topojson-client@3/dist/topojson-client.min.js'
-    ], cb, function(){ _renderUnavailable('Mappa non disponibile: libreria TopoJSON non raggiungibile'); });
+    ], cb, function(){ _drawP2SchematicMap(); });
   }
   _loadD3(function(){_loadTopo(_doLoad);});
 }// ── ALERT FEED ────────────────────────────────────────────────────
@@ -3463,7 +3565,6 @@ function refreshIncremental(){
     if(n.includes('rappler')) out.push('rappler');
     if(n.includes('jakarta post')) out.push('jakarta');
     if(n.includes('bangkok post')) out.push('bangkokpost');
-    if(n.includes('bernama')) out.push('bernama');
     if(n.includes('viet nam news') || n.includes('vietnam news')) out.push('vietnamnews');
     if(n.includes('tempo')) out.push('tempo');
     if(n.includes('kompas')) out.push('kompas');
@@ -3585,7 +3686,7 @@ function toggleSidebar(){
 
 <script>
 (function(){
-  var APP_VERSION='2.7';
+  var APP_VERSION='2.8';
   var VERSION_KEY='sh3_app_version';
   try{
     var savedVersion=localStorage.getItem(VERSION_KEY)||'';
