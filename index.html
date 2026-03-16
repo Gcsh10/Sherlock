@@ -531,8 +531,10 @@ header{
     height:52px;
     padding-left:max(12px,env(safe-area-inset-left));
     padding-right:max(12px,env(safe-area-inset-right));
-    overflow-x:auto;overflow-y:hidden;scrollbar-width:none;
+    overflow-x:auto;overflow-y:hidden;
+    scrollbar-width:none;flex-wrap:nowrap;
   }
+  header::-webkit-scrollbar{display:none;}
   header::-webkit-scrollbar{display:none;}
   /* hide page-tabs from header — bottom-nav takes over */
   #page-tabs-header{display:none !important;}
@@ -3736,12 +3738,14 @@ function toggleSidebar(){
 <script>
 (function(){
   var LIVE_KEY='sh3_live_cfg_v1';
-  var liveCfg={enabled:true,interval:120,lastRefresh:0,lastAttempt:0};
+  var liveCfg={enabled:true,interval:60,lastRefresh:0,lastAttempt:0};
   try{
     var saved=JSON.parse(localStorage.getItem(LIVE_KEY)||'null');
     if(saved&&typeof saved==='object'){
       if(typeof saved.enabled==='boolean') liveCfg.enabled=saved.enabled;
       if([30,60,120,300,600].indexOf(Number(saved.interval))!==-1) liveCfg.interval=Number(saved.interval);
+      // Force migration: bump any value below 60 up to 60
+      if(liveCfg.interval<60) liveCfg.interval=60;
       if(saved.lastRefresh) liveCfg.lastRefresh=Number(saved.lastRefresh)||0;
     }
   }catch(e){}
@@ -3777,8 +3781,8 @@ function toggleSidebar(){
       +'<button class="hbtn live-toggle" id="live-toggle" title="Aggiornamento automatico">AUTO ON</button>'
       +'<select class="live-interval" id="live-interval" title="Intervallo aggiornamento">'
       +'<option value="30">30s</option>'
-      +'<option value="60">60s</option>'
-      +'<option value="120" selected>120s</option>'
+      +'<option value="60" selected>60s</option>'
+      +'<option value="120">120s</option>'
       +'<option value="300">5 min</option>'
       +'<option value="600">10 min</option>'
       +'</select>'
@@ -3805,7 +3809,7 @@ function toggleSidebar(){
   window.startTimer=function(){
     clearInterval(window.timerInt);
     var arc=document.getElementById('tarc'), lbl=document.getElementById('tlbl');
-    var C=44, total=Number(liveCfg.interval)||120;
+    var C=44, total=Number(liveCfg.interval)||60;
     if(!liveCfg.enabled){
       window.timerSec=0;
       if(lbl) lbl.textContent='MAN';
