@@ -532,131 +532,100 @@ header{
 
 @media (max-width:992px){
   .sidebar{width:160px;}
-  .page-tabs{margin-left:4px;}
   .hbtn{padding:4px 8px;font-size:11px;}
 }
 
-/* ── TABLET PORTRAIT 601–767px (iPad portrait) ───────────────────*/
+/* Bottom nav: hidden on desktop */
+#bottom-nav{display:none;}
+
+/* ── TABLET PORTRAIT ≤ 767px (iPad portrait) ────────────────────*/
 @media (max-width:767px){
-  /* Header: compact, page tabs still visible */
-  header{height:48px;padding:0 10px;gap:6px;
-    padding-left:max(10px,env(safe-area-inset-left));
-    padding-right:max(10px,env(safe-area-inset-right));}
-  .logo{font-size:17px;letter-spacing:.22em;}
-  #clock{font-size:15px;}
-  .hbtn{padding:5px 9px;font-size:11px;}
-  .hsep{display:none;}
+  header{
+    height:52px;
+    padding-left:max(12px,env(safe-area-inset-left));
+    padding-right:max(12px,env(safe-area-inset-right));
+    overflow-x:auto;overflow-y:hidden;scrollbar-width:none;
+  }
+  header::-webkit-scrollbar{display:none;}
+  /* hide page-tabs from header — bottom-nav takes over */
+  #page-tabs-header{display:none !important;}
 
-  /* Shell: remove bottom nav space  */
-  .shell{height:calc(100dvh - 48px - 52px);}
+  /* bottom nav */
+  #bottom-nav{
+    display:flex !important;
+    position:fixed;bottom:0;left:0;right:0;
+    height:52px;
+    min-height:calc(52px + env(safe-area-inset-bottom));
+    padding-bottom:env(safe-area-inset-bottom);
+    padding-left:env(safe-area-inset-left);
+    padding-right:env(safe-area-inset-right);
+    background:var(--bg2);border-top:1px solid var(--bd2);z-index:400;
+  }
+  #bottom-nav .page-tab{
+    flex:1;border-radius:0;font-size:10px;
+    padding:6px 4px;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    border:none;border-top:2px solid transparent;
+    min-height:44px;background:transparent;color:var(--tx2);
+    cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;
+    letter-spacing:.02em;transition:all .15s;-webkit-tap-highlight-color:transparent;
+  }
+  #bottom-nav .page-tab.on{border-top-color:var(--acc);color:#eaf6ff;background:rgba(0,184,255,.08);}
 
-  /* Hide sidebar — use existing drawer mechanism */
+  /* shell: full height minus header and bottom-nav */
+  .shell{
+    height:calc(100dvh - 52px - 52px - env(safe-area-inset-bottom));
+    padding-bottom:0;
+  }
+
   .sidebar{display:none;}
-
-  /* Columns: 2 columns on iPad portrait */
   .main-area{flex:1;}
   .cols-wrap{
     display:grid !important;
     grid-template-columns:repeat(2,1fr);
     overflow-x:hidden;overflow-y:hidden;
-    gap:0;height:100%;
+    height:100%;gap:0;
   }
-  .acol{
-    min-width:0;max-width:100%;flex:none;
-    height:100%;border-right:1px solid var(--bd);border-bottom:none;
-  }
+  .acol{min-width:0;max-width:100%;flex:none;height:100%;border-right:1px solid var(--bd);}
   .acol:nth-child(even){border-right:none;}
   .add-col-btn{display:none;}
-
-  /* Cards */
+  .col-feed{-webkit-overflow-scrolling:touch;}
   .ctlink{font-size:15px;}
-  .cdesc{font-size:13px;}
   .card{padding:10px 12px;}
 
-  /* Page tabs: move to bottom */
-  .page-tabs{
-    position:fixed;bottom:0;left:0;right:0;
-    display:flex !important;
-    height:52px;
-    background:var(--bg2);
-    border-top:1px solid var(--bd2);
-    border-radius:0;
-    padding:0;margin:0;
-    padding-bottom:env(safe-area-inset-bottom);
-    z-index:400;
-    padding-left:env(safe-area-inset-left);
-    padding-right:env(safe-area-inset-right);
-  }
-  .page-tab{
-    flex:1;border-radius:0;
-    font-size:10px;padding:6px 4px 4px;
-    display:flex;flex-direction:column;align-items:center;
-    justify-content:center;gap:2px;
-    border:none;border-top:2px solid transparent;
-    min-height:44px;
-  }
-  .page-tab.on{border-top-color:var(--acc);border-bottom:none;}
-
-  /* Map page: collapse intel panel on tablet */
   .ops-intel{width:0;overflow:hidden;border:none;}
-  .ops-main{flex-direction:column;}
   .p2-map-toolbar{flex-wrap:wrap;height:auto;gap:4px;padding:6px 8px;}
-
-  /* TV panel */
-  #tv-panel{width:100%!important;height:220px!important;left:0!important;right:0!important;bottom:52px!important;resize:none!important;}
+  #tv-panel{width:100%!important;height:220px!important;left:0!important;right:0!important;bottom:calc(52px + env(safe-area-inset-bottom))!important;resize:none!important;}
 }
 
-/* ── PHONE LANDSCAPE 481–600px ───────────────────────────────────*/
-@media (max-width:600px) and (orientation:landscape){
-  .shell{height:calc(100dvh - 44px);}
-  header{height:44px;}
-  .page-tabs{height:44px;bottom:0;}
-  .cols-wrap{
-    grid-template-columns:repeat(2,1fr) !important;
-    height:calc(100dvh - 44px - 44px);
-  }
-  .acol{height:100%;}
-  .col-feed{-webkit-overflow-scrolling:touch;}
-}
-
-/* ── PHONE PORTRAIT ≤ 600px ──────────────────────────────────────*/
+/* ── PHONE ≤ 600px ───────────────────────────────────────────────*/
 @media (max-width:600px){
-  /* Header: logo + timer + menu button only */
   header{
-    height:52px;
-    padding:0 12px;
+    height:50px;gap:8px;
     padding-left:max(12px,env(safe-area-inset-left));
     padding-right:max(12px,env(safe-area-inset-right));
-    flex-wrap:nowrap;gap:8px;
+    overflow-x:auto;overflow-y:hidden;scrollbar-width:none;flex-wrap:nowrap;
   }
-  .logo{font-size:15px;letter-spacing:.2em;}
-  #clock{display:none;}
+  header::-webkit-scrollbar{display:none;}
+  .logo{font-size:15px;letter-spacing:.2em;flex-shrink:0;}
   .live-lbl{display:none;}
-  .timer-wrap{gap:4px;}
-  #tlbl{font-size:10px;}
+  #clock{display:none;}
+  .hright{display:flex;flex-shrink:0;gap:4px;margin-left:auto;align-items:center;}
+  .hright .hbtn{font-size:10px;padding:4px 8px;white-space:nowrap;}
 
-  /* Bottoni header nascosti in drawer */
-  .hright{display:none;position:fixed;top:52px;left:0;right:0;
-    background:var(--bg2);border-bottom:1px solid var(--bd2);
-    flex-direction:column;padding:8px 12px;gap:6px;z-index:300;
-    padding-left:max(12px,env(safe-area-inset-left));
-    padding-right:max(12px,env(safe-area-inset-right));}
-  .hright.open{display:flex;}
-  .hright .hbtn{width:100%;text-align:center;padding:10px;font-size:13px;}
-  .mobile-menu-btn{
-    display:inline-flex;align-items:center;justify-content:center;
-    margin-left:auto;min-width:44px;min-height:44px;
+  #bottom-nav{
+    height:50px;
+    min-height:calc(50px + env(safe-area-inset-bottom));
   }
+  #bottom-nav .page-tab{font-size:9px;padding:4px 2px;}
 
-  /* Shell */
+  /* shell = viewport - header(50) - bottom-nav(50) - safe-area */
   .shell{
-    height:calc(100dvh - 52px - 56px);
-    flex-direction:column;
+    height:calc(100dvh - 50px - 50px - env(safe-area-inset-bottom));
+    padding-bottom:0;
   }
-  .sidebar{display:none;}
 
-  /* Columns: single column, snap scroll horizontal */
-  .main-area{flex:1;min-height:0;}
+  .sidebar{display:none;}
   .cols-wrap{
     display:flex !important;
     flex-direction:row !important;
@@ -664,102 +633,52 @@ header{
     overflow-y:hidden !important;
     scroll-snap-type:x mandatory;
     -webkit-overflow-scrolling:touch;
-    height:100%;
-    gap:0;
+    height:100%;gap:0;scrollbar-width:none;
   }
   .cols-wrap::-webkit-scrollbar{display:none;}
   .acol{
-    min-width:calc(100vw - 24px);
-    max-width:calc(100vw - 24px);
-    flex-shrink:0;
-    scroll-snap-align:start;
-    height:100%;
-    border-right:1px solid var(--bd);
+    min-width:100%;max-width:100%;flex-shrink:0;
+    height:100%;scroll-snap-align:start;
   }
   .add-col-btn{display:none;}
-  .col-hd{padding:10px 12px;cursor:default;}
-  .col-name{font-size:12px;}
-
-  /* Cards: bigger tap targets */
+  .col-feed{-webkit-overflow-scrolling:touch;}
+  .col-hd{padding:10px 12px;}
   .card{padding:12px 14px;}
   .ctlink{font-size:16px;line-height:1.4;}
-  .cdesc{font-size:13px;}
-  .ctime{font-size:12px;}
-  .csrc{font-size:11px;}
 
-  /* Bottom tabs */
-  .page-tabs{
-    position:fixed;bottom:0;left:0;right:0;
-    display:flex !important;
-    height:56px;
-    background:var(--bg2);
-    border-top:1px solid var(--bd2);
-    border-radius:0;padding:0;margin:0;
-    padding-bottom:env(safe-area-inset-bottom);
-    padding-left:env(safe-area-inset-left);
-    padding-right:env(safe-area-inset-right);
-    z-index:400;
-  }
-  .page-tab{
-    flex:1;border-radius:0;font-size:9px;
-    padding:6px 2px 4px;
-    display:flex;flex-direction:column;
-    align-items:center;justify-content:center;
-    border:none;border-top:2px solid transparent;
-    min-height:44px;letter-spacing:.04em;
-  }
-  .page-tab.on{border-top-color:var(--acc);color:var(--acc);}
-
-  /* Map: full screen, no intel panel */
   .ops-intel{display:none;}
-  .ops-main{flex-direction:column;}
-  .p2-map-toolbar{
-    flex-wrap:nowrap;overflow-x:auto;
-    -webkit-overflow-scrolling:touch;
-    scrollbar-width:none;padding:5px 8px;gap:4px;
-  }
+  .p2-map-toolbar{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:5px 8px;}
   .p2-map-toolbar::-webkit-scrollbar{display:none;}
-  .p2-region-btns,.p2-layer-btns{flex-shrink:0;}
-  .p2-timeline-bar{min-width:120px;}
-
-  /* TV panel */
-  #tv-panel{
-    width:100%!important;height:210px!important;
-    left:0!important;right:0!important;
-    bottom:56px!important;resize:none!important;
-  }
-
-  /* Map fullscreen btn */
   .p2-fullscreen-btn{display:none;}
+  #tv-panel{width:100%!important;height:200px!important;left:0!important;right:0!important;bottom:calc(50px + env(safe-area-inset-bottom))!important;resize:none!important;}
 }
 
-/* ── VERY SMALL PHONE ≤ 380px ────────────────────────────────────*/
 @media (max-width:380px){
-  .logo{font-size:13px;letter-spacing:.15em;}
-  .acol{min-width:100vw;max-width:100vw;}
-  .page-tab{font-size:8px;}
-  .ctlink{font-size:15px;}
+  .logo{font-size:13px;letter-spacing:.14em;}
+  #bottom-nav .page-tab{font-size:8px;}
 }
 
-/* ── MOBILE SIDEBAR DRAWER (unchanged) ──────────────────────────*/
-.mobile-side-btn{display:none;border-color:var(--acc2);color:var(--acc);margin-left:6px;}
+/* ── MOBILE SIDEBAR DRAWER ───────────────────────────────────────*/
+.mobile-side-btn{display:none;border-color:var(--acc2);color:var(--acc);padding:4px 8px;}
 .mobile-sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:320;}
 .mobile-sidebar-head{display:none;padding:8px;border-bottom:1px solid var(--bd2);background:var(--bg2);}
 @media (max-width:767px){
-  .mobile-side-btn{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;}
+  .mobile-side-btn{display:inline-flex;align-items:center;justify-content:center;}
   .shell{position:relative;}
   #mobile-sidebar{
-    display:flex!important;position:fixed;top:48px;left:0;bottom:0;
-    width:min(84vw,320px);max-width:320px;z-index:350;
+    display:flex!important;position:fixed;
+    top:52px;left:0;
+    bottom:calc(52px + env(safe-area-inset-bottom));
+    width:min(84vw,300px);z-index:350;
     transform:translateX(-102%);transition:transform .22s ease;
-    box-shadow:0 10px 40px rgba(0,0,0,.45);
+    box-shadow:4px 0 24px rgba(0,0,0,.5);
   }
   .mobile-sidebar-head{display:block;}
   body.mobile-sidebar-open #mobile-sidebar{transform:translateX(0);}
   body.mobile-sidebar-open #mobile-sidebar-overlay{display:block;}
 }
 @media (max-width:600px){
-  #mobile-sidebar{top:52px;}
+  #mobile-sidebar{top:50px;bottom:calc(50px + env(safe-area-inset-bottom));}
 }
 
 
@@ -781,19 +700,16 @@ header{
 /* ── SNAP-SCROLL COLUMN DOTS (phone) ─────────────────────────────*/
 #col-scroll-dots{
   display:none;
-  position:fixed;bottom:60px;left:0;right:0;
+  position:fixed;bottom:58px;left:0;right:0;
   justify-content:center;gap:5px;z-index:390;
-  pointer-events:none;
-  padding-bottom:2px;
+  pointer-events:none;padding-bottom:2px;
 }
-#col-scroll-dots span{
-  width:5px;height:5px;border-radius:50%;
-  background:var(--bd2);transition:background .2s,transform .2s;
-}
+#col-scroll-dots span{width:5px;height:5px;border-radius:50%;background:var(--bd2);transition:background .2s,transform .2s;}
 #col-scroll-dots span.active{background:var(--acc);transform:scale(1.3);}
-@media (max-width:600px){
-  #col-scroll-dots{display:flex;}
-};align-items:center;gap:6px;color:#ffffff !important;font-weight:700;letter-spacing:.04em;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:2px 8px;}
+@media (max-width:600px){#col-scroll-dots{display:flex;bottom:calc(54px + env(safe-area-inset-bottom));}}
+
+/* Source badge */
+.csrc{display:inline-flex;align-items:center;gap:6px;color:#ffffff !important;font-weight:700;letter-spacing:.04em;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:2px 8px;}
 
 .csrc::before{
   content:'';
@@ -977,15 +893,15 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
   </div>
   <div class="hsep"></div>
   <div class="live-dot"></div><span class="live-lbl">LIVE</span>
-  <button class="hbtn mobile-side-btn" id="mobile-side-btn" onclick="toggleMobileSidebar()">☰ FILTRI</button>
-  <div class="page-tabs">
+  <button class="hbtn mobile-side-btn" id="mobile-side-btn" onclick="toggleMobileSidebar()">☰</button>
+  <!-- page-tabs: visible in header on desktop, moved to bottom bar on mobile via CSS -->
+  <div class="page-tabs" id="page-tabs-header">
     <button class="page-tab on" id="ptab-1" onclick="switchPage(1)">Notizie</button>
     <button class="page-tab" id="ptab-2" onclick="switchPage(2)">Mappa</button>
     <button class="page-tab" id="ptab-3" onclick="switchPage(3)">Timeline</button>
     <button class="page-tab" id="ptab-4" onclick="switchPage(4)">Briefing</button>
     <button class="page-tab" id="ptab-tv" onclick="tvToggle()">Live TV</button>
   </div>
-  <button class="hbtn mobile-menu-btn" id="mobile-menu-btn" onclick="toggleMobileMenu()">☰ MENU</button>
   <div class="hright">
     <span id="clock"></span>
     <button class="hbtn" onclick="toggleTheme()">Tema</button>
@@ -994,8 +910,34 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
     <button class="hbtn" onclick="openRestoreModal()">Colonne</button>
     <button class="hbtn" onclick="hardReset()" title="Reset completo localStorage">Reset</button>
     <button class="hbtn" id="trbtn" onclick="translateAll()" data-alltr="0" title="Traduci articoli cinesi con Google Translate">Traduci</button>
-      </div>
+  </div>
 </header>
+<!-- Bottom nav bar for mobile — populated by JS -->
+<nav id="bottom-nav" aria-label="Navigazione"></nav>
+<script>
+(function(){
+  var nav=document.getElementById('bottom-nav');
+  if(!nav)return;
+  var tabs=[
+    {label:'Notizie',  page:1},
+    {label:'Mappa',    page:2},
+    {label:'Timeline', page:3},
+    {label:'Briefing', page:4},
+    {label:'Live TV',  page:'tv'}
+  ];
+  tabs.forEach(function(t){
+    var btn=document.createElement('button');
+    btn.className='page-tab'+(t.page===1?' on':'');
+    btn.setAttribute('data-page',t.page);
+    btn.textContent=t.label;
+    btn.addEventListener('click',function(){
+      if(t.page==='tv'){tvToggle();}
+      else{switchPage(t.page);}
+    });
+    nav.appendChild(btn);
+  });
+})();
+</script>
 
 <div class="modal-bg" id="src-modal" style="display:none" onclick="if(event.target===this)closeSrcModal()">
   <div class="modal">
@@ -1942,7 +1884,15 @@ function switchPage(n){
     var p=document.getElementById('page-'+i),t=document.getElementById('ptab-'+i);
     if(p)p.classList.toggle('on',n===i);
     if(t)t.classList.toggle('on',n===i);
+    // also sync bottom-nav copy
+    var tb=document.querySelector('#bottom-nav [data-page="'+i+'"]');
+    if(tb)tb.classList.toggle('on',n===i);
   });
+  // sync Live TV tab in both bars
+  var tvH=document.getElementById('ptab-tv');
+  var tvB=document.querySelector('#bottom-nav [data-page="tv"]');
+  if(tvH)tvH.classList.remove('on');
+  if(tvB)tvB.classList.remove('on');
   if(n===2){renderAlerts();if(!_p2MapWorld)initP2Map();else _drawP2Map();}
   if(n===3){renderTimelinePage();}
   if(n===4){renderBriefingPage();}
