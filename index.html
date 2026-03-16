@@ -364,10 +364,6 @@ header{
 /* ── FULLSCREEN MAP ───────────────────────────────────────────────*/
 .ops-main.map-fullscreen .ops-intel{width:0!important;overflow:hidden!important;border:none!important;flex-shrink:0;}
 
-/* ── CORRELATION ARCS ─────────────────────────────────────────────*/
-@keyframes arc-dash{from{stroke-dashoffset:400}to{stroke-dashoffset:0}}
-.arcs-layer path{pointer-events:none;}
-
 /* ── MARITIME ROUTES ──────────────────────────────────────────────*/
 .routes-layer path{stroke-linecap:round;stroke-linejoin:round;}
 
@@ -1071,7 +1067,6 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
                 <button class="p2-lbtn on" id="lbtn-borders" onclick="p2ToggleLayer('borders',this)">&#9644; Confini</button>
                 <button class="p2-lbtn on" id="lbtn-naval" onclick="p2ToggleLayer('naval',this)">&#9875; Flotte</button>
                 <button class="p2-lbtn on" id="lbtn-chokepoints" onclick="p2ToggleLayer('chokepoints',this)">&#9830; Chokepoint</button>
-                <button class="p2-lbtn on" id="lbtn-arcs" onclick="p2ToggleLayer('arcs',this)">&#9654; Archi</button>
                 <button class="p2-lbtn on" id="lbtn-routes" onclick="p2ToggleLayer('routes',this)">&#9783; Rotte</button>
               </div>
               <div style="width:1px;height:16px;background:var(--bd2);margin:0 2px;flex-shrink:0;"></div>
@@ -1220,7 +1215,6 @@ var DEFAULTS=[
   {id:'starmalaysia',name:'The Star Malaysia',url:'https://news.google.com/rss/search?q=site:thestar.com.my&hl=en&gl=MY&ceid=MY:en',cat:'sudest_asia',on:true},
   {id:'khmertimes',name:'Khmer Times',url:'https://news.google.com/rss/search?q=site:khmertimeskh.com&hl=en&gl=KH&ceid=KH:en',cat:'sudest_asia',on:true},
   {id:'myanmarnow',name:'Myanmar Now',url:'https://news.google.com/rss/search?q=site:myanmar-now.org&hl=en&gl=MM&ceid=MM:en',cat:'sudest_asia',on:true},
-  {id:'singtao',name:'Sing Tao Daily',url:'https://news.google.com/rss/search?q=site:stheadline.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',cat:'cina',on:true},
   {id:'applehk',name:'Apple Daily HK',url:'https://news.google.com/rss/search?q=%22Apple+Daily%22+Hong+Kong&hl=en&gl=HK&ceid=HK:en',cat:'cina',on:true},
   {id:'cna_tw',name:'Central News Agency',url:'https://news.google.com/rss/search?q=site:cna.com.tw&hl=zh-TW&gl=TW&ceid=TW:zh-Hant',cat:'cina',on:true},
   {id:'pla_daily',name:'PLA Daily',url:'https://news.google.com/rss/search?q=site:81.cn+解放军报&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
@@ -1268,7 +1262,7 @@ var DEFAULTS=[
   {id:'nhk',       name:'NHK World',          cat:'media',   url:'https://news.google.com/rss/search?q=site:nhk.or.jp&hl=en&gl=JP&ceid=JP:en',on:true},
   {id:'thehill',   name:'The Hill',           cat:'media',   url:'https://news.google.com/rss/search?q=site:thehill.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'axios',     name:'Axios World',        cat:'media',   url:'https://news.google.com/rss/search?q=site:axios.com+world&hl=en',on:true},
-  {id:'nikkei',    name:'Nikkei Asia',        cat:'regional',url:'https://news.google.com/rss/search?q=site:asia.nikkei.com&hl=en',on:true},
+  {id:'nikkei',    name:'Nikkei Asia',        cat:'regional',url:'https://asia.nikkei.com/rss/feed/nar',on:true},
   {id:'scmp',      name:'S.China Morning',    cat:'regional',url:'https://news.google.com/rss/search?q=site:scmp.com&hl=en',on:true},
   {id:'haaretz',   name:'Haaretz',            cat:'regional',url:'https://news.google.com/rss/search?q=site:haaretz.com&hl=en',on:true},
   {id:'meye',      name:'Middle East Eye',    cat:'regional',url:'https://news.google.com/rss/search?q=site:middleeasteye.net&hl=en',on:true},
@@ -1389,10 +1383,9 @@ var ALL_COLS=[
   {id:'medioriente', name:'Medio Oriente',icon:'&#128332;', regions:['medioriente']},
   {id:'italia',      name:'Italia',       icon:'&#127470;&#127481;', regions:['italia']},
   {id:'cina',        name:'Cina & Taiwan',icon:'&#127464;&#127475;', regions:['cina']},
-  {id:'indopacifico',name:'Indo-Pacifico',icon:'&#127759;', regions:['indopacifico']},
+  {id:'indopacifico',name:'Indo-Pacifico',icon:'&#127759;', regions:['indopacifico','sudest_asia']},
   {id:'americas',    name:'Americhe',     icon:'&#127758;', regions:['americas']},
   {id:'osint',       name:'OSINT',        icon:'&#128065;', regions:['osint']},
-  {id:'sudest',      name:'Sud-Est Asia', icon:'🌏', regions:['sudest_asia']},
   {id:'russia',      name:'Russia',       icon:'🇷🇺', regions:['russia']},
   {id:'africa',      name:'Africa',       icon:'🌍', regions:['africa']},
 ];
@@ -1882,18 +1875,30 @@ function switchPage(n){
     var p=document.getElementById('page-'+i),t=document.getElementById('ptab-'+i);
     if(p)p.classList.toggle('on',n===i);
     if(t)t.classList.toggle('on',n===i);
-    // also sync bottom-nav copy
     var tb=document.querySelector('#bottom-nav [data-page="'+i+'"]');
     if(tb)tb.classList.toggle('on',n===i);
   });
-  // sync Live TV tab in both bars
   var tvH=document.getElementById('ptab-tv');
   var tvB=document.querySelector('#bottom-nav [data-page="tv"]');
   if(tvH)tvH.classList.remove('on');
   if(tvB)tvB.classList.remove('on');
-  if(n===2){renderAlerts();if(!_p2MapWorld)initP2Map();else _drawP2Map();}
-  if(n===3){renderTimelinePage();}
-  if(n===4){renderBriefingPage();}
+
+  // Pause pin/hotspot CSS animations when NOT on map — saves GPU
+  var st=document.getElementById('_mapAnimPause');
+  if(n===2){
+    if(st)st.remove();
+    renderAlerts();
+    if(!_p2MapWorld) initP2Map(); else _drawP2Map();
+  } else {
+    if(!st){
+      st=document.createElement('style');
+      st.id='_mapAnimPause';
+      st.textContent='.p2-pin .dot::after,.p2-hotspot .hs-ring{animation-play-state:paused!important;}';
+      document.head.appendChild(st);
+    }
+    if(n===3)renderTimelinePage();
+    if(n===4)renderBriefingPage();
+  }
 }
 
 
@@ -2052,7 +2057,7 @@ function translateAll(){
 }
 
 
-var _p2Layers={pins:true,hs:true,cables:true,conflict:true,pipes:false,heatmap:true,borders:true,naval:true,chokepoints:true,arcs:true,routes:true};
+var _p2Layers={pins:true,hs:true,cables:true,conflict:true,pipes:false,heatmap:true,borders:true,naval:true,chokepoints:true,routes:true};
 var _p2SearchMatches=[];
 var _p2CurrentView='global';
 
@@ -2632,13 +2637,11 @@ function p2SetView(view){
 function p2ToggleLayer(layer,btn){
   _p2Layers[layer]=!_p2Layers[layer];
   if(btn)btn.classList.toggle('on',_p2Layers[layer]);
-  if(layer==='pipes'||layer==='heatmap'||layer==='borders'||layer==='arcs'||layer==='routes'){
-    // These require SVG redraw
+  if(layer==='pipes'||layer==='heatmap'||layer==='borders'||layer==='routes'){
     if(_p2G&&_p2Proj){
       var path=d3.geoPath(_p2Proj);
       if(layer==='pipes') _drawPipelines(_p2G.node(),path);
       if(layer==='borders') _drawBorders(_p2G.node(),path);
-      if(layer==='arcs') _drawArcs(_p2G.node(),path);
       if(layer==='routes') _drawRoutes(_p2G.node(),path);
       if(layer==='heatmap'){
         var hm=_buildHeatmap();
@@ -2873,9 +2876,6 @@ function _drawP2Map(){
   // Energy pipelines
   _drawPipelines(g.node(),path);
 
-  // Correlation arcs (multi-country events)
-  _drawArcs(g.node(),path);
-
   // Maritime shipping routes
   _drawRoutes(g.node(),path);
 
@@ -2889,7 +2889,7 @@ function _drawP2Map(){
     .translateExtent([[-W*2,-H*2],[W*3,H*3]])
     .on('zoom',function(event){
       g.attr('transform',event.transform);
-      _redrawOverlay(); // reposition HTML pins on zoom/pan
+      _redrawOverlayThrottled(); // throttled — max 4fps during gesture
     });
 
   var svgNode=svg.node();
@@ -2909,9 +2909,31 @@ function _drawP2Map(){
   if(_p2CurrentView!=='global')p2SetView(_p2CurrentView);
 }
 
+
+// Throttle overlay redraws — max once per 250ms during zoom/pan
+var _overlayThrottleTimer=null;
+function _redrawOverlayThrottled(){
+  if(_overlayThrottleTimer)return;
+  _overlayThrottleTimer=setTimeout(function(){
+    _overlayThrottleTimer=null;
+    if(_isMapVisible()) _redrawOverlay();
+  },250);
+}
+
+// Check if map page is currently visible
+function _isMapVisible(){
+  var p=document.getElementById('page-2');
+  return p&&p.classList.contains('on')&&document.visibilityState!=='hidden';
+}
+
 function _refreshP2Overlay(){
+  if(!_isMapVisible())return; // skip if map not visible
   _redrawOverlay();
   _updateStats();
+  if(_p2G&&_p2Proj){
+    var path=d3.geoPath(_p2Proj);
+    _drawRoutes(_p2G.node(),path);
+  }
 }
 
 function initP2Map(){
@@ -3714,12 +3736,12 @@ function toggleSidebar(){
 <script>
 (function(){
   var LIVE_KEY='sh3_live_cfg_v1';
-  var liveCfg={enabled:true,interval:30,lastRefresh:0,lastAttempt:0};
+  var liveCfg={enabled:true,interval:120,lastRefresh:0,lastAttempt:0};
   try{
     var saved=JSON.parse(localStorage.getItem(LIVE_KEY)||'null');
     if(saved&&typeof saved==='object'){
       if(typeof saved.enabled==='boolean') liveCfg.enabled=saved.enabled;
-      if([15,30,60,120,300].indexOf(Number(saved.interval))!==-1) liveCfg.interval=Number(saved.interval);
+      if([30,60,120,300,600].indexOf(Number(saved.interval))!==-1) liveCfg.interval=Number(saved.interval);
       if(saved.lastRefresh) liveCfg.lastRefresh=Number(saved.lastRefresh)||0;
     }
   }catch(e){}
@@ -3754,11 +3776,11 @@ function toggleSidebar(){
     box.innerHTML=''
       +'<button class="hbtn live-toggle" id="live-toggle" title="Aggiornamento automatico">AUTO ON</button>'
       +'<select class="live-interval" id="live-interval" title="Intervallo aggiornamento">'
-      +'<option value="15">15s</option>'
       +'<option value="30">30s</option>'
       +'<option value="60">60s</option>'
-      +'<option value="120">120s</option>'
-      +'<option value="300">300s</option>'
+      +'<option value="120" selected>120s</option>'
+      +'<option value="300">5 min</option>'
+      +'<option value="600">10 min</option>'
       +'</select>'
 +'<span class="live-status on" id="live-status">attivo</span>';
     timerWrap.appendChild(box);
@@ -3783,7 +3805,7 @@ function toggleSidebar(){
   window.startTimer=function(){
     clearInterval(window.timerInt);
     var arc=document.getElementById('tarc'), lbl=document.getElementById('tlbl');
-    var C=44, total=Number(liveCfg.interval)||30;
+    var C=44, total=Number(liveCfg.interval)||120;
     if(!liveCfg.enabled){
       window.timerSec=0;
       if(lbl) lbl.textContent='MAN';
