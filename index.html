@@ -1320,15 +1320,17 @@ var PRESETS=[
 ];
 
 var ALL_COLS=[
-  {id:'global',      name:'Globale',      icon:'&#127758;', regions:['all']},
+  {id:'global',      name:'Globale',      icon:'&#127758;', regions:['global']},
   {id:'europa',      name:'Europa',       icon:'&#127466;&#127482;', regions:['europa']},
   {id:'medioriente', name:'Medio Oriente',icon:'&#128332;', regions:['medioriente']},
   {id:'italia',      name:'Italia',       icon:'&#127470;&#127481;', regions:['italia']},
-  {id:'cina',        name:'Cina',           icon:'&#127464;&#127475;', regions:['cina','indopacifico']},
+  {id:'cina',        name:'Cina & Taiwan',icon:'&#127464;&#127475;', regions:['cina']},
   {id:'indopacifico',name:'Indo-Pacifico',icon:'&#127759;', regions:['indopacifico']},
   {id:'americas',    name:'Americhe',     icon:'&#127758;', regions:['americas']},
   {id:'osint',       name:'OSINT',        icon:'&#128065;', regions:['osint']},
-  {id:'sudest',   name:'Sud-Est Asia', icon:'🌏', regions:['sudest_asia','indopacifico']},
+  {id:'sudest',      name:'Sud-Est Asia', icon:'🌏', regions:['sudest_asia']},
+  {id:'russia',      name:'Russia',       icon:'🇷🇺', regions:['russia']},
+  {id:'africa',      name:'Africa',       icon:'🌍', regions:['africa']},
 ];
 
 var sources=[],articles=[],colOrder=[],colClosed=[],timerSec=120,timerInt=null,sourceStatus={},pIdx=0;
@@ -1432,14 +1434,15 @@ var CL={
   high:['conflict','troops','military','sanctions','coup','escalation','offensive','threat','conflitto','truppe','militare','sanzioni','golpe'],
   medium:['tension','protest','election','summit','negotiations','ceasefire','talks','tensione','protesta','elezione','vertice','negoziato'],
   regions:{
-    europa:['europe','european','nato','ukraine','poland','germany','france','uk','britain','romania','hungary','turkey','balkan','sweden','finland','spain','europa','europeo','ucraina','polonia','germania','francia'],
-    italia:['italy','italian','italia','italiano','roma','rome','milan','milano','meloni','palazzo chigi','quirinale','farnesina'],
-    medioriente:['middle east','iran','israel','gaza','palestine','syria','iraq','lebanon','saudi','yemen','hamas','hezbollah','idf','tehran','jerusalem','riyadh','medio oriente','israele','palestina','siria','libano'],
-    indopacifico:['japan','korea','india','taiwan','pacific','asean','indo-pacific','tokyo','seoul','singapore','vietnam','philippines','indonesia','australia','myanmar','giappone','corea'],
-    cina:['china','chinese','xi jinping','pla','bri','cina','cinese','pechino','beijing'],
-    americas:['usa','united states','america','trump','washington','canada','brazil','mexico','latin','venezuela','colombia','argentina','stati uniti'],
-    africa:['africa','sudan','ethiopia','somalia','mali','sahel','congo','nigeria','kenya','libya','mozambique','etiopia','libia'],
-    russia:['russia','putin','kremlin','moscow','wagner','cremlino','mosca'],
+    europa:['europe','european','nato','ukraine','poland','germany','france','uk','britain','romania','hungary','turkey','balkan','sweden','finland','spain','portugal','greece','serbia','moldova','georgia','armenia','azerbaijan','estonia','latvia','lithuania','czech','slovak','bulgaria','croatia','kosovo','europa','europeo','ucraina','polonia','germania','francia','grecia','turchia','svezia','finlandia','norvegia','danimarca','paesi bassi','olanda'],
+    italia:['italy','italian','italia','italiano','roma','rome','milan','milano','meloni','palazzo chigi','quirinale','farnesina','genova','napoli','torino','governo italiano'],
+    medioriente:['middle east','iran','israel','gaza','palestine','syria','iraq','lebanon','saudi','yemen','hamas','hezbollah','idf','tehran','jerusalem','riyadh','medio oriente','israele','palestina','siria','libano','giordania','kuwait','qatar','emirati','oman','bahrein','egitto','egypt','cairo','libia','libya'],
+    cina:['china','chinese','xi jinping','pla','bri','cina','cinese','pechino','beijing','shanghai','hong kong','xinjiang','tibet','taiwan','taipei','tsai','lai ching','formosa','stretto di taiwan','taiwan strait','foxconn','huawei','people\'s daily','xinhua','cgtn','global times','renminbi','yuan'],
+    indopacifico:['japan','south korea','india','pacific','indo-pacific','tokyo','seoul','new delhi','mumbai','kashmir','australia','new zealand','mongolia','north korea','pyongyang','kim jong','giappone','corea del sud','india','australia','nuova zelanda','canberra'],
+    sudest_asia:['vietnam','philippines','indonesia','thailand','malaysia','singapore','cambodia','myanmar','laos','brunei','timor','asean','southeast asia','filippin','jakarta','manila','hanoi','bangkok','kuala lumpur','yangon','naypyidaw','mekong','filippine','tailandia','malesia','cambogia','birmania','sud-est asiatico'],
+    americas:['usa','united states','america','trump','washington','canada','brazil','mexico','latin','venezuela','colombia','argentina','chile','peru','cuba','haiti','caribbean','stati uniti','brasile','messico','colombia','argentina','caracas','bogota','buenos aires','ottawa','pentagono','cia','congresso usa'],
+    africa:['africa','sudan','ethiopia','somalia','mali','sahel','congo','nigeria','kenya','libya','mozambique','etiopia','libia','tanzania','ghana','senegal','cameroon','angola','zimbabwe','zambia','rwanda','burkina','niger','chad','djibouti','eritrea'],
+    russia:['russia','putin','kremlin','moscow','wagner','cremlino','mosca','siberia','san pietroburgo','bielorussia','belarus','minsk','lukashenko'],
   }
 };
 function classify(item){
@@ -1448,13 +1451,24 @@ function classify(item){
   for(var i=0;i<CL.critical.length;i++){if(txt.indexOf(CL.critical[i])>=0){sev='critical';break;}}
   if(sev==='low'){for(var i=0;i<CL.high.length;i++){if(txt.indexOf(CL.high[i])>=0){sev='high';break;}}}
   if(sev==='low'){for(var i=0;i<CL.medium.length;i++){if(txt.indexOf(CL.medium[i])>=0){sev='medium';break;}}}
-  var reg='global',rks=Object.keys(CL.regions);
-  for(var r=0;r<rks.length;r++){var kw=CL.regions[rks[r]];for(var k=0;k<kw.length;k++){if(txt.indexOf(kw[k])>=0){reg=rks[r];break;}}if(reg!=='global')break;}
-  item.sev=sev;item.region=reg;
-  // If region still global but source has explicit cat mapping, use it
-  if(reg==='global'&&item.cat==='cina')item.region='cina';
-  if(reg==='global'&&item.cat==='sudest_asia')item.region='indopacifico';
-  if(reg==='global'&&item.cat==='italia')item.region='italia';
+  // Priority order: more specific regions checked first to avoid false positives
+  var REGION_PRIORITY=['italia','cina','russia','medioriente','sudest_asia','europa','americas','africa','indopacifico'];
+  var reg='global';
+  for(var r=0;r<REGION_PRIORITY.length;r++){
+    var rk=REGION_PRIORITY[r];
+    var kw=CL.regions[rk];
+    for(var k=0;k<kw.length;k++){
+      if(txt.indexOf(kw[k])>=0){reg=rk;break;}
+    }
+    if(reg!=='global')break;
+  }
+  item.sev=sev; item.region=reg;
+  // Fallback: if still global, use source category to assign region
+  if(reg==='global'){
+    if(item.cat==='cina') item.region='cina';
+    else if(item.cat==='sudest_asia') item.region='sudest_asia';
+    else if(item.cat==='italia') item.region='italia';
+  }
   return item;
 }
 
@@ -1597,50 +1611,30 @@ function cardHTML(a){
     +'<div class="cfoot">'+time+trBtn+'</div></div>';
 }
 
-// Sources exclusive to a specific column (not shown elsewhere)
-var COL_EXCLUSIVE = {
-  'sudest': ['straitstime','rappler','jakarta','bangkokpost','vietnamnews','khmertimes','tempo']
-};
-// Build reverse map: srcId → colId
-var _srcExclusiveCol = {};
-Object.keys(COL_EXCLUSIVE).forEach(function(colId){
-  COL_EXCLUSIVE[colId].forEach(function(srcId){ _srcExclusiveCol[srcId] = colId; });
-});
-
-function _isExclusiveTo(article, colId){
-  // Returns true if this article belongs EXCLUSIVELY to another column
-  var sid = (article.src||'').toLowerCase().replace(/[\s\-\.]/g,'');
-  var ownerCol = null;
-  for(var key in _srcExclusiveCol){
-    if(sid.indexOf(key) >= 0){ ownerCol = _srcExclusiveCol[key]; break; }
-  }
-  // Also detect by cat
-  if(!ownerCol && article.cat === 'sudest_asia') ownerCol = 'sudest';
-  // If the source has an exclusive column AND this is not that column → exclude
-  return ownerCol !== null && ownerCol !== colId;
-}
-
-function getForCol(def){return articles.filter(function(a){
-  if(def.regions[0]==='all'){
-    // Exclude sources exclusive to a specific column (e.g. Bernama → sudest only)
-    if(_isExclusiveTo(a, def.id)) return false;
-    return true;
-  }
+// Each article belongs to exactly ONE column based on its region.
+// The 'global' column catches only articles with region==='global'.
+// OSINT column matches by cat regardless of region.
+function _articleMatchesCol(a, def){
   if(def.regions[0]==='osint') return a.cat==='osint';
-  // For cina column, also match by cat so even misclassified articles show
-  if(def.id==='cina') return a.region==='cina'||a.cat==='cina';
   return def.regions.indexOf(a.region)>=0;
-});}
-function inCol(col, a){
-  if(col.regions[0]==='all'){
-    if(_isExclusiveTo(a, col.id)) return false;
-    return true;
-  }
-  if(col.regions[0]==='osint') return a.cat==='osint';
-  if(col.id==='cina') return a.region==='cina'||a.cat==='cina';
-  if(col.id==='sudest') return a.region==='sudest_asia'||a.cat==='sudest_asia';
-  return col.regions.indexOf(a.region)>=0;
 }
+
+// Deduplicate articles by normalized title (remove duplicate headlines from different feeds)
+function _dedup(arts){
+  var seen={};
+  return arts.filter(function(a){
+    var key=(a.link||'')+'||'+(a.title||'').toLowerCase().replace(/\s+/g,' ').trim().substring(0,80);
+    if(seen[key]) return false;
+    seen[key]=true;
+    return true;
+  });
+}
+
+function getForCol(def){
+  var filtered=articles.filter(function(a){ return _articleMatchesCol(a,def); });
+  return _dedup(filtered);
+}
+function inCol(col, a){ return _articleMatchesCol(a, col); }
 
 function renderAll(){renderColumns();updateColList();renderTimelinePage();renderBriefingPage();}
 function renderColumns(){
