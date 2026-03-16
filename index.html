@@ -17,9 +17,10 @@
 :root{--bg:#0d1117;--bg2:#111827;--s:#161d2e;--s2:#1c2640;--bd:#1f2d44;--bd2:#2d3f5c;--acc:#00b8ff;--acc2:#0090cc;--acc3:#001830;--tx:#d8e4f0;--tx2:#7a9ab8;--mu:#3d5270;--re:#ff3d57;--am:#f0a500;}
 [data-theme=light]{--bg:#f4f4f5;--bg2:#e8e8ea;--s:#fff;--s2:#f0f0f0;--bd:#d4d4d8;--bd2:#a1a1aa;--acc:#16a34a;--acc2:#15803d;--acc3:#dcfce7;--tx:#09090b;--tx2:#3f3f46;--mu:#a1a1aa;--re:#dc2626;--am:#d97706;}
 *{box-sizing:border-box;margin:0;padding:0;}
-html{height:100%;height:-webkit-fill-available;}
+html,body{height:100%;height:-webkit-fill-available;}
 body{
-  min-height:100vh;min-height:-webkit-fill-available;min-height:100dvh;
+  display:flex;flex-direction:column;
+  height:100dvh;height:-webkit-fill-available;
   overflow:hidden;background:var(--bg);color:var(--tx);
   font-family:'Inter',sans-serif;font-size:15px;
   -webkit-text-size-adjust:100%;
@@ -49,10 +50,9 @@ header{
 #clock{font-family:'Inter',sans-serif;font-size:17px;color:#fff;font-weight:700;letter-spacing:.03em;}
 .shell{
   display:flex;
-  height:calc(100vh - 46px);
-  height:calc(100dvh - 46px);
+  flex:1;
+  min-height:0;
   overflow:hidden;
-  padding-bottom:env(safe-area-inset-bottom);
 }
 .sidebar{width:clamp(180px,18vw,210px);flex-shrink:0;background:var(--s);border-right:1px solid var(--bd2);display:flex;flex-direction:column;overflow:hidden;}
 .tabs{display:flex;border-bottom:1px solid var(--bd2);flex-shrink:0;}
@@ -553,13 +553,13 @@ header{
   /* bottom nav */
   #bottom-nav{
     display:flex !important;
-    position:fixed;bottom:0;left:0;right:0;
+    flex-shrink:0;
     height:52px;
-    min-height:calc(52px + env(safe-area-inset-bottom));
     padding-bottom:env(safe-area-inset-bottom);
     padding-left:env(safe-area-inset-left);
     padding-right:env(safe-area-inset-right);
     background:var(--bg2);border-top:1px solid var(--bd2);z-index:400;
+    order:99;
   }
   #bottom-nav .page-tab{
     flex:1;border-radius:0;font-size:10px;
@@ -572,11 +572,8 @@ header{
   }
   #bottom-nav .page-tab.on{border-top-color:var(--acc);color:#eaf6ff;background:rgba(0,184,255,.08);}
 
-  /* shell: full height minus header and bottom-nav */
-  .shell{
-    height:calc(100dvh - 52px - 52px - env(safe-area-inset-bottom));
-    padding-bottom:0;
-  }
+  /* shell fills remaining space between header and bottom-nav automatically */
+  .shell{flex:1;min-height:0;height:auto;padding-bottom:0;}
 
   .sidebar{display:none;}
   .main-area{flex:1;}
@@ -595,7 +592,7 @@ header{
 
   .ops-intel{width:0;overflow:hidden;border:none;}
   .p2-map-toolbar{flex-wrap:wrap;height:auto;gap:4px;padding:6px 8px;}
-  #tv-panel{width:100%!important;height:220px!important;left:0!important;right:0!important;bottom:calc(52px + env(safe-area-inset-bottom))!important;resize:none!important;}
+  #tv-panel{width:100%!important;height:220px!important;left:0!important;right:0!important;bottom:56px!important;resize:none!important;}
 }
 
 /* ── PHONE ≤ 600px ───────────────────────────────────────────────*/
@@ -615,15 +612,12 @@ header{
 
   #bottom-nav{
     height:50px;
-    min-height:calc(50px + env(safe-area-inset-bottom));
+    padding-bottom:env(safe-area-inset-bottom);
   }
   #bottom-nav .page-tab{font-size:9px;padding:4px 2px;}
 
-  /* shell = viewport - header(50) - bottom-nav(50) - safe-area */
-  .shell{
-    height:calc(100dvh - 50px - 50px - env(safe-area-inset-bottom));
-    padding-bottom:0;
-  }
+  /* shell fills remaining space automatically via flex:1 on body */
+  .shell{flex:1;min-height:0;height:auto;padding-bottom:0;}
 
   .sidebar{display:none;}
   .cols-wrap{
@@ -650,7 +644,7 @@ header{
   .p2-map-toolbar{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:5px 8px;}
   .p2-map-toolbar::-webkit-scrollbar{display:none;}
   .p2-fullscreen-btn{display:none;}
-  #tv-panel{width:100%!important;height:200px!important;left:0!important;right:0!important;bottom:calc(50px + env(safe-area-inset-bottom))!important;resize:none!important;}
+  #tv-panel{width:100%!important;height:200px!important;left:0!important;right:0!important;bottom:54px!important;resize:none!important;}
 }
 
 @media (max-width:380px){
@@ -668,7 +662,7 @@ header{
   #mobile-sidebar{
     display:flex!important;position:fixed;
     top:52px;left:0;
-    bottom:calc(52px + env(safe-area-inset-bottom));
+    bottom:56px;
     width:min(84vw,300px);z-index:350;
     transform:translateX(-102%);transition:transform .22s ease;
     box-shadow:4px 0 24px rgba(0,0,0,.5);
@@ -678,7 +672,7 @@ header{
   body.mobile-sidebar-open #mobile-sidebar-overlay{display:block;}
 }
 @media (max-width:600px){
-  #mobile-sidebar{top:50px;bottom:calc(50px + env(safe-area-inset-bottom));}
+  #mobile-sidebar{top:50px;bottom:54px;}
 }
 
 
@@ -1269,9 +1263,6 @@ var DEFAULTS=[
   {id:'pti',       name:'PTI (India)',        cat:'agenzie', url:'https://news.google.com/rss/search?q=press+trust+india&hl=en',on:true},
   {id:'prensa',    name:'Prensa Latina',      cat:'agenzie', url:'https://news.google.com/rss/search?q=site:plenglish.com&hl=en',on:true},
   {id:'bbc',       name:'BBC World',          cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+world+news&hl=en&gl=GB&ceid=GB:en',on:true},
-  {id:'bbcme',     name:'BBC Middle East',    cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+middle+east&hl=en&gl=GB&ceid=GB:en',on:true},
-  {id:'bbcasia',   name:'BBC Asia',           cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+asia&hl=en&gl=GB&ceid=GB:en',on:true},
-  {id:'bbcafrica', name:'BBC Africa',         cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+africa&hl=en&gl=GB&ceid=GB:en',on:true},
   {id:'aljazeera', name:'Al Jazeera',         cat:'media',   url:'https://news.google.com/rss/search?q=site:aljazeera.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'france24',  name:'France 24',          cat:'media',   url:'https://news.google.com/rss/search?q=site:france24.com&hl=en&gl=FR&ceid=FR:en',on:true},
   {id:'dwnews',    name:'DW News',            cat:'media',   url:'https://news.google.com/rss/search?q=site:dw.com&hl=en&gl=DE&ceid=DE:en',on:true},
@@ -1564,7 +1555,15 @@ function parseRSS(xml,src){
       var desc=(el.querySelector('description, summary, content')||{}).textContent||'';
       var pub=(el.querySelector('pubDate, published, updated')||{}).textContent||'';
       title=title.replace(/<[^>]+>/g,'').trim();
-      desc=desc.replace(/<[^>]+>/g,'').trim().substring(0,200);
+      desc=desc.replace(/<[^>]+>/g,'').trim();
+      // Decode common HTML entities
+      desc=desc.replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&apos;/g,"'");
+      title=title.replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"');
+      // Strip trailing " — Source Name" or " Source Name" patterns added by Google News / RSS aggregators
+      desc=desc.replace(/\s{2,}.*$/, '').trim();
+      // Remove description if it's just a repeat of the title
+      if(desc.toLowerCase().indexOf(title.toLowerCase().substring(0,40))===0) desc='';
+      desc=desc.substring(0,220);
       if(!title)return;
       out.push(classify({title:title,link:link,description:desc,pub:pub,src:src.name,cat:src.cat,ts:pub?new Date(pub).getTime()||0:0}));
     });
@@ -1820,12 +1819,11 @@ function renderSrcList(){
     html+='<div style="font-size:9px;color:var(--mu);padding:4px 8px 1px;font-family:Share Tech Mono,monospace;text-transform:uppercase;letter-spacing:.1em">'+(CAT[cat]||cat)+'</div>';
     catmap[cat].forEach(function(s){
       var st=sourceStatus[s.id],stCls=st==='ok'?'ok':st==='err'?'err':'lo',stTxt=st==='ok'?'●':st==='err'?'✕':'○';
-      var isDel=s.id&&s.id.indexOf('c_')===0;
       html+='<div class="src-item"><div class="src-dot" style="background:'+(s.on?'var(--acc)':'var(--mu)')+'"></div>'
         +'<span class="src-nm" title="'+esc(s.url)+'">'+esc(s.name)+'</span>'
         +'<span class="src-st '+stCls+'">'+stTxt+'</span>'
         +'<button class="tog '+(s.on?'on':'off')+'" onclick="toggleSrc(\''+s.id+'\')"></button>'
-        +(isDel?'<button class="src-del" onclick="delSrc(\''+s.id+'\')">&#x2715;</button>':'')
+        +'<button class="src-del" onclick="delSrc(\''+s.id+'\')" title="Rimuovi fonte">&#x2715;</button>'
         +'</div>';
     });
   });
@@ -1833,7 +1831,15 @@ function renderSrcList(){
   var ac=document.getElementById('actcount');if(ac)ac.textContent=sources.filter(function(s){return s.on;}).length;
 }
 function toggleSrc(id){var s=sources.find(function(x){return x.id===id;});if(s){s.on=!s.on;persist();renderSrcList();}}
-function delSrc(id){sources=sources.filter(function(s){return s.id!==id;});persist();renderSrcList();}
+function delSrc(id){
+  var s=sources.find(function(x){return x.id===id;});
+  if(!s)return;
+  var isCustom=s.id&&s.id.indexOf('c_')===0;
+  if(!isCustom&&!confirm('Rimuovere "'+s.name+'"?\n(Puoi riaggiungerla dal menu Fonte)'))return;
+  sources=sources.filter(function(x){return x.id!==id;});
+  persist();renderSrcList();
+  notify('Rimossa: '+s.name);
+}
 function addInline(){
   var nm=(document.getElementById('qi-nm').value||'').trim(),url=(document.getElementById('qi-url').value||'').trim(),cat=document.getElementById('qi-cat').value;
   if(!nm||!url){notify('Nome e URL richiesti');return;}
