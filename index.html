@@ -81,12 +81,12 @@ header{
 .qsel{flex:1;background:var(--s2);border:1px solid var(--bd);padding:4px 5px;color:var(--tx);font-size:11px;font-family:'Share Tech Mono',monospace;outline:none;}
 .qadd-btn{background:none;border:1px solid var(--acc2);color:var(--acc);cursor:pointer;font-size:14px;padding:3px 10px;font-family:'Share Tech Mono',monospace;flex-shrink:0;transition:all .15s;}
 .qadd-btn:hover{background:rgba(0,184,255,.1);}
-.main-area{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;}
+.main-area{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0;overflow:hidden;}
 .cols-wrap{display:flex;overflow-x:auto;overflow-y:hidden;gap:0;flex:1;min-height:0;}
 .cols-wrap::-webkit-scrollbar{height:5px;}
 .cols-wrap::-webkit-scrollbar-track{background:var(--bg);}
 .cols-wrap::-webkit-scrollbar-thumb{background:var(--bd2);}
-.acol{min-width:clamp(220px,28vw,280px);max-width:100%;flex:1 1 300px;display:flex;flex-direction:column;border-right:1px solid var(--bd);height:100%;overflow:hidden;background:var(--bg);}
+.acol{min-width:clamp(220px,28vw,280px);max-width:100%;flex:1 1 300px;display:flex;flex-direction:column;border-right:1px solid var(--bd);min-height:0;overflow:hidden;background:var(--bg);}
 .acol.drag-over{border-right:2px solid var(--acc);}
 .col-hd{display:flex;align-items:center;gap:8px;padding:9px 10px;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent),var(--bg2);border-bottom:1px solid var(--bd2);flex-shrink:0;cursor:grab;user-select:none;}
 .col-icon{display:none!important;}.col-name{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:var(--tx);letter-spacing:.08em;text-transform:uppercase;flex:1;}
@@ -571,10 +571,11 @@ header{
   .cols-wrap{
     display:grid !important;
     grid-template-columns:repeat(2,1fr);
+    grid-template-rows:1fr;
     overflow-x:hidden;overflow-y:hidden;
-    height:100%;gap:0;
+    flex:1;min-height:0;gap:0;
   }
-  .acol{min-width:0;max-width:100%;flex:none;height:100%;border-right:1px solid var(--bd);}
+  .acol{min-width:0;max-width:100%;flex:none;min-height:0;overflow:hidden;border-right:1px solid var(--bd);}
   .acol:nth-child(even){border-right:none;}
   .add-col-btn{display:none;}
   .col-feed{-webkit-overflow-scrolling:touch;}
@@ -618,12 +619,12 @@ header{
     overflow-y:hidden !important;
     scroll-snap-type:x mandatory;
     -webkit-overflow-scrolling:touch;
-    height:100%;gap:0;scrollbar-width:none;
+    flex:1;min-height:0;gap:0;scrollbar-width:none;
   }
   .cols-wrap::-webkit-scrollbar{display:none;}
   .acol{
     min-width:100%;max-width:100%;flex-shrink:0;
-    height:100%;scroll-snap-align:start;
+    min-height:0;scroll-snap-align:start;
   }
   .add-col-btn{display:none;}
   .col-feed{-webkit-overflow-scrolling:touch;}
@@ -964,7 +965,7 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
 <div class="p2-map-tip" id="p2-map-tip"></div>
 <div class="shell" style="flex-direction:column;">
   <!-- PAGINA 1: colonne -->
-  <div class="page on" id="page-1" style="flex:1;min-height:0;">
+  <div class="page on" id="page-1" style="flex:1;min-height:0;overflow:hidden;">
   <div class="mobile-sidebar-overlay" id="mobile-sidebar-overlay" onclick="closeMobileSidebar()"></div>
   <aside class="sidebar" id="mobile-sidebar">
     <div class="mobile-sidebar-head"><button class="hbtn" id="mobile-sidebar-close" onclick="closeMobileSidebar()">✕ Chiudi</button></div>
