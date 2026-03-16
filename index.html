@@ -32,7 +32,7 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 .hbtn:active{transform:translateY(0);}
 .hbtn.acc{border-color:rgba(0,184,255,.42);color:#eaf6ff;background:linear-gradient(180deg,rgba(0,184,255,.18),rgba(0,184,255,.08));}
 #rbtn{font-size:15px;padding:5px 11px;}#rbtn:disabled{opacity:.3;cursor:not-allowed;}
-#clock{font-family:'Share Tech Mono',monospace;font-size:13px;color:#fff;font-weight:700;letter-spacing:.04em;}
+#clock{font-family:'Inter',sans-serif;font-size:17px;color:#fff;font-weight:700;letter-spacing:.03em;}
 .shell{display:flex;height:calc(100vh - 46px);overflow:hidden;}
 .sidebar{width:clamp(180px,18vw,210px);flex-shrink:0;background:var(--s);border-right:1px solid var(--bd2);display:flex;flex-direction:column;overflow:hidden;}
 .tabs{display:flex;border-bottom:1px solid var(--bd2);flex-shrink:0;}
@@ -274,13 +274,81 @@ header{height:46px;background:var(--bg2);border-bottom:1px solid var(--bd2);disp
 #p2-map-wrap{flex:1;min-height:0;position:relative;overflow:hidden;background:var(--bg);}
 #p2-map-wrap svg{width:100%;height:100%;display:block;}
 #p2-map-wrap{border:none!important;box-shadow:none!important;outline:none!important;}
-#p2-map-wrap .map-shell{width:100%;height:100%;position:relative;overflow:hidden;border-radius:0;border:none;background:#121417;cursor:grab;touch-action:none;}
-#p2-map-wrap .map-shell:active{cursor:grabbing;}
+#p2-map-wrap .map-shell{width:100%;height:100%;position:relative;overflow:hidden;border-radius:28px;border:1px solid rgba(61,92,127,.42);background:radial-gradient(circle at 50% 45%,rgba(16,65,126,.14),rgba(2,10,24,.0) 52%),var(--bg);}
 #p2-map-wrap .map-shell svg{display:block;width:100%;height:100%;}
 .theater-head{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 8px 2px;font-family:Share Tech Mono,monospace;text-transform:uppercase;letter-spacing:.12em;font-size:9px;color:var(--tx2);}
 .theater-add{border:1px solid rgba(122,154,184,.22);background:rgba(255,255,255,.03);color:var(--tx2);border-radius:999px;padding:3px 8px;font-size:9px;font-family:Share Tech Mono,monospace;cursor:pointer;}
 .theater-add:hover{color:var(--tx);border-color:rgba(0,184,255,.42);}
 
+
+/* ── COUNTRY SEARCH ───────────────────────────────────────────────*/
+.p2-search-wrap{position:relative;display:flex;align-items:center;flex-shrink:0;}
+.p2-search-input{
+  background:var(--s2);border:1px solid var(--bd);color:var(--tx);
+  font-family:'Share Tech Mono',monospace;font-size:11px;
+  padding:4px 26px 4px 9px;width:128px;outline:none;border-radius:2px;
+  transition:border-color .15s,width .2s;
+}
+.p2-search-input:focus{border-color:var(--acc2);width:160px;}
+.p2-search-input::placeholder{color:var(--mu);}
+.p2-search-clear{
+  position:absolute;right:6px;background:none;border:none;
+  color:var(--mu);cursor:pointer;font-size:12px;line-height:1;padding:0;display:none;
+}
+.p2-search-clear:hover{color:var(--tx);}
+.p2-search-drop{
+  position:absolute;top:calc(100% + 4px);left:0;min-width:190px;
+  background:var(--s);border:1px solid var(--bd2);z-index:200;
+  max-height:190px;overflow-y:auto;display:none;
+  box-shadow:0 8px 24px rgba(0,0,0,.6);
+}
+.p2-search-drop::-webkit-scrollbar{width:3px;}
+.p2-search-drop::-webkit-scrollbar-thumb{background:var(--bd2);}
+.p2-search-drop.open{display:block;}
+.p2-search-opt{
+  padding:5px 10px;font-size:12px;cursor:pointer;
+  font-family:'Share Tech Mono',monospace;color:var(--tx2);
+  border-bottom:1px solid var(--bd);transition:background .1s;
+}
+.p2-search-opt:last-child{border-bottom:none;}
+.p2-search-opt:hover,.p2-search-opt.hi{background:var(--s2);color:var(--acc);}
+.p2-search-opt mark{background:rgba(0,184,255,.2);color:var(--acc);font-style:normal;}
+
+/* ── PIN ARTICLE POPUP ────────────────────────────────────────────*/
+.p2-pin-popup{
+  position:fixed;z-index:660;
+  background:var(--s);border:1px solid var(--bd2);
+  box-shadow:0 8px 32px rgba(0,0,0,.7),0 0 0 1px rgba(0,184,255,.1);
+  min-width:270px;max-width:330px;display:none;flex-direction:column;
+}
+.p2-pin-popup.open{display:flex;}
+.p2-pp-hd{
+  display:flex;align-items:center;padding:7px 10px;
+  background:var(--bg2);border-bottom:1px solid var(--bd2);gap:6px;flex-shrink:0;
+}
+.p2-pp-title{flex:1;font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--acc);text-transform:uppercase;}
+.p2-pp-close{background:none;border:none;color:var(--mu);cursor:pointer;font-size:14px;padding:0 3px;line-height:1;transition:color .12s;}
+.p2-pp-close:hover{color:var(--re);}
+.p2-pp-body{max-height:230px;overflow-y:auto;}
+.p2-pp-body::-webkit-scrollbar{width:3px;}
+.p2-pp-body::-webkit-scrollbar-thumb{background:var(--bd2);}
+.p2-pp-item{padding:6px 10px;border-bottom:1px solid var(--bd);transition:background .1s;}
+.p2-pp-item:last-child{border-bottom:none;}
+.p2-pp-item:hover{background:var(--s2);}
+.p2-pp-item-title{font-size:12px;color:var(--tx);line-height:1.4;font-weight:600;text-decoration:none;display:block;}
+.p2-pp-item-title:hover{color:var(--acc);}
+.p2-pp-item-meta{font-size:9px;color:var(--mu);margin-top:2px;font-family:'Share Tech Mono',monospace;}
+.p2-pp-sev{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px;vertical-align:middle;flex-shrink:0;}
+
+/* ── FULLSCREEN MAP ───────────────────────────────────────────────*/
+.ops-main.map-fullscreen .ops-intel{width:0!important;overflow:hidden!important;border:none!important;flex-shrink:0;}
+
+/* ── CORRELATION ARCS ─────────────────────────────────────────────*/
+@keyframes arc-dash{from{stroke-dashoffset:400}to{stroke-dashoffset:0}}
+.arcs-layer path{pointer-events:none;}
+
+/* ── MARITIME ROUTES ──────────────────────────────────────────────*/
+.routes-layer path{stroke-linecap:round;stroke-linejoin:round;}
 
 /* Map tooltip */
 .p2-map-tip{
@@ -913,8 +981,15 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
             <div class="p2-map-toolbar" id="p2-toolbar">
               <div class="p2-region-btns">
                 <button class="p2-rbtn active" onclick="p2SetView('global')">&#127758; Global</button>
-                <button class="p2-rbtn p2-zoom-btn" onclick="p2ZoomStep(1.25)" title="Zoom in">+</button>
-                <button class="p2-rbtn p2-zoom-btn" onclick="p2ZoomStep(0.8)" title="Zoom out">&minus;</button>
+                <button class="p2-rbtn p2-zoom-btn" onclick="p2ZoomStep(1.5)" title="Zoom in">+</button>
+                <button class="p2-rbtn p2-zoom-btn" onclick="p2ZoomStep(0.67)" title="Zoom out">&minus;</button>
+              </div>
+              <div style="width:1px;height:16px;background:var(--bd2);margin:0 2px;flex-shrink:0;"></div>
+              <!-- Country search -->
+              <div class="p2-search-wrap" id="p2-search-wrap">
+                <input class="p2-search-input" id="p2-search-inp" placeholder="&#128269; Cerca paese…" autocomplete="off" spellcheck="false">
+                <button class="p2-search-clear" id="p2-search-clear" title="Cancella">&#x2715;</button>
+                <div class="p2-search-drop" id="p2-search-drop"></div>
               </div>
               <div style="width:1px;height:16px;background:var(--bd2);margin:0 2px;flex-shrink:0;"></div>
               <div class="p2-layer-btns">
@@ -926,7 +1001,9 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
                 <button class="p2-lbtn on" id="lbtn-heatmap" onclick="p2ToggleLayer('heatmap',this)">&#9650; Heatmap</button>
                 <button class="p2-lbtn on" id="lbtn-borders" onclick="p2ToggleLayer('borders',this)">&#9644; Confini</button>
                 <button class="p2-lbtn on" id="lbtn-naval" onclick="p2ToggleLayer('naval',this)">&#9875; Flotte</button>
-                <button class="p2-lbtn on" id="lbtn-chokepoints" onclick="p2ToggleLayer('chokepoints',this)">&#9875; Chokepoint</button>
+                <button class="p2-lbtn on" id="lbtn-chokepoints" onclick="p2ToggleLayer('chokepoints',this)">&#9830; Chokepoint</button>
+                <button class="p2-lbtn on" id="lbtn-arcs" onclick="p2ToggleLayer('arcs',this)">&#9654; Archi</button>
+                <button class="p2-lbtn on" id="lbtn-routes" onclick="p2ToggleLayer('routes',this)">&#9783; Rotte</button>
               </div>
               <div style="width:1px;height:16px;background:var(--bd2);margin:0 2px;flex-shrink:0;"></div>
               <div class="p2-timeline-bar" id="p2-timeline-bar">
@@ -937,9 +1014,19 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
                 <span class="p2-tl-label">ora</span>
                 <span class="p2-tl-label" id="p2-tl-count" style="color:var(--acc);min-width:56px;text-align:right;"></span>
               </div>
+              <div style="width:1px;height:16px;background:var(--bd2);margin:0 2px;flex-shrink:0;"></div>
+              <button class="p2-lbtn p2-fullscreen-btn" id="p2-fullscreen-btn" onclick="p2ToggleFullscreen(this)" title="Espandi mappa">&#x2922; Full</button>
             </div>
             <div id="p2-map-wrap" style="position:relative;"></div>
           </div>
+        </div>
+        <!-- Pin article popup -->
+        <div class="p2-pin-popup" id="p2-pin-popup">
+          <div class="p2-pp-hd">
+            <span class="p2-pp-title" id="p2-pp-title">—</span>
+            <button class="p2-pp-close" onclick="closePinPopup()">&#x2715;</button>
+          </div>
+          <div class="p2-pp-body" id="p2-pp-body"></div>
         </div>
 
         <!-- ── RIGHT: Country / COA Panel (slide-in) ── -->
@@ -1882,7 +1969,8 @@ function translateAll(){
 }
 
 
-var _p2Layers={pins:true,hs:true,cables:true,conflict:true,pipes:false,heatmap:true,borders:true,naval:true,chokepoints:true};
+var _p2Layers={pins:true,hs:true,cables:true,conflict:true,pipes:false,heatmap:true,borders:true,naval:true,chokepoints:true,arcs:true,routes:true};
+var _p2SearchMatches=[];
 var _p2CurrentView='global';
 
 // ── Region → ISO-2 mapping ───────────────────────────────────────
@@ -2461,12 +2549,14 @@ function p2SetView(view){
 function p2ToggleLayer(layer,btn){
   _p2Layers[layer]=!_p2Layers[layer];
   if(btn)btn.classList.toggle('on',_p2Layers[layer]);
-  if(layer==='pipes'||layer==='heatmap'||layer==='borders'){
+  if(layer==='pipes'||layer==='heatmap'||layer==='borders'||layer==='arcs'||layer==='routes'){
     // These require SVG redraw
     if(_p2G&&_p2Proj){
       var path=d3.geoPath(_p2Proj);
       if(layer==='pipes') _drawPipelines(_p2G.node(),path);
       if(layer==='borders') _drawBorders(_p2G.node(),path);
+      if(layer==='arcs') _drawArcs(_p2G.node(),path);
+      if(layer==='routes') _drawRoutes(_p2G.node(),path);
       if(layer==='heatmap'){
         var hm=_buildHeatmap();
         _p2G.selectAll('path.country').attr('fill',function(f){
@@ -2526,9 +2616,13 @@ function _redrawOverlay(){
             var col=a.sev==='critical'?'#ef4444':a.sev==='high'?'#f59e0b':'#94a3b8';
             return '<li style="color:'+col+';margin:2px 0">'+a.title.substring(0,60)+'…</li>';
           }).join('');
-          tip.innerHTML='<b style="font-size:11px;color:var(--acc)">&#9679; '+hub.name+'</b><div style="color:var(--mu);font-size:10px;margin:2px 0">'+items.length+' notizie correlate</div><ul style="margin:4px 0 0;padding:0 0 0 14px;font-size:10px">'+names+'</ul>';
+          tip.innerHTML='<b style="font-size:11px;color:var(--acc)">&#9679; '+hub.name+'</b><div style="color:var(--mu);font-size:10px;margin:2px 0">'+items.length+' notizie — click per dettagli</div><ul style="margin:4px 0 0;padding:0 0 0 14px;font-size:10px">'+names+'</ul>';
           tip.style.display='block';
         }
+      });
+      pin.addEventListener('click',function(e){
+        e.stopPropagation();
+        openPinPopup(hub.name, items, e.clientX, e.clientY);
       });
       pin.addEventListener('mousemove',function(e){if(tip){tip.style.left=(e.clientX+14)+'px';tip.style.top=(e.clientY-10)+'px';}});
       pin.addEventListener('mouseleave',function(){if(tip)tip.style.display='none';});
@@ -2626,17 +2720,21 @@ function _drawP2Map(){
     .attr('viewBox','0 0 '+W+' '+H)
     .style('width','100%').style('height','100%').style('display','block').style('overflow','hidden');
 
-  // Sphere background
-  svg.append('path').datum({type:'Sphere'}).attr('d',path)
-    .attr('fill','var(--bg2)');
+  // Background rect for area outside the sphere (stays fixed, matches outer bg)
+  svg.append('rect').attr('width',W).attr('height',H).attr('fill','var(--bg)');
 
-  // Graticule
-  svg.append('path').datum(d3.geoGraticule()()).attr('d',path)
-    .attr('fill','none').attr('stroke','var(--bd)').attr('stroke-width','0.3').attr('opacity','0.45');
-
-  // Zoom group
+  // Zoom group — sphere, graticule, countries and all layers live inside here
+  // so everything transforms consistently on zoom/pan
   var g=svg.append('g').attr('class','zoom-group');
   _p2G=g;
+
+  // Sphere background (inside zoom group)
+  g.append('path').datum({type:'Sphere'}).attr('d',path)
+    .attr('fill','var(--bg2)');
+
+  // Graticule (inside zoom group)
+  g.append('path').datum(d3.geoGraticule()()).attr('d',path)
+    .attr('fill','none').attr('stroke','var(--bd)').attr('stroke-width','0.3').attr('opacity','0.45');
 
   // Countries fill
   g.selectAll('path.country').data(countries.features).enter().append('path')
@@ -2692,20 +2790,20 @@ function _drawP2Map(){
   // Energy pipelines
   _drawPipelines(g.node(),path);
 
-  // Globe outline
-  svg.append('path').datum({type:'Sphere'}).attr('d',path)
+  // Correlation arcs (multi-country events)
+  _drawArcs(g.node(),path);
+
+  // Maritime shipping routes
+  _drawRoutes(g.node(),path);
+
+  // Globe outline (inside zoom group, so it follows zoom/pan)
+  g.append('path').datum({type:'Sphere'}).attr('d',path)
     .attr('fill','none').attr('stroke','var(--bd2)').attr('stroke-width','0.8');
 
   // D3 zoom
   _p2ZoomBeh=d3.zoom()
-    .scaleExtent([0.85,8])
+    .scaleExtent([0.7,15])
     .translateExtent([[-W*2,-H*2],[W*3,H*3]])
-    .wheelDelta(function(event){
-      return -event.deltaY * (event.ctrlKey ? 0.003 : 0.0022);
-    })
-    .filter(function(event){
-      return !event.button;
-    })
     .on('zoom',function(event){
       g.attr('transform',event.transform);
       _redrawOverlay(); // reposition HTML pins on zoom/pan
@@ -3674,6 +3772,355 @@ function toggleSidebar(){
     if(typeof window.startTimer==='function') window.startTimer();
   }, 400);
 })();
+</script>
+
+<script>
+// ══════════════════════════════════════════════════════════════════
+// FEATURE 1 — COUNTRY SEARCH
+// ══════════════════════════════════════════════════════════════════
+// Approximate centroids [lat, lng] per ISO-2
+var ISO_CENTROID={
+  'AF':[33,65],'AL':[41,20],'DZ':[28,3],'AO':[-12,18],'AR':[-34,-64],
+  'AU':[-25,133],'AT':[47,14],'BD':[24,90],'BE':[50,4],'BO':[-17,-65],
+  'BR':[-10,-55],'BG':[43,25],'KH':[13,105],'CM':[6,12],'CA':[60,-95],
+  'CL':[-35,-71],'CN':[35,103],'CO':[4,-72],'CD':[-4,22],'HR':[45,16],
+  'CU':[22,-79],'CZ':[50,15],'DK':[56,10],'EC':[-2,-78],'EG':[27,30],
+  'ET':[9,40],'FI':[64,26],'FR':[46,2],'DE':[51,9],'GH':[8,-1],
+  'GR':[39,22],'GT':[15,-90],'HT':[19,-72],'HN':[15,-87],'HU':[47,19],
+  'IN':[21,78],'ID':[-5,120],'IR':[32,54],'IQ':[33,44],'IE':[53,-8],
+  'IL':[31,35],'IT':[43,12],'JP':[36,138],'JO':[31,36],'KE':[1,38],
+  'KW':[29,48],'LA':[18,103],'LB':[34,36],'LR':[7,-9],'LY':[27,17],
+  'LT':[56,24],'MX':[24,-102],'MA':[32,-5],'MZ':[-18,35],'NA':[-22,17],
+  'NP':[28,84],'NL':[52,5],'NZ':[-41,174],'NI':[13,-85],'NE':[17,8],
+  'NG':[10,8],'NO':[65,13],'PK':[30,69],'PA':[9,-80],'PG':[-6,147],
+  'PY':[-23,-58],'PE':[-10,-76],'PH':[13,122],'PL':[52,20],'PT':[39,-8],
+  'QA':[25,51],'RO':[46,25],'RU':[60,100],'SA':[25,45],'SN':[14,-14],
+  'SL':[8,-12],'SO':[6,46],'ZA':[-29,25],'ZW':[-20,30],'ES':[40,-4],
+  'SS':[7,30],'SD':[16,30],'SR':[4,-56],'SE':[62,15],'CH':[47,8],
+  'SY':[35,38],'TW':[24,121],'TZ':[-6,35],'TH':[15,101],'TL':[-9,126],
+  'TG':[8,1],'TT':[11,-61],'TN':[34,9],'TR':[39,35],'UG':[1,32],
+  'UA':[49,32],'AE':[24,54],'GB':[55,-2],'US':[38,-97],'UY':[-33,-56],
+  'VE':[8,-66],'VN':[16,108],'YE':[15,48],'ZM':[-13,27],'PS':[31,35],
+  'BY':[53,28],'KP':[40,127],'KR':[37,128],'MM':[17,96],'MN':[46,105],
+  'LK':[7,81],'GE':[42,43],'AZ':[40,48],'AM':[40,45],'KZ':[48,68],
+  'MG':[-20,47],'CF':[7,21],'GN':[11,-11],'CI':[7,-6],'BJ':[9,2],
+  'BF':[13,-2],'ML':[17,-4],'MR':[20,-11],'TD':[15,19],'ER':[15,39],
+  'DJ':[11,43],'RW':[-2,30],'BI':[-3,30],'MW':[-13,34],'BW':[-22,24],
+  'LS':[-30,28],'SZ':[-27,31],'OM':[22,58],'BH':[26,50],'CY':[35,33],
+  'MK':[41,22],'RS':[44,21],'ME':[42,19],'BA':[44,17],'SK':[48,19],
+  'MD':[47,29],'LV':[57,25],'EE':[59,25],'IS':[65,-18],'LU':[49,6],
+  'LI':[47,9],'MC':[43,7],'MT':[36,14],'SI':[46,15],'GW':[12,-15],
+  'NE':[17,8],'DO':[19,-70],'SV':[14,-89],'MU':[-20,58],'KM':[-12,44],
+  'SC':[-4,55],'TM':[39,59],'UZ':[41,64],'TJ':[39,71],'KG':[42,74],
+  'MN':[46,105],'BN':[4,115],'SG':[1,104],'MY':[3,110],'PW':[7,134],
+  'FJ':[-18,178],'TO':[-21,-175],'VU':[-16,168],'WS':[-13,-172],
+  'NR':[-1,167],'KI':[1,174],'MH':[7,171],'FM':[7,158],'PW':[7,134],
+  'TL':[-9,126],'BD':[24,90],'BT':[27,90]
+};
+
+function p2SearchInit(){
+  var inp=document.getElementById('p2-search-inp');
+  var drop=document.getElementById('p2-search-drop');
+  var clr=document.getElementById('p2-search-clear');
+  if(!inp||!drop||!clr)return;
+
+  function _render(){
+    var q=inp.value.trim().toLowerCase();
+    clr.style.display=q?'block':'none';
+    if(!q){drop.className='p2-search-drop';_p2SearchMatches=[];return;}
+    var matches=[];
+    Object.keys(CN2).forEach(function(iso){
+      var name=CN2[iso];
+      if(name.toLowerCase().indexOf(q)>=0) matches.push({iso:iso,name:name});
+    });
+    matches.sort(function(a,b){
+      var ai=a.name.toLowerCase().indexOf(q),bi=b.name.toLowerCase().indexOf(q);
+      return ai!==bi?ai-bi:a.name.localeCompare(b.name);
+    });
+    _p2SearchMatches=matches;
+    var qEsc=q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+    drop.innerHTML=matches.slice(0,22).map(function(m,i){
+      var hl=m.name.replace(new RegExp('('+qEsc+')','gi'),'<mark>$1</mark>');
+      return '<div class="p2-search-opt" data-i="'+i+'">'+hl+'</div>';
+    }).join('');
+    drop.className=matches.length?'p2-search-drop open':'p2-search-drop';
+    drop.querySelectorAll('.p2-search-opt').forEach(function(el){
+      el.addEventListener('click',function(){
+        p2SearchSelect(+this.getAttribute('data-i'));
+      });
+    });
+  }
+
+  var _hi=-1;
+  inp.addEventListener('input',function(){_hi=-1;_render();});
+
+  inp.addEventListener('keydown',function(e){
+    var opts=drop.querySelectorAll('.p2-search-opt');
+    if(!opts.length)return;
+    if(e.key==='ArrowDown'){e.preventDefault();_hi=Math.min(_hi+1,opts.length-1);}
+    else if(e.key==='ArrowUp'){e.preventDefault();_hi=Math.max(_hi-1,0);}
+    else if(e.key==='Enter'){e.preventDefault();if(_hi>=0)p2SearchSelect(_hi);else if(_p2SearchMatches.length)p2SearchSelect(0);return;}
+    else if(e.key==='Escape'){drop.className='p2-search-drop';inp.blur();return;}
+    opts.forEach(function(o,i){o.classList.toggle('hi',i===_hi);});
+  });
+
+  clr.addEventListener('click',function(){
+    inp.value='';_p2SearchMatches=[];_hi=-1;
+    clr.style.display='none';drop.className='p2-search-drop';inp.focus();
+  });
+
+  document.addEventListener('click',function(e){
+    var wrap=document.getElementById('p2-search-wrap');
+    if(wrap&&!wrap.contains(e.target)) drop.className='p2-search-drop';
+  });
+}
+
+window.p2SearchSelect=function(i){
+  var m=_p2SearchMatches[i];if(!m)return;
+  var inp=document.getElementById('p2-search-inp');
+  var drop=document.getElementById('p2-search-drop');
+  if(inp)inp.value=m.name;
+  if(drop)drop.className='p2-search-drop';
+  var clr=document.getElementById('p2-search-clear');
+  if(clr)clr.style.display='block';
+  // Pan map to country
+  if(_p2SVG&&_p2ZoomBeh&&_p2Proj){
+    var c=ISO_CENTROID[m.iso];
+    if(c){
+      var wrap=document.getElementById('p2-map-wrap');
+      var W=wrap?wrap.clientWidth:900,H=wrap?wrap.clientHeight:420;
+      var xy=_p2Proj([c[1],c[0]]);
+      if(xy){
+        var scale=4.5;
+        var tx=W/2-xy[0]*scale, ty=H/2-xy[1]*scale;
+        var t=d3.zoomIdentity.translate(tx,ty).scale(scale);
+        _p2SVG.transition().duration(600).call(_p2ZoomBeh.transform,t);
+      }
+    }
+  }
+  // Open country panel
+  openCountryPanel(m.iso, m.name);
+};
+
+// Init search when map page is shown
+document.addEventListener('DOMContentLoaded',function(){
+  setTimeout(p2SearchInit, 600);
+});
+
+// ══════════════════════════════════════════════════════════════════
+// FEATURE 2 — FULLSCREEN MAP (hide intel panel)
+// ══════════════════════════════════════════════════════════════════
+window.p2ToggleFullscreen=function(btn){
+  var main=document.getElementById('page-2')&&document.getElementById('page-2').querySelector('.ops-main');
+  if(!main)return;
+  var on=main.classList.toggle('map-fullscreen');
+  if(btn){
+    btn.classList.toggle('on',on);
+    btn.innerHTML=on?'&#x2923; Exit':'&#x2922; Full';
+  }
+  // Redraw map to fill new width
+  setTimeout(function(){try{_drawP2Map();}catch(e){}},80);
+};
+
+// ══════════════════════════════════════════════════════════════════
+// FEATURE 3 — PIN ARTICLE POPUP
+// ══════════════════════════════════════════════════════════════════
+var _pinPopupOpen=false;
+
+window.openPinPopup=function(name, items, cx, cy){
+  var popup=document.getElementById('p2-pin-popup');
+  var title=document.getElementById('p2-pp-title');
+  var body=document.getElementById('p2-pp-body');
+  if(!popup||!title||!body)return;
+  title.textContent='&#9679; '+name+' — '+items.length+' notizie';
+  var SEV_COL={critical:'#ef4444',high:'#f59e0b',medium:'#3b82f6',low:'#22d35e'};
+  body.innerHTML=items.slice(0,30).map(function(a){
+    var col=SEV_COL[a.sev]||'#94a3b8';
+    var time=a.pub?fmtTime(a.pub):'';
+    return '<div class="p2-pp-item">'
+      +'<a class="p2-pp-item-title" href="'+esc(a.link||'#')+'" target="_blank" rel="noopener">'
+      +'<span class="p2-pp-sev" style="background:'+col+'"></span>'
+      +esc(a.title)+'</a>'
+      +'<div class="p2-pp-item-meta">'+esc(a.src||'')+(time?' · '+time:'')+'</div>'
+      +'</div>';
+  }).join('');
+  // Position near click, keep inside viewport
+  var pw=330,ph=280;
+  var vw=window.innerWidth,vh=window.innerHeight;
+  var left=Math.min(cx+12,vw-pw-12);
+  var top=Math.min(cy-30,vh-ph-12);
+  popup.style.left=left+'px';
+  popup.style.top=top+'px';
+  popup.classList.add('open');
+  _pinPopupOpen=true;
+};
+
+window.closePinPopup=function(){
+  var popup=document.getElementById('p2-pin-popup');
+  if(popup)popup.classList.remove('open');
+  _pinPopupOpen=false;
+};
+
+// Close popup on map click/scroll
+document.addEventListener('click',function(e){
+  if(!_pinPopupOpen)return;
+  var popup=document.getElementById('p2-pin-popup');
+  if(popup&&!popup.contains(e.target)) closePinPopup();
+});
+
+// ══════════════════════════════════════════════════════════════════
+// FEATURE 4 — CORRELATION ARCS
+// Articles mentioning 2+ geographic hubs → animated great-circle arcs
+// ══════════════════════════════════════════════════════════════════
+function _buildArcPairs(){
+  var pairs={};  // key "hubA|hubB" → {a,b,count,maxSev}
+  var SEV={critical:4,high:3,medium:2,low:1};
+  var filtered=_timelineFilter(articles).filter(function(a){return a.sev==='critical'||a.sev==='high';});
+  filtered.forEach(function(art){
+    var title=(art.title||'').toLowerCase()+' '+(art.description||'').toLowerCase();
+    var matched=[];
+    GEO_HUBS.forEach(function(hub){
+      for(var j=0;j<hub.k.length;j++){
+        if(title.indexOf(hub.k[j])>=0){matched.push(hub);break;}
+      }
+    });
+    if(matched.length<2)return;
+    // Create pairs from first 4 matches to avoid clutter
+    var ms=matched.slice(0,4);
+    for(var i=0;i<ms.length-1;i++){
+      for(var j2=i+1;j2<ms.length;j2++){
+        var a=ms[i],b=ms[j2];
+        // Avoid self-pairs (same hub area)
+        if(Math.abs(a.lat-b.lat)<3&&Math.abs(a.lng-b.lng)<3)continue;
+        var k=[a.lat+'_'+a.lng,b.lat+'_'+b.lng].sort().join('|');
+        if(!pairs[k]){pairs[k]={a:a,b:b,count:0,sev:0};}
+        pairs[k].count++;
+        pairs[k].sev=Math.max(pairs[k].sev,SEV[art.sev]||1);
+      }
+    }
+  });
+  // Return sorted by severity × count, top 20
+  return Object.values(pairs)
+    .filter(function(p){return p.count>=1;})
+    .sort(function(a,b){return (b.sev*b.count)-(a.sev*a.count);})
+    .slice(0,20);
+}
+
+function _drawArcs(gNode, path){
+  var g=d3.select(gNode);
+  g.select('.arcs-layer').remove();
+  if(!_p2Layers.arcs)return;
+  var pairs=_buildArcPairs();
+  if(!pairs.length)return;
+  var layer=g.append('g').attr('class','arcs-layer');
+  var SEV_COL={4:'rgba(239,68,68,',3:'rgba(245,158,11,',2:'rgba(59,130,246,',1:'rgba(0,184,255,'};
+
+  pairs.forEach(function(p,idx){
+    var col=(SEV_COL[p.sev]||SEV_COL[1]);
+    var op=Math.min(0.15+p.count*0.08,0.6);
+    var strokeOp=Math.min(0.35+p.count*0.1,0.85);
+    var w=Math.min(0.8+p.count*0.25,2.5);
+    // Great-circle line
+    var geoj={type:'Feature',geometry:{type:'LineString',coordinates:[[p.a.lng,p.a.lat],[p.b.lng,p.b.lat]]}};
+    // Glow
+    layer.append('path').datum(geoj)
+      .attr('d',d3.geoPath().projection(_p2Proj).context(null)(geoj))
+      .attr('fill','none')
+      .attr('stroke',col+op+')')
+      .attr('stroke-width',w*4);
+    // Animated line
+    var dashLen=Math.min(30+p.count*10,80);
+    var el=layer.append('path').datum(geoj)
+      .attr('d',d3.geoPath().projection(_p2Proj).context(null)(geoj))
+      .attr('fill','none')
+      .attr('stroke',col+strokeOp+')')
+      .attr('stroke-width',w)
+      .attr('stroke-linecap','round')
+      .attr('stroke-dasharray',dashLen+' '+(400-dashLen));
+    // Offset animation staggered by index
+    el.style('animation','arc-dash '+(2.5+idx*0.2)+'s linear infinite');
+    el.style('animation-delay',(idx*0.18)+'s');
+    el.append('title').text(p.a.name+' ↔ '+p.b.name+' ('+p.count+' notizie)');
+  });
+}
+
+// ══════════════════════════════════════════════════════════════════
+// FEATURE 5 — MARITIME SHIPPING ROUTES
+// Color-coded by regional alert intensity from live articles
+// ══════════════════════════════════════════════════════════════════
+var MARITIME_ROUTES=[
+  // [name, regionKey, [[lng,lat],...]]
+  ['Rotta Atlantico N.', 'americas',    [[-74,40],[-50,45],[-30,50],[-10,52],[0,51],[2,51]]],
+  ['Rotta Atlantico S.', 'americas',    [[-43,-23],[-30,-15],[-15,-5],[0,5],[14,4],[15,-1],[-14,-8]]],
+  ['Rotta Europa-Asia (N)', 'europa',   [[2,51],[5,51],[10,54],[15,58],[20,60],[25,60],[30,60],[40,60],[50,58],[60,55],[70,55],[80,53],[90,51],[100,50],[110,48],[120,46],[125,38],[130,35],[135,34],[140,35]]],
+  ['Rotta Suez-Asia',   'medioriente', [[14,37],[32,30],[33,28],[34,26],[38,20],[42,15],[44,12],[48,10],[55,12],[60,20],[65,22],[70,20],[72,18],[80,10],[90,5],[100,3],[104,1],[108,3],[110,5],[114,10],[118,20],[120,25],[121,25]]],
+  ['Rotta Capo Buona Speranza','africa',[[-74,40],[-30,-10],[-18,-28],[15,-35],[18,-35],[25,-30],[35,-20],[45,-10],[55,0],[60,10],[68,22],[72,18]]],
+  ['Mar Rosso / Houthi','medioriente',  [[32,30],[36,25],[40,20],[43,15],[43,12]]],
+  ['Canale Panama',     'americas',     [[-77,8],[-79,9],[-80,10],[-84,10]]],
+  ['Rotta Indo-Pacifico','indopacifico',[[72,18],[80,10],[90,5],[100,3],[108,3],[114,10],[118,20],[120,25],[121,25],[130,35],[135,34],[140,35],[142,38],[145,40]]],
+  ['Stretto Malacca',   'indopacifico', [[104,1],[103,2],[102,3],[100,5],[99,7],[97,8]]],
+  ['Rotta Artica (NE)', 'russia',       [[30,70],[40,72],[55,73],[80,76],[100,77],[120,75],[140,73],[160,70],[170,65],[180,60]]],
+];
+
+function _getRouteColor(regionKey){
+  // Compute severity from live articles for the region
+  var SEV={critical:4,high:3,medium:2,low:1};
+  var filtered=_timelineFilter(articles);
+  var score=0, n=0;
+  filtered.forEach(function(a){
+    if(a.region===regionKey||a.cat===regionKey){
+      score+=SEV[a.sev]||1; n++;
+    }
+  });
+  var avg=n?score/n:0;
+  if(avg>=3.5) return {col:'rgba(239,68,68,',label:'CRITICA'};
+  if(avg>=2.5) return {col:'rgba(245,158,11,',label:'TESA'};
+  if(avg>=1.5) return {col:'rgba(59,130,246,',label:'MONIT.'};
+  return {col:'rgba(34,211,94,',label:'NORMALE'};
+}
+
+function _drawRoutes(gNode, path){
+  var g=d3.select(gNode);
+  g.select('.routes-layer').remove();
+  if(!_p2Layers.routes)return;
+  var layer=g.append('g').attr('class','routes-layer');
+
+  MARITIME_ROUTES.forEach(function(r){
+    var name=r[0], region=r[1], coords=r[2];
+    var st=_getRouteColor(region);
+    var geoj={type:'Feature',geometry:{type:'LineString',coordinates:coords}};
+    var d=d3.geoPath().projection(_p2Proj)(geoj);
+    if(!d)return;
+    // Glow
+    layer.append('path').datum(geoj)
+      .attr('d',d)
+      .attr('fill','none')
+      .attr('stroke',st.col+'0.12)')
+      .attr('stroke-width','7')
+      .attr('stroke-linecap','round');
+    // Main
+    layer.append('path').datum(geoj)
+      .attr('d',d)
+      .attr('fill','none')
+      .attr('stroke',st.col+'0.7)')
+      .attr('stroke-width','1.4')
+      .attr('stroke-dasharray','10 5')
+      .attr('stroke-linecap','round')
+      .append('title').text('['+st.label+'] '+name);
+  });
+}
+
+// Redraw SVG layers when articles refresh
+var _origRefreshP2Overlay=window._refreshP2Overlay||function(){};
+window._refreshP2Overlay=function(){
+  _redrawOverlay();
+  _updateStats();
+  if(_p2G&&_p2Proj){
+    var path=d3.geoPath(_p2Proj);
+    _drawArcs(_p2G.node(),path);
+    _drawRoutes(_p2G.node(),path);
+  }
+};
 </script>
 
 </body>
