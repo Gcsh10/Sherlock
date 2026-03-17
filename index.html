@@ -1456,15 +1456,24 @@ var ALL_COLS=[
 
 var sources=[],articles=[],colOrder=[],colClosed=[],timerSec=120,timerInt=null,sourceStatus={},pIdx=0;
 
-function persist(){try{localStorage.setItem('sh3_sources',JSON.stringify(sources));localStorage.setItem('sh3_colorder',JSON.stringify(colOrder));localStorage.setItem('sh3_colclosed',JSON.stringify(colClosed));}catch(e){}}
+function persist(){
+  try{
+    localStorage.setItem('sh3_sources_v2',JSON.stringify(sources));
+    localStorage.setItem('sh3_colorder',JSON.stringify(colOrder));
+    localStorage.setItem('sh3_colclosed',JSON.stringify(colClosed));
+  }catch(e){}
+}
 function loadPersist(){
   var DEFAULT_CLOSED=['russia','africa','americas','medioriente'];
-  var LAYOUT_VER='v5'; // bump this to force colClosed reset on next deploy
+  var LAYOUT_VER='v5';
   try{
-    // Se colOrder salvato è vuoto o invalido, cancella tutto
+    // Migrate from old key if present
+    if(!localStorage.getItem('sh3_sources_v2')&&localStorage.getItem('sh3_sources')){
+      localStorage.setItem('sh3_sources_v2',localStorage.getItem('sh3_sources'));
+    }
     var _co=localStorage.getItem('sh3_colorder');
     if(_co){try{var _p=JSON.parse(_co);if(!Array.isArray(_p)||_p.length===0){localStorage.removeItem('sh3_colorder');localStorage.removeItem('sh3_colclosed');}}catch(e){localStorage.removeItem('sh3_colorder');}}
-    var s=localStorage.getItem('sh3_sources');
+    var s=localStorage.getItem('sh3_sources_v2');
     if(s){
       try{
         var saved=JSON.parse(s);
