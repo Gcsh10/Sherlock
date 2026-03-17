@@ -940,6 +940,7 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
         <option value="cyber">Cyber / OSINT</option><option value="finance">Finanza</option>
         <option value="regional">Regionale</option><option value="agenzie">Agenzia</option>
         <option value="osint">OSINT</option>
+        <option value="analisti_cn">Analisti CN</option>
       </select></div>
     <div class="mrow">
       <button class="hbtn" onclick="closeSrcModal()">Annulla</button>
@@ -991,6 +992,7 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
             <option value="ist">Ist.</option><option value="cyber">Cyber</option>
             <option value="finance">Finance</option><option value="regional">Reg.</option>
             <option value="osint">OSINT</option>
+            <option value="analisti_cn">Analisti CN</option>
           </select>
           <button class="qadd-btn" onclick="addInline()">&#8853;</button>
         </div>
@@ -1229,7 +1231,7 @@ var DEFAULTS=[
   {id:'beijingdaily',name:'Beijing Daily',url:'https://news.google.com/rss/search?q=site:bjd.com.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
   {id:'ce_cn',name:'China Economic Net',url:'https://news.google.com/rss/search?q=site:ce.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
   {id:'gmw',name:'Guangming Daily',url:'https://news.google.com/rss/search?q=site:gmw.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
-  {id:'pekingnology',name:'Pekingnology (feed)',url:'https://www.pekingnology.com/feed',cat:'cina',on:true},
+  {id:'pekingnology',name:'Pekingnology (feed)',url:'https://www.pekingnology.com/feed',cat:'analisti_cn',on:true},
 
   {id:'reuters',   name:'Reuters',            cat:'agenzie', url:'https://news.google.com/rss/search?q=reuters+world+news&hl=en&gl=US&ceid=US:en',on:true},
   {id:'ap',        name:'AP',                 cat:'agenzie', url:'https://news.google.com/rss/search?q=associated+press+world&hl=en&gl=US&ceid=US:en',on:true},
@@ -1377,25 +1379,87 @@ var PRESETS=[
   {id:'merics',      name:'MERICS (China)',       cat:'cina', url:'https://news.google.com/rss/search?q=MERICS+china&hl=en', on:true},
   {id:'csis_china',  name:'CSIS China',           cat:'cina', url:'https://news.google.com/rss/search?q=site:csis.org+china&hl=en', on:true},
 
+  // ── ANALISTI GEOPOLITICI CINESI ───────────────────────────────────
+  // Think tank — query bilingui EN+ZH
+  {id:'ciis', name:'CIIS 中国国际问题研究院', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q="China+Institute+of+International+Studies"+OR+中国国际问题研究院+OR+CIIS&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'cicir', name:'CICIR 现代国际关系研究院', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q="China+Institutes+of+Contemporary+International+Relations"+OR+现代国际关系研究院+OR+CICIR&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'siis', name:'SIIS 上海国际问题研究院', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q="Shanghai+Institutes+for+International+Studies"+OR+上海国际问题研究院+OR+SIIS&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'cfau', name:'CFAU 外交学院', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q="China+Foreign+Affairs+University"+OR+外交学院+CFAU&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'ciss', name:'CISS 中国国际战略研究院', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q="China+Institute+for+International+and+Strategic+Studies"+OR+中国国际战略研究院&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'cass', name:'CASS 中国社会科学院', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q="Chinese+Academy+of+Social+Sciences"+OR+中国社会科学院+international+geopolitics&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'ccg', name:'CCG 中国与全球化智库', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q="Center+for+China+and+Globalization"+OR+中国与全球化智库+OR+CCG&hl=en&gl=US&ceid=US:en', on:true},
+  // Analisti — query bilingui EN+ZH
+  {id:'jin_canrong', name:'金灿荣 Jin Canrong', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q=金灿荣+OR+"Jin+Canrong"&hl=zh-CN&gl=CN&ceid=CN:zh-Hans', on:true},
+  {id:'zhang_weiwei', name:'张维为 Zhang Weiwei', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q=张维为+OR+"Zhang+Weiwei"+复旦+Fudan&hl=zh-CN&gl=CN&ceid=CN:zh-Hans', on:true},
+  {id:'zhang_wenmu', name:'张文木 Zhang Wenmu', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q=张文木+OR+"Zhang+Wenmu"+地缘+战略&hl=zh-CN&gl=CN&ceid=CN:zh-Hans', on:true},
+  {id:'wyzxwk_wenmu', name:'张文木 乌有之乡', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q=张文木+乌有之乡+OR+"Zhang+Wenmu"+wyzxwk&hl=zh-CN&gl=CN&ceid=CN:zh-Hans', on:true},
+  {id:'hu_xijin', name:'胡锡进 Hu Xijin', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q=胡锡进+OR+"Hu+Xijin"+环球时报&hl=zh-CN&gl=CN&ceid=CN:zh-Hans', on:true},
+  {id:'wang_xiangsui', name:'王湘穗 Wang Xiangsui', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q=王湘穗+OR+"Wang+Xiangsui"+战略&hl=zh-CN&gl=CN&ceid=CN:zh-Hans', on:true},
+  {id:'yan_xuetong', name:'阎学通 Yan Xuetong', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q=阎学通+OR+"Yan+Xuetong"+清华+Tsinghua&hl=zh-CN&gl=CN&ceid=CN:zh-Hans', on:true},
+  {id:'da_wei', name:'达巍 Da Wei', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q=达巍+OR+"Da+Wei"+CISS+中美&hl=zh-CN&gl=CN&ceid=CN:zh-Hans', on:true},
+  {id:'hou_aijun', name:'侯爱军 Hou Aijun', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q=侯爱军+OR+"Hou+Aijun"+军事+security&hl=zh-CN&gl=CN&ceid=CN:zh-Hans', on:true},
+  {id:'you_ji', name:'尤吉 You Ji', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q=尤吉+解放军+OR+"You+Ji"+PLA+China&hl=zh-CN&gl=CN&ceid=CN:zh-Hans', on:true},
+  {id:'ge_jianxiong', name:'葛剑雄 Ge Jianxiong', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q=葛剑雄+OR+"Ge+Jianxiong"+历史+geopolitics&hl=zh-CN&gl=CN&ceid=CN:zh-Hans', on:true},
+  {id:'zhao_long', name:'赵龙 Zhao Long SIIS', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q=赵龙+上海国际+OR+"Zhao+Long"+SIIS+global&hl=zh-CN&gl=CN&ceid=CN:zh-Hans', on:true},
+  {id:'zheng_yongnian', name:'郑永年 Zheng Yongnian', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q=郑永年+OR+"Zheng+Yongnian"+香港+中国&hl=zh-CN&gl=CN&ceid=CN:zh-Hans', on:true},
+  {id:'sun_yanhong', name:'孙艳红 Sun Yanhong CASS', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q=孙艳红+社科院+OR+"Sun+Yanhong"+CASS+China&hl=zh-CN&gl=CN&ceid=CN:zh-Hans', on:true},
+  // Substack — RSS diretto
+  {id:'ginger_river', name:'Jiang Jiang — Ginger River', cat:'analisti_cn',
+    url:'https://gingerriver.substack.com/feed', on:true},
+  {id:'wang_zichen', name:'Wang Zichen — Pekingnology+', cat:'analisti_cn',
+    url:'https://zichenwang.substack.com/feed', on:true},
+  // Jamestown Foundation — China Brief
+  {id:'jamestown_cb', name:'Jamestown Foundation — China Brief', cat:'analisti_cn',
+    url:'https://jamestown.org/programs/cb/feed/', on:true},
+  // Aggregatori
+  {id:'guancha_zhuanlan', name:'观察者网 专栏', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q=观察者网+地缘+战略+分析&hl=zh-CN&gl=CN&ceid=CN:zh-Hans', on:true},
+  {id:'huanqiu_opinion', name:'环球时报 评论', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q=环球时报+评论+国际+地缘&hl=zh-CN&gl=CN&ceid=CN:zh-Hans', on:true},
+
 ];
 
 var ALL_COLS=[
-  {id:'global',      name:'Globale',      icon:'&#127758;', regions:['global']},
-  {id:'europa',      name:'Europa',       icon:'&#127466;&#127482;', regions:['europa']},
-  {id:'medioriente', name:'Medio Oriente',icon:'&#128332;', regions:['medioriente']},
-  {id:'italia',      name:'Italia',       icon:'&#127470;&#127481;', regions:['italia']},
-  {id:'cina',        name:'Cina & Taiwan',icon:'&#127464;&#127475;', regions:['cina']},
-  {id:'indopacifico',name:'Indo-Pacifico',icon:'&#127759;', regions:['indopacifico','sudest_asia']},
-  {id:'americas',    name:'Americhe',     icon:'&#127758;', regions:['americas']},
-  {id:'osint',       name:'OSINT',        icon:'&#128065;', regions:['osint']},
-  {id:'russia',      name:'Russia',       icon:'🇷🇺', regions:['russia']},
-  {id:'africa',      name:'Africa',       icon:'🌍', regions:['africa']},
+  {id:'global',       name:'Globale',           icon:'&#127758;', regions:['global']},
+  {id:'europa',       name:'Europa',            icon:'&#127466;&#127482;', regions:['europa']},
+  {id:'medioriente',  name:'Medio Oriente',     icon:'&#128332;', regions:['medioriente']},
+  {id:'italia',       name:'Italia',            icon:'&#127470;&#127481;', regions:['italia']},
+  {id:'cina',         name:'Cina & Taiwan',     icon:'&#127464;&#127475;', regions:['cina']},
+  {id:'indopacifico', name:'Indo-Pacifico',     icon:'&#127759;', regions:['indopacifico','sudest_asia']},
+  {id:'americas',     name:'Americhe',          icon:'&#127758;', regions:['americas']},
+  {id:'osint',        name:'OSINT',             icon:'&#128065;', regions:['osint']},
+  {id:'russia',       name:'Russia',            icon:'🇷🇺', regions:['russia']},
+  {id:'africa',       name:'Africa',            icon:'🌍', regions:['africa']},
+  {id:'analisti_cn',  name:'Analisti CN',       icon:'🔎', regions:['analisti_cn']},
 ];
 
 var sources=[],articles=[],colOrder=[],colClosed=[],timerSec=120,timerInt=null,sourceStatus={},pIdx=0;
 
 function persist(){try{localStorage.setItem('sh3_sources',JSON.stringify(sources));localStorage.setItem('sh3_colorder',JSON.stringify(colOrder));localStorage.setItem('sh3_colclosed',JSON.stringify(colClosed));}catch(e){}}
 function loadPersist(){
+  var DEFAULT_CLOSED=['russia','africa','americas','medioriente'];
+  var LAYOUT_VER='v4'; // bump this to force colClosed reset on next deploy
   try{
     // Se colOrder salvato è vuoto o invalido, cancella tutto
     var _co=localStorage.getItem('sh3_colorder');
@@ -1411,6 +1475,11 @@ function loadPersist(){
           if(d.id==='wsj') existing.url='https://feeds.a.dj.com/rss/RSSWorldNews.xml';
           if(d.id==='rane_worldview') existing.url='https://news.google.com/rss/search?q=(site:worldview.stratfor.com+OR+site:ranenetwork.com)+worldview&hl=en&gl=US&ceid=US:en';
           if(['xinhua','peoples_daily','cgtn_default','globaltimes_default','chinadaily_default'].indexOf(d.id)>=0) existing.on=true;
+          // Force all analisti_cn sources ON
+          if(d.cat==='analisti_cn') existing.on=true;
+          // Always sync cat and url from DEFAULTS — fixes migrations when categories change
+          existing.cat=d.cat;
+          existing.url=d.url;
           return existing;
         });
         // Also keep any custom user-added sources not in DEFAULTS
@@ -1419,7 +1488,22 @@ function loadPersist(){
       }catch(e){sources=DEFAULTS.slice();}
     } else { sources=DEFAULTS.slice(); }
     var co=localStorage.getItem('sh3_colorder'); colOrder=co?JSON.parse(co):ALL_COLS.map(function(c){return c.id;});
-    var cc=localStorage.getItem('sh3_colclosed'); colClosed=cc?JSON.parse(cc):[];
+    // Force colClosed defaults if layout version has changed
+    var savedLayoutVer=localStorage.getItem('sh3_layout_ver');
+    var cc=localStorage.getItem('sh3_colclosed');
+    if(savedLayoutVer!==LAYOUT_VER||!cc){
+      colClosed=DEFAULT_CLOSED.slice();
+      localStorage.setItem('sh3_layout_ver',LAYOUT_VER);
+    } else {
+      colClosed=JSON.parse(cc);
+      // Ensure the 4 panels are closed if they were never explicitly opened by user
+      DEFAULT_CLOSED.forEach(function(id){
+        if(colClosed.indexOf(id)<0){
+          // Only add back if user hasn't ever seen/touched this session
+          // We trust the saved state — they may have opened it intentionally
+        }
+      });
+    }
     DEFAULTS.forEach(function(d){if(!sources.find(function(s){return s.id===d.id;}))sources.push(d);});
     ALL_COLS.forEach(function(c){if(colOrder.indexOf(c.id)<0)colOrder.push(c.id);});
     // Deduplication: rimuovi duplicati da colOrder
@@ -1527,7 +1611,10 @@ function classify(item){
     if(item.cat==='cina') item.region='cina';
     else if(item.cat==='sudest_asia') item.region='sudest_asia';
     else if(item.cat==='italia') item.region='italia';
+    else if(item.cat==='analisti_cn') item.region='analisti_cn';
   }
+  // analisti_cn always stays in its own column regardless of text keywords
+  if(item.cat==='analisti_cn') item.region='analisti_cn';
   return item;
 }
 
@@ -1683,6 +1770,7 @@ function cardHTML(a){
 // OSINT column matches by cat regardless of region.
 function _articleMatchesCol(a, def){
   if(def.regions[0]==='osint') return a.cat==='osint';
+  if(def.regions[0]==='analisti_cn') return a.cat==='analisti_cn';
   return def.regions.indexOf(a.region)>=0;
 }
 
@@ -1798,7 +1886,7 @@ function activateTheater(theater){
 
 function renderSrcList(){
   var el=document.getElementById('srclist');if(!el)return;
-  var CAT={agenzie:'Agenzie',media:'Media',italia:'Italia',think:'Think tank',ist:'Ist.',cyber:'Cyber',finance:'Finance',regional:'Reg.',osint:'OSINT',cina:'Cina',sudest_asia:'Sud-est Asia'};
+  var CAT={agenzie:'Agenzie',media:'Media',italia:'Italia',think:'Think tank',ist:'Ist.',cyber:'Cyber',finance:'Finance',regional:'Reg.',osint:'OSINT',cina:'Cina',sudest_asia:'Sud-est Asia',analisti_cn:'Analisti CN'};
   var catmap={};
   sources.forEach(function(s){var c=s.cat||'media';if(!catmap[c])catmap[c]=[];catmap[c].push(s);});
   var html='';
@@ -1915,9 +2003,10 @@ var REGION_LABELS={
   americas:'Americhe',
   africa:'Africa subsahariana',
   osint:'OSINT / Analisi difesa',
-  sudest_asia:'Sud-Est asiatico'
+  sudest_asia:'Sud-Est asiatico',
+  analisti_cn:'Analisti geopolitici cinesi'
 };
-var REGION_ORDER=['medioriente','russia','europa','cina','indopacifico','sudest_asia','americas','africa','italia','osint','global'];
+var REGION_ORDER=['medioriente','russia','europa','cina','analisti_cn','indopacifico','sudest_asia','americas','africa','italia','osint','global'];
 
 function _sevRank(sev){return ({critical:4,high:3,medium:2,low:1})[sev]||0;}
 function _sevColor(sev){return sev==='critical'?'#ef4444':sev==='high'?'#f59e0b':sev==='medium'?'#3b82f6':'#22d35e';}
