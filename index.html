@@ -598,11 +598,11 @@ header{
   .live-lbl{display:none;}
   #clock{display:none;}
   .hright{display:flex;flex-shrink:0;gap:4px;margin-left:auto;align-items:center;}
-  .hright .hbtn{font-size:10px;padding:4px 8px;white-space:nowrap;}
+  .hright .hbtn{font-size:13px;padding:6px 11px;white-space:nowrap;}
 
   #bottom-nav{
     height:50px;
-    padding-bottom:env(safe-area-inset-bottom);
+    padding-bottom:max(env(safe-area-inset-bottom), 10px);
   }
   #bottom-nav .page-tab{font-size:9px;padding:4px 2px;}
 
@@ -2429,7 +2429,7 @@ function _drawNaval(overlay, toScreen, wrap, tip){
   NAVAL_GROUPS.forEach(function(ng){
     var name=ng[0],nation=ng[1],type=ng[2],lat=ng[3],lng=ng[4],status=ng[5],desc=ng[6];
     var xy = toScreen(lat,lng);
-    if(!xy||xy[0]<-20||xy[0]>wrap.clientWidth+20||xy[1]<-20||xy[1]>wrap.clientHeight+20) return;
+    if(!inView(xy)) return;
     var color = _navalColors[nation]||'#94a3b8';
     var opacity = status==='port'?'0.35': status==='limited'?'0.55':'1';
     var icon = type==='carrier'?'⬡': type==='sub'?'◆':'▲';
@@ -2488,7 +2488,7 @@ function _drawChokepoints(overlay, toScreen, wrap, tip){
   CHOKEPOINTS.forEach(function(cp){
     var name=cp[0],lat=cp[1],lng=cp[2],traffic=cp[3],status=cp[4],desc=cp[5];
     var xy = toScreen(lat,lng);
-    if(!xy||xy[0]<-30||xy[0]>wrap.clientWidth+30||xy[1]<-30||xy[1]>wrap.clientHeight+30) return;
+    if(!inView(xy)) return;
     var st = _cpStatusCfg[status]||_cpStatusCfg.normal;
     var color = st.color;
     var el = document.createElement('div');
@@ -2673,14 +2673,29 @@ function _redrawOverlay(){
 
   var overlay=document.createElement('div');
   overlay.className='p2-map-pins';
-  // Use current transform to position pins correctly
-  var curT=_p2G?d3.zoomTransform(_p2SVG.node()):null;
+  // Get current zoom transform
+  var curT=_p2G&&_p2SVG?d3.zoomTransform(_p2SVG.node()):null;
 
+  // Apply the same CSS transform as the SVG g group — pins move in sync instantly
+  if(curT){
+    overlay.style.transform=curT.toString();
+    overlay.style.transformOrigin='0 0';
+  }
+
+  // Position pins at RAW projection coordinates (pre-transform)
+  // The CSS transform on the overlay handles the visual offset — zero lag
   function toScreen(lat,lng){
     var xy=_p2Proj([lng,lat]);
-    if(!xy)return null;
-    if(curT)return [curT.applyX(xy[0]),curT.applyY(xy[1])];
-    return xy;
+    return xy||null;
+  }
+
+  // Viewport bounds in projection space (for culling off-screen pins)
+  var W2=wrap.clientWidth||900, H2=wrap.clientHeight||420;
+  var pad=60;
+  function inView(xy){
+    if(!xy||!curT)return true; // no transform yet, show all
+    var sx=curT.applyX(xy[0]), sy=curT.applyY(xy[1]);
+    return sx>-pad&&sx<W2+pad&&sy>-pad&&sy<H2+pad;
   }
 
   // ── News pins ─────────────────────────────────────────────────
@@ -2689,7 +2704,7 @@ function _redrawOverlay(){
     Object.keys(clusters).forEach(function(key){
       var cl=clusters[key], items=cl.items, hub=cl.hub;
       var xy=toScreen(hub.lat,hub.lng);
-      if(!xy||xy[0]<-20||xy[0]>wrap.clientWidth+20||xy[1]<-20||xy[1]>wrap.clientHeight+20)return;
+      if(!inView(xy))return;
       var maxSev=0;
       items.forEach(function(a){var s={critical:4,high:3,medium:2,low:1}[a.sev]||0;if(s>maxSev)maxSev=s;});
       var cls=maxSev>=4?'crit':maxSev>=3?'high':maxSev>=2?'med':'low';
@@ -2722,7 +2737,7 @@ function _redrawOverlay(){
   if(_p2Layers.hs){
     HOTSPOTS.forEach(function(hs){
       var xy=toScreen(hs.lat,hs.lng);
-      if(!xy||xy[0]<-20||xy[0]>wrap.clientWidth+20||xy[1]<-20||xy[1]>wrap.clientHeight+20)return;
+      if(!inView(xy))return;
       var el=document.createElement('div');
       el.className='p2-hotspot '+hs.sev;
       el.style.cssText='position:absolute;transform:translate(-50%,-50%);pointer-events:auto;cursor:pointer;left:'+xy[0]+'px;top:'+xy[1]+'px;';
@@ -2891,7 +2906,16 @@ function _drawP2Map(){
     .translateExtent([[-W*2,-H*2],[W*3,H*3]])
     .on('zoom',function(event){
       g.attr('transform',event.transform);
-      _redrawOverlayThrottled(); // throttled — max 4fps during gesture
+      // Sync overlay transform instantly — zero lag on all devices
+      var ol=document.querySelector('#p2-map-wrap .p2-map-pins');
+      if(ol){
+        ol.style.transform=event.transform.toString();
+        ol.style.transformOrigin='0 0';
+      }
+    })
+    .on('end',function(){
+      // Full redraw only when gesture ends — recalculates clip/visibility
+      _redrawOverlay();
     });
 
   var svgNode=svg.node();
@@ -3738,14 +3762,14 @@ function toggleSidebar(){
 <script>
 (function(){
   var LIVE_KEY='sh3_live_cfg_v1';
-  var liveCfg={enabled:true,interval:60,lastRefresh:0,lastAttempt:0};
+  var liveCfg={enabled:true,interval:120,lastRefresh:0,lastAttempt:0};
   try{
     var saved=JSON.parse(localStorage.getItem(LIVE_KEY)||'null');
     if(saved&&typeof saved==='object'){
       if(typeof saved.enabled==='boolean') liveCfg.enabled=saved.enabled;
       if([30,60,120,300,600].indexOf(Number(saved.interval))!==-1) liveCfg.interval=Number(saved.interval);
-      // Force migration: bump any value below 60 up to 60
-      if(liveCfg.interval<60) liveCfg.interval=60;
+      // Force migration: bump any value below 120 up to 120
+      if(liveCfg.interval<120) liveCfg.interval=120;
       if(saved.lastRefresh) liveCfg.lastRefresh=Number(saved.lastRefresh)||0;
     }
   }catch(e){}
@@ -3781,8 +3805,8 @@ function toggleSidebar(){
       +'<button class="hbtn live-toggle" id="live-toggle" title="Aggiornamento automatico">AUTO ON</button>'
       +'<select class="live-interval" id="live-interval" title="Intervallo aggiornamento">'
       +'<option value="30">30s</option>'
-      +'<option value="60" selected>60s</option>'
-      +'<option value="120">120s</option>'
+      +'<option value="60">60s</option>'
+      +'<option value="120" selected>120s</option>'
       +'<option value="300">5 min</option>'
       +'<option value="600">10 min</option>'
       +'</select>'
@@ -3809,7 +3833,7 @@ function toggleSidebar(){
   window.startTimer=function(){
     clearInterval(window.timerInt);
     var arc=document.getElementById('tarc'), lbl=document.getElementById('tlbl');
-    var C=44, total=Number(liveCfg.interval)||60;
+    var C=44, total=Number(liveCfg.interval)||120;
     if(!liveCfg.enabled){
       window.timerSec=0;
       if(lbl) lbl.textContent='MAN';
