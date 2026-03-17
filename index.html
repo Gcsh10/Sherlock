@@ -1202,42 +1202,42 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
 
 var DEFAULTS=[
   {id:'gpf',name:'Geopolitical Futures (feed)',url:'https://geopoliticalfutures.com/feed',cat:'osint',on:true},
-  {id:'rane_worldview',name:'RANE Worldview',url:'https://news.google.com/rss/search?q=(site:worldview.stratfor.com+OR+site:ranenetwork.com)+worldview&hl=en&gl=US&ceid=US:en',cat:'osint',on:true},
+  {id:'rane_worldview',name:'RANE Worldview',url:'https://news.google.com/rss/search?q=RANE+worldview+stratfor+geopolitics&hl=en&gl=US&ceid=US:en',cat:'osint',on:true},
 
   {id:'intelligence_online',name:'Intelligence Online',url:'https://news.google.com/rss/search?q=site:intelligenceonline.com&hl=en&gl=US&ceid=US:en',cat:'osint',on:true},
 
   {id:'straitstimes',name:'The Straits Times (RSS)',url:'https://news.google.com/rss/search?q=site:straitstimes.com&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
   {id:'cna_sg',name:'Channel NewsAsia (RSS)',url:'https://news.google.com/rss/search?q=site:channelnewsasia.com&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
-  {id:'bangkokpost',name:'Bangkok Post',url:'https://news.google.com/rss/search?q=site:bangkokpost.com&hl=en&gl=TH&ceid=TH:en',cat:'sudest_asia',on:true},
-  {id:'nation_th',name:'The Nation Thailand',url:'https://news.google.com/rss/search?q=site:nationthailand.com&hl=en&gl=TH&ceid=TH:en',cat:'sudest_asia',on:true},
-  {id:'vietnamnews',name:'Viet Nam News',url:'https://news.google.com/rss/search?q=site:vietnamnews.vn&hl=en&gl=VN&ceid=VN:en',cat:'sudest_asia',on:true},
-  {id:'tuoitre',name:'Tuoi Tre News',url:'https://news.google.com/rss/search?q=site:tuoitrenews.vn&hl=en&gl=VN&ceid=VN:en',cat:'sudest_asia',on:true},
-  {id:'jakartapost',name:'The Jakarta Post',url:'https://news.google.com/rss/search?q=site:thejakartapost.com&hl=en&gl=ID&ceid=ID:en',cat:'sudest_asia',on:true},
-  {id:'tempo',name:'Tempo',url:'https://news.google.com/rss/search?q=site:tempo.co+OR+site:en.tempo.co&hl=en&gl=ID&ceid=ID:en',cat:'sudest_asia',on:true},
-  {id:'rappler',name:'Rappler',url:'https://news.google.com/rss/search?q=site:rappler.com&hl=en&gl=PH&ceid=PH:en',cat:'sudest_asia',on:true},
-  {id:'inquirer',name:'Philippine Daily Inquirer',url:'https://news.google.com/rss/search?q=site:inquirer.net&hl=en&gl=PH&ceid=PH:en',cat:'sudest_asia',on:true},
-  {id:'starmalaysia',name:'The Star Malaysia',url:'https://news.google.com/rss/search?q=site:thestar.com.my&hl=en&gl=MY&ceid=MY:en',cat:'sudest_asia',on:true},
-  {id:'khmertimes',name:'Khmer Times',url:'https://news.google.com/rss/search?q=site:khmertimeskh.com&hl=en&gl=KH&ceid=KH:en',cat:'sudest_asia',on:true},
-  {id:'myanmarnow',name:'Myanmar Now',url:'https://news.google.com/rss/search?q=site:myanmar-now.org&hl=en&gl=MM&ceid=MM:en',cat:'sudest_asia',on:true},
-  {id:'applehk',name:'Apple Daily HK',url:'https://news.google.com/rss/search?q=%22Apple+Daily%22+Hong+Kong&hl=en&gl=HK&ceid=HK:en',cat:'cina',on:true},
-  {id:'cna_tw',name:'Central News Agency',url:'https://news.google.com/rss/search?q=site:cna.com.tw&hl=zh-TW&gl=TW&ceid=TW:zh-Hant',cat:'cina',on:true},
-  {id:'pla_daily',name:'PLA Daily',url:'https://news.google.com/rss/search?q=site:81.cn+解放军报&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
-  {id:'pla_eastern',name:'Eastern Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+东部战区&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
-  {id:'pla_southern',name:'Southern Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+南部战区&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
-  {id:'pla_western',name:'Western Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+西部战区&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
-  {id:'pla_northern',name:'Northern Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+北部战区&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
-  {id:'pla_central',name:'Central Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+中部战区&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
-  {id:'qstheory',name:'Seeking Truth',url:'https://news.google.com/rss/search?q=site:qstheory.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
-  {id:'beijingdaily',name:'Beijing Daily',url:'https://news.google.com/rss/search?q=site:bjd.com.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
-  {id:'ce_cn',name:'China Economic Net',url:'https://news.google.com/rss/search?q=site:ce.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
-  {id:'gmw',name:'Guangming Daily',url:'https://news.google.com/rss/search?q=site:gmw.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
+  {id:'bangkokpost',name:'Bangkok Post',url:'https://news.google.com/rss/search?q=site:bangkokpost.com&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
+  {id:'nation_th',name:'The Nation Thailand',url:'https://news.google.com/rss/search?q=site:nationthailand.com&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
+  {id:'vietnamnews',name:'Viet Nam News',url:'https://news.google.com/rss/search?q=site:vietnamnews.vn&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
+  {id:'tuoitre',name:'Tuoi Tre News',url:'https://news.google.com/rss/search?q=site:tuoitrenews.vn&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
+  {id:'jakartapost',name:'The Jakarta Post',url:'https://news.google.com/rss/search?q=site:thejakartapost.com&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
+  {id:'tempo',name:'Tempo',url:'https://news.google.com/rss/search?q=site:tempo.co+OR+site:en.tempo.co&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
+  {id:'rappler',name:'Rappler',url:'https://news.google.com/rss/search?q=site:rappler.com&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
+  {id:'inquirer',name:'Philippine Daily Inquirer',url:'https://news.google.com/rss/search?q=site:inquirer.net&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
+  {id:'starmalaysia',name:'The Star Malaysia',url:'https://news.google.com/rss/search?q=site:thestar.com.my&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
+  {id:'khmertimes',name:'Khmer Times',url:'https://news.google.com/rss/search?q=site:khmertimeskh.com&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
+  {id:'myanmarnow',name:'Myanmar Now',url:'https://news.google.com/rss/search?q=site:myanmar-now.org&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
+  {id:'applehk',name:'Apple Daily HK',url:'https://news.google.com/rss/search?q=%22Apple+Daily%22+Hong+Kong&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
+  {id:'cna_tw',name:'Central News Agency',url:'https://news.google.com/rss/search?q=site:cna.com.tw&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
+  {id:'pla_daily',name:'PLA Daily',url:'https://news.google.com/rss/search?q=site:81.cn+解放军报&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
+  {id:'pla_eastern',name:'Eastern Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+东部战区&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
+  {id:'pla_southern',name:'Southern Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+南部战区&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
+  {id:'pla_western',name:'Western Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+西部战区&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
+  {id:'pla_northern',name:'Northern Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+北部战区&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
+  {id:'pla_central',name:'Central Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+中部战区&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
+  {id:'qstheory',name:'Seeking Truth',url:'https://news.google.com/rss/search?q=site:qstheory.cn&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
+  {id:'beijingdaily',name:'Beijing Daily',url:'https://news.google.com/rss/search?q=site:bjd.com.cn&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
+  {id:'ce_cn',name:'China Economic Net',url:'https://news.google.com/rss/search?q=site:ce.cn&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
+  {id:'gmw',name:'Guangming Daily',url:'https://news.google.com/rss/search?q=site:gmw.cn&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
   {id:'pekingnology',name:'Pekingnology (feed)',url:'https://www.pekingnology.com/feed',cat:'analisti_cn',on:true},
 
   {id:'reuters',   name:'Reuters',            cat:'agenzie', url:'https://news.google.com/rss/search?q=reuters+world+news&hl=en&gl=US&ceid=US:en',on:true},
   {id:'ap',        name:'AP',                 cat:'agenzie', url:'https://news.google.com/rss/search?q=associated+press+world&hl=en&gl=US&ceid=US:en',on:true},
   {id:'afp',       name:'AFP',                cat:'agenzie', url:'https://news.google.com/rss/search?q=agence+france+presse+AFP&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'ansa',      name:'ANSA Mondo',         cat:'agenzie', url:'https://news.google.com/rss/search?q=site:ansa.it+mondo&hl=it&gl=IT&ceid=IT:it',on:true},
-  {id:'ansait',    name:'ANSA Italia',        cat:'agenzie', url:'https://news.google.com/rss/search?q=site:ansa.it+politica&hl=it&gl=IT&ceid=IT:it',on:true},
+  {id:'ansa',      name:'ANSA Mondo',         cat:'agenzie', url:'https://news.google.com/rss/search?q=site:ansa.it+mondo&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'ansait',    name:'ANSA Italia',        cat:'agenzie', url:'https://news.google.com/rss/search?q=site:ansa.it+politica&hl=en&gl=US&ceid=US:en',on:true},
   {id:'tass',      name:'TASS',               cat:'agenzie', url:'https://news.google.com/rss/search?q=site:tass.com&hl=en',on:true},
   {id:'xinhua',    name:'Xinhua',             cat:'agenzie', url:'https://news.google.com/rss/search?q=site:xinhua.net+OR+Xinhua+world+news&hl=en&gl=US&ceid=US:en',on:true},
   {id:'peoples_daily', name:"People's Daily",      cat:'cina',    url:'https://news.google.com/rss/search?q=site:en.people.cn+world&hl=en&gl=US&ceid=US:en',on:true},
@@ -1252,18 +1252,18 @@ var DEFAULTS=[
   {id:'wam',       name:'WAM (UAE)',           cat:'agenzie', url:'https://news.google.com/rss/search?q=site:wam.ae&hl=en',on:true},
   {id:'pti',       name:'PTI (India)',        cat:'agenzie', url:'https://news.google.com/rss/search?q=press+trust+india&hl=en',on:true},
   {id:'prensa',    name:'Prensa Latina',      cat:'agenzie', url:'https://news.google.com/rss/search?q=site:plenglish.com&hl=en',on:true},
-  {id:'bbc',       name:'BBC World',          cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+world+news&hl=en&gl=GB&ceid=GB:en',on:true},
+  {id:'bbc',       name:'BBC World',          cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+world+news&hl=en&gl=US&ceid=US:en',on:true},
   {id:'aljazeera', name:'Al Jazeera',         cat:'media',   url:'https://news.google.com/rss/search?q=site:aljazeera.com&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'france24',  name:'France 24',          cat:'media',   url:'https://news.google.com/rss/search?q=site:france24.com&hl=en&gl=FR&ceid=FR:en',on:true},
-  {id:'dwnews',    name:'DW News',            cat:'media',   url:'https://news.google.com/rss/search?q=site:dw.com&hl=en&gl=DE&ceid=DE:en',on:true},
+  {id:'france24',  name:'France 24',          cat:'media',   url:'https://news.google.com/rss/search?q=site:france24.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'dwnews',    name:'DW News',            cat:'media',   url:'https://news.google.com/rss/search?q=site:dw.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'euronews',  name:'Euronews',           cat:'media',   url:'https://news.google.com/rss/search?q=euronews+world&hl=en',on:true},
-  {id:'guardian',  name:'The Guardian',       cat:'media',   url:'https://news.google.com/rss/search?q=site:theguardian.com+world&hl=en&gl=GB&ceid=GB:en',on:true},
-  {id:'spiegel',   name:'Der Spiegel EN',     cat:'media',   url:'https://news.google.com/rss/search?q=site:spiegel.de+international&hl=en&gl=DE&ceid=DE:en',on:true},
+  {id:'guardian',  name:'The Guardian',       cat:'media',   url:'https://news.google.com/rss/search?q=site:theguardian.com+world&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'spiegel',   name:'Der Spiegel EN',     cat:'media',   url:'https://news.google.com/rss/search?q=site:spiegel.de+international&hl=en&gl=US&ceid=US:en',on:true},
   {id:'lemonde',   name:'Le Monde EN',        cat:'media',   url:'https://news.google.com/rss/search?q=site:lemonde.fr&hl=en',on:true},
-  {id:'elpais',    name:'El Pais EN',         cat:'media',   url:'https://news.google.com/rss/search?q=site:elpais.com&hl=en&gl=ES&ceid=ES:en',on:true},
-  {id:'rfi',       name:'RFI English',        cat:'media',   url:'https://news.google.com/rss/search?q=site:rfi.fr&hl=en&gl=FR&ceid=FR:en',on:true},
+  {id:'elpais',    name:'El Pais EN',         cat:'media',   url:'https://news.google.com/rss/search?q=site:elpais.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'rfi',       name:'RFI English',        cat:'media',   url:'https://news.google.com/rss/search?q=site:rfi.fr&hl=en&gl=US&ceid=US:en',on:true},
   {id:'voa',       name:'VOA News',           cat:'media',   url:'https://news.google.com/rss/search?q=site:voanews.com&hl=en',on:true},
-  {id:'nhk',       name:'NHK World',          cat:'media',   url:'https://news.google.com/rss/search?q=site:nhk.or.jp&hl=en&gl=JP&ceid=JP:en',on:true},
+  {id:'nhk',       name:'NHK World',          cat:'media',   url:'https://news.google.com/rss/search?q=site:nhk.or.jp&hl=en&gl=US&ceid=US:en',on:true},
   {id:'thehill',   name:'The Hill',           cat:'media',   url:'https://news.google.com/rss/search?q=site:thehill.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'axios',     name:'Axios World',        cat:'media',   url:'https://news.google.com/rss/search?q=site:axios.com+world&hl=en',on:true},
   {id:'nikkei',    name:'Nikkei Asia',        cat:'regional',url:'https://news.google.com/rss/search?q=site:asia.nikkei.com&hl=en&gl=US&ceid=US:en',on:true},
@@ -1271,15 +1271,15 @@ var DEFAULTS=[
   {id:'haaretz',   name:'Haaretz',            cat:'regional',url:'https://news.google.com/rss/search?q=site:haaretz.com&hl=en',on:true},
   {id:'meye',      name:'Middle East Eye',    cat:'regional',url:'https://news.google.com/rss/search?q=site:middleeasteye.net&hl=en',on:true},
   {id:'kyivindep', name:'Kyiv Independent',   cat:'regional',url:'https://news.google.com/rss/search?q=site:kyivindependent.com&hl=en',on:true},
-  {id:'news24',    name:'News24 Africa',      cat:'regional',url:'https://news.google.com/rss/search?q=site:news24.com&hl=en&gl=ZA&ceid=ZA:en',on:true},
-  {id:'dawn',      name:'Dawn Pakistan',      cat:'regional',url:'https://news.google.com/rss/search?q=site:dawn.com&hl=en&gl=PK&ceid=PK:en',on:true},
+  {id:'news24',    name:'News24 Africa',      cat:'regional',url:'https://news.google.com/rss/search?q=site:news24.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'dawn',      name:'Dawn Pakistan',      cat:'regional',url:'https://news.google.com/rss/search?q=site:dawn.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'caixin',    name:'Caixin Global',      cat:'regional',url:'https://news.google.com/rss/search?q=site:caixinglobal.com&hl=en',on:true},
-  {id:'repubblica',name:'La Repubblica',      cat:'italia',  url:'https://news.google.com/rss/search?q=site:repubblica.it+esteri&hl=it&gl=IT&ceid=IT:it',on:true},
-  {id:'corriere',  name:'Corriere della S.',  cat:'italia',  url:'https://news.google.com/rss/search?q=site:corriere.it+esteri&hl=it',on:true},
-  {id:'rainews',   name:'Rainews 24',         cat:'italia',  url:'https://news.google.com/rss/search?q=site:rainews.it&hl=it',on:true},
-  {id:'sole24',    name:'Sole 24 Ore',        cat:'italia',  url:'https://news.google.com/rss/search?q=site:ilsole24ore.com+mondo&hl=it&gl=IT&ceid=IT:it',on:true},
-  {id:'stampa',    name:'La Stampa',          cat:'italia',  url:'https://news.google.com/rss/search?q=site:lastampa.it+esteri&hl=it',on:true},
-  {id:'messaggero',name:'Il Messaggero',      cat:'italia',  url:'https://news.google.com/rss/search?q=site:ilmessaggero.it+mondo&hl=it',on:true},
+  {id:'repubblica',name:'La Repubblica',      cat:'italia',  url:'https://news.google.com/rss/search?q=site:repubblica.it+esteri&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'corriere',  name:'Corriere della S.',  cat:'italia',  url:'https://news.google.com/rss/search?q=site:corriere.it+esteri&hl=en',on:true},
+  {id:'rainews',   name:'Rainews 24',         cat:'italia',  url:'https://news.google.com/rss/search?q=site:rainews.it&hl=en',on:true},
+  {id:'sole24',    name:'Sole 24 Ore',        cat:'italia',  url:'https://news.google.com/rss/search?q=site:ilsole24ore.com+mondo&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'stampa',    name:'La Stampa',          cat:'italia',  url:'https://news.google.com/rss/search?q=site:lastampa.it+esteri&hl=en',on:true},
+  {id:'messaggero',name:'Il Messaggero',      cat:'italia',  url:'https://news.google.com/rss/search?q=site:ilmessaggero.it+mondo&hl=en',on:true},
   {id:'fp',        name:'Foreign Policy',     cat:'think',   url:'https://news.google.com/rss/search?q=site:foreignpolicy.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'foreignaff',name:'Foreign Affairs',    cat:'think',   url:'https://news.google.com/rss/search?q=site:foreignaffairs.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'crisisgrp', name:'Crisis Group',       cat:'think',   url:'https://news.google.com/rss/search?q=site:crisisgroup.org&hl=en&gl=US&ceid=US:en',on:true},
@@ -1289,7 +1289,7 @@ var DEFAULTS=[
   {id:'warzone',   name:'The War Zone',       cat:'think',   url:'https://news.google.com/rss/search?q=site:twz.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'defone',    name:'Defense One',        cat:'think',   url:'https://news.google.com/rss/search?q=site:defenseone.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'diplomat',  name:'The Diplomat',       cat:'think',   url:'https://thediplomat.com/feed/',on:true},
-  {id:'politico',  name:'Politico EU',        cat:'think',   url:'https://news.google.com/rss/search?q=site:politico.eu&hl=en&gl=BE&ceid=BE:en',on:true},
+  {id:'politico',  name:'Politico EU',        cat:'think',   url:'https://news.google.com/rss/search?q=site:politico.eu&hl=en&gl=US&ceid=US:en',on:true},
   {id:'economist', name:'The Economist',      cat:'think',   url:'https://news.google.com/rss/search?q=site:economist.com&hl=en',on:true},
   {id:'sipri',     name:'SIPRI',              cat:'think',   url:'https://www.sipri.org/rss.xml',on:true},
   {id:'intelonline',name:'Intelligence Online',cat:'think',  url:'https://news.google.com/rss/search?q=site:intelligenceonline.com&hl=en',on:true},
@@ -1304,19 +1304,19 @@ var DEFAULTS=[
   {id:'osint_rferl',  name:'RFE/RL',          cat:'osint',   url:'https://news.google.com/rss/search?q=site:rferl.org&hl=en&gl=US&ceid=US:en',on:true},
   {id:'osint_twz',    name:'The War Zone',    cat:'osint',   url:'https://news.google.com/rss/search?q=site:twz.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'osint_defone', name:'Defense One',     cat:'osint',   url:'https://news.google.com/rss/search?q=site:defenseone.com&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'osint_janes',  name:'Janes',           cat:'osint',   url:'https://news.google.com/rss/search?q=site:janes.com&hl=en',on:true},
+  {id:'osint_janes',  name:'Janes',           cat:'osint',   url:'https://news.google.com/rss/search?q=site:janes.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'osint_oryx',   name:'Oryx',            cat:'osint',   url:'https://news.google.com/rss/search?q=site:oryxspioenkop.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'osint_geopol', name:'Geopolitical Monitor',cat:'osint',url:'https://news.google.com/rss/search?q=site:geopoliticalmonitor.com&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'osint_acled',  name:'ACLED',           cat:'osint',   url:'https://news.google.com/rss/search?q=site:acleddata.com&hl=en',on:true},
+  {id:'osint_acled',  name:'ACLED',           cat:'osint',   url:'https://news.google.com/rss/search?q=site:acleddata.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'cia',     name:'CIA Newsroom',  cat:'ist', url:'https://news.google.com/rss/search?q=site:cia.gov&hl=en&gl=US&ceid=US:en',on:true},
   {id:'cia_x',   name:'CIA / X',        cat:'ist', url:'https://news.google.com/rss/search?q=CIA+intelligence+geopolitics&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'dis',     name:'Sic.Naz. IT',   cat:'ist', url:'https://news.google.com/rss/search?q=sicurezzanazionale+DIS+AISE+AISI&hl=it&gl=IT&ceid=IT:it',on:true},
+  {id:'dis',     name:'Sic.Naz. IT',   cat:'ist', url:'https://news.google.com/rss/search?q=sicurezzanazionale+DIS+AISE+AISI&hl=en&gl=US&ceid=US:en',on:true},
   {id:'dis_x',   name:'SicNazionale / X', cat:'ist', url:'https://news.google.com/rss/search?q=DIS+intelligence+Italy+sicurezza&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'dgse',    name:'DGSE France',   cat:'ist', url:'https://news.google.com/rss/search?q=DGSE+renseignement+france&hl=fr&gl=FR&ceid=FR:fr',on:true},
+  {id:'dgse',    name:'DGSE France',   cat:'ist', url:'https://news.google.com/rss/search?q=DGSE+renseignement+france&hl=en&gl=US&ceid=US:en',on:true},
   {id:'dgse_x',  name:'DGSE / X',       cat:'ist', url:'https://news.google.com/rss/search?q=DGSE+France+intelligence&hl=en&gl=US&ceid=US:en',on:true},
   // ── CINA ──────────────────────────────────────────────────────
   {id:'xinhua_cina',name:'Xinhua EN',url:'https://news.google.com/rss/search?q=Xinhua+international+news&hl=en&gl=US&ceid=US:en',cat:'cina',max:15,on:true},
-  {id:'globaltimes',name:'Global Times',url:'https://news.google.com/rss/search?q="Global+Times"+China&hl=en&gl=US&ceid=US:en',cat:'cina',max:10},
+  {id:'globaltimes',name:'Global Times',url:'https://news.google.com/rss/search?q=%22Global+Times%22+China&hl=en&gl=US&ceid=US:en',cat:'cina',max:10},
   {id:'chinadigitaltimes',name:'China Digital Times',url:'https://chinadigitaltimes.net/feed/',cat:'cina',max:10},
   // ── GLOBAL MEDIA ──────────────────────────────────────────────
   {id:'wsj_world',name:'WSJ World',url:'https://feeds.a.dj.com/rss/RSSWorldNews.xml',cat:'media',max:15},
@@ -1346,32 +1346,32 @@ var PRESETS=[
   {id:'baidu_guancha',name:'Baidu 观察者网',cat:'cina',url:'https://news.google.com/rss/search?q=site:guancha.cn+%E5%9B%BD%E9%99%85&hl=en&gl=US&ceid=US:en',on:true},
   {id:'people_world_zh',name:'人民网 国际 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=%E4%BA%BA%E6%B0%91%E7%BD%91+%E5%9B%BD%E9%99%85&hl=en&gl=US&ceid=US:en',on:true},
   {id:'thepaper_zh',name:'澎湃新闻 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:thepaper.cn+%E5%9B%BD%E9%99%85&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'hk01_zh',name:'HK01 香港01 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:hk01.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',on:true},
-  {id:'singtao_zh',name:'星岛日报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:stheadline.com&hl=zh-HK&gl=HK&ceid=HK:zh-Hant',on:true},
-  {id:'gmw_zh',name:'光明网 Guangming (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:gmw.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
-  {id:'beijingdaily_zh',name:'北京日报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:bjd.com.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
-  {id:'qstheory_zh',name:'求是理论网 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:qstheory.cn&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
-  {id:'huanqiu_zh',name:'环球网 / 环球时报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:huanqiu.com+OR+环球时报&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
+  {id:'hk01_zh',name:'HK01 香港01 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:hk01.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'singtao_zh',name:'星岛日报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:stheadline.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'gmw_zh',name:'光明网 Guangming (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:gmw.cn&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'beijingdaily_zh',name:'北京日报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:bjd.com.cn&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'qstheory_zh',name:'求是理论网 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:qstheory.cn&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'huanqiu_zh',name:'环球网 / 环球时报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:huanqiu.com+OR+环球时报&hl=en&gl=US&ceid=US:en',on:true},
   {id:'rand',      name:'RAND Corp.',  cat:'think',   url:'https://news.google.com/rss/search?q=site:rand.org&hl=en'},
   {id:'brookings', name:'Brookings',   cat:'think',   url:'https://news.google.com/rss/search?q=site:brookings.edu&hl=en'},
   {id:'iiss',      name:'IISS',        cat:'think',   url:'https://news.google.com/rss/search?q=site:iiss.org&hl=en'},
-  {id:'cna',       name:'CNA',         cat:'regional',url:'https://news.google.com/rss/search?q=site:channelnewsasia.com&hl=en&gl=SG&ceid=SG:en'},
+  {id:'cna',       name:'CNA',         cat:'regional',url:'https://news.google.com/rss/search?q=site:channelnewsasia.com&hl=en&gl=US&ceid=US:en'},
   {id:'arabnews',  name:'Arab News',   cat:'regional',url:'https://news.google.com/rss/search?q=site:arabnews.com&hl=en'},
   // ── FONTI CINESI (in lingua cinese e inglese) ──────────────────
   // English-language Chinese state/official media
   {id:'xinhua_en',   name:'Xinhua (EN)',        cat:'cina', url:'https://news.google.com/rss/search?q=Xinhua+world+news+China&hl=en&gl=US&ceid=US:en', on:true},
   {id:'cgtn_en',     name:'CGTN',               cat:'cina', url:'https://news.google.com/rss/search?q=site:cgtn.com&hl=en&gl=US&ceid=US:en', on:true},
-  {id:'globaltimes', name:'Global Times (EN)',   cat:'cina', url:'https://news.google.com/rss/search?q="Global+Times"+China&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'globaltimes', name:'Global Times (EN)',   cat:'cina', url:'https://news.google.com/rss/search?q=%22Global+Times%22+China&hl=en&gl=US&ceid=US:en', on:true},
   {id:'chinadaily',  name:'China Daily (EN)',    cat:'cina', url:'https://news.google.com/rss/search?q=site:chinadaily.com.cn+world&hl=en&gl=US&ceid=US:en', on:true},
   {id:'people_en',   name:'Peoples Daily (EN)',cat:'cina', url:'https://news.google.com/rss/search?q=site:en.people.cn&hl=en&gl=US&ceid=US:en', on:true},
   // Chinese-language sources (RSS in 中文)
   {id:'xinhua_zh',   name:'新华社 Xinhua (中)',  cat:'cina', url:'https://news.google.com/rss/search?q=%E6%96%B0%E5%8D%8E%E7%A4%BE+%E5%9B%BD%E9%99%85&hl=en&gl=US&ceid=US:en', on:true},
   {id:'people_zh',   name:'人民日报 (中)',        cat:'cina', url:'https://news.google.com/rss/search?q=%E4%BA%BA%E6%B0%91%E6%97%A5%E6%8A%A5+%E5%9B%BD%E9%99%85&hl=en&gl=US&ceid=US:en', on:true},
-  {id:'globaltimes_zh',name:'环球时报 (中)',      cat:'cina', url:'https://news.google.com/rss/search?q=环球时报+军事&hl=zh-CN&gl=CN&ceid=CN:zh-Hans', on:true},
+  {id:'globaltimes_zh',name:'环球时报 (中)',      cat:'cina', url:'https://news.google.com/rss/search?q=环球时报+军事&hl=en&gl=US&ceid=US:en', on:true},
   {id:'guancha',     name:'观察者网 (中)',        cat:'cina', url:'https://news.google.com/rss/search?q=site:guancha.cn+%E5%9B%BD%E9%99%85&hl=en&gl=US&ceid=US:en', on:true},
-  {id:'caixin',      name:'财新 Caixin (中)',     cat:'cina', url:'https://news.google.com/rss/search?q=site:caixin.com&hl=zh-CN', on:true},
+  {id:'caixin',      name:'财新 Caixin (中)',     cat:'cina', url:'https://news.google.com/rss/search?q=site:caixin.com&hl=en', on:true},
   // Taiwan / HK perspectives  
-  {id:'rti_tw',      name:'RTI Taiwan (中)',      cat:'cina', url:'https://news.google.com/rss/search?q=site:rti.org.tw&hl=zh-TW&gl=TW&ceid=TW:zh-Hant', on:true},
+  {id:'rti_tw',      name:'RTI Taiwan (中)',      cat:'cina', url:'https://news.google.com/rss/search?q=site:rti.org.tw&hl=en&gl=US&ceid=US:en', on:true},
   {id:'rfa_zh',      name:'自由亚洲 RFA (中)',    cat:'cina', url:'https://news.google.com/rss/search?q=site:rfa.org+chinese&hl=en&gl=US&ceid=US:en', on:true},
   {id:'voachinese',  name:'美国之音 VOA (中)',    cat:'cina', url:'https://news.google.com/rss/search?q=site:voachinese.com&hl=en&gl=US&ceid=US:en', on:true},
   {id:'scmp_cn',     name:'SCMP China',           cat:'cina', url:'https://news.google.com/rss/search?q=site:scmp.com+china&hl=en', on:true},
@@ -1443,7 +1443,7 @@ var PRESETS=[
   {id:'zhipu_diyuan', name:'知乎 地缘政治', cat:'analisti_cn',
     url:'https://news.google.com/rss/search?q=site:zhihu.com+%E5%9C%B0%E7%BC%98%E6%94%BF%E6%B2%BB&hl=en&gl=US&ceid=US:en', on:true},
   {id:'zhipu_ai', name:'智谱 Zhipu AI 地缘政治', cat:'analisti_cn',
-    url:'https://news.google.com/rss/search?q=%E6%99%BA%E8%B0%B1+%E5%9C%B0%E7%BC%98%E6%94%BF%E6%B2%BB+OR+"Zhipu"+geopolitics&hl=en&gl=US&ceid=US:en', on:true},
+    url:'https://news.google.com/rss/search?q=%E6%99%BA%E8%B0%B1+%E5%9C%B0%E7%BC%98%E6%94%BF%E6%B2%BB+OR+%22Zhipu%22+geopolitics&hl=en&gl=US&ceid=US:en', on:true},
   {id:'guancha_diyuan', name:'观察者网 地缘政治', cat:'analisti_cn',
     url:'https://news.google.com/rss/search?q=site:guancha.cn+%E5%9C%B0%E7%BC%98%E6%94%BF%E6%B2%BB&hl=en&gl=US&ceid=US:en', on:true},
 
@@ -1467,22 +1467,25 @@ var sources=[],articles=[],colOrder=[],colClosed=[],timerSec=120,timerInt=null,s
 
 function persist(){
   try{
-    localStorage.setItem('sh3_sources_v2',JSON.stringify(sources));
+    localStorage.setItem('sh3_sources_v3',JSON.stringify(sources));
     localStorage.setItem('sh3_colorder',JSON.stringify(colOrder));
     localStorage.setItem('sh3_colclosed',JSON.stringify(colClosed));
   }catch(e){}
 }
 function loadPersist(){
   var DEFAULT_CLOSED=['russia','africa','americas','medioriente'];
-  var LAYOUT_VER='v5';
+  var LAYOUT_VER='v6';
   try{
     // Migrate from old key if present
-    if(!localStorage.getItem('sh3_sources_v2')&&localStorage.getItem('sh3_sources')){
-      localStorage.setItem('sh3_sources_v2',localStorage.getItem('sh3_sources'));
+    if(!localStorage.getItem('sh3_sources_v3')&&localStorage.getItem('sh3_sources_v2')){
+      localStorage.setItem('sh3_sources_v3',localStorage.getItem('sh3_sources_v2'));
+    }
+    if(!localStorage.getItem('sh3_sources_v3')&&localStorage.getItem('sh3_sources')){
+      localStorage.setItem('sh3_sources_v3',localStorage.getItem('sh3_sources'));
     }
     var _co=localStorage.getItem('sh3_colorder');
     if(_co){try{var _p=JSON.parse(_co);if(!Array.isArray(_p)||_p.length===0){localStorage.removeItem('sh3_colorder');localStorage.removeItem('sh3_colclosed');}}catch(e){localStorage.removeItem('sh3_colorder');}}
-    var s=localStorage.getItem('sh3_sources_v2');
+    var s=localStorage.getItem('sh3_sources_v3');
     if(s){
       try{
         var saved=JSON.parse(s);
@@ -1491,7 +1494,7 @@ function loadPersist(){
         var merged=DEFAULTS.map(function(d){
           var existing=savedIds[d.id]?savedIds[d.id]:d;
           if(d.id==='wsj') existing.url='https://feeds.a.dj.com/rss/RSSWorldNews.xml';
-          if(d.id==='rane_worldview') existing.url='https://news.google.com/rss/search?q=(site:worldview.stratfor.com+OR+site:ranenetwork.com)+worldview&hl=en&gl=US&ceid=US:en';
+          if(d.id==='rane_worldview') existing.url='https://news.google.com/rss/search?q=RANE+worldview+stratfor+geopolitics&hl=en&gl=US&ceid=US:en';
           if(['xinhua','peoples_daily','cgtn_default','globaltimes_default','chinadaily_default'].indexOf(d.id)>=0) existing.on=true;
           // Force all analisti_cn sources ON
           if(d.cat==='analisti_cn') existing.on=true;
