@@ -1204,13 +1204,13 @@ var DEFAULTS=[
   {id:'gpf',name:'Geopolitical Futures (feed)',url:'https://geopoliticalfutures.com/feed',cat:'osint',on:true},
   {id:'rane_worldview',name:'RANE Worldview',url:'https://news.google.com/rss/search?q=RANE+worldview+stratfor+geopolitics&hl=en&gl=US&ceid=US:en',cat:'osint',on:true},
 
-  {id:'intelligence_online',name:'Intelligence Online',url:'https://news.google.com/rss/search?q=site:intelligenceonline.com&hl=en&gl=US&ceid=US:en',cat:'osint',on:true},
+  {id:'intelligence_online',name:'Intelligence Online (RSS)',url:'https://feeds.feedburner.com/IntelligenceOnline',cat:'osint',on:true},
 
-  {id:'straitstimes',name:'The Straits Times (RSS)',url:'https://news.google.com/rss/search?q=site:straitstimes.com&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
-  {id:'cna_sg',name:'Channel NewsAsia (RSS)',url:'https://news.google.com/rss/search?q=site:channelnewsasia.com&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
+  {id:'straitstimes',name:'The Straits Times Asia (RSS)',url:'https://www.straitstimes.com/news/asia/rss.xml',cat:'sudest_asia',on:true},
+  {id:'cna_sg',name:'CNA Asia (RSS)',url:'https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml&category=6511',cat:'sudest_asia',on:true},
   {id:'bangkokpost',name:'Bangkok Post',url:'https://news.google.com/rss/search?q=site:bangkokpost.com&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
   {id:'nation_th',name:'The Nation Thailand',url:'https://news.google.com/rss/search?q=site:nationthailand.com&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
-  {id:'vietnamnews',name:'Viet Nam News',url:'https://news.google.com/rss/search?q=site:vietnamnews.vn&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
+  {id:'vietnamnews',name:'Viet Nam News World (RSS)',url:'https://vietnamnews.vn/rss/world.rss',cat:'sudest_asia',on:true},
   {id:'tuoitre',name:'Tuoi Tre News',url:'https://news.google.com/rss/search?q=site:tuoitrenews.vn&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
   {id:'jakartapost',name:'The Jakarta Post',url:'https://news.google.com/rss/search?q=site:thejakartapost.com&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
   {id:'tempo',name:'Tempo',url:'https://news.google.com/rss/search?q=site:tempo.co+OR+site:en.tempo.co&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
@@ -1219,7 +1219,7 @@ var DEFAULTS=[
   {id:'starmalaysia',name:'The Star Malaysia',url:'https://news.google.com/rss/search?q=site:thestar.com.my&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
   {id:'khmertimes',name:'Khmer Times',url:'https://news.google.com/rss/search?q=site:khmertimeskh.com&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
   {id:'myanmarnow',name:'Myanmar Now',url:'https://news.google.com/rss/search?q=site:myanmar-now.org&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
-  {id:'applehk',name:'Apple Daily HK',url:'https://news.google.com/rss/search?q=%22Apple+Daily%22+Hong+Kong&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
+  {id:'mingpao_hk',name:'Ming Pao (HK)',url:'https://news.google.com/rss/search?q=site:mingpao.com+China+OR+%E4%B8%AD%E5%9B%BD&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
   {id:'cna_tw',name:'Central News Agency',url:'https://news.google.com/rss/search?q=site:cna.com.tw&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
   {id:'pla_daily',name:'PLA Daily',url:'https://news.google.com/rss/search?q=site:81.cn+解放军报&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
   {id:'pla_eastern',name:'Eastern Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+东部战区&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
@@ -1231,7 +1231,7 @@ var DEFAULTS=[
   {id:'beijingdaily',name:'Beijing Daily',url:'https://news.google.com/rss/search?q=site:bjd.com.cn&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
   {id:'ce_cn',name:'China Economic Net',url:'https://news.google.com/rss/search?q=site:ce.cn&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
   {id:'gmw',name:'Guangming Daily',url:'https://news.google.com/rss/search?q=site:gmw.cn&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
-  {id:'pekingnology',name:'Pekingnology (feed)',url:'https://www.pekingnology.com/feed',cat:'analisti_cn',on:true},
+  {id:'pekingnology',name:'Pekingnology (Substack feed)',url:'https://pekingnology.substack.com/feed',cat:'analisti_cn',on:true},
 
   {id:'reuters',   name:'Reuters',            cat:'agenzie', url:'https://news.google.com/rss/search?q=reuters+world+news&hl=en&gl=US&ceid=US:en',on:true},
   {id:'ap',        name:'AP',                 cat:'agenzie', url:'https://news.google.com/rss/search?q=associated+press+world&hl=en&gl=US&ceid=US:en',on:true},
@@ -1273,7 +1273,7 @@ var DEFAULTS=[
   {id:'kyivindep', name:'Kyiv Independent',   cat:'regional',url:'https://news.google.com/rss/search?q=site:kyivindependent.com&hl=en',on:true},
   {id:'news24',    name:'News24 Africa',      cat:'regional',url:'https://news.google.com/rss/search?q=site:news24.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'dawn',      name:'Dawn Pakistan',      cat:'regional',url:'https://news.google.com/rss/search?q=site:dawn.com&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'caixin',    name:'Caixin Global',      cat:'regional',url:'https://news.google.com/rss/search?q=site:caixinglobal.com&hl=en',on:true},
+  {id:'caixinglobal_regional',name:'Caixin Global',cat:'regional',url:'https://news.google.com/rss/search?q=site:caixinglobal.com&hl=en',on:true},
   {id:'repubblica',name:'La Repubblica',      cat:'italia',  url:'https://news.google.com/rss/search?q=site:repubblica.it+esteri&hl=en&gl=US&ceid=US:en',on:true},
   {id:'corriere',  name:'Corriere della S.',  cat:'italia',  url:'https://news.google.com/rss/search?q=site:corriere.it+esteri&hl=en',on:true},
   {id:'rainews',   name:'Rainews 24',         cat:'italia',  url:'https://news.google.com/rss/search?q=site:rainews.it&hl=en',on:true},
@@ -1305,7 +1305,7 @@ var DEFAULTS=[
   {id:'osint_twz',    name:'The War Zone',    cat:'osint',   url:'https://news.google.com/rss/search?q=site:twz.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'osint_defone', name:'Defense One',     cat:'osint',   url:'https://news.google.com/rss/search?q=site:defenseone.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'osint_janes',  name:'Janes',           cat:'osint',   url:'https://news.google.com/rss/search?q=site:janes.com&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'osint_oryx',   name:'Oryx',            cat:'osint',   url:'https://news.google.com/rss/search?q=site:oryxspioenkop.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'osint_oryx',   name:'Oryx (RSS)',      cat:'osint',   url:'https://www.oryxspioenkop.com/feeds/posts/default?alt=rss',on:true},
   {id:'osint_geopol', name:'Geopolitical Monitor',cat:'osint',url:'https://news.google.com/rss/search?q=site:geopoliticalmonitor.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'osint_acled',  name:'ACLED',           cat:'osint',   url:'https://news.google.com/rss/search?q=site:acleddata.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'cia',     name:'CIA Newsroom',  cat:'ist', url:'https://news.google.com/rss/search?q=site:cia.gov&hl=en&gl=US&ceid=US:en',on:true},
@@ -1316,7 +1316,7 @@ var DEFAULTS=[
   {id:'dgse_x',  name:'DGSE / X',       cat:'ist', url:'https://news.google.com/rss/search?q=DGSE+France+intelligence&hl=en&gl=US&ceid=US:en',on:true},
   // ── CINA ──────────────────────────────────────────────────────
   {id:'xinhua_cina',name:'Xinhua EN',url:'https://news.google.com/rss/search?q=Xinhua+international+news&hl=en&gl=US&ceid=US:en',cat:'cina',max:15,on:true},
-  {id:'globaltimes',name:'Global Times',url:'https://news.google.com/rss/search?q=%22Global+Times%22+China&hl=en&gl=US&ceid=US:en',cat:'cina',max:10},
+  {id:'globaltimes_cn_main',name:'Global Times',url:'https://news.google.com/rss/search?q=%22Global+Times%22+China&hl=en&gl=US&ceid=US:en',cat:'cina',max:10},
   {id:'chinadigitaltimes',name:'China Digital Times',url:'https://chinadigitaltimes.net/feed/',cat:'cina',max:10},
   // ── GLOBAL MEDIA ──────────────────────────────────────────────
   {id:'wsj_world',name:'WSJ World',url:'https://feeds.a.dj.com/rss/RSSWorldNews.xml',cat:'media',max:15},
@@ -1361,7 +1361,7 @@ var PRESETS=[
   // English-language Chinese state/official media
   {id:'xinhua_en',   name:'Xinhua (EN)',        cat:'cina', url:'https://news.google.com/rss/search?q=Xinhua+world+news+China&hl=en&gl=US&ceid=US:en', on:true},
   {id:'cgtn_en',     name:'CGTN',               cat:'cina', url:'https://news.google.com/rss/search?q=site:cgtn.com&hl=en&gl=US&ceid=US:en', on:true},
-  {id:'globaltimes', name:'Global Times (EN)',   cat:'cina', url:'https://news.google.com/rss/search?q=%22Global+Times%22+China&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'globaltimes_en', name:'Global Times (EN)',cat:'cina', url:'https://news.google.com/rss/search?q=%22Global+Times%22+China&hl=en&gl=US&ceid=US:en', on:true},
   {id:'chinadaily',  name:'China Daily (EN)',    cat:'cina', url:'https://news.google.com/rss/search?q=site:chinadaily.com.cn+world&hl=en&gl=US&ceid=US:en', on:true},
   {id:'people_en',   name:'Peoples Daily (EN)',cat:'cina', url:'https://news.google.com/rss/search?q=site:en.people.cn&hl=en&gl=US&ceid=US:en', on:true},
   // Chinese-language sources (RSS in 中文)
@@ -1369,7 +1369,7 @@ var PRESETS=[
   {id:'people_zh',   name:'人民日报 (中)',        cat:'cina', url:'https://news.google.com/rss/search?q=%E4%BA%BA%E6%B0%91%E6%97%A5%E6%8A%A5+%E5%9B%BD%E9%99%85&hl=en&gl=US&ceid=US:en', on:true},
   {id:'globaltimes_zh',name:'环球时报 (中)',      cat:'cina', url:'https://news.google.com/rss/search?q=环球时报+军事&hl=en&gl=US&ceid=US:en', on:true},
   {id:'guancha',     name:'观察者网 (中)',        cat:'cina', url:'https://news.google.com/rss/search?q=site:guancha.cn+%E5%9B%BD%E9%99%85&hl=en&gl=US&ceid=US:en', on:true},
-  {id:'caixin',      name:'财新 Caixin (中)',     cat:'cina', url:'https://news.google.com/rss/search?q=site:caixin.com&hl=en', on:true},
+  {id:'caixin_cn',   name:'财新 Caixin (中)',cat:'cina', url:'https://news.google.com/rss/search?q=site:caixin.com&hl=en', on:true},
   // Taiwan / HK perspectives  
   {id:'rti_tw',      name:'RTI Taiwan (中)',      cat:'cina', url:'https://news.google.com/rss/search?q=site:rti.org.tw&hl=en&gl=US&ceid=US:en', on:true},
   {id:'rfa_zh',      name:'自由亚洲 RFA (中)',    cat:'cina', url:'https://news.google.com/rss/search?q=site:rfa.org+chinese&hl=en&gl=US&ceid=US:en', on:true},
@@ -1941,7 +1941,7 @@ function addInline(){
   var nm=(document.getElementById('qi-nm').value||'').trim(),url=(document.getElementById('qi-url').value||'').trim(),cat=document.getElementById('qi-cat').value;
   if(!nm||!url){notify('Nome e URL richiesti');return;}
   if(sources.find(function(s){return s.url===url;})){notify('URL gia presente');return;}
-  sources.push({id:'c_'+Date.now(),name:nm,cat:cat,url:url,on:true});
+  sources.push({id:'c_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),name:nm,cat:cat,url:url,on:true});
   persist();renderSrcList();document.getElementById('qi-nm').value='';document.getElementById('qi-url').value='';
   notify('Aggiunto: '+nm);doRefresh();
 }
@@ -1955,7 +1955,7 @@ function addSrc(){
   var nm=(document.getElementById('mn').value||'').trim(),url=(document.getElementById('murl').value||'').trim(),cat=document.getElementById('mcat').value;
   if(!nm||!url){notify('Nome e URL richiesti');return;}
   if(sources.find(function(s){return s.url===url;})){notify('URL gia presente');return;}
-  sources.push({id:'c_'+Date.now(),name:nm,cat:cat,url:url,on:true});
+  sources.push({id:'c_'+Date.now()+'_'+Math.random().toString(36).slice(2,6),name:nm,cat:cat,url:url,on:true});
   persist();renderSrcList();closeSrcModal();notify('Aggiunto: '+nm);doRefresh();
 }
 function addPreset(id){
@@ -3863,6 +3863,36 @@ function toggleSidebar(){
 .briefing-page-section-name{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--acc2);border-left:2px solid var(--acc2);padding-left:7px;}
 .briefing-page-empty{color:var(--mu);font-family:'Share Tech Mono',monospace;font-size:11px;padding:18px 0;}
 
+
+/* iOS: alza e ingrandisce leggermente i bottoni della bottom bar */
+@supports (-webkit-touch-callout: none){
+  @media (max-width:767px){
+    #bottom-nav{
+      height:68px;
+      padding-bottom:max(env(safe-area-inset-bottom), 26px);
+    }
+    #bottom-nav .page-tab{
+      font-size:11px;
+      min-height:56px;
+      justify-content:flex-start;
+      padding-top:8px;
+      padding-bottom:6px;
+    }
+  }
+  @media (max-width:600px){
+    #bottom-nav{
+      height:72px;
+      padding-bottom:max(env(safe-area-inset-bottom), 30px);
+    }
+    #bottom-nav .page-tab{
+      font-size:11px;
+      min-height:58px;
+      justify-content:flex-start;
+      padding-top:9px;
+      padding-bottom:6px;
+    }
+  }
+}
 </style>
 
 
