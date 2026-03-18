@@ -553,13 +553,14 @@ header{
   #bottom-nav .page-tab{
     flex:1;border-radius:0;font-size:10px;
     padding:6px 4px;
-    display:flex;flex-direction:column;align-items:center;justify-content:center;
-    border:none;border-top:2px solid transparent;
+    display:flex;align-items:center;justify-content:center;
+    border:none;outline:none;box-shadow:none;
     min-height:44px;background:transparent;color:var(--tx2);
     cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;
-    letter-spacing:.02em;transition:all .15s;-webkit-tap-highlight-color:transparent;
+    letter-spacing:.02em;transition:color .15s ease,opacity .15s ease;
+    -webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent;
   }
-  #bottom-nav .page-tab.on{border-top-color:var(--acc);color:#eaf6ff;background:rgba(0,184,255,.08);}
+  #bottom-nav .page-tab.on{color:#eaf6ff;background:transparent;}
 
   /* shell fills remaining space between header and bottom-nav automatically */
   .shell{flex:1;min-height:0;height:auto;padding-bottom:0;}
@@ -3863,36 +3864,6 @@ function toggleSidebar(){
 .briefing-page-section-name{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--acc2);border-left:2px solid var(--acc2);padding-left:7px;}
 .briefing-page-empty{color:var(--mu);font-family:'Share Tech Mono',monospace;font-size:11px;padding:18px 0;}
 
-
-/* iOS: alza e ingrandisce leggermente i bottoni della bottom bar */
-@supports (-webkit-touch-callout: none){
-  @media (max-width:767px){
-    #bottom-nav{
-      height:68px;
-      padding-bottom:max(env(safe-area-inset-bottom), 26px);
-    }
-    #bottom-nav .page-tab{
-      font-size:11px;
-      min-height:56px;
-      justify-content:flex-start;
-      padding-top:8px;
-      padding-bottom:6px;
-    }
-  }
-  @media (max-width:600px){
-    #bottom-nav{
-      height:72px;
-      padding-bottom:max(env(safe-area-inset-bottom), 30px);
-    }
-    #bottom-nav .page-tab{
-      font-size:11px;
-      min-height:58px;
-      justify-content:flex-start;
-      padding-top:9px;
-      padding-bottom:6px;
-    }
-  }
-}
 </style>
 
 
