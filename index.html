@@ -540,7 +540,7 @@ header{
 /* ── TABLET PORTRAIT ≤ 767px (iPad portrait) ────────────────────*/
 @media (max-width:767px){
   header{
-    height:52px;
+    height:60px;
     padding-left:max(12px,env(safe-area-inset-left));
     padding-right:max(12px,env(safe-area-inset-right));
     overflow-x:auto;overflow-y:hidden;
@@ -556,23 +556,23 @@ header{
   #bottom-nav{
     display:flex !important;
     flex-shrink:0;
-    height:64px;
-    min-height:64px;
-    padding-top:6px;
-    padding-bottom:calc(env(safe-area-inset-bottom) + 10px);
-    padding-left:max(6px,env(safe-area-inset-left));
-    padding-right:max(6px,env(safe-area-inset-right));
+    height:78px;
+    min-height:78px;
+    padding-top:8px;
+    padding-bottom:calc(env(safe-area-inset-bottom) + 12px);
+    padding-left:max(8px,env(safe-area-inset-left));
+    padding-right:max(8px,env(safe-area-inset-right));
     background:var(--bg2);border-top:1px solid var(--bd2);z-index:400;
     order:99;
   }
   #bottom-nav .page-tab{
-    flex:1;border-radius:0;font-size:10px;
-    padding:8px 4px 10px;
+    flex:1;border-radius:0;font-size:14px;
+    padding:10px 6px 12px;
     display:flex;align-items:flex-start;justify-content:center;
     border:none;outline:none;box-shadow:none;
-    min-height:48px;background:transparent;color:var(--tx2);
-    cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;
-    letter-spacing:.02em;transition:color .15s ease,opacity .15s ease;
+    min-height:56px;background:transparent;color:var(--tx2);
+    cursor:pointer;font-family:'Inter',sans-serif;font-weight:700;
+    letter-spacing:.01em;transition:color .15s ease,opacity .15s ease;
     -webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent;
   }
   #bottom-nav .page-tab.on{color:#eaf6ff;background:transparent;}
@@ -598,29 +598,32 @@ header{
 
   .ops-intel{width:0;overflow:hidden;border:none;}
   .p2-map-toolbar{flex-wrap:wrap;height:auto;gap:4px;padding:6px 8px;}
-  #tv-panel{width:100%!important;height:220px!important;left:0!important;right:0!important;bottom:56px!important;resize:none!important;}
+  #tv-panel{width:100%!important;height:220px!important;left:0!important;right:0!important;bottom:72px!important;resize:none!important;}
 }
 
 /* ── PHONE ≤ 600px ───────────────────────────────────────────────*/
 @media (max-width:600px){
   header{
-    height:50px;gap:8px;
+    height:64px;gap:10px;
     padding-left:max(12px,env(safe-area-inset-left));
     padding-right:max(12px,env(safe-area-inset-right));
     overflow-x:auto;overflow-y:hidden;scrollbar-width:none;flex-wrap:nowrap;
   }
   header::-webkit-scrollbar{display:none;}
-  .logo{font-size:15px;letter-spacing:.2em;flex-shrink:0;}
+  .logo{font-size:16px;letter-spacing:.18em;flex-shrink:0;}
   .live-lbl{display:none;}
   #clock{display:none;}
-  .hright{display:flex;flex-shrink:0;gap:4px;margin-left:auto;align-items:center;}
-  .hright .hbtn{font-size:13px;padding:6px 11px;white-space:nowrap;}
+  .hright{display:flex;flex-shrink:0;gap:6px;margin-left:auto;align-items:center;}
+  .hright .hbtn{font-size:15px;padding:10px 14px;min-height:42px;white-space:nowrap;}
+  .mobile-side-btn{padding:8px 12px;min-height:42px;font-size:15px;}
 
   #bottom-nav{
-    height:50px;
-    padding-bottom:max(env(safe-area-inset-bottom), 18px);
+    height:86px;
+    min-height:86px;
+    padding-top:8px;
+    padding-bottom:max(env(safe-area-inset-bottom), 20px);
   }
-  #bottom-nav .page-tab{font-size:12px;padding:5px 3px 6px;line-height:1.2;font-weight:700;}
+  #bottom-nav .page-tab{font-size:15px;padding:10px 4px 12px;line-height:1.15;font-weight:800;min-height:58px;}
 
   /* shell fills remaining space automatically via flex:1 on body */
   .shell{flex:1;min-height:0;height:auto;padding-bottom:0;}
@@ -650,12 +653,14 @@ header{
   .p2-map-toolbar{flex-wrap:nowrap;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:5px 8px;}
   .p2-map-toolbar::-webkit-scrollbar{display:none;}
   .p2-fullscreen-btn{display:none;}
-  #tv-panel{width:100%!important;height:200px!important;left:0!important;right:0!important;bottom:54px!important;resize:none!important;}
+  #tv-panel{width:100%!important;height:200px!important;left:0!important;right:0!important;bottom:72px!important;resize:none!important;}
 }
 
 @media (max-width:380px){
-  .logo{font-size:13px;letter-spacing:.14em;}
-  #bottom-nav .page-tab{font-size:11px;}
+  .logo{font-size:14px;letter-spacing:.14em;}
+  .hright .hbtn{font-size:14px;padding:9px 12px;min-height:40px;}
+  .mobile-side-btn{font-size:14px;padding:7px 10px;min-height:40px;}
+  #bottom-nav .page-tab{font-size:13px;}
 }
 
 /* ── MOBILE SIDEBAR DRAWER ───────────────────────────────────────*/
@@ -667,8 +672,8 @@ header{
   .shell{position:relative;}
   #mobile-sidebar{
     display:flex!important;position:fixed;
-    top:52px;left:0;
-    bottom:56px;
+    top:60px;left:0;
+    bottom:72px;
     width:min(84vw,300px);z-index:350;
     transform:translateX(-102%);transition:transform .22s ease;
     box-shadow:4px 0 24px rgba(0,0,0,.5);
@@ -678,7 +683,7 @@ header{
   body.mobile-sidebar-open #mobile-sidebar-overlay{display:block;}
 }
 @media (max-width:600px){
-  #mobile-sidebar{top:50px;bottom:54px;}
+  #mobile-sidebar{top:64px;bottom:72px;}
 }
 
 
@@ -706,7 +711,7 @@ header{
 }
 #col-scroll-dots span{width:5px;height:5px;border-radius:50%;background:var(--bd2);transition:background .2s,transform .2s;}
 #col-scroll-dots span.active{background:var(--acc);transform:scale(1.3);}
-@media (max-width:600px){#col-scroll-dots{display:flex;bottom:calc(54px + env(safe-area-inset-bottom));}}
+@media (max-width:600px){#col-scroll-dots{display:flex;bottom:calc(78px + env(safe-area-inset-bottom));}}
 
 /* Source badge */
 .csrc{display:inline-flex;align-items:center;gap:6px;color:#ffffff !important;font-weight:700;letter-spacing:.04em;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:999px;padding:2px 8px;}
@@ -1283,7 +1288,7 @@ var DEFAULTS=[
   {id:'nhk',       name:'NHK World',          cat:'media',   url:'https://news.google.com/rss/search?q=site:nhk.or.jp&hl=en&gl=US&ceid=US:en',on:true},
   {id:'thehill',   name:'The Hill',           cat:'media',   url:'https://news.google.com/rss/search?q=site:thehill.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'axios',     name:'Axios World',        cat:'media',   url:'https://news.google.com/rss/search?q=site:axios.com+world&hl=en',on:true},
-  {id:'nikkei',    name:'Nikkei Asia',        cat:'regional',url:'https://news.google.com/rss/search?q=site:asia.nikkei.com&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'nikkei',    name:'Nikkei Asia',        cat:'regional',url:'https://asia.nikkei.com/rss/feed/nar',on:true},
   {id:'scmp',      name:'S.China Morning',    cat:'regional',url:'https://news.google.com/rss/search?q=site:scmp.com&hl=en',on:true},
   {id:'haaretz',   name:'Haaretz',            cat:'regional',url:'https://news.google.com/rss/search?q=site:haaretz.com&hl=en',on:true},
   {id:'meye',      name:'Middle East Eye',    cat:'regional',url:'https://news.google.com/rss/search?q=site:middleeasteye.net&hl=en',on:true},
@@ -1498,8 +1503,8 @@ function persist(){
 }
 function loadPersist(){
   var DEFAULT_CLOSED=['russia','africa','americas','medioriente'];
-  var LAYOUT_VER='v7';
-  var REMOVED_SOURCE_IDS=['ccg'];
+  var LAYOUT_VER='v10';
+  var REMOVED_SOURCE_IDS=['ccg','caixin','almonitor','mei','mideasteye','arabnews','bbcme','arabiya','trtworld','meduza','moscowtimes','carnegie_russia','lowy','scmp_cn','rti_tw','globaltimes','globaltimes_zh','xinhua_en','xinhua_zh','people_en','people_zh','chinadaily','csis_china','merics','bbcafrica','warontherocks','defensenews','breakingdefense','janes','isw','acled'];
   try{
     // Migrate from old key if present
     if(!localStorage.getItem('sh3_sources_v3')&&localStorage.getItem('sh3_sources_v2')){
@@ -1558,13 +1563,19 @@ function loadPersist(){
     }
     sources=sources.filter(function(s){return REMOVED_SOURCE_IDS.indexOf(s.id)<0;});
     DEFAULTS.forEach(function(d){if(REMOVED_SOURCE_IDS.indexOf(d.id)<0&&!sources.find(function(s){return s.id===d.id;}))sources.push(d);});
-    try{localStorage.setItem('sh3_sources_v3',JSON.stringify(sources));}catch(e){}
-    // Force analisti_cn sources ON unconditionally (always, every load)
-    sources.forEach(function(s){if(s.cat==='analisti_cn')s.on=true;});
-    ['deng_yuwen','china_thought_express','bill_bishop','sinocism','geopolitechs'].forEach(function(id){
-      var src=sources.find(function(s){return s.id===id;});
-      if(src) src.on=true;
+    var FORCE_ON_IDS=[
+      'deng_yuwen','china_thought_express','bill_bishop','sinocism','geopolitechs',
+      'guancha_diyuan','huanqiu_opinion','baidu_diyuan','zhipu_diyuan','csis_china',
+      'ciis','cicir','siis','cfau','ciss','cass','huanqiu_zh','rand','brookings','iiss',
+      'scmp_cn','merics','cna','cna_sg','people_world_zh','arabnews','xinhua_en','cgtn_en',
+      'globaltimes_en','chinadaily','people_en','xinhua_zh','people_zh'
+    ];
+    // Force requested sources ON unconditionally (every load, regardless of saved prefs)
+    sources.forEach(function(s){
+      if(s.cat==='analisti_cn')s.on=true;
+      if(FORCE_ON_IDS.indexOf(s.id)>=0)s.on=true;
     });
+    try{localStorage.setItem('sh3_sources_v3',JSON.stringify(sources));}catch(e){}
     ALL_COLS.forEach(function(c){if(colOrder.indexOf(c.id)<0)colOrder.push(c.id);});
     // Deduplication: rimuovi duplicati da colOrder
     var seen={};
@@ -1916,12 +1927,12 @@ function showTab(id){
 var THEATER_META={
   global:{label:'Globale', cats:['agenzie','media','finance']},
   europa:{label:'Europa', cats:['italia']},
-  medioriente:{label:'Medio Oriente', ids:['almonitor','mei','mideasteye','arabnews','aljazeera','bbcme','arabiya','trtworld']},
-  russia:{label:'Russia / Eurasia', ids:['meduza','moscowtimes','carnegie_russia','tass']},
-  indopacifico:{label:'Indo-Pacifico', cats:['sudest_asia'], ids:['thediplomat','nikkeiasia','lowy','scmp','scmp_cn','rappler','jakartapost','straitstimes','cna_sg','cna_tw','nhk','kyodo','yonhap','pti','the_hindu','rti_tw']},
-  cina:{label:'Cina', cats:['cina'], ids:['globaltimes','globaltimes_zh','xinhua','xinhua_cina','xinhua_en','xinhua_zh','pekingnology','people_en','people_zh','pla_daily','pla_eastern','pla_southern','pla_western','pla_northern','pla_central','caixin','chinadaily','chinadigitaltimes','csis_china','merics','qstheory','beijingdaily','ce_cn','gmw']},
-  africa:{label:'Africa', ids:['bbcafrica']},
-  difesa:{label:'Difesa / OSINT', cats:['osint','ist','cyber','think'], ids:['warontherocks','defensenews','breakingdefense','janes','isw','acled','gpf','rane_worldview','intelligence_online']}
+  medioriente:{label:'Medio Oriente', ids:['haaretz','meye','aljazeera','anadolu','wam']},
+  russia:{label:'Russia / Eurasia', ids:['tass','kyivindep','osint_rferl','dpa']},
+  indopacifico:{label:'Indo-Pacifico', cats:['sudest_asia'], ids:['diplomat','nikkei','scmp','rappler','jakartapost','straitstimes','cna_sg','cna_tw','nhk','kyodo','yonhap','pti','the_hindu','dawn']},
+  cina:{label:'Cina', cats:['cina','analisti_cn'], ids:['xinhua','xinhua_cina','pekingnology','peoples_daily','globaltimes_default','globaltimes_cn_main','pla_daily','pla_eastern','pla_southern','pla_western','pla_northern','pla_central','chinadaily_default','chinadigitaltimes','qstheory','beijingdaily','ce_cn','gmw','mingpao_hk','cna_tw']},
+  africa:{label:'Africa', ids:['news24','afp','rfi']},
+  difesa:{label:'Difesa / OSINT', cats:['osint','ist','cyber'], ids:['warzone','defone','osint_janes','osint_acled','osint_oryx','gpf','rane_worldview','intelligence_online','intelonline']}
 };
 function sourceTheater(s){
   var id=(s.id||'').toLowerCase(), cat=(s.cat||'').toLowerCase();
@@ -3905,7 +3916,7 @@ function toggleSidebar(){
 
 <script>
 (function(){
-  var APP_VERSION='2.5';
+  var APP_VERSION='2.6';
   var VERSION_KEY='sh3_app_version';
   try{
     var savedVersion=localStorage.getItem(VERSION_KEY)||'';
