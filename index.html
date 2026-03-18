@@ -522,6 +522,18 @@ header{
   .hbtn{padding:4px 8px;font-size:11px;}
 }
 
+/* iPadOS / tablet: top header can scroll horizontally */
+@media (min-width:768px) and (max-width:1199px){
+  header{
+    overflow-x:auto;overflow-y:hidden;
+    scrollbar-width:none;flex-wrap:nowrap;
+    -webkit-overflow-scrolling:touch;
+  }
+  header::-webkit-scrollbar{display:none;}
+  header > *{flex-shrink:0;}
+  #page-tabs-header{flex-shrink:0;}
+}
+
 /* Bottom nav: hidden on desktop */
 #bottom-nav{display:none;}
 
@@ -533,6 +545,7 @@ header{
     padding-right:max(12px,env(safe-area-inset-right));
     overflow-x:auto;overflow-y:hidden;
     scrollbar-width:none;flex-wrap:nowrap;
+    -webkit-overflow-scrolling:touch;
   }
   header::-webkit-scrollbar{display:none;}
   header::-webkit-scrollbar{display:none;}
@@ -543,19 +556,21 @@ header{
   #bottom-nav{
     display:flex !important;
     flex-shrink:0;
-    height:52px;
-    padding-bottom:env(safe-area-inset-bottom);
-    padding-left:env(safe-area-inset-left);
-    padding-right:env(safe-area-inset-right);
+    height:64px;
+    min-height:64px;
+    padding-top:6px;
+    padding-bottom:calc(env(safe-area-inset-bottom) + 10px);
+    padding-left:max(6px,env(safe-area-inset-left));
+    padding-right:max(6px,env(safe-area-inset-right));
     background:var(--bg2);border-top:1px solid var(--bd2);z-index:400;
     order:99;
   }
   #bottom-nav .page-tab{
     flex:1;border-radius:0;font-size:10px;
-    padding:6px 4px;
-    display:flex;align-items:center;justify-content:center;
+    padding:8px 4px 10px;
+    display:flex;align-items:flex-start;justify-content:center;
     border:none;outline:none;box-shadow:none;
-    min-height:44px;background:transparent;color:var(--tx2);
+    min-height:48px;background:transparent;color:var(--tx2);
     cursor:pointer;font-family:'Inter',sans-serif;font-weight:600;
     letter-spacing:.02em;transition:color .15s ease,opacity .15s ease;
     -webkit-appearance:none;appearance:none;-webkit-tap-highlight-color:transparent;
@@ -1371,7 +1386,6 @@ var PRESETS=[
   {id:'people_zh',   name:'人民日报 (中)',        cat:'cina', url:'https://news.google.com/rss/search?q=%E4%BA%BA%E6%B0%91%E6%97%A5%E6%8A%A5+%E5%9B%BD%E9%99%85&hl=en&gl=US&ceid=US:en', on:true},
   {id:'globaltimes_zh',name:'环球时报 (中)',      cat:'cina', url:'https://news.google.com/rss/search?q=环球时报+军事&hl=en&gl=US&ceid=US:en', on:true},
   {id:'guancha',     name:'观察者网 (中)',        cat:'cina', url:'https://news.google.com/rss/search?q=site:guancha.cn+%E5%9B%BD%E9%99%85&hl=en&gl=US&ceid=US:en', on:true},
-  {id:'caixin_cn',   name:'财新 Caixin (中)',cat:'cina', url:'https://news.google.com/rss/search?q=site:caixin.com&hl=en', on:true},
   // Taiwan / HK perspectives  
   {id:'rti_tw',      name:'RTI Taiwan (中)',      cat:'cina', url:'https://news.google.com/rss/search?q=site:rti.org.tw&hl=en&gl=US&ceid=US:en', on:true},
   {id:'rfa_zh',      name:'自由亚洲 RFA (中)',    cat:'cina', url:'https://news.google.com/rss/search?q=site:rfa.org+chinese&hl=en&gl=US&ceid=US:en', on:true},
