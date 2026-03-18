@@ -1252,6 +1252,7 @@ var DEFAULTS=[
   {id:'anadolu',   name:'Anadolu Agency',     cat:'agenzie', url:'https://news.google.com/rss/search?q=site:aa.com.tr&hl=en',on:true},
   {id:'wam',       name:'WAM (UAE)',           cat:'agenzie', url:'https://news.google.com/rss/search?q=site:wam.ae&hl=en',on:true},
   {id:'pti',       name:'PTI (India)',        cat:'agenzie', url:'https://news.google.com/rss/search?q=press+trust+india&hl=en',on:true},
+  {id:'the_hindu', name:'The Hindu',          cat:'sudest_asia', url:'https://news.google.com/rss/search?q=site:thehindu.com+india+OR+indopacific&hl=en&gl=US&ceid=US:en',on:true},
   {id:'prensa',    name:'Prensa Latina',      cat:'agenzie', url:'https://news.google.com/rss/search?q=site:plenglish.com&hl=en',on:true},
   {id:'bbc',       name:'BBC World',          cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+world+news&hl=en&gl=US&ceid=US:en',on:true},
   {id:'aljazeera', name:'Al Jazeera',         cat:'media',   url:'https://news.google.com/rss/search?q=site:aljazeera.com&hl=en&gl=US&ceid=US:en',on:true},
@@ -1539,6 +1540,10 @@ function loadPersist(){
     DEFAULTS.forEach(function(d){if(!sources.find(function(s){return s.id===d.id;}))sources.push(d);});
     // Force analisti_cn sources ON unconditionally (always, every load)
     sources.forEach(function(s){if(s.cat==='analisti_cn')s.on=true;});
+    ['deng_yuwen','china_thought_express','bill_bishop','sinocism','geopolitechs'].forEach(function(id){
+      var src=sources.find(function(s){return s.id===id;});
+      if(src) src.on=true;
+    });
     ALL_COLS.forEach(function(c){if(colOrder.indexOf(c.id)<0)colOrder.push(c.id);});
     // Deduplication: rimuovi duplicati da colOrder
     var seen={};
@@ -1892,7 +1897,7 @@ var THEATER_META={
   europa:{label:'Europa', cats:['italia']},
   medioriente:{label:'Medio Oriente', ids:['almonitor','mei','mideasteye','arabnews','aljazeera','bbcme','arabiya','trtworld']},
   russia:{label:'Russia / Eurasia', ids:['meduza','moscowtimes','carnegie_russia','tass']},
-  indopacifico:{label:'Indo-Pacifico', cats:['sudest_asia'], ids:['thediplomat','nikkeiasia','lowy','scmp','scmp_cn','rappler','jakartapost','straitstimes','cna_sg','cna_tw','nhk','kyodo','yonhap','pti','rti_tw']},
+  indopacifico:{label:'Indo-Pacifico', cats:['sudest_asia'], ids:['thediplomat','nikkeiasia','lowy','scmp','scmp_cn','rappler','jakartapost','straitstimes','cna_sg','cna_tw','nhk','kyodo','yonhap','pti','the_hindu','rti_tw']},
   cina:{label:'Cina', cats:['cina'], ids:['globaltimes','globaltimes_zh','xinhua','xinhua_cina','xinhua_en','xinhua_zh','pekingnology','people_en','people_zh','pla_daily','pla_eastern','pla_southern','pla_western','pla_northern','pla_central','caixin','chinadaily','chinadigitaltimes','csis_china','merics','qstheory','beijingdaily','ce_cn','gmw']},
   africa:{label:'Africa', ids:['bbcafrica']},
   difesa:{label:'Difesa / OSINT', cats:['osint','ist','cyber','think'], ids:['warontherocks','defensenews','breakingdefense','janes','isw','acled','gpf','rane_worldview','intelligence_online']}
