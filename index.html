@@ -157,6 +157,7 @@ header{
 .tvsel{max-width:110px;}
 .tvbtn2{background:none;border:1px solid var(--bd2);color:var(--mu);cursor:pointer;font-size:9px;padding:1px 5px;font-family:'Share Tech Mono',monospace;flex-shrink:0;white-space:nowrap;transition:all .15s;}
 .tvbtn2:hover{border-color:var(--re);color:var(--re);}
+#tv-close-btn{font-size:24px;padding:4px 12px;min-width:44px;min-height:38px;line-height:1;font-weight:700;color:var(--re)!important;display:inline-flex;align-items:center;justify-content:center;}
 #tv-yt-wrap{flex:1;position:relative;min-height:0;background:#000;overflow:hidden;}
 #tv-yt-wrap iframe{position:absolute;inset:0;width:100%!important;height:100%!important;border:none;}
 #tv-hls-video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:none;}
@@ -1215,7 +1216,7 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
     </select>
     <button class="tvbtn2" id="tv-mute-btn" onclick="tvUnmute()">SUONO</button>
     <button class="tvbtn2" onclick="tvOpenYT()">YT &#x2197;</button>
-    <button class="tvbtn2" onclick="tvClose()" style="color:var(--re)">&#x2715;</button>
+    <button class="tvbtn2" id="tv-close-btn" onclick="tvClose()" aria-label="Chiudi video player">&#x2715;</button>
   </div>
   <div id="tv-yt-wrap">
     <video webkit-playsinline autoplay controls id="tv-hls-video" playsinline muted style="width:100%;height:100%;"></video>
