@@ -4493,5 +4493,108 @@ window._refreshP2Overlay=function(){
 })();
 </script>
 
+
+<style id="ipados-upgrade-style">
+/* ── IPADOS UPGRADE ───────────────────────────────────────────── */
+@media (min-width:768px) and (max-width:1199px){
+  body.ipados-mode{font-size:16px;}
+  body.ipados-mode header{height:58px;gap:10px;padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env(safe-area-inset-right));}
+  body.ipados-mode .logo{font-size:18px;letter-spacing:.22em;}
+  body.ipados-mode .hbtn{font-size:12px;padding:7px 12px;min-height:36px;}
+  body.ipados-mode .page-tab{font-size:12px;padding:7px 12px;}
+  body.ipados-mode #clock{font-size:18px;}
+  body.ipados-mode #page-1.on{display:flex;min-width:0;min-height:0;}
+  body.ipados-mode .sidebar{display:flex;min-height:0;background:linear-gradient(180deg,rgba(255,255,255,.02),transparent),var(--s);}
+  body.ipados-mode .main-area{min-width:0;min-height:0;overflow:hidden;}
+  body.ipados-mode .col-hd{padding:11px 12px;}
+  body.ipados-mode .col-name{font-size:12px;}
+  body.ipados-mode .col-feed{padding:6px 0;}
+  body.ipados-mode .card{padding:12px 14px;}
+  body.ipados-mode .ctlink{font-size:15px;line-height:1.42;}
+  body.ipados-mode .cdesc{font-size:13px;line-height:1.42;}
+  body.ipados-mode #tv-panel{border-radius:14px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.55);}
+}
+
+/* iPad landscape: vera dashboard a 2 colonne visibili + pannello laterale */
+@media (min-width:950px) and (max-width:1199px) and (orientation:landscape){
+  body.ipados-landscape #page-1.on{display:grid;grid-template-columns:260px minmax(0,1fr);align-items:stretch;}
+  body.ipados-landscape.sidebar-collapsed #page-1.on{grid-template-columns:minmax(0,1fr);}
+  body.ipados-landscape.sidebar-collapsed .sidebar{display:none!important;}
+  body.ipados-landscape .sidebar{width:auto!important;border-right:1px solid var(--bd2);}
+  body.ipados-landscape .tabs{min-height:42px;}
+  body.ipados-landscape .tab{font-size:11px;padding:10px 4px;}
+  body.ipados-landscape .cols-wrap{
+    display:grid!important;
+    grid-auto-flow:column;
+    grid-auto-columns:minmax(44vw,1fr);
+    gap:10px;
+    padding:10px 10px 10px 12px;
+    overflow-x:auto;overflow-y:hidden;
+    scroll-snap-type:x proximity;
+  }
+  body.ipados-landscape .acol{
+    min-width:0!important;max-width:none!important;flex:none;
+    border:1px solid var(--bd);
+    border-radius:14px;
+    background:linear-gradient(180deg,rgba(255,255,255,.02),transparent),var(--bg);
+    scroll-snap-align:start;
+  }
+  body.ipados-landscape .add-col-btn{min-width:52px;border:1px dashed var(--bd2);border-radius:14px;margin-right:4px;}
+  body.ipados-landscape #tv-panel{width:min(430px,40vw);height:min(250px,28vh);bottom:16px;right:16px;}
+}
+
+/* iPad portrait: una vista più pulita, sidebar richiamabile */
+@media (min-width:768px) and (max-width:1024px) and (orientation:portrait){
+  body.ipados-portrait #page-tabs-header{display:flex!important;}
+  body.ipados-portrait .mobile-side-btn{display:inline-flex;align-items:center;justify-content:center;}
+  body.ipados-portrait #sidebar-toggle-btn{display:none;}
+  body.ipados-portrait #page-1.on{display:flex;min-width:0;min-height:0;}
+  body.ipados-portrait .sidebar{
+    position:fixed;top:58px;left:0;bottom:0;width:min(340px,44vw)!important;z-index:330;
+    transform:translateX(-100%);transition:transform .22s ease;box-shadow:18px 0 40px rgba(0,0,0,.38);
+  }
+  body.ipados-portrait.mobile-sidebar-open .sidebar{transform:translateX(0);}
+  body.ipados-portrait #mobile-sidebar-overlay{display:none;position:fixed;inset:58px 0 0 0;background:rgba(0,0,0,.45);z-index:320;}
+  body.ipados-portrait.mobile-sidebar-open #mobile-sidebar-overlay{display:block;}
+  body.ipados-portrait .mobile-sidebar-head{display:block;}
+  body.ipados-portrait .main-area{width:100%;}
+  body.ipados-portrait .cols-wrap{
+    display:grid!important;
+    grid-auto-flow:column;
+    grid-auto-columns:minmax(72vw,1fr);
+    gap:12px;
+    padding:12px;
+    overflow-x:auto;overflow-y:hidden;
+    scroll-snap-type:x proximity;
+  }
+  body.ipados-portrait .acol{
+    min-width:0!important;max-width:none!important;flex:none;
+    border:1px solid var(--bd);border-radius:14px;scroll-snap-align:start;
+    background:linear-gradient(180deg,rgba(255,255,255,.02),transparent),var(--bg);
+  }
+  body.ipados-portrait .add-col-btn{min-width:56px;border:1px dashed var(--bd2);border-radius:14px;}
+  body.ipados-portrait #tv-panel{width:min(540px,78vw);height:min(290px,30vh);left:50%!important;right:auto!important;transform:translateX(-50%);bottom:16px;}
+}
+</style>
+<script id="ipados-upgrade-script">
+(function(){
+  function syncIpadMode(){
+    var w=window.innerWidth;
+    var isIpad=w>=768 && w<=1199;
+    var portrait=window.matchMedia('(orientation: portrait)').matches;
+    document.body.classList.toggle('ipados-mode', isIpad);
+    document.body.classList.toggle('ipados-portrait', isIpad && portrait);
+    document.body.classList.toggle('ipados-landscape', isIpad && !portrait);
+    if(!(isIpad && portrait)){
+      document.body.classList.remove('mobile-sidebar-open');
+    }
+  }
+  window.addEventListener('resize', syncIpadMode);
+  window.addEventListener('orientationchange', syncIpadMode);
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', syncIpadMode);
+  else syncIpadMode();
+})();
+</script>
+
 </body>
 </html>
