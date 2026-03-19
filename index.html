@@ -11,8 +11,6 @@
 <link rel="icon" type="image/svg+xml" href="sherlock-icon.svg">
 <title>SHERLOCK – Responsive</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.14/dist/hls.min.js"></script>
-<script src="https://www.youtube.com/iframe_api"></script>
 <style>
 :root{--bg:#0d1117;--bg2:#111827;--s:#161d2e;--s2:#1c2640;--bd:#1f2d44;--bd2:#2d3f5c;--acc:#00b8ff;--acc2:#0090cc;--acc3:#001830;--tx:#d8e4f0;--tx2:#7a9ab8;--mu:#3d5270;--re:#ff3d57;--am:#f0a500;}
 [data-theme=light]{--bg:#f4f4f5;--bg2:#e8e8ea;--s:#fff;--s2:#f0f0f0;--bd:#d4d4d8;--bd2:#a1a1aa;--acc:#16a34a;--acc2:#15803d;--acc3:#dcfce7;--tx:#09090b;--tx2:#3f3f46;--mu:#a1a1aa;--re:#dc2626;--am:#d97706;}
@@ -3215,6 +3213,37 @@ var TV_CH=[
   {name:'CNBC',          type:'embed', embed:'https://www.youtube-nocookie.com/embed/live_stream?channel=UCrp_UI8XtuYfpiqluWLD7Lw&autoplay=1&mute=1&playsinline=1', link:'https://www.youtube.com/@CNBCTelevision/streams'},
 ];
 var _tvIdx=0,_tvMuted=true,_hlsInst=null,_tvHlsTimeout=null;
+var _tvLibsPromise=null,_ytPlayer=null,_ytAPIReady=false,_ytPendingId=null;
+function _loadScriptOnce(src,checkReady){
+  return new Promise(function(resolve,reject){
+    try{ if(checkReady && checkReady()){ resolve(); return; } }catch(e){}
+    var existing=document.querySelector('script[data-src="'+src+'"]');
+    if(existing){
+      existing.addEventListener('load',function(){resolve();},{once:true});
+      existing.addEventListener('error',function(){reject(new Error('script load error'));},{once:true});
+      return;
+    }
+    var s=document.createElement('script');
+    s.src=src;
+    s.async=true;
+    s.defer=true;
+    s.dataset.src=src;
+    s.onload=function(){resolve();};
+    s.onerror=function(){reject(new Error('script load error'));};
+    document.head.appendChild(s);
+  });
+}
+function _ensureTvLibs(){
+  if(_tvLibsPromise) return _tvLibsPromise;
+  _tvLibsPromise=Promise.all([
+    _loadScriptOnce('https://cdn.jsdelivr.net/npm/hls.js@1.4.14/dist/hls.min.js', function(){ return typeof Hls!=='undefined'; }),
+    _loadScriptOnce('https://www.youtube.com/iframe_api', function(){ return _ytAPIReady || (typeof YT!=='undefined' && YT.Player); })
+  ]).catch(function(err){
+    _tvLibsPromise=null;
+    throw err;
+  });
+  return _tvLibsPromise;
+}
 
 function _tvWrap(){return document.getElementById('tv-yt-wrap');}
 function _tvGetVideo(){return document.getElementById('tv-hls-video');}
@@ -3330,7 +3359,6 @@ function _tryHLS(url,ytId,idx){
   }else{fallback();}
 }
 // ── YouTube IFrame Player API ──────────────────────────────────────
-var _ytPlayer=null,_ytAPIReady=false,_ytPendingId=null;
 window.onYouTubeIframeAPIReady=function(){
   _ytAPIReady=true;
   if(_ytPendingId){var id=_ytPendingId;_ytPendingId=null;_ytEmbed(id);}
@@ -3398,7 +3426,17 @@ function _showTVMsg(txt,btnTxt,btnUrl){
 
 function tvUnmute(){_tvMuted=!_tvMuted;var vid=_tvGetVideo();if(vid&&vid.style.display!=='none'){vid.muted=_tvMuted;if(!_tvMuted)vid.play().catch(function(){});}_updateMuteBtn();}
 function _updateMuteBtn(){var b=document.getElementById('tv-mute-btn');if(b)b.textContent=_tvMuted?'SUONO':'MUTE';}
-function tvChange(){var sel=document.getElementById('tvsel');if(sel)_buildPlayer(parseInt(sel.value,10));}
+function tvChange(){
+  var sel=document.getElementById('tvsel');
+  if(!sel) return;
+  var idx=parseInt(sel.value,10);
+  var panel=document.getElementById('tv-panel');
+  if(panel && !panel.classList.contains('tv-off')){
+    _ensureTvLibs().then(function(){_buildPlayer(idx);}).catch(function(){_showTVMsg('Player non disponibile','Apri stream ↗',_tvOpenUrlFor(idx));});
+  }else{
+    _tvIdx=idx;
+  }
+}
 function tvToggle(){
   var panel=document.getElementById('tv-panel');
   if(!panel)return;
@@ -3406,7 +3444,8 @@ function tvToggle(){
   panel.classList.remove('tv-page-mode');
   if(isOff){
     panel.classList.remove('tv-off');
-    _buildPlayer(_tvIdx);
+    _showTVMsg('Caricamento player…','Apri stream ↗',_tvOpenUrlFor(_tvIdx));
+    _ensureTvLibs().then(function(){_buildPlayer(_tvIdx);}).catch(function(){_showTVMsg('Player non disponibile','Apri stream ↗',_tvOpenUrlFor(_tvIdx));});
   } else {
     panel.classList.add('tv-off');
     _tvResetSurface();
