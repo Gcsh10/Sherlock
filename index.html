@@ -9,7 +9,7 @@
 <meta name="theme-color" content="#09090b">
 <link rel="apple-touch-icon" href="sherlock-icon.png">
 <link rel="icon" type="image/svg+xml" href="sherlock-icon.svg">
-<title>SHERLOCK</title>
+<title>SHERLOCK – Responsive</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.14/dist/hls.min.js"></script>
 <script src="https://www.youtube.com/iframe_api"></script>
@@ -164,6 +164,7 @@ header{
 .tv-msg a{color:var(--re);text-decoration:none;}
 
 /* page switcher removed */
+#page-5{display:none!important;}
 
 
 
@@ -905,7 +906,7 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
     <button class="page-tab" id="ptab-2" onclick="switchPage(2)">Mappa</button>
     <button class="page-tab" id="ptab-3" onclick="switchPage(3)">Timeline</button>
     <button class="page-tab" id="ptab-4" onclick="switchPage(4)">Briefing</button>
-    <button class="page-tab" id="ptab-tv" onclick="tvToggle()">Live TV</button>
+    <button class="page-tab" id="ptab-5" onclick="tvToggle()">Live TV</button>
   </div>
   <div class="hright">
     <span id="clock"></span>
@@ -928,16 +929,16 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
     {label:'Mappa',    page:2},
     {label:'Timeline', page:3},
     {label:'Briefing', page:4},
-    {label:'Live TV',  page:'tv'}
+    {label:'Live TV',  live:true}
   ];
   tabs.forEach(function(t){
     var btn=document.createElement('button');
     btn.className='page-tab'+(t.page===1?' on':'');
-    btn.setAttribute('data-page',t.page);
+    if(t.page) btn.setAttribute('data-page',t.page);
+    if(t.live) btn.setAttribute('data-live','1');
     btn.textContent=t.label;
     btn.addEventListener('click',function(){
-      if(t.page==='tv'){tvToggle();}
-      else{switchPage(t.page);}
+      if(t.live) tvToggle(); else switchPage(t.page);
     });
     nav.appendChild(btn);
   });
@@ -1192,6 +1193,9 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
       <div class="briefing-page-body" id="briefing-page-body"></div>
     </div>
   </div><!-- /page-4 -->
+
+  <!-- PAGINA 5: LIVE TV -->
+  <div class="page" id="page-5" style="flex:1;min-height:0;flex-direction:column;"></div>
 </div>
 
 <div id="tv-panel" class="tv-off">
@@ -1528,7 +1532,7 @@ function loadPersist(){
           var existing=savedIds[d.id]?savedIds[d.id]:d;
           if(d.id==='wsj') existing.url='https://feeds.a.dj.com/rss/RSSWorldNews.xml';
           if(d.id==='rane_worldview') existing.url='https://news.google.com/rss/search?q=RANE+worldview+stratfor+geopolitics&hl=en&gl=US&ceid=US:en';
-          if(['xinhua','peoples_daily','cgtn_default','globaltimes_default','chinadaily_default'].indexOf(d.id)>=0) existing.on=true;
+          if(['xinhua','peoples_daily','cgtn_default','globaltimes_default','chinadaily_default','thepaper_zh','xinhua_cina','xinhua_en','xinhua_zh','globaltimes_cn_main','globaltimes_en','globaltimes_zh','chinadaily'].indexOf(d.id)>=0) existing.on=true;
           // Force all analisti_cn sources ON
           if(d.cat==='analisti_cn') existing.on=true;
           // Always sync cat and url from DEFAULTS — fixes migrations when categories change
@@ -2038,10 +2042,11 @@ function switchPage(n){
     var tb=document.querySelector('#bottom-nav [data-page="'+i+'"]');
     if(tb)tb.classList.toggle('on',n===i);
   });
-  var tvH=document.getElementById('ptab-tv');
-  var tvB=document.querySelector('#bottom-nav [data-page="tv"]');
-  if(tvH)tvH.classList.remove('on');
-  if(tvB)tvB.classList.remove('on');
+
+  var liveBtn=document.getElementById('ptab-5');
+  if(liveBtn) liveBtn.classList.remove('on');
+  var liveMobile=document.querySelector('#bottom-nav [data-live="1"]');
+  if(liveMobile) liveMobile.classList.remove('on');
 
   // Pause pin/hotspot CSS animations when NOT on map — saves GPU
   var st=document.getElementById('_mapAnimPause');
@@ -3393,14 +3398,32 @@ function _showTVMsg(txt,btnTxt,btnUrl){
 function tvUnmute(){_tvMuted=!_tvMuted;var vid=_tvGetVideo();if(vid&&vid.style.display!=='none'){vid.muted=_tvMuted;if(!_tvMuted)vid.play().catch(function(){});}_updateMuteBtn();}
 function _updateMuteBtn(){var b=document.getElementById('tv-mute-btn');if(b)b.textContent=_tvMuted?'SUONO':'MUTE';}
 function tvChange(){var sel=document.getElementById('tvsel');if(sel)_buildPlayer(parseInt(sel.value,10));}
-function tvToggle(){var panel=document.getElementById('tv-panel');if(!panel)return;if(panel.classList.contains('tv-off')){panel.classList.remove('tv-off');_buildPlayer(_tvIdx);}else{tvClose();}}
-function tvClose(){_tvResetSurface();var panel=document.getElementById('tv-panel');if(panel)panel.classList.add('tv-off');}
+function tvToggle(){
+  var panel=document.getElementById('tv-panel');
+  if(!panel)return;
+  var isOff=panel.classList.contains('tv-off');
+  panel.classList.remove('tv-page-mode');
+  if(isOff){
+    panel.classList.remove('tv-off');
+    _buildPlayer(_tvIdx);
+  } else {
+    panel.classList.add('tv-off');
+    _tvResetSurface();
+  }
+}
+function tvClose(){
+  var panel=document.getElementById('tv-panel');
+  if(!panel)return;
+  panel.classList.remove('tv-page-mode');
+  panel.classList.add('tv-off');
+  _tvResetSurface();
+}
 function tvOpenYT(){var ch=TV_CH[_tvIdx];if(!ch)return;var url=_tvOpenUrlFor(_tvIdx);if(url)window.open(url,'_blank');}
 (function(){
   var hd=document.getElementById('tvhd'),panel=document.getElementById('tv-panel');
   if(!hd||!panel)return;
   var dx=0,dy=0,down=false;
-  hd.addEventListener('mousedown',function(e){if(e.target.tagName==='BUTTON'||e.target.tagName==='SELECT')return;down=true;dx=e.clientX-panel.offsetLeft;dy=e.clientY-panel.offsetTop;e.preventDefault();});
+  hd.addEventListener('mousedown',function(e){if(panel.classList.contains('tv-page-mode'))return;if(e.target.tagName==='BUTTON'||e.target.tagName==='SELECT')return;down=true;dx=e.clientX-panel.offsetLeft;dy=e.clientY-panel.offsetTop;e.preventDefault();});
   document.addEventListener('mousemove',function(e){if(!down)return;panel.style.left=(e.clientX-dx)+'px';panel.style.top=(e.clientY-dy)+'px';panel.style.right='auto';panel.style.bottom='auto';});
   document.addEventListener('mouseup',function(){down=false;});
 })();
@@ -3542,7 +3565,9 @@ document.addEventListener('click', function(e){
   }catch(e){}
 });
 
+try{document.body.classList.remove('sidebar-collapsed');}catch(e){}
 loadPersist();
+try{document.body.classList.remove('sidebar-collapsed');}catch(e){}
 renderAll();
 doRefresh();
 
@@ -4494,105 +4519,169 @@ window._refreshP2Overlay=function(){
 </script>
 
 
-<style id="ipados-upgrade-style">
-/* ── IPADOS UPGRADE ───────────────────────────────────────────── */
-@media (min-width:768px) and (max-width:1199px){
-  body.ipados-mode{font-size:16px;}
-  body.ipados-mode header{height:58px;gap:10px;padding-left:max(14px,env(safe-area-inset-left));padding-right:max(14px,env(safe-area-inset-right));}
-  body.ipados-mode .logo{font-size:18px;letter-spacing:.22em;}
-  body.ipados-mode .hbtn{font-size:12px;padding:7px 12px;min-height:36px;}
-  body.ipados-mode .page-tab{font-size:12px;padding:7px 12px;}
-  body.ipados-mode #clock{font-size:18px;}
-  body.ipados-mode #page-1.on{display:flex;min-width:0;min-height:0;}
-  body.ipados-mode .sidebar{display:flex;min-height:0;background:linear-gradient(180deg,rgba(255,255,255,.02),transparent),var(--s);}
-  body.ipados-mode .main-area{min-width:0;min-height:0;overflow:hidden;}
-  body.ipados-mode .col-hd{padding:11px 12px;}
-  body.ipados-mode .col-name{font-size:12px;}
-  body.ipados-mode .col-feed{padding:6px 0;}
-  body.ipados-mode .card{padding:12px 14px;}
-  body.ipados-mode .ctlink{font-size:15px;line-height:1.42;}
-  body.ipados-mode .cdesc{font-size:13px;line-height:1.42;}
-  body.ipados-mode #tv-panel{border-radius:14px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.55);}
-}
 
-/* iPad landscape: vera dashboard a 2 colonne visibili + pannello laterale */
-@media (min-width:950px) and (max-width:1199px) and (orientation:landscape){
-  body.ipados-landscape #page-1.on{display:grid;grid-template-columns:260px minmax(0,1fr);align-items:stretch;}
-  body.ipados-landscape.sidebar-collapsed #page-1.on{grid-template-columns:minmax(0,1fr);}
-  body.ipados-landscape.sidebar-collapsed .sidebar{display:none!important;}
-  body.ipados-landscape .sidebar{width:auto!important;border-right:1px solid var(--bd2);}
-  body.ipados-landscape .tabs{min-height:42px;}
-  body.ipados-landscape .tab{font-size:11px;padding:10px 4px;}
-  body.ipados-landscape .cols-wrap{
-    display:grid!important;
-    grid-auto-flow:column;
-    grid-auto-columns:minmax(44vw,1fr);
-    gap:10px;
-    padding:10px 10px 10px 12px;
-    overflow-x:auto;overflow-y:hidden;
-    scroll-snap-type:x proximity;
-  }
-  body.ipados-landscape .acol{
-    min-width:0!important;max-width:none!important;flex:none;
-    border:1px solid var(--bd);
-    border-radius:14px;
-    background:linear-gradient(180deg,rgba(255,255,255,.02),transparent),var(--bg);
-    scroll-snap-align:start;
-  }
-  body.ipados-landscape .add-col-btn{min-width:52px;border:1px dashed var(--bd2);border-radius:14px;margin-right:4px;}
-  body.ipados-landscape #tv-panel{width:min(430px,40vw);height:min(250px,28vh);bottom:16px;right:16px;}
+<style id="browser-page-fixes">
+@media (min-width:1200px){
+  #tv-panel.tv-page-mode{position:fixed;top:46px;left:0;right:0;bottom:0;width:auto!important;height:auto!important;min-width:0;min-height:0;resize:none;z-index:320;border:0;border-top:1px solid var(--bd2);box-shadow:none;}
+  #tv-panel.tv-page-mode .tvhd{height:42px;padding:6px 10px;cursor:default;}
+  #tv-panel.tv-page-mode #tv-yt-wrap{height:calc(100% - 42px);}
 }
-
-/* iPad portrait: una vista più pulita, sidebar richiamabile */
-@media (min-width:768px) and (max-width:1024px) and (orientation:portrait){
-  body.ipados-portrait #page-tabs-header{display:flex!important;}
-  body.ipados-portrait .mobile-side-btn{display:inline-flex;align-items:center;justify-content:center;}
-  body.ipados-portrait #sidebar-toggle-btn{display:none;}
-  body.ipados-portrait #page-1.on{display:flex;min-width:0;min-height:0;}
-  body.ipados-portrait .sidebar{
-    position:fixed;top:58px;left:0;bottom:0;width:min(340px,44vw)!important;z-index:330;
-    transform:translateX(-100%);transition:transform .22s ease;box-shadow:18px 0 40px rgba(0,0,0,.38);
-  }
-  body.ipados-portrait.mobile-sidebar-open .sidebar{transform:translateX(0);}
-  body.ipados-portrait #mobile-sidebar-overlay{display:none;position:fixed;inset:58px 0 0 0;background:rgba(0,0,0,.45);z-index:320;}
-  body.ipados-portrait.mobile-sidebar-open #mobile-sidebar-overlay{display:block;}
-  body.ipados-portrait .mobile-sidebar-head{display:block;}
-  body.ipados-portrait .main-area{width:100%;}
-  body.ipados-portrait .cols-wrap{
-    display:grid!important;
-    grid-auto-flow:column;
-    grid-auto-columns:minmax(72vw,1fr);
-    gap:12px;
-    padding:12px;
-    overflow-x:auto;overflow-y:hidden;
-    scroll-snap-type:x proximity;
-  }
-  body.ipados-portrait .acol{
-    min-width:0!important;max-width:none!important;flex:none;
-    border:1px solid var(--bd);border-radius:14px;scroll-snap-align:start;
-    background:linear-gradient(180deg,rgba(255,255,255,.02),transparent),var(--bg);
-  }
-  body.ipados-portrait .add-col-btn{min-width:56px;border:1px dashed var(--bd2);border-radius:14px;}
-  body.ipados-portrait #tv-panel{width:min(540px,78vw);height:min(290px,30vh);left:50%!important;right:auto!important;transform:translateX(-50%);bottom:16px;}
+@media (max-width:1199px){
+  #tv-panel.tv-page-mode{bottom:72px!important;top:46px!important;height:auto!important;left:0!important;right:0!important;width:100%!important;resize:none!important;}
 }
 </style>
-<script id="ipados-upgrade-script">
+
+<style id="browser-upgrade-style">
+/* ── BROWSER UPGRADE ───────────────────────────────────────────── */
+.browser-toolbar{display:none;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--bd2);background:linear-gradient(180deg,rgba(255,255,255,.03),transparent),var(--bg2);flex-shrink:0;}
+.browser-toolbar-left{display:flex;align-items:center;gap:8px;flex-wrap:wrap;width:100%;}
+.browser-search{min-width:260px;max-width:420px;width:30vw;background:var(--s2);border:1px solid var(--bd);padding:8px 12px;color:var(--tx);font-size:12px;font-family:'Inter',sans-serif;border-radius:999px;outline:none;}
+.browser-search:focus{border-color:var(--acc2);box-shadow:0 0 0 1px rgba(0,184,255,.14);}
+.browser-select{appearance:none;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(122,154,184,.22);color:var(--tx);font-size:11px;font-family:'Inter',sans-serif;font-weight:600;padding:8px 28px 8px 12px;border-radius:999px;outline:none;}
+.browser-mini-label{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.12em;color:var(--mu);text-transform:uppercase;}
+body.desktop-browser-upgrade .acol.is-priority .col-hd{background:linear-gradient(180deg,rgba(0,184,255,.08),rgba(0,184,255,.02)),var(--bg2);}
+body.desktop-browser-upgrade .acol.is-priority .col-name{color:#f4fbff;}
+body.desktop-browser-upgrade .cols-wrap{flex:1;}
+body.desktop-browser-upgrade .cols-wrap .acol{min-width:clamp(260px,24vw,340px);}
+body.desktop-browser-upgrade .cols-wrap .acol.is-priority{min-width:clamp(320px,31vw,420px);flex:1.2 1 420px;}
+body.desktop-browser-upgrade .cols-wrap .acol.is-secondary{min-width:clamp(240px,21vw,300px);}
+body.desktop-browser-upgrade .cols-wrap .acol.is-tools{min-width:clamp(220px,20vw,280px);}
+body.desktop-browser-upgrade .col-feed .empty{padding:28px 14px;}
+body.desktop-browser-upgrade .col-hd{padding:11px 12px;}
+body.desktop-browser-upgrade .main-area{overflow:hidden;}
+body.desktop-browser-upgrade #page-2,
+body.desktop-browser-upgrade #page-3,
+body.desktop-browser-upgrade #page-4{width:100%;min-width:0;min-height:0;}
+@media (min-width:1200px){
+  body.desktop-browser-upgrade #page-1.on{
+    display:grid;
+    grid-template-columns:clamp(180px,18vw,210px) minmax(0,1fr);
+    grid-template-rows:auto minmax(0,1fr);
+    grid-template-areas:"toolbar toolbar" "sidebar main";
+    align-items:stretch;
+  }
+  body.desktop-browser-upgrade #page-1>.browser-toolbar{display:flex;grid-area:toolbar;min-width:0;}
+  body.desktop-browser-upgrade #page-1>.sidebar{display:flex;grid-area:sidebar;min-height:0;}
+  body.desktop-browser-upgrade #page-1>.main-area{grid-area:main;min-width:0;min-height:0;}
+  body.desktop-browser-upgrade.sidebar-collapsed #page-1.on{
+    grid-template-columns:minmax(0,1fr);
+    grid-template-areas:"toolbar" "main";
+  }
+}
+@media (max-width:1199px){
+  .browser-toolbar{display:none!important;}
+}
+</style>
+<script id="browser-upgrade-script">
 (function(){
-  function syncIpadMode(){
-    var w=window.innerWidth;
-    var isIpad=w>=768 && w<=1199;
-    var portrait=window.matchMedia('(orientation: portrait)').matches;
-    document.body.classList.toggle('ipados-mode', isIpad);
-    document.body.classList.toggle('ipados-portrait', isIpad && portrait);
-    document.body.classList.toggle('ipados-landscape', isIpad && !portrait);
-    if(!(isIpad && portrait)){
-      document.body.classList.remove('mobile-sidebar-open');
+  var browserState={query:'',severity:'all'};
+  var PRIORITY_IDS=['global','medioriente','cina','europa','russia'];
+  var TOOL_IDS=['osint','analisti_cn'];
+  function matchesBrowserFilters(a){
+    if(!a) return false;
+    var sev=browserState.severity||'all';
+    var rank={critical:4,high:3,medium:2,low:1};
+    if(sev==='critical' && a.sev!=='critical') return false;
+    if(sev==='high' && (rank[a.sev]||1)<3) return false;
+    if(sev==='medium' && (rank[a.sev]||1)<2) return false;
+    var q=(browserState.query||'').trim().toLowerCase();
+    if(q){
+      var hay=((a.title||'')+' '+(a.description||'')+' '+(a.src||'')+' '+(a.region||'')).toLowerCase();
+      if(hay.indexOf(q)===-1) return false;
+    }
+    return true;
+  }
+  window.matchesBrowserFilters=matchesBrowserFilters;
+  function getForColEnhanced(def){
+    var base=(typeof window._dedup==='function'?window._dedup((window.articles||[]).filter(function(a){return window._articleMatchesCol(a,def);})):[]);
+    if(!base.length) return [];
+    return base.filter(matchesBrowserFilters);
+  }
+  function classifyColRole(def){
+    if(PRIORITY_IDS.indexOf(def.id)>=0) return 'is-priority';
+    if(TOOL_IDS.indexOf(def.id)>=0) return 'is-tools';
+    return 'is-secondary';
+  }
+  function ensureBrowserChrome(){
+    var page=document.getElementById('page-1');
+    var mainArea=page&&page.querySelector('.main-area');
+    if(!page||!mainArea) return;
+    if(!document.getElementById('browser-toolbar')){
+      var toolbar=document.createElement('div');
+      toolbar.className='browser-toolbar';
+      toolbar.id='browser-toolbar';
+      toolbar.innerHTML=''
+        +'<div class="browser-toolbar-left">'
+        +'<span class="browser-mini-label">Vista browser</span>'
+        +'<input id="browser-search" class="browser-search" type="search" placeholder="Cerca tra titoli, fonti, aree…">'
+        +'<select id="browser-severity" class="browser-select">'
+        +'<option value="all">Tutte le severità</option>'
+        +'<option value="critical">Solo critiche</option>'
+        +'<option value="high">Da alta in su</option>'
+        +'<option value="medium">Da media in su</option>'
+        +'</select>'
+        +'</div>';
+      page.insertBefore(toolbar, mainArea);
     }
   }
-  window.addEventListener('resize', syncIpadMode);
-  window.addEventListener('orientationchange', syncIpadMode);
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', syncIpadMode);
-  else syncIpadMode();
+  function bindBrowserControls(){
+    var search=document.getElementById('browser-search');
+    var sev=document.getElementById('browser-severity');
+    if(search && !search.dataset.bound){
+      search.dataset.bound='1';
+      search.addEventListener('input', function(){ browserState.query=this.value||''; rerenderBrowserView(); });
+    }
+    if(sev && !sev.dataset.bound){
+      sev.dataset.bound='1';
+      sev.addEventListener('change', function(){ browserState.severity=this.value; rerenderBrowserView(); });
+    }
+  }
+  function rerenderBrowserView(){
+    if(typeof window.renderColumnsOriginal==='function') window.renderColumnsOriginal();
+    if(typeof window.updateColList==='function') window.updateColList();
+    if(typeof window.renderTimelinePage==='function') window.renderTimelinePage();
+    if(typeof window.renderBriefingPage==='function') window.renderBriefingPage();
+    try{ if(typeof window.paintSourceBadges==='function') window.paintSourceBadges(); }catch(e){}
+  }
+  function patchRenderers(){
+    if(typeof window.renderColumns==='function' && !window.renderColumnsOriginal){
+      window.renderColumnsOriginal=window.renderColumns;
+      window.renderColumns=function(){
+        var wrap=document.getElementById('cols-wrap'); if(!wrap) return;
+        var addBtn=document.getElementById('add-col-btn');
+        wrap.querySelectorAll('.acol').forEach(function(el){el.parentNode.removeChild(el);});
+        (window.colOrder||[]).forEach(function(cid){
+          if((window.colClosed||[]).indexOf(cid)>=0) return;
+          var def=(window.ALL_COLS||[]).find(function(c){return c.id===cid;}); if(!def) return;
+          var arts=getForColEnhanced(def);
+          var node=window.buildCol(def,arts);
+          node.classList.add(classifyColRole(def));
+          wrap.insertBefore(node,addBtn);
+        });
+      };
+    }
+    if(typeof window.renderAll==='function' && !window.renderAllOriginalBrowser){
+      window.renderAllOriginalBrowser=window.renderAll;
+      window.renderAll=function(){ ensureBrowserChrome(); bindBrowserControls(); rerenderBrowserView(); };
+    }
+    if(typeof window.getForCol==='function' && !window.getForColOriginalBrowser){
+      window.getForColOriginalBrowser=window.getForCol;
+      window.getForCol=getForColEnhanced;
+    }
+  }
+  function markDesktopMode(){
+    var on=window.innerWidth>=1200;
+    document.body.classList.toggle('desktop-browser-upgrade', on);
+  }
+  function initBrowserUpgrade(){
+    ensureBrowserChrome();
+    bindBrowserControls();
+    patchRenderers();
+    markDesktopMode();
+  }
+  window.addEventListener('resize', markDesktopMode);
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', initBrowserUpgrade);
+  else initBrowserUpgrade();
 })();
 </script>
 
