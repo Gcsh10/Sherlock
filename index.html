@@ -86,6 +86,9 @@ header{
 .cols-wrap::-webkit-scrollbar-thumb{background:var(--bd2);}
 .acol{min-width:clamp(220px,28vw,280px);max-width:100%;flex:1 1 300px;display:flex;flex-direction:column;border-right:1px solid var(--bd);min-height:0;overflow:hidden;background:var(--bg);}
 .acol.drag-over{border-right:2px solid var(--acc);}
+.acol.touch-dragging{opacity:.9;transform:scale(1.01);box-shadow:0 18px 42px rgba(0,0,0,.32);z-index:25;}
+body.col-touch-sorting .cols-wrap{scroll-behavior:auto;}
+body.col-touch-sorting .col-hd{cursor:grabbing;}
 .col-hd{display:flex;align-items:center;gap:8px;padding:9px 10px;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent),var(--bg2);border-bottom:1px solid var(--bd2);flex-shrink:0;cursor:grab;user-select:none;}
 .col-icon{display:none!important;}.col-name{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:var(--tx);letter-spacing:.08em;text-transform:uppercase;flex:1;}
 .col-cnt{font-size:10px;color:var(--tx2);font-family:'Share Tech Mono',monospace;background:rgba(255,255,255,.05);padding:2px 7px;border-radius:999px;border:1px solid rgba(122,154,184,.14);}
@@ -1122,7 +1125,6 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
         <div id="country-panel-overlay" onclick="closeCountryPanel()"></div>
         <div id="country-panel">
           <div class="cp-hd">
-            <span class="cp-hd-flag" id="cp-flag">&#127758;</span>
             <div class="cp-hd-info">
               <div class="cp-hd-name" id="cp-name">Seleziona paese</div>
               <div class="cp-hd-region" id="cp-region">REGIONE &middot; ISO</div>
@@ -1889,6 +1891,7 @@ function buildCol(def,arts){
   col.appendChild(feed);
   col.addEventListener('dragstart',onDragStart);col.addEventListener('dragover',onDragOver);
   col.addEventListener('dragleave',onDragLeave);col.addEventListener('drop',onDrop);col.addEventListener('dragend',onDragEnd);
+  attachTouchColumnSort(col, hd);
   return col;
 }
 function showSkeletons(){
@@ -1916,11 +1919,74 @@ function openRestoreModal(){
 }
 function closeRestoreModal(){document.getElementById('restore-modal').style.display='none';}
 var dragSrc=null;
+var touchSortState={col:null,target:null,header:null,timer:null,startX:0,startY:0,dragging:false};
+function reorderColumnsById(srcId,targetId){
+  var si=colOrder.indexOf(srcId),di=colOrder.indexOf(targetId);
+  if(si<0||di<0||si===di)return false;
+  var moved=colOrder.splice(si,1)[0];
+  var newDi=colOrder.indexOf(targetId);
+  if(newDi<0)newDi=di>si?di-1:di;
+  colOrder.splice(newDi,0,moved);
+  persist();renderAll();
+  return true;
+}
 function onDragStart(e){dragSrc=this;e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',this.getAttribute('data-colid'));}
 function onDragOver(e){e.preventDefault();if(this!==dragSrc)this.classList.add('drag-over');}
 function onDragLeave(){this.classList.remove('drag-over');}
-function onDrop(e){e.preventDefault();this.classList.remove('drag-over');if(this===dragSrc)return;var si=colOrder.indexOf(e.dataTransfer.getData('text/plain')),di=colOrder.indexOf(this.getAttribute('data-colid'));if(si>=0&&di>=0){var moved=colOrder.splice(si,1)[0];var newDi=colOrder.indexOf(this.getAttribute('data-colid'));if(newDi<0)newDi=di>si?di-1:di;colOrder.splice(newDi,0,moved);persist();renderAll();}}
+function onDrop(e){e.preventDefault();this.classList.remove('drag-over');if(this===dragSrc)return;reorderColumnsById(e.dataTransfer.getData('text/plain'),this.getAttribute('data-colid'));}
 function onDragEnd(){this.classList.remove('dragging');}
+function isTouchSortable(){return window.matchMedia && window.matchMedia('(pointer: coarse)').matches;}
+function clearTouchColumnSort(){
+  clearTimeout(touchSortState.timer);touchSortState.timer=null;
+  document.body.classList.remove('col-touch-sorting');
+  document.querySelectorAll('.acol.drag-over,.acol.touch-dragging').forEach(function(el){el.classList.remove('drag-over','touch-dragging');el.style.transform='';});
+  touchSortState={col:null,target:null,header:null,timer:null,startX:0,startY:0,dragging:false};
+}
+function attachTouchColumnSort(col,hd){
+  if(!hd || hd.dataset.touchSortBound==='1')return;
+  hd.dataset.touchSortBound='1';
+  hd.addEventListener('touchstart',function(e){
+    if(!isTouchSortable())return;
+    if(e.touches.length!==1)return;
+    if(e.target && e.target.closest && e.target.closest('.col-close'))return;
+    var t=e.touches[0];
+    clearTimeout(touchSortState.timer);
+    touchSortState={col:col,target:col,header:hd,timer:null,startX:t.clientX,startY:t.clientY,dragging:false};
+    touchSortState.timer=setTimeout(function(){
+      if(!touchSortState.col)return;
+      touchSortState.dragging=true;
+      touchSortState.col.classList.add('touch-dragging');
+      document.body.classList.add('col-touch-sorting');
+      try{navigator.vibrate && navigator.vibrate(10);}catch(_e){}
+    },180);
+  },{passive:true});
+  hd.addEventListener('touchmove',function(e){
+    if(!touchSortState.col || touchSortState.col!==col)return;
+    var t=e.touches[0];
+    var dx=t.clientX-touchSortState.startX, dy=t.clientY-touchSortState.startY;
+    if(!touchSortState.dragging){
+      if(Math.abs(dx)>12 || Math.abs(dy)>12){clearTouchColumnSort();}
+      return;
+    }
+    e.preventDefault();
+    col.style.transform='translate('+dx+'px,'+Math.max(-8,Math.min(8,dy*0.15))+'px) scale(1.01)';
+    var target=document.elementFromPoint(t.clientX,t.clientY);
+    var over=target && target.closest ? target.closest('.acol') : null;
+    document.querySelectorAll('.acol.drag-over').forEach(function(el){if(el!==over)el.classList.remove('drag-over');});
+    if(over && over!==col){over.classList.add('drag-over');touchSortState.target=over;} else {touchSortState.target=col;}
+  },{passive:false});
+  function finishTouchSort(){
+    if(!touchSortState.col || touchSortState.col!==col){clearTouchColumnSort();return;}
+    var dragged=touchSortState.dragging;
+    var srcId=col.getAttribute('data-colid');
+    var targetId=touchSortState.target && touchSortState.target.getAttribute ? touchSortState.target.getAttribute('data-colid') : null;
+    clearTimeout(touchSortState.timer);
+    if(dragged && targetId && targetId!==srcId){reorderColumnsById(srcId,targetId);}
+    clearTouchColumnSort();
+  }
+  hd.addEventListener('touchend',finishTouchSort,{passive:true});
+  hd.addEventListener('touchcancel',finishTouchSort,{passive:true});
+}
 function showTab(id){
   document.querySelectorAll('.tab').forEach(function(t){t.classList.remove('on');});
   document.querySelectorAll('.pane').forEach(function(p){p.classList.add('hidden');});
@@ -2472,11 +2538,11 @@ function _buildHeatmap(){
 }
 
 function _heatColor(intensity){
-  // 0 → transparent, 0.3 → amber, 0.7+ → red
-  if(intensity<=0)return 'rgba(0,0,0,0)';
-  if(intensity<0.3) return 'rgba(59,130,246,'+(intensity*0.4+0.05)+')'; // blue tint
-  if(intensity<0.6) return 'rgba(245,158,11,'+(intensity*0.5+0.1)+')'; // amber
-  return 'rgba(239,68,68,'+(Math.min(intensity,1)*0.55+0.1)+')';        // red
+  // Mantieni sempre visibile il suolo: niente trasparenze che lo confondano con l’oceano
+  if(intensity<=0)return 'rgba(36,49,77,0.96)';
+  if(intensity<0.3) return 'rgba(56,189,248,'+(intensity*0.42+0.18)+')'; // azzurro più leggibile
+  if(intensity<0.6) return 'rgba(245,158,11,'+(intensity*0.5+0.12)+')'; // amber
+  return 'rgba(239,68,68,'+(Math.min(intensity,1)*0.55+0.12)+')';        // red
 }
 
 // ══════════════════════════════════════════════════════════════════
@@ -2712,18 +2778,12 @@ function _timelineFilter(arts){
 var _cpCurrentIso='';
 var _cpCurrentReg='';
 
-// Country flag emoji from ISO2
-function _isoToFlag(iso){
-  if(!iso||iso.length!==2)return '🌍';
-  return String.fromCodePoint(...iso.toUpperCase().split('').map(function(c){return 0x1F1E0-65+c.charCodeAt(0);}));
-}
 
 function openCountryPanel(iso2, name){
   var reg=Object.keys(RC).find(function(r){return RC[r].indexOf(iso2)>=0;})||'global';
   _cpCurrentIso=iso2;
   _cpCurrentReg=reg;
 
-  document.getElementById('cp-flag').textContent=_isoToFlag(iso2);
   document.getElementById('cp-name').textContent=name||iso2;
   document.getElementById('cp-region').textContent=reg.toUpperCase()+' · '+iso2;
 
