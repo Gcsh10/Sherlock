@@ -884,22 +884,37 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
 .briefing-page-section-num{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--mu);}
 .briefing-page-section-name{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--acc2);border-left:2px solid var(--acc2);padding-left:7px;}
 .briefing-page-empty{color:var(--mu);font-family:'Share Tech Mono',monospace;font-size:11px;padding:18px 0;}
+
+
+
+/* Briefing migliorato */
 .briefing-page-head{justify-content:space-between;flex-wrap:wrap;}
-.briefing-page-head-left{display:flex;align-items:center;gap:12px;min-width:0;}
-.briefing-page-head-right{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.briefing-page-meta{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.08em;color:var(--mu);text-transform:uppercase;}
-.briefing-page-btn{height:30px;padding:0 12px;border:1px solid var(--bd2);background:var(--bg);color:var(--tx);font:600 11px/1 'Share Tech Mono',monospace;letter-spacing:.08em;text-transform:uppercase;cursor:pointer;}
-.briefing-page-btn:hover{border-color:var(--acc);color:var(--acc);}
-.briefing-lead{margin:0 0 20px;padding:14px 16px;border:1px solid var(--bd2);background:linear-gradient(180deg,rgba(255,255,255,.02),rgba(255,255,255,0));}
-.briefing-lead-title{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);margin-bottom:8px;}
-.briefing-lead-text{font-size:14px;line-height:1.55;color:var(--tx);}
-.briefing-subgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:0 0 24px;}
-.briefing-subcard{border:1px solid var(--bd2);padding:12px 14px;background:var(--bg2);}
-.briefing-subcard-title{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc2);margin-bottom:8px;}
-.briefing-bullets{margin:0;padding-left:18px;}
-.briefing-bullets li{margin:0 0 8px;color:var(--tx);line-height:1.45;}
-.briefing-note{margin-top:8px;font-size:12px;color:var(--mu);}
-@media (max-width:900px){.briefing-subgrid{grid-template-columns:1fr;}.briefing-page-head{align-items:flex-start;}}
+.briefing-page-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.briefing-status{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--mu);letter-spacing:.08em;}
+.briefing-hero{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;margin-bottom:18px;}
+.briefing-card{background:var(--s);border:1px solid var(--bd);padding:14px 16px;}
+.briefing-card-title{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);margin-bottom:10px;}
+.briefing-lead{font-size:17px;line-height:1.45;font-weight:600;color:var(--tx);}
+.briefing-sublead{font-size:13px;line-height:1.55;color:#c9d1d9;margin-top:10px;}
+.briefing-bullets{display:flex;flex-direction:column;gap:10px;}
+.briefing-bullet{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--bd);}
+.briefing-bullet:first-child{border-top:none;padding-top:0;}
+.briefing-bullet-dot{width:8px;height:8px;border-radius:50%;margin-top:6px;flex-shrink:0;}
+.briefing-bullet-body{flex:1;min-width:0;}
+.briefing-bullet-head{font-size:13px;font-weight:600;line-height:1.4;color:var(--tx);}
+.briefing-bullet-meta{font-size:10px;color:var(--mu);font-family:'Share Tech Mono',monospace;margin-top:3px;}
+.briefing-deck{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:18px;}
+.briefing-mini-list{display:flex;flex-direction:column;gap:10px;}
+.briefing-mini-item{padding:10px 0;border-top:1px solid var(--bd);}
+.briefing-mini-item:first-child{border-top:none;padding-top:0;}
+.briefing-mini-item a{font-size:13px;font-weight:600;line-height:1.4;color:var(--tx);text-decoration:none;display:block;}
+.briefing-mini-item a:hover{color:var(--acc);}
+.briefing-mini-item .meta{font-size:10px;color:var(--mu);font-family:'Share Tech Mono',monospace;margin-top:3px;}
+.briefing-region-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+.briefing-page-section{background:var(--s);border:1px solid var(--bd);padding:14px 16px;margin-bottom:0;}
+@media (max-width:900px){
+  .briefing-hero,.briefing-deck,.briefing-region-grid{grid-template-columns:1fr;}
+}
 
 </style>
 </head>
@@ -1195,7 +1210,6 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
             <option value="high">Critiche + alte</option>
             <option value="medium">Da medio in su</option>
           </select>
-          <button class="browser-help-btn" type="button" title="Criteri severità" onclick="openSeverityModal()">?</button>
         </div>
       </div>
       <div class="timeline-body" id="timeline-body"></div>
@@ -1206,13 +1220,11 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
   <div class="page" id="page-4" style="flex:1;min-height:0;flex-direction:column;">
     <div class="briefing-page-wrap">
       <div class="briefing-page-head">
-        <div class="briefing-page-head-left">
-          <div class="briefing-page-title">Briefing strategico</div>
-          <div class="briefing-page-meta" id="briefing-page-meta">Aggiornamento briefing</div>
-        </div>
-        <div class="briefing-page-head-right">
-          <button class="briefing-page-btn" id="briefing-share-btn" onclick="shareBriefing()">Condividi</button>
-          <button class="briefing-page-btn" id="briefing-print-btn" onclick="printBriefing()">Stampa</button>
+        <div class="briefing-page-title">Briefing strategico</div>
+        <div class="briefing-page-actions">
+          <span class="briefing-status" id="briefing-status">In attesa dati</span>
+          <button class="hbtn" onclick="shareBriefingPage()">Condividi</button>
+          <button class="hbtn" onclick="printBriefingPage()">Stampa</button>
         </div>
       </div>
       <div class="briefing-page-body" id="briefing-page-body"></div>
@@ -1229,8 +1241,14 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
     <span class="tvlbl" id="tvlbl">AL JAZEERA EN — LIVE</span>
     <select class="tvsel" id="tvsel" onchange="_buildPlayer(+this.value)">
       <option value="0">Al Jazeera EN</option><option value="1">Al Jazeera AR</option>
-      <option value="2">DW News</option><option value="3">Euronews EN</option>
-      <option value="4">TRT World</option><option value="5">Bloomberg</option>
+      <option value="2">France 24 EN</option><option value="3">France 24 FR</option>
+      <option value="4">DW News</option><option value="5">Euronews EN</option>
+      <option value="6">Sky News</option><option value="7">BBC News</option>
+      <option value="8">Reuters Now</option><option value="9">TRT World</option>
+      <option value="10">NHK World</option><option value="11">CGTN</option>
+      <option value="12">RT English</option><option value="13">i24 News</option>
+      <option value="14">Bloomberg</option><option value="15">CNN</option>
+      <option value="16">CNBC</option>
     </select>
     <button class="tvbtn2" id="tv-mute-btn" onclick="tvUnmute()">SUONO</button>
     <button class="tvbtn2" onclick="tvOpenYT()">YT &#x2197;</button>
@@ -1936,8 +1954,6 @@ function openRestoreModal(){
   document.getElementById('restore-modal').style.display='flex';
 }
 function closeRestoreModal(){document.getElementById('restore-modal').style.display='none';}
-function openSeverityModal(){var m=document.getElementById('severity-modal'); if(m) m.style.display='flex';}
-function closeSeverityModal(){var m=document.getElementById('severity-modal'); if(m) m.style.display='none';}
 var dragSrc=null;
 var touchSortState={col:null,target:null,header:null,timer:null,startX:0,startY:0,dragging:false};
 function reorderColumnsById(srcId,targetId){
@@ -1962,58 +1978,27 @@ function clearTouchColumnSort(){
   document.querySelectorAll('.acol.drag-over,.acol.touch-dragging').forEach(function(el){el.classList.remove('drag-over','touch-dragging');el.style.transform='';el.style.pointerEvents='';});
   touchSortState={col:null,target:null,header:null,timer:null,startX:0,startY:0,dragging:false};
 }
-function detectTouchColumnTarget(activeCol,clientX){
-  var cols=Array.from(document.querySelectorAll('.acol')).filter(function(el){return el!==activeCol;});
-  if(!cols.length)return activeCol;
-  var best=null,bestDist=Infinity;
+function getTouchSortTarget(clientX, draggedCol){
+  var cols=[].slice.call(document.querySelectorAll('.cols-wrap .acol')).filter(function(el){return el!==draggedCol;});
+  if(!cols.length)return draggedCol;
+  var target=cols[0], best=Infinity;
   cols.forEach(function(el){
     var r=el.getBoundingClientRect();
-    var cx=r.left + (r.width/2);
+    var cx=r.left + r.width/2;
     var d=Math.abs(clientX-cx);
-    if(d<bestDist){bestDist=d;best=el;}
+    if(d<best){best=d;target=el;}
   });
-  return best || activeCol;
+  return target;
 }
 function attachTouchColumnSort(col,hd){
   if(!hd || hd.dataset.touchSortBound==='1')return;
   hd.dataset.touchSortBound='1';
-  hd.style.touchAction='none';
-  function touchMoveHandler(e){
-    if(!touchSortState.col || touchSortState.col!==col)return;
-    if(!e.touches || !e.touches.length)return;
-    var t=e.touches[0];
-    var dx=t.clientX-touchSortState.startX, dy=t.clientY-touchSortState.startY;
-    if(!touchSortState.dragging){
-      if(Math.abs(dx)>12 || Math.abs(dy)>12){clearTouchColumnSort();}
-      return;
-    }
-    e.preventDefault();
-    col.style.transform='translate('+dx+'px,'+Math.max(-10,Math.min(10,dy*0.18))+'px) scale(1.01)';
-    var over=detectTouchColumnTarget(col,t.clientX);
-    document.querySelectorAll('.acol.drag-over').forEach(function(el){if(el!==over)el.classList.remove('drag-over');});
-    if(over && over!==col){over.classList.add('drag-over');touchSortState.target=over;} else {touchSortState.target=col;}
-  }
-  function finishTouchSort(){
-    if(!touchSortState.col || touchSortState.col!==col){clearTouchColumnSort();return;}
-    var dragged=touchSortState.dragging;
-    var srcId=col.getAttribute('data-colid');
-    var targetId=touchSortState.target && touchSortState.target.getAttribute ? touchSortState.target.getAttribute('data-colid') : null;
-    clearTimeout(touchSortState.timer);
-    document.removeEventListener('touchmove',touchMoveHandler);
-    document.removeEventListener('touchend',finishTouchSort);
-    document.removeEventListener('touchcancel',finishTouchSort);
-    if(dragged && targetId && targetId!==srcId){reorderColumnsById(srcId,targetId);}
-    clearTouchColumnSort();
-  }
   hd.addEventListener('touchstart',function(e){
     if(!isTouchSortable())return;
     if(e.touches.length!==1)return;
     if(e.target && e.target.closest && e.target.closest('.col-close'))return;
     var t=e.touches[0];
     clearTimeout(touchSortState.timer);
-    document.removeEventListener('touchmove',touchMoveHandler);
-    document.removeEventListener('touchend',finishTouchSort);
-    document.removeEventListener('touchcancel',finishTouchSort);
     touchSortState={col:col,target:col,header:hd,timer:null,startX:t.clientX,startY:t.clientY,dragging:false};
     touchSortState.timer=setTimeout(function(){
       if(!touchSortState.col)return;
@@ -2021,16 +2006,32 @@ function attachTouchColumnSort(col,hd){
       touchSortState.col.classList.add('touch-dragging');
       touchSortState.col.style.pointerEvents='none';
       document.body.classList.add('col-touch-sorting');
-      document.addEventListener('touchmove',touchMoveHandler,{passive:false});
-      document.addEventListener('touchend',finishTouchSort,{passive:true});
-      document.addEventListener('touchcancel',finishTouchSort,{passive:true});
       try{navigator.vibrate && navigator.vibrate(10);}catch(_e){}
     },180);
   },{passive:true});
   hd.addEventListener('touchmove',function(e){
     if(!touchSortState.col || touchSortState.col!==col)return;
-    if(touchSortState.dragging){touchMoveHandler(e);}
+    var t=e.touches[0];
+    var dx=t.clientX-touchSortState.startX, dy=t.clientY-touchSortState.startY;
+    if(!touchSortState.dragging){
+      if(Math.abs(dx)>12 || Math.abs(dy)>12){clearTouchColumnSort();}
+      return;
+    }
+    e.preventDefault();
+    col.style.transform='translate('+dx+'px,'+Math.max(-8,Math.min(8,dy*0.15))+'px) scale(1.01)';
+    var over=getTouchSortTarget(t.clientX,col);
+    document.querySelectorAll('.acol.drag-over').forEach(function(el){if(el!==over)el.classList.remove('drag-over');});
+    if(over && over!==col){over.classList.add('drag-over');touchSortState.target=over;} else {touchSortState.target=col;}
   },{passive:false});
+  function finishTouchSort(){
+    if(!touchSortState.col || touchSortState.col!==col){clearTouchColumnSort();return;}
+    var dragged=touchSortState.dragging;
+    var srcId=col.getAttribute('data-colid');
+    var targetId=touchSortState.target && touchSortState.target.getAttribute ? touchSortState.target.getAttribute('data-colid') : null;
+    clearTimeout(touchSortState.timer);
+    if(dragged && targetId && targetId!==srcId){reorderColumnsById(srcId,targetId);}
+    clearTouchColumnSort();
+  }
   hd.addEventListener('touchend',finishTouchSort,{passive:true});
   hd.addEventListener('touchcancel',finishTouchSort,{passive:true});
 }
@@ -2139,7 +2140,6 @@ function startTimer(){
 }
 function tickClock(){var el=document.getElementById('clock');if(!el)return;var n=new Date();el.textContent=[n.getHours(),n.getMinutes()].map(function(x){return x.toString().padStart(2,'0');}).join(':');}
 setInterval(tickClock,1000);tickClock();
-scheduleAutoBriefing();
 function toggleTheme(){var h=document.documentElement;h.setAttribute('data-theme',h.getAttribute('data-theme')==='light'?'dark':'light');}
 function notify(msg){var n=document.createElement('div');n.className='notif';n.textContent=msg;document.body.appendChild(n);setTimeout(function(){if(n.parentNode)n.parentNode.removeChild(n);},2500);}
 
@@ -2238,172 +2238,121 @@ function renderTimelinePage(){
   });
   body.innerHTML=html;
 }
-function _briefingAutoSlotLabel(d){
-  var h=d.getHours(),m=d.getMinutes();
-  if(h>15||(h===15&&m>=0)) return '15:00';
-  if(h>8||(h===8&&m>=30)) return '08:30';
-  return 'manuale';
-}
-function _lastBriefingSlot(now){
-  var d=new Date(now||Date.now());
-  var y=d.getFullYear(),mo=d.getMonth(),da=d.getDate();
-  var a=new Date(y,mo,da,8,30,0,0);
-  var b=new Date(y,mo,da,15,0,0,0);
-  if(d>=b) return b;
-  if(d>=a) return a;
-  return new Date(y,mo,da-1,15,0,0,0);
-}
-function _nextBriefingSlot(now){
-  var d=new Date(now||Date.now());
-  var y=d.getFullYear(),mo=d.getMonth(),da=d.getDate();
-  var a=new Date(y,mo,da,8,30,0,0);
-  var b=new Date(y,mo,da,15,0,0,0);
-  if(d<a) return a;
-  if(d<b) return b;
-  return new Date(y,mo,da+1,8,30,0,0);
-}
-function _briefingBuildData(list, mode, slotDate){
-  var sorted=(list||[]).slice().sort(function(a,b){var s=_sevRank(b.sev)-_sevRank(a.sev); if(s!==0)return s; return (b.ts||0)-(a.ts||0);});
-  var critical=sorted.slice(0,5);
-  var watch=sorted.filter(function(a){return (a.sev||'low')!=='low';}).slice(0,6);
+function buildBriefingData(){
+  var list=(articles||[]).slice().sort(function(a,b){
+    var s=_sevRank(b.sev)-_sevRank(a.sev); if(s!==0)return s;
+    return (b.ts||0)-(a.ts||0);
+  });
+  var top=list.slice(0,5);
+  var opening=top[0]||null;
+  var happened=top.slice(0,3);
+  var watch=list.filter(function(a){return _sevRank(a.sev)>=2;}).slice(0,4);
   var byRegion={};
-  sorted.forEach(function(a){var r=a.region||'global';(byRegion[r]=byRegion[r]||[]).push(a);});
-  var lead='Nessuna notizia caricata.';
-  if(critical.length){
-    var regs=[]; critical.forEach(function(a){var r=REGION_LABELS[a.region]||a.region||'Globale'; if(regs.indexOf(r)===-1) regs.push(r);});
-    lead='Il quadro del momento ruota soprattutto intorno a '+regs.slice(0,3).join(', ')+'. Le priorità immediate emergono da '+critical.length+' voci ad alta severità, da verificare in sequenza partendo dalle più recenti e convergenti.';
-  }
+  list.forEach(function(a){var r=a.region||'global';(byRegion[r]=byRegion[r]||[]).push(a);});
   var sections=[];
   REGION_ORDER.forEach(function(region){
-    var arr=(byRegion[region]||[]).slice(0,5);
-    if(arr.length) sections.push({region:region,items:arr});
+    var arr=(byRegion[region]||[]).slice().sort(function(a,b){
+      var s=_sevRank(b.sev)-_sevRank(a.sev); if(s!==0)return s;
+      return (b.ts||0)-(a.ts||0);
+    }).slice(0,4);
+    if(arr.length) sections.push({region:region, items:arr});
   });
-  var slot=slotDate?slotDate.toISOString():'';
-  return {mode:mode||'manuale',slot:slot,slotLabel:slotDate?_briefingAutoSlotLabel(slotDate):'manuale',generatedAt:Date.now(),critical:critical,watch:watch,sections:sections,lead:lead};
-}
-function _briefingDataToHtml(data){
-  if(!data||!data.sections||!data.sections.length) return '<div class="briefing-page-empty">Nessuna notizia utilizzabile per il briefing.</div>';
-  var html='';
-  html+='<section class="briefing-lead"><div class="briefing-lead-title">Apertura</div><div class="briefing-lead-text">'+esc(data.lead||'')+'</div><div class="briefing-note">Criterio: urgenza × impatto × capacità di alterare il quadro.</div></section>';
-  html+='<div class="briefing-subgrid">';
-  html+='<section class="briefing-subcard"><div class="briefing-subcard-title">Cosa è successo</div><ul class="briefing-bullets">';
-  (data.critical||[]).forEach(function(a){html+='<li><strong>'+esc(a.title)+'</strong> — '+esc(a.src||'')+'</li>';});
-  if(!(data.critical||[]).length) html+='<li>Nessun elemento prioritario disponibile.</li>';
-  html+='</ul></section>';
-  html+='<section class="briefing-subcard"><div class="briefing-subcard-title">Cosa guardare adesso</div><ul class="briefing-bullets">';
-  (data.watch||[]).forEach(function(a){html+='<li>'+esc(REGION_LABELS[a.region]||a.region||'Globale')+': <strong>'+esc(a.title)+'</strong></li>';});
-  if(!(data.watch||[]).length) html+='<li>Nessun watchpoint disponibile.</li>';
-  html+='</ul></section>';
-  html+='</div>';
-  var idx=1;
-  (data.sections||[]).forEach(function(sec){
-    html+='<section class="briefing-page-section"><div class="briefing-page-section-hd"><span class="briefing-page-section-num">'+String(idx).padStart(2,'0')+'</span><span class="briefing-page-section-name">'+esc(REGION_LABELS[sec.region]||sec.region)+'</span></div>';
-    sec.items.forEach(function(a){
-      html+='<div class="br-item"><span class="br-sev-badge '+a.sev+'">'+esc(a.sev||'low')+'</span><div class="br-item-body"><a class="br-item-headline" href="'+esc(a.link||'#')+'" target="_blank" rel="noopener">'+esc(a.title)+'</a><div class="br-item-meta">'+esc(a.src||'')+(a.pub?' · '+fmtTime(a.pub):'')+'</div></div></div>';
-    });
-    html+='</section>'; idx++;
-  });
-  return html;
-}
-function _briefingDataToText(data){
-  if(!data) return 'Briefing non disponibile';
-  var out=[];
-  out.push('BRIEFING STRATEGICO');
-  out.push('Generato: '+new Date(data.generatedAt||Date.now()).toLocaleString('it-IT'));
-  out.push('Slot: '+(data.mode==='automatico' ? 'automatico '+(data.slotLabel||'') : 'manuale'));
-  out.push('');
-  out.push((data.lead||''));
-  out.push('');
-  out.push('COSA È SUCCESSO');
-  (data.critical||[]).forEach(function(a){out.push('- '+(a.title||'')+' — '+(a.src||''));});
-  out.push('');
-  out.push('COSA GUARDARE ADESSO');
-  (data.watch||[]).forEach(function(a){out.push('- '+(REGION_LABELS[a.region]||a.region||'Globale')+': '+(a.title||''));});
-  out.push('');
-  (data.sections||[]).forEach(function(sec){
-    out.push((REGION_LABELS[sec.region]||sec.region).toUpperCase());
-    sec.items.forEach(function(a){out.push('- ['+String((a.sev||'low')).toUpperCase()+'] '+(a.title||'')+' — '+(a.src||''));});
-    out.push('');
-  });
-  return out.join('
-');
-}
-function _saveBriefingData(data){ try{ localStorage.setItem('briefing_snapshot_v1', JSON.stringify(data)); }catch(e){} window._briefingSnapshot=data; }
-function _loadBriefingData(){
-  if(window._briefingSnapshot) return window._briefingSnapshot;
-  try{ var raw=localStorage.getItem('briefing_snapshot_v1'); if(raw){ window._briefingSnapshot=JSON.parse(raw); return window._briefingSnapshot; } }catch(e){}
-  return null;
-}
-function _setBriefingMeta(data){
-  var meta=document.getElementById('briefing-page-meta'); if(!meta) return;
-  if(!data){ meta.textContent='Aggiornamento briefing'; return; }
-  var when=new Date(data.generatedAt||Date.now()).toLocaleString('it-IT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});
-  meta.textContent=(data.mode==='automatico' ? 'Briefing automatico '+(data.slotLabel||'') : 'Briefing live')+' · '+when;
-}
-function generateBriefingSnapshot(mode, slotDate){
-  var list=(articles||[]).slice().sort(function(a,b){var s=_sevRank(b.sev)-_sevRank(a.sev); if(s!==0)return s; return (b.ts||0)-(a.ts||0);}).slice(0,40);
-  if(!list.length) return null;
-  var data=_briefingBuildData(list, mode||'manuale', slotDate||null);
-  _saveBriefingData(data);
-  return data;
-}
-function maybeAutoGenerateBriefing(){
-  var list=(articles||[]); if(!list.length) return;
-  var slot=_lastBriefingSlot(new Date());
-  var currentKey=slot.getFullYear()+'-'+String(slot.getMonth()+1).padStart(2,'0')+'-'+String(slot.getDate()).padStart(2,'0')+'-'+String(slot.getHours()).padStart(2,'0')+String(slot.getMinutes()).padStart(2,'0');
-  var saved=_loadBriefingData();
-  if(!saved || saved.slot!==slot.toISOString()){
-    generateBriefingSnapshot('automatico', slot);
-  }
-}
-function scheduleAutoBriefing(){
-  try{ clearTimeout(window._briefingAutoTimer); }catch(e){}
-  var next=_nextBriefingSlot(new Date());
-  var delay=Math.max(1000, next.getTime()-Date.now());
-  window._briefingAutoTimer=setTimeout(function(){ generateBriefingSnapshot('automatico', next); renderBriefingPage(); scheduleAutoBriefing(); }, delay);
-}
-async function shareBriefing(){
-  var data=_loadBriefingData()||generateBriefingSnapshot('manuale',null);
-  if(!data) return;
-  var text=_briefingDataToText(data);
-  if(navigator.share){
-    try{ await navigator.share({title:'Briefing strategico', text:text}); return; }catch(e){}
-  }
-  try{ await navigator.clipboard.writeText(text); alert('Briefing copiato negli appunti.'); }catch(e){ alert(text); }
-}
-function printBriefing(){
-  var data=_loadBriefingData()||generateBriefingSnapshot('manuale',null);
-  if(!data) return;
-  var w=window.open('','_blank','noopener,noreferrer,width=980,height=760');
-  if(!w) return;
-  var title='Briefing strategico';
-  var meta=(data.mode==='automatico' ? 'Briefing automatico '+(data.slotLabel||'') : 'Briefing live')+' · '+new Date(data.generatedAt||Date.now()).toLocaleString('it-IT');
-  w.document.write('<!doctype html><html><head><meta charset="utf-8"><title>'+title+'</title><style>body{font-family:Arial,sans-serif;margin:32px;color:#111;line-height:1.45}h1{font-size:22px;margin:0 0 6px}h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;margin:26px 0 10px;color:#444}a{color:#111;text-decoration:none}ul{margin:8px 0 0 18px;padding:0}li{margin:0 0 8px}.meta{font-size:12px;color:#666;margin-bottom:18px}.lead{padding:14px 16px;border:1px solid #ddd;background:#fafafa}.item{margin:0 0 10px;padding:0 0 10px;border-bottom:1px solid #eee}.sev{display:inline-block;font-size:11px;padding:2px 6px;border:1px solid #bbb;margin-right:8px;text-transform:uppercase}.src{font-size:12px;color:#666}</style></head><body>');
-  w.document.write('<h1>'+title+'</h1><div class="meta">'+meta+'</div>');
-  w.document.write('<div class="lead"><strong>Apertura.</strong> '+esc(data.lead||'')+'</div>');
-  w.document.write('<h2>Cosa è successo</h2><ul>');
-  (data.critical||[]).forEach(function(a){w.document.write('<li><strong>'+esc(a.title)+'</strong> — '+esc(a.src||'')+'</li>');});
-  w.document.write('</ul><h2>Cosa guardare adesso</h2><ul>');
-  (data.watch||[]).forEach(function(a){w.document.write('<li>'+esc(REGION_LABELS[a.region]||a.region||'Globale')+': <strong>'+esc(a.title)+'</strong></li>');});
-  w.document.write('</ul>');
-  (data.sections||[]).forEach(function(sec){
-    w.document.write('<h2>'+esc(REGION_LABELS[sec.region]||sec.region)+'</h2>');
-    sec.items.forEach(function(a){
-      w.document.write('<div class="item"><span class="sev">'+esc(a.sev||'low')+'</span><a href="'+esc(a.link||'#')+'">'+esc(a.title)+'</a><div class="src">'+esc(a.src||'')+(a.pub?' · '+fmtTime(a.pub):'')+'</div></div>');
-    });
-  });
-  w.document.write('<script>window.onload=function(){setTimeout(function(){window.print();},150)}<\/script></body></html>');
-  w.document.close();
+  return {updated:new Date(), opening:opening, happened:happened, watch:watch, sections:sections};
 }
 function renderBriefingPage(){
   var body=document.getElementById('briefing-page-body'); if(!body) return;
-  maybeAutoGenerateBriefing();
-  var data=_loadBriefingData();
-  if(!data && articles && articles.length) data=generateBriefingSnapshot('manuale',null);
-  _setBriefingMeta(data);
-  body.innerHTML=_briefingDataToHtml(data);
+  var status=document.getElementById('briefing-status');
+  if(!articles||!articles.length){
+    if(status)status.textContent='Nessuna notizia caricata';
+    body.innerHTML='<div class="briefing-page-empty">Nessuna notizia caricata.</div>';
+    return;
+  }
+  var data=buildBriefingData();
+  if(status)status.textContent='Aggiornato '+data.updated.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+  var html='';
+  html+='<section class="briefing-hero">';
+  html+='<div class="briefing-card"><div class="briefing-card-title">Apertura</div>';
+  if(data.opening){
+    html+='<div class="briefing-lead">'+esc(data.opening.title)+'</div>';
+    html+='<div class="briefing-sublead">'+esc(data.opening.description||('Fonte: '+(data.opening.src||'')+' · '+(REGION_LABELS[data.opening.region]||data.opening.region||'Globale')) )+'</div>';
+  } else {
+    html+='<div class="briefing-sublead">Nessuna apertura disponibile.</div>';
+  }
+  html+='</div>';
+  html+='<div class="briefing-card"><div class="briefing-card-title">Cosa è successo</div><div class="briefing-bullets">';
+  data.happened.forEach(function(a){
+    html+='<div class="briefing-bullet"><span class="briefing-bullet-dot" style="background:'+_sevColor(a.sev)+'"></span><div class="briefing-bullet-body"><div class="briefing-bullet-head">'+esc(a.title)+'</div><div class="briefing-bullet-meta">'+esc(a.src||'')+' · '+esc(REGION_LABELS[a.region]||a.region||'Globale')+'</div></div></div>';
+  });
+  html+='</div></div></section>';
+  html+='<section class="briefing-deck">';
+  html+='<div class="briefing-card"><div class="briefing-card-title">Cosa guardare adesso</div><div class="briefing-mini-list">';
+  data.watch.forEach(function(a){
+    html+='<div class="briefing-mini-item"><a href="'+esc(a.link||'#')+'" target="_blank" rel="noopener">'+esc(a.title)+'</a><div class="meta">'+esc(a.src||'')+' · '+(a.sev||'low').toUpperCase()+'</div></div>';
+  });
+  html+='</div></div>';
+  html+='<div class="briefing-card"><div class="briefing-card-title">Quadro rapido</div><div class="briefing-mini-list">';
+  data.sections.slice(0,4).forEach(function(sec){
+    var a=sec.items[0];
+    html+='<div class="briefing-mini-item"><a href="'+esc(a.link||'#')+'" target="_blank" rel="noopener">'+esc(REGION_LABELS[sec.region]||sec.region)+': '+esc(a.title)+'</a><div class="meta">'+esc(a.src||'')+' · '+(a.sev||'low').toUpperCase()+'</div></div>';
+  });
+  html+='</div></div></section>';
+  html+='<section class="briefing-region-grid">';
+  data.sections.forEach(function(sec,idx){
+    html+='<section class="briefing-page-section"><div class="briefing-page-section-hd"><span class="briefing-page-section-num">'+String(idx+1).padStart(2,'0')+'</span><span class="briefing-page-section-name">'+esc(REGION_LABELS[sec.region]||sec.region)+'</span></div>';
+    sec.items.forEach(function(a){
+      html+='<div class="br-item"><span class="br-sev-badge '+a.sev+'">'+esc(a.sev||'low')+'</span><div class="br-item-body"><a class="br-item-headline" href="'+esc(a.link||'#')+'" target="_blank" rel="noopener">'+esc(a.title)+'</a><div class="br-item-meta">'+esc(a.src||'')+(a.pub?' · '+fmtTime(a.pub):'')+'</div></div></div>';
+    });
+    html+='</section>';
+  });
+  html+='</section>';
+  body.innerHTML=html;
 }
-
+function briefingPlainText(){
+  var data=buildBriefingData();
+  var lines=[];
+  lines.push('Briefing strategico');
+  lines.push('Aggiornato: '+data.updated.toLocaleString('it-IT'));
+  lines.push('');
+  if(data.opening){
+    lines.push('Apertura');
+    lines.push(data.opening.title);
+    lines.push((data.opening.src||'')+' · '+(REGION_LABELS[data.opening.region]||data.opening.region||'Globale'));
+    lines.push('');
+  }
+  lines.push('Cosa è successo');
+  data.happened.forEach(function(a){ lines.push('- '+a.title+' ('+(a.src||'')+')'); });
+  lines.push('');
+  lines.push('Cosa guardare adesso');
+  data.watch.forEach(function(a){ lines.push('- '+a.title+' ('+(a.sev||'low').toUpperCase()+')'); });
+  lines.push('');
+  data.sections.forEach(function(sec){
+    lines.push((REGION_LABELS[sec.region]||sec.region).toUpperCase());
+    sec.items.forEach(function(a){ lines.push('- '+a.title+' ('+(a.src||'')+')'); });
+    lines.push('');
+  });
+  return lines.join('\n');
+}
+function shareBriefingPage(){
+  if(!articles||!articles.length){notify('Nessun briefing da condividere');return;}
+  var text=briefingPlainText();
+  if(navigator.share){
+    navigator.share({title:'Briefing strategico', text:text}).catch(function(){});
+  } else if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(function(){notify('Briefing copiato negli appunti');}).catch(function(){notify('Condivisione non disponibile');});
+  } else {
+    notify('Condivisione non disponibile');
+  }
+}
+function printBriefingPage(){
+  if(!articles||!articles.length){notify('Nessun briefing da stampare');return;}
+  var w=window.open('','_blank','width=980,height=760');
+  if(!w){notify('Popup bloccato');return;}
+  var content=document.getElementById('briefing-page-body').innerHTML;
+  w.document.write('<!DOCTYPE html><html lang="it"><head><meta charset="utf-8"><title>Briefing strategico</title><style>body{font-family:Arial,sans-serif;margin:24px;color:#111;}a{color:#111;text-decoration:none;} .briefing-page-section,.briefing-card{border:1px solid #bbb;padding:14px 16px;margin-bottom:14px;} .briefing-card-title,.briefing-page-section-name{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#0b5cad;} .briefing-hero,.briefing-deck,.briefing-region-grid{display:block;} .briefing-lead{font-size:20px;font-weight:700;line-height:1.4;} .briefing-sublead,.briefing-mini-item .meta,.br-item-meta,.briefing-bullet-meta{font-size:12px;color:#555;} .briefing-bullet,.br-item,.briefing-mini-item{margin:10px 0;} .br-sev-badge{display:inline-block;font-size:10px;padding:2px 6px;border:1px solid #bbb;margin-right:8px;} </style></head><body><h1>Briefing strategico</h1><div style="margin-bottom:14px;color:#555;">Aggiornato '+new Date().toLocaleString('it-IT')+'</div>'+content+'</body></html>');
+  w.document.close();
+  w.focus();
+  setTimeout(function(){w.print();},250);
+}
 // ── MAPPA PAGINA 2 ────────────────────────────────────────────────
 var _p2MapWorld=null;
 // ── INLINE TRANSLATION ENGINE ────────────────────────────────────
@@ -3250,7 +3199,7 @@ function _drawP2Map(){
   var ic=_buildColors();
   var tip=document.getElementById('p2-map-tip');
 
-  _p2Proj=d3.geoNaturalEarth1().scale(W/5.95).translate([W/2,H/2]).precision(0.5);
+  _p2Proj=d3.geoNaturalEarth1().scale(W/6.2).translate([W/2,H/2]).precision(0.5);
   var path=d3.geoPath(_p2Proj);
   var NS=document.createElementNS.bind(document,'http://www.w3.org/2000/svg');
 
@@ -3450,11 +3399,22 @@ var TV_CH=[
   // ── HLS nativo (bypass bot-check) ───────────────────────────────
   {name:'Al Jazeera EN', type:'hls', hls:'https://live-hls-web-aje.getaj.net/AJE/index.m3u8',               yt:'gCNeDWCI0vo', link:'https://www.youtube.com/watch?v=gCNeDWCI0vo'},
   {name:'Al Jazeera AR', type:'hls', hls:'https://live-hls-web-aja.getaj.net/AJA/index.m3u8',               yt:'rChF468RWrU', link:'https://www.youtube.com/watch?v=rChF468RWrU'},
+  {name:'France 24 EN',  type:'hls', hls:'https://static.france24.com/live/F24_EN_LO_HLS/live_web.m3u8',    yt:'u9foWyMSETk', link:'https://www.youtube.com/watch?v=u9foWyMSETk'},
+  {name:'France 24 FR',  type:'hls', hls:'https://static.france24.com/live/F24_FR_LO_HLS/live_web.m3u8',    yt:'', link:'https://www.france24.com/fr/direct'},
   {name:'DW News',       type:'hls', hls:'https://dwamdstream102.akamaized.net/hls/live/2015531/dwstream102/index.m3u8', yt:'LuKwFajn37U', link:'https://www.youtube.com/watch?v=LuKwFajn37U'},
   {name:'Euronews EN',   type:'hls', hls:'https://jmp2.uk/SamsungTVPlus/GBAJ4900020VP.m3u8',                yt:'pykpO5kQJ98', link:'https://www.youtube.com/watch?v=pykpO5kQJ98'},
+  {name:'Sky News',      type:'hls', hls:'https://jmp2.uk/SamsungTVPlus/USBB52000022Q.m3u8',                yt:'9Auq9mYxFEE', link:'https://www.youtube.com/watch?v=9Auq9mYxFEE'},
+  {name:'BBC News',      type:'hls', hls:'https://jmp2.uk/SamsungTVPlus/US4000033L.m3u8',                   yt:'', link:'https://www.youtube.com/@BBCNews/streams'},
+  {name:'Reuters Now',   type:'hls', hls:'https://reuters-reutersnow-1-nl.samsung.wurl.tv/playlist.m3u8',   yt:'', link:'https://www.youtube.com/@Reuters/streams'},
   {name:'TRT World',     type:'hls', hls:'https://trtworldlive.akamaized.net/hls/live/2003168/trtworldlive/index.m3u8', yt:'ABfFhWzWs0s', link:'https://www.youtube.com/watch?v=ABfFhWzWs0s'},
+  {name:'NHK World',     type:'hls', hls:'https://nhkworld.webcdn.stream.ne.jp/www11/nhkworld-tv/global/263941/live_wa_s.m3u8', yt:'f0lYfG_vY_U', link:'https://www.youtube.com/watch?v=f0lYfG_vY_U'},
+  {name:'CGTN',          type:'hls', hls:'https://news.cgtn.com/resource/live/english/cgtn-news.m3u8',      yt:'8gGEJi5K9w4', link:'https://www.youtube.com/watch?v=8gGEJi5K9w4'},
+  {name:'RT English',    type:'hls', hls:'https://rt-glb.rttv.com/live/rten/playlist.m3u8',                 yt:'', link:'https://www.bnonews.com/index.php/live-feeds/rt/'},
+  {name:'i24 News',      type:'hls', hls:'https://bcovlive-a.akamaihd.net/6db4a900c00c4f7dac5f1e97ab87a0e4/eu-central-1/5377161796001/profile_0/chunklist.m3u8', yt:'', link:'https://video.i24news.tv/'},
   // ── YouTube IFrame API ───────────────────────────────────────────
   {name:'Bloomberg',     type:'embed', embed:'https://www.youtube-nocookie.com/embed/live_stream?channel=UCIALMKvObZNtJ6AmdCLP7Lg&autoplay=1&mute=1&playsinline=1', link:'https://www.youtube.com/@BloombergTelevision/streams'},
+  {name:'CNN',           type:'link', yt:'', link:'https://www.youtube.com/@CNN/streams'},
+  {name:'CNBC',          type:'embed', embed:'https://www.youtube-nocookie.com/embed/live_stream?channel=UCrp_UI8XtuYfpiqluWLD7Lw&autoplay=1&mute=1&playsinline=1', link:'https://www.youtube.com/@CNBCTelevision/streams'},
 ];
 var _tvIdx=0,_tvMuted=true,_hlsInst=null,_tvHlsTimeout=null;
 var _tvLibsPromise=null,_ytPlayer=null,_ytAPIReady=false,_ytPendingId=null;
@@ -4220,6 +4180,37 @@ function toggleSidebar(){
 .briefing-page-section-name{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.15em;text-transform:uppercase;color:var(--acc2);border-left:2px solid var(--acc2);padding-left:7px;}
 .briefing-page-empty{color:var(--mu);font-family:'Share Tech Mono',monospace;font-size:11px;padding:18px 0;}
 
+
+
+/* Briefing migliorato */
+.briefing-page-head{justify-content:space-between;flex-wrap:wrap;}
+.briefing-page-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.briefing-status{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--mu);letter-spacing:.08em;}
+.briefing-hero{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;margin-bottom:18px;}
+.briefing-card{background:var(--s);border:1px solid var(--bd);padding:14px 16px;}
+.briefing-card-title{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);margin-bottom:10px;}
+.briefing-lead{font-size:17px;line-height:1.45;font-weight:600;color:var(--tx);}
+.briefing-sublead{font-size:13px;line-height:1.55;color:#c9d1d9;margin-top:10px;}
+.briefing-bullets{display:flex;flex-direction:column;gap:10px;}
+.briefing-bullet{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--bd);}
+.briefing-bullet:first-child{border-top:none;padding-top:0;}
+.briefing-bullet-dot{width:8px;height:8px;border-radius:50%;margin-top:6px;flex-shrink:0;}
+.briefing-bullet-body{flex:1;min-width:0;}
+.briefing-bullet-head{font-size:13px;font-weight:600;line-height:1.4;color:var(--tx);}
+.briefing-bullet-meta{font-size:10px;color:var(--mu);font-family:'Share Tech Mono',monospace;margin-top:3px;}
+.briefing-deck{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:18px;}
+.briefing-mini-list{display:flex;flex-direction:column;gap:10px;}
+.briefing-mini-item{padding:10px 0;border-top:1px solid var(--bd);}
+.briefing-mini-item:first-child{border-top:none;padding-top:0;}
+.briefing-mini-item a{font-size:13px;font-weight:600;line-height:1.4;color:var(--tx);text-decoration:none;display:block;}
+.briefing-mini-item a:hover{color:var(--acc);}
+.briefing-mini-item .meta{font-size:10px;color:var(--mu);font-family:'Share Tech Mono',monospace;margin-top:3px;}
+.briefing-region-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+.briefing-page-section{background:var(--s);border:1px solid var(--bd);padding:14px 16px;margin-bottom:0;}
+@media (max-width:900px){
+  .briefing-hero,.briefing-deck,.briefing-region-grid{grid-template-columns:1fr;}
+}
+
 </style>
 
 
@@ -4813,6 +4804,37 @@ window._refreshP2Overlay=function(){
 @media (max-width:1199px){
   #tv-panel.tv-page-mode{bottom:72px!important;top:46px!important;height:auto!important;left:0!important;right:0!important;width:100%!important;resize:none!important;}
 }
+
+
+/* Briefing migliorato */
+.briefing-page-head{justify-content:space-between;flex-wrap:wrap;}
+.briefing-page-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.briefing-status{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--mu);letter-spacing:.08em;}
+.briefing-hero{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;margin-bottom:18px;}
+.briefing-card{background:var(--s);border:1px solid var(--bd);padding:14px 16px;}
+.briefing-card-title{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);margin-bottom:10px;}
+.briefing-lead{font-size:17px;line-height:1.45;font-weight:600;color:var(--tx);}
+.briefing-sublead{font-size:13px;line-height:1.55;color:#c9d1d9;margin-top:10px;}
+.briefing-bullets{display:flex;flex-direction:column;gap:10px;}
+.briefing-bullet{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--bd);}
+.briefing-bullet:first-child{border-top:none;padding-top:0;}
+.briefing-bullet-dot{width:8px;height:8px;border-radius:50%;margin-top:6px;flex-shrink:0;}
+.briefing-bullet-body{flex:1;min-width:0;}
+.briefing-bullet-head{font-size:13px;font-weight:600;line-height:1.4;color:var(--tx);}
+.briefing-bullet-meta{font-size:10px;color:var(--mu);font-family:'Share Tech Mono',monospace;margin-top:3px;}
+.briefing-deck{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:18px;}
+.briefing-mini-list{display:flex;flex-direction:column;gap:10px;}
+.briefing-mini-item{padding:10px 0;border-top:1px solid var(--bd);}
+.briefing-mini-item:first-child{border-top:none;padding-top:0;}
+.briefing-mini-item a{font-size:13px;font-weight:600;line-height:1.4;color:var(--tx);text-decoration:none;display:block;}
+.briefing-mini-item a:hover{color:var(--acc);}
+.briefing-mini-item .meta{font-size:10px;color:var(--mu);font-family:'Share Tech Mono',monospace;margin-top:3px;}
+.briefing-region-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+.briefing-page-section{background:var(--s);border:1px solid var(--bd);padding:14px 16px;margin-bottom:0;}
+@media (max-width:900px){
+  .briefing-hero,.briefing-deck,.briefing-region-grid{grid-template-columns:1fr;}
+}
+
 </style>
 
 <style id="browser-upgrade-style">
@@ -4822,11 +4844,6 @@ window._refreshP2Overlay=function(){
 .browser-search{min-width:260px;max-width:420px;width:30vw;background:var(--s2);border:1px solid var(--bd);padding:8px 12px;color:var(--tx);font-size:12px;font-family:'Inter',sans-serif;border-radius:999px;outline:none;}
 .browser-search:focus{border-color:var(--acc2);box-shadow:0 0 0 1px rgba(0,184,255,.14);}
 .browser-select{appearance:none;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(122,154,184,.22);color:var(--tx);font-size:11px;font-family:'Inter',sans-serif;font-weight:600;padding:8px 28px 8px 12px;border-radius:999px;outline:none;}
-.browser-help-btn{appearance:none;border:1px solid rgba(122,154,184,.26);background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));color:var(--tx);min-width:34px;height:34px;padding:0 10px;border-radius:999px;font:600 13px 'Inter',sans-serif;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;}
-.browser-help-btn:hover,.browser-help-btn:active{border-color:rgba(122,154,184,.42);background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.04));}
-.criteria-grid{display:grid;grid-template-columns:110px 1fr;gap:10px 12px;font-size:13px;line-height:1.45;}
-.criteria-grid strong{font-family:'Share Tech Mono',monospace;color:var(--acc);letter-spacing:.03em;}
-.criteria-note{margin-top:12px;font-size:12px;color:var(--mut);line-height:1.45;}
 .browser-mini-label{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.12em;color:var(--mu);text-transform:uppercase;}
 body.desktop-browser-upgrade .acol.is-priority .col-hd{background:linear-gradient(180deg,rgba(0,184,255,.08),rgba(0,184,255,.02)),var(--bg2);}
 body.desktop-browser-upgrade .acol.is-priority .col-name{color:#f4fbff;}
@@ -4860,6 +4877,37 @@ body.desktop-browser-upgrade #page-4{width:100%;min-width:0;min-height:0;}
 @media (max-width:1199px){
   .browser-toolbar{display:none!important;}
 }
+
+
+/* Briefing migliorato */
+.briefing-page-head{justify-content:space-between;flex-wrap:wrap;}
+.briefing-page-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.briefing-status{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--mu);letter-spacing:.08em;}
+.briefing-hero{display:grid;grid-template-columns:1.1fr .9fr;gap:14px;margin-bottom:18px;}
+.briefing-card{background:var(--s);border:1px solid var(--bd);padding:14px 16px;}
+.briefing-card-title{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);margin-bottom:10px;}
+.briefing-lead{font-size:17px;line-height:1.45;font-weight:600;color:var(--tx);}
+.briefing-sublead{font-size:13px;line-height:1.55;color:#c9d1d9;margin-top:10px;}
+.briefing-bullets{display:flex;flex-direction:column;gap:10px;}
+.briefing-bullet{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--bd);}
+.briefing-bullet:first-child{border-top:none;padding-top:0;}
+.briefing-bullet-dot{width:8px;height:8px;border-radius:50%;margin-top:6px;flex-shrink:0;}
+.briefing-bullet-body{flex:1;min-width:0;}
+.briefing-bullet-head{font-size:13px;font-weight:600;line-height:1.4;color:var(--tx);}
+.briefing-bullet-meta{font-size:10px;color:var(--mu);font-family:'Share Tech Mono',monospace;margin-top:3px;}
+.briefing-deck{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:18px;}
+.briefing-mini-list{display:flex;flex-direction:column;gap:10px;}
+.briefing-mini-item{padding:10px 0;border-top:1px solid var(--bd);}
+.briefing-mini-item:first-child{border-top:none;padding-top:0;}
+.briefing-mini-item a{font-size:13px;font-weight:600;line-height:1.4;color:var(--tx);text-decoration:none;display:block;}
+.briefing-mini-item a:hover{color:var(--acc);}
+.briefing-mini-item .meta{font-size:10px;color:var(--mu);font-family:'Share Tech Mono',monospace;margin-top:3px;}
+.briefing-region-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;}
+.briefing-page-section{background:var(--s);border:1px solid var(--bd);padding:14px 16px;margin-bottom:0;}
+@media (max-width:900px){
+  .briefing-hero,.briefing-deck,.briefing-region-grid{grid-template-columns:1fr;}
+}
+
 </style>
 <script id="browser-upgrade-script">
 (function(){
@@ -4909,7 +4957,6 @@ body.desktop-browser-upgrade #page-4{width:100%;min-width:0;min-height:0;}
         +'<option value="high">Da alta in su</option>'
         +'<option value="medium">Da media in su</option>'
         +'</select>'
-        +'<button id="browser-severity-help" class="browser-help-btn" type="button" title="Criteri severità">?</button>'
         +'</div>';
       page.insertBefore(toolbar, mainArea);
     }
@@ -4924,11 +4971,6 @@ body.desktop-browser-upgrade #page-4{width:100%;min-width:0;min-height:0;}
     if(sev && !sev.dataset.bound){
       sev.dataset.bound='1';
       sev.addEventListener('change', function(){ browserState.severity=this.value; rerenderBrowserView(); });
-    }
-    var help=document.getElementById('browser-severity-help');
-    if(help && !help.dataset.bound){
-      help.dataset.bound='1';
-      help.addEventListener('click', openSeverityModal);
     }
   }
   function rerenderBrowserView(){
