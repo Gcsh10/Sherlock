@@ -1240,15 +1240,7 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
     <div class="tvdot"></div>
     <span class="tvlbl" id="tvlbl">AL JAZEERA EN — LIVE</span>
     <select class="tvsel" id="tvsel" onchange="_buildPlayer(+this.value)">
-      <option value="0">Al Jazeera EN</option><option value="1">Al Jazeera AR</option>
-      <option value="2">France 24 EN</option><option value="3">France 24 FR</option>
-      <option value="4">DW News</option><option value="5">Euronews EN</option>
-      <option value="6">Sky News</option><option value="7">BBC News</option>
-      <option value="8">Reuters Now</option><option value="9">TRT World</option>
-      <option value="10">NHK World</option><option value="11">CGTN</option>
-      <option value="12">RT English</option><option value="13">i24 News</option>
-      <option value="14">Bloomberg</option><option value="15">CNN</option>
-      <option value="16">CNBC</option>
+      <option value="0">Al Jazeera EN</option><option value="1">Al Jazeera AR</option>      <option value="4">DW News</option><option value="5">Euronews EN</option>      <option value="9">TRT World</option>      <option value="14">Bloomberg</option>
     </select>
     <button class="tvbtn2" id="tv-mute-btn" onclick="tvUnmute()">SUONO</button>
     <button class="tvbtn2" onclick="tvOpenYT()">YT &#x2197;</button>
@@ -3399,22 +3391,11 @@ var TV_CH=[
   // ── HLS nativo (bypass bot-check) ───────────────────────────────
   {name:'Al Jazeera EN', type:'hls', hls:'https://live-hls-web-aje.getaj.net/AJE/index.m3u8',               yt:'gCNeDWCI0vo', link:'https://www.youtube.com/watch?v=gCNeDWCI0vo'},
   {name:'Al Jazeera AR', type:'hls', hls:'https://live-hls-web-aja.getaj.net/AJA/index.m3u8',               yt:'rChF468RWrU', link:'https://www.youtube.com/watch?v=rChF468RWrU'},
-  {name:'France 24 EN',  type:'hls', hls:'https://static.france24.com/live/F24_EN_LO_HLS/live_web.m3u8',    yt:'u9foWyMSETk', link:'https://www.youtube.com/watch?v=u9foWyMSETk'},
-  {name:'France 24 FR',  type:'hls', hls:'https://static.france24.com/live/F24_FR_LO_HLS/live_web.m3u8',    yt:'', link:'https://www.france24.com/fr/direct'},
   {name:'DW News',       type:'hls', hls:'https://dwamdstream102.akamaized.net/hls/live/2015531/dwstream102/index.m3u8', yt:'LuKwFajn37U', link:'https://www.youtube.com/watch?v=LuKwFajn37U'},
   {name:'Euronews EN',   type:'hls', hls:'https://jmp2.uk/SamsungTVPlus/GBAJ4900020VP.m3u8',                yt:'pykpO5kQJ98', link:'https://www.youtube.com/watch?v=pykpO5kQJ98'},
-  {name:'Sky News',      type:'hls', hls:'https://jmp2.uk/SamsungTVPlus/USBB52000022Q.m3u8',                yt:'9Auq9mYxFEE', link:'https://www.youtube.com/watch?v=9Auq9mYxFEE'},
-  {name:'BBC News',      type:'hls', hls:'https://jmp2.uk/SamsungTVPlus/US4000033L.m3u8',                   yt:'', link:'https://www.youtube.com/@BBCNews/streams'},
-  {name:'Reuters Now',   type:'hls', hls:'https://reuters-reutersnow-1-nl.samsung.wurl.tv/playlist.m3u8',   yt:'', link:'https://www.youtube.com/@Reuters/streams'},
   {name:'TRT World',     type:'hls', hls:'https://trtworldlive.akamaized.net/hls/live/2003168/trtworldlive/index.m3u8', yt:'ABfFhWzWs0s', link:'https://www.youtube.com/watch?v=ABfFhWzWs0s'},
-  {name:'NHK World',     type:'hls', hls:'https://nhkworld.webcdn.stream.ne.jp/www11/nhkworld-tv/global/263941/live_wa_s.m3u8', yt:'f0lYfG_vY_U', link:'https://www.youtube.com/watch?v=f0lYfG_vY_U'},
-  {name:'CGTN',          type:'hls', hls:'https://news.cgtn.com/resource/live/english/cgtn-news.m3u8',      yt:'8gGEJi5K9w4', link:'https://www.youtube.com/watch?v=8gGEJi5K9w4'},
-  {name:'RT English',    type:'hls', hls:'https://rt-glb.rttv.com/live/rten/playlist.m3u8',                 yt:'', link:'https://www.bnonews.com/index.php/live-feeds/rt/'},
-  {name:'i24 News',      type:'hls', hls:'https://bcovlive-a.akamaihd.net/6db4a900c00c4f7dac5f1e97ab87a0e4/eu-central-1/5377161796001/profile_0/chunklist.m3u8', yt:'', link:'https://video.i24news.tv/'},
   // ── YouTube IFrame API ───────────────────────────────────────────
   {name:'Bloomberg',     type:'embed', embed:'https://www.youtube-nocookie.com/embed/live_stream?channel=UCIALMKvObZNtJ6AmdCLP7Lg&autoplay=1&mute=1&playsinline=1', link:'https://www.youtube.com/@BloombergTelevision/streams'},
-  {name:'CNN',           type:'link', yt:'', link:'https://www.youtube.com/@CNN/streams'},
-  {name:'CNBC',          type:'embed', embed:'https://www.youtube-nocookie.com/embed/live_stream?channel=UCrp_UI8XtuYfpiqluWLD7Lw&autoplay=1&mute=1&playsinline=1', link:'https://www.youtube.com/@CNBCTelevision/streams'},
 ];
 var _tvIdx=0,_tvMuted=true,_hlsInst=null,_tvHlsTimeout=null;
 var _tvLibsPromise=null,_ytPlayer=null,_ytAPIReady=false,_ytPendingId=null;
