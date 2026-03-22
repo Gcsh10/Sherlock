@@ -1240,7 +1240,7 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
     <div class="tvdot"></div>
     <span class="tvlbl" id="tvlbl">AL JAZEERA EN — LIVE</span>
     <select class="tvsel" id="tvsel" onchange="_buildPlayer(+this.value)">
-      <option value="0">Al Jazeera EN</option><option value="1">Al Jazeera AR</option>      <option value="4">DW News</option><option value="5">Euronews EN</option>      <option value="9">TRT World</option>      <option value="14">Bloomberg</option>
+      <option value="0">Al Jazeera EN</option><option value="1">Al Jazeera AR</option><option value="2">DW News</option><option value="3">Euronews EN</option><option value="4">TRT World</option><option value="5">Bloomberg</option>
     </select>
     <button class="tvbtn2" id="tv-mute-btn" onclick="tvUnmute()">SUONO</button>
     <button class="tvbtn2" onclick="tvOpenYT()">YT &#x2197;</button>
@@ -1535,7 +1535,7 @@ function persist(){
 function loadPersist(){
   var DEFAULT_CLOSED=['russia','africa','americas','medioriente'];
   var LAYOUT_VER='v10';
-  var REMOVED_SOURCE_IDS=['ccg','caixin','almonitor','mei','mideasteye','arabnews','bbcme','arabiya','trtworld','meduza','moscowtimes','carnegie_russia','lowy','scmp_cn','rti_tw','globaltimes','globaltimes_zh','xinhua_en','xinhua_zh','people_en','people_zh','chinadaily','csis_china','merics','bbcafrica','warontherocks','defensenews','breakingdefense','janes','isw','acled'];
+  var REMOVED_SOURCE_IDS=['ccg','caixin','almonitor','mei','mideasteye','arabnews','bbcme','arabiya','trtworld','meduza','moscowtimes','carnegie_russia','lowy','scmp_cn','rti_tw','globaltimes','globaltimes_zh','xinhua_en','xinhua_zh','people_en','people_zh','chinadaily','csis_china','merics','bbcafrica','warontherocks','defensenews','breakingdefense','janes','isw','acled','onu','un','un_news','unnews','iaea'];
   try{
     // Migrate from old key if present
     if(!localStorage.getItem('sh3_sources_v3')&&localStorage.getItem('sh3_sources_v2')){
@@ -1551,7 +1551,11 @@ function loadPersist(){
       try{
         var saved=JSON.parse(s);
         if(Array.isArray(saved)){
-          saved=saved.filter(function(x){return x && REMOVED_SOURCE_IDS.indexOf(x.id)<0;});
+          saved=saved.filter(function(x){
+            if(!x) return false;
+            var _name=((x.name||'')+'').toLowerCase().trim();
+            return REMOVED_SOURCE_IDS.indexOf(x.id)<0 && ['onu','un','un news','un newsroom','iaea','prensa latina'].indexOf(_name)<0;
+          });
         }
         // Merge: keep saved prefs (on/off) but add any new DEFAULTS not yet saved
         var savedIds={};saved.forEach(function(x){savedIds[x.id]=x;});
@@ -1568,7 +1572,8 @@ function loadPersist(){
         });
         // Also keep any custom user-added sources not in DEFAULTS
         saved.forEach(function(x){
-          if(REMOVED_SOURCE_IDS.indexOf(x.id)>=0) return;
+          var _name=((x&&x.name)||'').toLowerCase().trim();
+          if(!x||REMOVED_SOURCE_IDS.indexOf(x.id)>=0||['onu','un','un news','un newsroom','iaea','prensa latina'].indexOf(_name)>=0) return;
           if(!DEFAULTS.find(function(d){return d.id===x.id;}))merged.push(x);
         });
         sources=merged.filter(function(x){return REMOVED_SOURCE_IDS.indexOf(x.id)<0;});
