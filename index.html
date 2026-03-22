@@ -1306,7 +1306,6 @@ var DEFAULTS=[
   {id:'wam',       name:'WAM (UAE)',           cat:'agenzie', url:'https://news.google.com/rss/search?q=site:wam.ae&hl=en',on:true},
   {id:'pti',       name:'PTI (India)',        cat:'agenzie', url:'https://news.google.com/rss/search?q=press+trust+india&hl=en',on:true},
   {id:'the_hindu', name:'The Hindu',          cat:'sudest_asia', url:'https://news.google.com/rss/search?q=site:thehindu.com+india+OR+indopacific&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'prensa',    name:'Prensa Latina',      cat:'agenzie', url:'https://news.google.com/rss/search?q=site:plenglish.com&hl=en',on:true},
   {id:'bbc',       name:'BBC World',          cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+world+news&hl=en&gl=US&ceid=US:en',on:true},
   {id:'aljazeera', name:'Al Jazeera',         cat:'media',   url:'https://news.google.com/rss/search?q=site:aljazeera.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'france24',  name:'France 24',          cat:'media',   url:'https://news.google.com/rss/search?q=site:france24.com&hl=en&gl=US&ceid=US:en',on:true},
@@ -1348,12 +1347,9 @@ var DEFAULTS=[
   {id:'economist', name:'The Economist',      cat:'think',   url:'https://news.google.com/rss/search?q=site:economist.com&hl=en',on:true},
   {id:'sipri',     name:'SIPRI',              cat:'think',   url:'https://www.sipri.org/rss.xml',on:true},
   {id:'intelonline',name:'Intelligence Online',cat:'think',  url:'https://news.google.com/rss/search?q=site:intelligenceonline.com&hl=en',on:true},
-  {id:'un',        name:'ONU',                cat:'ist',     url:'https://news.google.com/rss/search?q=site:news.un.org&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'iaea',      name:'IAEA',               cat:'ist',     url:'https://news.google.com/rss/search?q=site:iaea.org&hl=en&gl=US&ceid=US:en',on:true},
   {id:'nato',      name:'NATO',               cat:'ist',     url:'https://news.google.com/rss/search?q=NATO+statement&hl=en',on:true},
   {id:'ft',        name:'Financial Times',    cat:'finance', url:'https://news.google.com/rss/search?q=site:ft.com+world&hl=en',on:true},
   {id:'bloomberg', name:'Bloomberg',          cat:'finance', url:'https://news.google.com/rss/search?q=bloomberg+geopolitics+economy+war&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'wsj',       name:'WSJ World',          cat:'finance', url:'https://feeds.a.dj.com/rss/RSSWorldNews.xml',on:true},
   {id:'therecord', name:'The Record',         cat:'cyber',   url:'https://news.google.com/rss/search?q=site:therecord.media&hl=en&gl=US&ceid=US:en',on:true},
   {id:'bellingcat',name:'Bellingcat',         cat:'cyber',   url:'https://www.bellingcat.com/feed/',on:true},
   {id:'osint_rferl',  name:'RFE/RL',          cat:'osint',   url:'https://news.google.com/rss/search?q=site:rferl.org&hl=en&gl=US&ceid=US:en',on:true},
@@ -1372,10 +1368,10 @@ var DEFAULTS=[
   // ── CINA ──────────────────────────────────────────────────────
   {id:'xinhua_cina',name:'Xinhua EN',url:'https://news.google.com/rss/search?q=Xinhua+international+news&hl=en&gl=US&ceid=US:en',cat:'cina',max:15,on:true},
   {id:'globaltimes_cn_main',name:'Global Times',url:'https://news.google.com/rss/search?q=%22Global+Times%22+China&hl=en&gl=US&ceid=US:en',cat:'cina',max:10},
-  {id:'chinadigitaltimes',name:'China Digital Times',url:'https://chinadigitaltimes.net/feed/',cat:'cina',max:10},
+  {id:'chinadigitaltimes',name:'China Digital Times',url:'https://chinadigitaltimes.net/feed/',cat:'analisti_cn',max:10,on:true},
   // ── GLOBAL MEDIA ──────────────────────────────────────────────
-  {id:'wsj_world',name:'WSJ World',url:'https://feeds.a.dj.com/rss/RSSWorldNews.xml',cat:'media',max:15},
-  {id:'nyt_world',name:'NYT World',url:'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',cat:'media',max:15},
+  {id:'wsj_world',name:'WSJ World',url:'https://feeds.a.dj.com/rss/RSSWorldNews.xml',cat:'media',max:15,on:true},
+  {id:'nyt_world',name:'NYT World',url:'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',cat:'media',max:15,on:true},
   {id:'washpost',name:'Washington Post',url:'https://feeds.washingtonpost.com/rss/world',cat:'media',max:12},
 ];
 
@@ -1494,6 +1490,8 @@ var PRESETS=[
   // Jamestown Foundation — China Brief
   {id:'jamestown_cb', name:'Jamestown Foundation — China Brief', cat:'analisti_cn',
     url:'https://jamestown.org/programs/cb/feed/', on:true},
+  {id:'do_intel_china', name:'DO Intel China', cat:'analisti_cn',
+    url:'https://www.defenseone.com/topic/china-intelligence/', on:true},
   // Aggregatori
   {id:'guancha_zhuanlan', name:'观察者网 专栏', cat:'analisti_cn',
     url:'https://news.google.com/rss/search?q=%E8%A7%82%E5%AF%9F%E8%80%85%E7%BD%91+%E5%9C%B0%E7%BC%98%E6%94%BF%E6%B2%BB+%E5%88%86%E6%9E%90&hl=en&gl=US&ceid=US:en', on:true},
@@ -1559,7 +1557,6 @@ function loadPersist(){
         var savedIds={};saved.forEach(function(x){savedIds[x.id]=x;});
         var merged=DEFAULTS.map(function(d){
           var existing=savedIds[d.id]?savedIds[d.id]:d;
-          if(d.id==='wsj') existing.url='https://feeds.a.dj.com/rss/RSSWorldNews.xml';
           if(d.id==='rane_worldview') existing.url='https://news.google.com/rss/search?q=RANE+worldview+stratfor+geopolitics&hl=en&gl=US&ceid=US:en';
           if(['xinhua','peoples_daily','cgtn_default','globaltimes_default','chinadaily_default','thepaper_zh','xinhua_cina','xinhua_en','xinhua_zh','globaltimes_cn_main','globaltimes_en','globaltimes_zh','chinadaily'].indexOf(d.id)>=0) existing.on=true;
           // Force all analisti_cn sources ON
@@ -1601,7 +1598,7 @@ function loadPersist(){
       'guancha_diyuan','huanqiu_opinion','baidu_diyuan','zhipu_diyuan','csis_china',
       'ciis','cicir','siis','cfau','ciss','cass','huanqiu_zh','rand','brookings','iiss',
       'scmp_cn','merics','cna','cna_sg','people_world_zh','arabnews','xinhua_en','cgtn_en',
-      'globaltimes_en','chinadaily','people_en','xinhua_zh','people_zh'
+      'globaltimes_en','chinadaily','people_en','xinhua_zh','people_zh','nyt_world','wsj_world','chinadigitaltimes','do_intel_china'
     ];
     // Force requested sources ON unconditionally (every load, regardless of saved prefs)
     sources.forEach(function(s){
@@ -2039,7 +2036,7 @@ var THEATER_META={
   medioriente:{label:'Medio Oriente', ids:['haaretz','meye','aljazeera','anadolu','wam']},
   russia:{label:'Russia / Eurasia', ids:['tass','kyivindep','osint_rferl','dpa']},
   indopacifico:{label:'Indo-Pacifico', cats:['sudest_asia'], ids:['diplomat','nikkei','scmp','rappler','jakartapost','straitstimes','cna_sg','cna_tw','nhk','kyodo','yonhap','pti','the_hindu','dawn']},
-  cina:{label:'Cina', cats:['cina','analisti_cn'], ids:['xinhua','xinhua_cina','pekingnology','peoples_daily','globaltimes_default','globaltimes_cn_main','pla_daily','pla_eastern','pla_southern','pla_western','pla_northern','pla_central','chinadaily_default','chinadigitaltimes','qstheory','beijingdaily','ce_cn','gmw','mingpao_hk','cna_tw']},
+  cina:{label:'Cina', cats:['cina','analisti_cn'], ids:['xinhua','xinhua_cina','pekingnology','peoples_daily','globaltimes_default','globaltimes_cn_main','pla_daily','pla_eastern','pla_southern','pla_western','pla_northern','pla_central','chinadaily_default','qstheory','beijingdaily','ce_cn','gmw','mingpao_hk','cna_tw']},
   africa:{label:'Africa', ids:['news24','afp','rfi']},
   difesa:{label:'Difesa / OSINT', cats:['osint','ist','cyber'], ids:['warzone','defone','osint_janes','osint_acled','osint_oryx','gpf','rane_worldview','intelligence_online','intelonline']}
 };
