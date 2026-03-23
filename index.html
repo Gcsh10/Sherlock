@@ -1286,6 +1286,9 @@ var DEFAULTS=[
   {id:'ce_cn',name:'China Economic Net',url:'https://news.google.com/rss/search?q=site:ce.cn&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
   {id:'gmw',name:'Guangming Daily',url:'https://news.google.com/rss/search?q=site:gmw.cn&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
   {id:'pekingnology',name:'Pekingnology (Substack feed)',url:'https://pekingnology.substack.com/feed',cat:'analisti_cn',on:true},
+  {id:'sun_chenghao',name:'Sun Chenghao',url:'https://www.chinaffairsplus.com/feed',cat:'analisti_cn',on:true},
+  {id:'lingua_sinica',name:'Lingua Sinica',url:'https://linguasinica.substack.com/feed',cat:'analisti_cn',on:true},
+  {id:'he_yuzhe',name:'He Yuzhe',url:'https://www.yuzhehe.com/feed',cat:'analisti_cn',on:true},
 
   {id:'reuters',   name:'Reuters',            cat:'agenzie', url:'https://news.google.com/rss/search?q=reuters+world+news&hl=en&gl=US&ceid=US:en',on:true},
   {id:'ap',        name:'AP',                 cat:'agenzie', url:'https://news.google.com/rss/search?q=associated+press+world&hl=en&gl=US&ceid=US:en',on:true},
@@ -1605,7 +1608,8 @@ function loadPersist(){
       'guancha_diyuan','huanqiu_opinion','baidu_diyuan','zhipu_diyuan','csis_china',
       'ciis','cicir','siis','cfau','ciss','cass','huanqiu_zh','rand','brookings','iiss',
       'scmp_cn','merics','cna','cna_sg','people_world_zh','arabnews','xinhua_en','cgtn_en',
-      'globaltimes_en','chinadaily','people_en','xinhua_zh','people_zh','nyt_world','wsj_world','chinadigitaltimes','do_intel_china'
+      'globaltimes_en','chinadaily','people_en','xinhua_zh','people_zh','nyt_world','wsj_world','chinadigitaltimes','do_intel_china',
+      'sun_chenghao','lingua_sinica','he_yuzhe'
     ];
     // Force requested sources ON unconditionally (every load, regardless of saved prefs)
     sources.forEach(function(s){
