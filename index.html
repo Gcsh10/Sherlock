@@ -535,6 +535,25 @@ body.col-touch-sorting .col-hd{cursor:grabbing;}
   header::-webkit-scrollbar{display:none;}
   header > *{flex-shrink:0;}
   #page-tabs-header{flex-shrink:0;}
+
+  body.desktop-browser-upgrade #page-1.on{
+    display:grid;
+    grid-template-columns:180px minmax(0,1fr);
+    grid-template-rows:auto minmax(0,1fr);
+    grid-template-areas:"toolbar toolbar" "sidebar main";
+    align-items:stretch;
+  }
+  body.desktop-browser-upgrade #page-1>.browser-toolbar{display:flex;grid-area:toolbar;min-width:0;}
+  body.desktop-browser-upgrade #page-1>.sidebar{display:flex;grid-area:sidebar;min-height:0;}
+  body.desktop-browser-upgrade #page-1>.main-area{grid-area:main;min-width:0;min-height:0;}
+  .browser-toolbar{padding:8px 10px;gap:8px;}
+  .browser-toolbar-left{gap:8px;flex-wrap:nowrap;min-width:0;}
+  .browser-search{min-width:220px;max-width:none;width:min(46vw,420px);}
+  .browser-select{padding:8px 26px 8px 12px;}
+
+  #page-2 .ops-intel{width:220px;}
+  #page-2 .p2-map-hd{padding:6px 10px;gap:6px;}
+  #page-2 #p2-map-wrap .map-shell{border-radius:22px;}
 }
 
 /* Bottom nav: hidden on desktop */
@@ -996,6 +1015,7 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
         <option value="regional">Regionale</option><option value="agenzie">Agenzia</option>
         <option value="osint">OSINT</option>
         <option value="analisti_cn">Analisti CN</option>
+        <option value="giappone">Giappone</option>
       </select></div>
     <div class="mrow">
       <button class="hbtn" onclick="closeSrcModal()">Annulla</button>
@@ -1048,6 +1068,7 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
             <option value="finance">Finance</option><option value="regional">Reg.</option>
             <option value="osint">OSINT</option>
             <option value="analisti_cn">Analisti CN</option>
+            <option value="giappone">Giappone</option>
           </select>
           <button class="qadd-btn" onclick="addInline()">&#8853;</button>
         </div>
@@ -1512,6 +1533,22 @@ var PRESETS=[
   {id:'guancha_diyuan', name:'观察者网 地缘政治', cat:'analisti_cn',
     url:'https://news.google.com/rss/search?q=site:guancha.cn+%E5%9C%B0%E7%BC%98%E6%94%BF%E6%B2%BB&hl=en&gl=US&ceid=US:en', on:true},
 
+
+  {id:'nhk_japan', name:'NHK World Japan', cat:'giappone', url:'https://news.google.com/rss/search?q=site:nhk.or.jp+japan+security+OR+japan+foreign+policy&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'nikkei_japan', name:'Nikkei Asia Japan', cat:'giappone', url:'https://news.google.com/rss/search?q=site:asia.nikkei.com+Japan+security+OR+Japan+geopolitics&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'japantimes_japan', name:'The Japan Times', cat:'giappone', url:'https://news.google.com/rss/search?q=site:japantimes.co.jp+Japan+security+OR+Japan+foreign+policy&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'asahi_japan', name:'朝日新聞 Asahi', cat:'giappone', url:'https://news.google.com/rss/search?q=site:asahi.com+%E6%97%A5%E6%9C%AC+%E5%A4%96%E4%BA%A4+OR+%E5%AE%89%E5%85%A8%E4%BF%9D%E9%9A%9C&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'yomiuri_japan', name:'読売新聞 Yomiuri', cat:'giappone', url:'https://news.google.com/rss/search?q=site:yomiuri.co.jp+%E6%97%A5%E6%9C%AC+%E5%A4%96%E4%BA%A4+OR+%E5%AE%89%E5%85%A8%E4%BF%9D%E9%9A%9C&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'mainichi_japan', name:'毎日新聞 Mainichi', cat:'giappone', url:'https://news.google.com/rss/search?q=site:mainichi.jp+%E6%97%A5%E6%9C%AC+%E5%A4%96%E4%BA%A4+OR+%E5%AE%89%E5%85%A8%E4%BF%9D%E9%9A%9C&hl=en&gl=US&ceid=US:en', on:false},
+  {id:'sankei_japan', name:'産経新聞 Sankei', cat:'giappone', url:'https://news.google.com/rss/search?q=site:sankei.com+%E6%97%A5%E6%9C%AC+%E5%AE%89%E5%85%A8%E4%BF%9D%E9%9A%9C+OR+%E5%A4%96%E4%BA%A4&hl=en&gl=US&ceid=US:en', on:false},
+  {id:'kazuto_suzuki', name:'Kazuto Suzuki', cat:'giappone', url:'https://news.google.com/rss/search?q="Kazuto+Suzuki"+Japan+security+OR+space&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'stephen_nagy', name:'Stephen Nagy', cat:'giappone', url:'https://news.google.com/rss/search?q="Stephen+Nagy"+Japan+geopolitics+OR+Indo-Pacific&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'hirohito_ogi', name:'Hirohito Ogi', cat:'giappone', url:'https://news.google.com/rss/search?q="Hirohito+Ogi"+Japan&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'haruo_tohmatsu', name:'Haruo Tohmatsu', cat:'giappone', url:'https://news.google.com/rss/search?q="Haruo+Tohmatsu"+Japan+strategy+OR+security&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'watanabe_nabe', name:'Watanabe Tsuneo (Nabe)', cat:'giappone', url:'https://news.google.com/rss/search?q="Watanabe+Tsuneo"+OR+Nabe+Japan+security&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'kawashima_shin', name:'Kawashima Shin', cat:'giappone', url:'https://news.google.com/rss/search?q="Kawashima+Shin"+Japan+China+OR+Taiwan&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'marina_fujita_dickson', name:'Marina Fujita Dickson', cat:'giappone', url:'https://news.google.com/rss/search?q="Marina+Fujita+Dickson"+Japan&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'alessio_patalano_jp', name:'Alessio Patalano', cat:'giappone', url:'https://news.google.com/rss/search?q="Alessio+Patalano"+Japan+maritime+OR+strategy&hl=en&gl=US&ceid=US:en', on:false},
 ];
 
 var ALL_COLS=[
@@ -1520,6 +1557,7 @@ var ALL_COLS=[
   {id:'medioriente',  name:'Medio Oriente',     icon:'&#128332;', regions:['medioriente']},
   {id:'italia',       name:'Italia',            icon:'&#127470;&#127481;', regions:['italia']},
   {id:'cina',         name:'Cina & Taiwan',     icon:'&#127464;&#127475;', regions:['cina']},
+  {id:'giappone',     name:'Giappone',          icon:'&#127471;&#127477;', regions:['giappone']},
   {id:'indopacifico', name:'Indo-Pacifico',     icon:'&#127759;', regions:['indopacifico','sudest_asia']},
   {id:'americas',     name:'Americhe',          icon:'&#127758;', regions:['americas']},
   {id:'osint',        name:'OSINT',             icon:'&#128065;', regions:['osint']},
@@ -1623,6 +1661,12 @@ function loadPersist(){
     colOrder=colOrder.filter(function(id){if(seen[id])return false;seen[id]=true;return true;});
     // Rimuovi ID non validi
     colOrder=colOrder.filter(function(id){return ALL_COLS.find(function(c){return c.id===id;});});
+    // Inserisci Giappone subito dopo Cina se è una nuova colonna
+    if(colOrder.indexOf('giappone')<0){
+      var cinaIdx=colOrder.indexOf('cina');
+      if(cinaIdx>=0) colOrder.splice(cinaIdx+1,0,'giappone');
+      else colOrder.push('giappone');
+    }
     // Safety: se tutte le colonne sono chiuse, resetta
     var visibleCols=colOrder.filter(function(id){return colClosed.indexOf(id)<0;});
     if(visibleCols.length===0){colClosed=[];}
@@ -1692,7 +1736,8 @@ var CL={
     italia:['italy','italian','italia','italiano','roma','rome','milan','milano','meloni','palazzo chigi','quirinale','farnesina','genova','napoli','torino','governo italiano'],
     medioriente:['middle east','iran','israel','gaza','palestine','syria','iraq','lebanon','saudi','yemen','hamas','hezbollah','idf','tehran','jerusalem','riyadh','medio oriente','israele','palestina','siria','libano','giordania','kuwait','qatar','emirati','oman','bahrein','egitto','egypt','cairo','libia','libya'],
     cina:['china','chinese','xi jinping','pla','bri','cina','cinese','pechino','beijing','shanghai','hong kong','xinjiang','tibet','taiwan','taipei','tsai','lai ching','formosa','stretto di taiwan','taiwan strait','foxconn','huawei','people\'s daily','xinhua','cgtn','global times','renminbi','yuan'],
-    indopacifico:['japan','south korea','india','pacific','indo-pacific','tokyo','seoul','new delhi','mumbai','kashmir','australia','new zealand','mongolia','north korea','pyongyang','kim jong','giappone','corea del sud','india','australia','nuova zelanda','canberra'],
+    giappone:['japan','japanese','giappone','giapponese','tokyo','nippon','kishida','ishiba','diet japan','jsdf','self-defense forces','yokosuka','okinawa','osaka','sdf','jmsdf','nhk world japan','nikkei asia','japan times','asahi','yomiuri','mainichi','sankei','kawashima shin','kazuto suzuki'],
+    indopacifico:['south korea','india','pacific','indo-pacific','seoul','new delhi','mumbai','kashmir','australia','new zealand','mongolia','north korea','pyongyang','kim jong','corea del sud','india','australia','nuova zelanda','canberra'],
     sudest_asia:['vietnam','philippines','indonesia','thailand','malaysia','singapore','cambodia','myanmar','laos','brunei','timor','asean','southeast asia','filippin','jakarta','manila','hanoi','bangkok','kuala lumpur','yangon','naypyidaw','mekong','filippine','tailandia','malesia','cambogia','birmania','sud-est asiatico'],
     americas:['usa','united states','america','trump','washington','canada','brazil','mexico','latin','venezuela','colombia','argentina','chile','peru','cuba','haiti','caribbean','stati uniti','brasile','messico','colombia','argentina','caracas','bogota','buenos aires','ottawa','pentagono','cia','congresso usa'],
     africa:['africa','sudan','ethiopia','somalia','mali','sahel','congo','nigeria','kenya','libya','mozambique','etiopia','libia','tanzania','ghana','senegal','cameroon','angola','zimbabwe','zambia','rwanda','burkina','niger','chad','djibouti','eritrea'],
@@ -1706,7 +1751,7 @@ function classify(item){
   if(sev==='low'){for(var i=0;i<CL.high.length;i++){if(txt.indexOf(CL.high[i])>=0){sev='high';break;}}}
   if(sev==='low'){for(var i=0;i<CL.medium.length;i++){if(txt.indexOf(CL.medium[i])>=0){sev='medium';break;}}}
   // Priority order: more specific regions checked first to avoid false positives
-  var REGION_PRIORITY=['italia','cina','russia','medioriente','sudest_asia','europa','americas','africa','indopacifico'];
+  var REGION_PRIORITY=['italia','cina','giappone','russia','medioriente','sudest_asia','europa','americas','africa','indopacifico'];
   var reg='global';
   for(var r=0;r<REGION_PRIORITY.length;r++){
     var rk=REGION_PRIORITY[r];
@@ -1721,6 +1766,7 @@ function classify(item){
   if(reg==='global'){
     if(item.cat==='cina') item.region='cina';
     else if(item.cat==='sudest_asia') item.region='sudest_asia';
+    else if(item.cat==='giappone') item.region='giappone';
     else if(item.cat==='italia') item.region='italia';
     else if(item.cat==='analisti_cn') item.region='analisti_cn';
   }
@@ -1865,7 +1911,7 @@ function _isNonLatin(s){return /[\u4e00-\u9fff\u3040-\u30ff\u0600-\u06ff\u3400-\
 function cardHTML(a){
   var time=a.pub?'<span class="ctime">'+fmtTime(a.pub)+'</span>':'';
   var isChinese=_isNonLatin(a.title||'');
-  var needsTr=isChinese||(a.cat==='cina')||_isNonLatin(a.src||'');
+  var needsTr=isChinese||(a.cat==='cina')||(a.cat==='giappone')||_isNonLatin(a.src||'');
   var zhBadge=isChinese?'<span class="clang-badge">中</span>':'';
   var trBtn=needsTr?'<button class="ctranslate" onclick="translateCard(this)" title="Translate to English">🌐 EN</button>':'';
   var needsAttr=needsTr?' data-needstr="1"':'';
@@ -2048,12 +2094,14 @@ var THEATER_META={
   russia:{label:'Russia / Eurasia', ids:['tass','kyivindep','osint_rferl','dpa']},
   indopacifico:{label:'Indo-Pacifico', cats:['sudest_asia'], ids:['diplomat','nikkei','scmp','rappler','jakartapost','straitstimes','cna_sg','cna_tw','nhk','kyodo','yonhap','pti','the_hindu','dawn']},
   cina:{label:'Cina', cats:['cina','analisti_cn'], ids:['xinhua','xinhua_cina','pekingnology','peoples_daily','globaltimes_default','globaltimes_cn_main','pla_daily','pla_eastern','pla_southern','pla_western','pla_northern','pla_central','chinadaily_default','qstheory','beijingdaily','ce_cn','gmw','mingpao_hk','cna_tw']},
+  giappone:{label:'Giappone', cats:['giappone'], ids:['nhk_japan','nikkei_japan','japantimes_japan','asahi_japan','yomiuri_japan','mainichi_japan','sankei_japan','kazuto_suzuki','stephen_nagy','hirohito_ogi','haruo_tohmatsu','watanabe_nabe','kawashima_shin','marina_fujita_dickson','alessio_patalano_jp']},
   africa:{label:'Africa', ids:['news24','afp','rfi']},
   difesa:{label:'Difesa / OSINT', cats:['osint','ist','cyber'], ids:['warzone','defone','osint_janes','osint_acled','osint_oryx','gpf','rane_worldview','intelligence_online','intelonline']}
 };
 function sourceTheater(s){
   var id=(s.id||'').toLowerCase(), cat=(s.cat||'').toLowerCase();
   if(THEATER_META.cina.ids.indexOf(id)>=0 || THEATER_META.cina.cats.indexOf(cat)>=0) return 'cina';
+  if(THEATER_META.giappone.ids.indexOf(id)>=0 || THEATER_META.giappone.cats.indexOf(cat)>=0) return 'giappone';
   if(THEATER_META.indopacifico.ids.indexOf(id)>=0 || THEATER_META.indopacifico.cats.indexOf(cat)>=0) return 'indopacifico';
   if(THEATER_META.medioriente.ids.indexOf(id)>=0) return 'medioriente';
   if(THEATER_META.russia.ids.indexOf(id)>=0) return 'russia';
@@ -2073,7 +2121,7 @@ function activateTheater(theater){
 
 function renderSrcList(){
   var el=document.getElementById('srclist');if(!el)return;
-  var CAT={agenzie:'Agenzie',media:'Media',italia:'Italia',think:'Think tank',ist:'Ist.',cyber:'Cyber',finance:'Finance',regional:'Reg.',osint:'OSINT',cina:'Cina',sudest_asia:'Sud-est Asia',analisti_cn:'Analisti CN'};
+  var CAT={agenzie:'Agenzie',media:'Media',italia:'Italia',think:'Think tank',ist:'Ist.',cyber:'Cyber',finance:'Finance',regional:'Reg.',osint:'OSINT',cina:'Cina',giappone:'Giappone',sudest_asia:'Sud-est Asia',analisti_cn:'Analisti CN'};
   var catmap={};
   sources.forEach(function(s){var c=s.cat||'media';if(!catmap[c])catmap[c]=[];catmap[c].push(s);});
   var html='';
@@ -2188,13 +2236,15 @@ var REGION_LABELS={
   italia:'Italia',
   indopacifico:'Indo-Pacifico',
   cina:'Cina e Taiwan',
+  giappone:'Giappone',
   americas:'Americhe',
   africa:'Africa subsahariana',
   osint:'OSINT / Analisi difesa',
   sudest_asia:'Sud-Est asiatico',
-  analisti_cn:'Analisti geopolitici cinesi'
+  analisti_cn:'Analisti geopolitici cinesi',
+  giappone:'Giappone'
 };
-var REGION_ORDER=['medioriente','russia','europa','cina','analisti_cn','indopacifico','sudest_asia','americas','africa','italia','osint','global'];
+var REGION_ORDER=['medioriente','russia','europa','cina','giappone','analisti_cn','indopacifico','sudest_asia','americas','africa','italia','osint','global'];
 
 function _sevRank(sev){return ({critical:4,high:3,medium:2,low:1})[sev]||0;}
 function _sevColor(sev){return sev==='critical'?'#ef4444':sev==='high'?'#f59e0b':sev==='medium'?'#3b82f6':'#22d35e';}
@@ -4863,7 +4913,7 @@ body.desktop-browser-upgrade #page-4{width:100%;min-width:0;min-height:0;}
     grid-template-areas:"toolbar" "main";
   }
 }
-@media (max-width:1199px){
+@media (max-width:767px){
   .browser-toolbar{display:none!important;}
 }
 
