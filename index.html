@@ -546,14 +546,15 @@ body.col-touch-sorting .col-hd{cursor:grabbing;}
   body.desktop-browser-upgrade #page-1>.browser-toolbar{display:flex;grid-area:toolbar;min-width:0;}
   body.desktop-browser-upgrade #page-1>.sidebar{display:flex;grid-area:sidebar;min-height:0;}
   body.desktop-browser-upgrade #page-1>.main-area{grid-area:main;min-width:0;min-height:0;}
-  .browser-toolbar{padding:8px 10px;gap:8px;}
-  .browser-toolbar-left{gap:8px;flex-wrap:nowrap;min-width:0;}
-  .browser-search{min-width:220px;max-width:none;width:min(46vw,420px);}
+  .browser-toolbar{display:flex;padding:8px 10px;gap:8px;}
+  .browser-toolbar-left{gap:8px;flex-wrap:nowrap;min-width:0;width:100%;}
+  .browser-search{display:block;min-width:240px;max-width:none;width:min(52vw,520px);}
   .browser-select{padding:8px 26px 8px 12px;}
 
-  #page-2 .ops-intel{width:220px;}
+  #page-2 .ops-intel{width:190px;}
   #page-2 .p2-map-hd{padding:6px 10px;gap:6px;}
   #page-2 #p2-map-wrap .map-shell{border-radius:22px;}
+  #page-2 .ops-map-center{flex:1.15;}
 }
 
 /* Bottom nav: hidden on desktop */
@@ -3706,9 +3707,64 @@ function tvOpenYT(){var ch=TV_CH[_tvIdx];if(!ch)return;var url=_tvOpenUrlFor(_tv
   var hd=document.getElementById('tvhd'),panel=document.getElementById('tv-panel');
   if(!hd||!panel)return;
   var dx=0,dy=0,down=false;
-  hd.addEventListener('mousedown',function(e){if(panel.classList.contains('tv-page-mode'))return;if(e.target.tagName==='BUTTON'||e.target.tagName==='SELECT')return;down=true;dx=e.clientX-panel.offsetLeft;dy=e.clientY-panel.offsetTop;e.preventDefault();});
-  document.addEventListener('mousemove',function(e){if(!down)return;panel.style.left=(e.clientX-dx)+'px';panel.style.top=(e.clientY-dy)+'px';panel.style.right='auto';panel.style.bottom='auto';});
-  document.addEventListener('mouseup',function(){down=false;});
+  function isHandleBlocked(target){
+    if(!target) return false;
+    var tag=(target.tagName||'').toUpperCase();
+    return tag==='BUTTON' || tag==='SELECT' || !!target.closest('button,select');
+  }
+  function clamp(val,min,max){ return Math.max(min, Math.min(max, val)); }
+  function startDrag(clientX,clientY,target){
+    if(panel.classList.contains('tv-page-mode')) return;
+    if(window.innerWidth<=767) return;
+    if(isHandleBlocked(target)) return;
+    var rect=panel.getBoundingClientRect();
+    if(!panel.style.left){
+      panel.style.left=rect.left+'px';
+      panel.style.top=rect.top+'px';
+      panel.style.right='auto';
+      panel.style.bottom='auto';
+    }
+    dx=clientX-panel.offsetLeft;
+    dy=clientY-panel.offsetTop;
+    down=true;
+  }
+  function moveDrag(clientX,clientY){
+    if(!down) return;
+    var maxLeft=Math.max(0, window.innerWidth-panel.offsetWidth);
+    var maxTop=Math.max(0, window.innerHeight-panel.offsetHeight);
+    var left=clamp(clientX-dx, 0, maxLeft);
+    var top=clamp(clientY-dy, 0, maxTop);
+    panel.style.left=left+'px';
+    panel.style.top=top+'px';
+    panel.style.right='auto';
+    panel.style.bottom='auto';
+  }
+  function endDrag(){ down=false; }
+  hd.addEventListener('mousedown',function(e){ startDrag(e.clientX,e.clientY,e.target); if(down)e.preventDefault(); });
+  document.addEventListener('mousemove',function(e){ moveDrag(e.clientX,e.clientY); });
+  document.addEventListener('mouseup',endDrag);
+  hd.addEventListener('touchstart',function(e){
+    var t=e.touches&&e.touches[0]; if(!t) return;
+    startDrag(t.clientX,t.clientY,e.target);
+    if(down)e.preventDefault();
+  },{passive:false});
+  document.addEventListener('touchmove',function(e){
+    if(!down) return;
+    var t=e.touches&&e.touches[0]; if(!t) return;
+    moveDrag(t.clientX,t.clientY);
+    e.preventDefault();
+  },{passive:false});
+  document.addEventListener('touchend',endDrag,{passive:true});
+  window.addEventListener('resize', function(){
+    if(window.innerWidth<=767){ down=false; return; }
+    if(panel.classList.contains('tv-off')||panel.classList.contains('tv-page-mode')) return;
+    if(panel.style.left){
+      var maxLeft=Math.max(0, window.innerWidth-panel.offsetWidth);
+      var maxTop=Math.max(0, window.innerHeight-panel.offsetHeight);
+      panel.style.left=clamp(parseFloat(panel.style.left)||0,0,maxLeft)+'px';
+      panel.style.top=clamp(parseFloat(panel.style.top)||0,0,maxTop)+'px';
+    }
+  });
 })();
 
 // ── INIT ──────────────────────────────────────────────────────────
@@ -5046,7 +5102,7 @@ body.desktop-browser-upgrade #page-4{width:100%;min-width:0;min-height:0;}
     }
   }
   function markDesktopMode(){
-    var on=window.innerWidth>=1200;
+    var on=window.innerWidth>=768;
     document.body.classList.toggle('desktop-browser-upgrade', on);
   }
   function initBrowserUpgrade(){
