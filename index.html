@@ -554,17 +554,25 @@ body.col-touch-sorting .col-hd{cursor:grabbing;}
     width:100%;
     max-width:100%;
   }
-  body.desktop-browser-upgrade.sidebar-collapsed #page-1 .cols-wrap{
-    display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    align-items:stretch;
-    overflow-x:hidden;
+  body.desktop-browser-upgrade.sidebar-collapsed #page-1 .cols-wrap,
+  body.desktop-browser-upgrade #page-1 .cols-wrap{
+    display:flex !important;
+    flex-direction:row !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
     width:100%;
   }
-  body.desktop-browser-upgrade.sidebar-collapsed #page-1 .acol{
-    min-width:0;
-    max-width:none;
-    flex:1 1 auto;
+  body.desktop-browser-upgrade #page-1 .cols-wrap::-webkit-scrollbar{display:none;}
+  body.desktop-browser-upgrade.sidebar-collapsed #page-1 .acol,
+  body.desktop-browser-upgrade #page-1 .acol{
+    min-width:280px;
+    max-width:280px;
+    flex-shrink:0;
+    flex:none;
+    scroll-snap-align:start;
   }
   .browser-toolbar{display:flex;padding:8px 10px;gap:8px;}
   .browser-toolbar-left{gap:8px;flex-wrap:nowrap;min-width:0;width:100%;}
@@ -4971,6 +4979,31 @@ body.desktop-browser-upgrade .cols-wrap .acol{min-width:clamp(260px,24vw,340px);
 body.desktop-browser-upgrade .cols-wrap .acol.is-priority{min-width:clamp(320px,31vw,420px);flex:1.2 1 420px;}
 body.desktop-browser-upgrade .cols-wrap .acol.is-secondary{min-width:clamp(240px,21vw,300px);}
 body.desktop-browser-upgrade .cols-wrap .acol.is-tools{min-width:clamp(220px,20vw,280px);}
+
+/* ── iPadOS landscape: scroll orizzontale colonne ──────────────── */
+@media (min-width:768px) and (max-width:1199px){
+  body.desktop-browser-upgrade .cols-wrap{
+    display:flex !important;
+    flex-direction:row !important;
+    flex-wrap:nowrap !important;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    scroll-snap-type:x mandatory;
+    -webkit-overflow-scrolling:touch;
+    scrollbar-width:none;
+  }
+  body.desktop-browser-upgrade .cols-wrap::-webkit-scrollbar{display:none;}
+  body.desktop-browser-upgrade .cols-wrap .acol,
+  body.desktop-browser-upgrade .cols-wrap .acol.is-priority,
+  body.desktop-browser-upgrade .cols-wrap .acol.is-secondary,
+  body.desktop-browser-upgrade .cols-wrap .acol.is-tools{
+    flex:none !important;
+    flex-shrink:0 !important;
+    scroll-snap-align:start;
+    min-width:clamp(260px,30vw,340px) !important;
+    max-width:clamp(260px,30vw,340px) !important;
+  }
+}
 body.desktop-browser-upgrade .col-feed .empty{padding:28px 14px;}
 body.desktop-browser-upgrade .col-hd{padding:11px 12px;}
 body.desktop-browser-upgrade .main-area{overflow:hidden;}
