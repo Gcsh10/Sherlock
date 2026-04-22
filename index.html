@@ -212,7 +212,7 @@ body.col-touch-sorting .col-hd{cursor:grabbing;}
 .card-new-flash{border-left:2px solid var(--acc)!important;transition:border-color 3s ease;}
 
 /* ── PIN / STELLA ───────────────────────────────────────────────── */
-.cpin{background:none;border:none;cursor:pointer;font-size:13px;padding:0 3px;color:var(--mu);line-height:1;transition:color .15s,transform .15s;flex-shrink:0;}
+.cpin{background:none;border:none;cursor:pointer;font-size:13px;padding:0 3px;color:var(--mu);line-height:1;transition:color .15s,transform .15s;flex-shrink:0;min-width:28px;min-height:28px;display:inline-flex;align-items:center;justify-content:center;}
 .cpin:hover{color:var(--am);transform:scale(1.2);}
 .cpin.pinned{color:var(--am);}
 .card.is-pinned{border-left:3px solid var(--am)!important;}
@@ -918,7 +918,39 @@ html[data-theme=dark] #analisi-chatgpt-panel textarea,
 .timeline-title,.briefing-page-title{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.14em;color:var(--acc);text-transform:uppercase;}
 .timeline-controls{display:flex;align-items:center;gap:8px;margin-left:auto;flex-wrap:wrap;}
 .timeline-select{appearance:none;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(122,154,184,.22);color:var(--tx);font-size:11px;font-family:'Inter',sans-serif;font-weight:600;padding:6px 28px 6px 10px;border-radius:999px;outline:none;}
-.timeline-body,.briefing-page-body{flex:1;min-height:0;overflow-y:auto;padding:14px 16px;}
+.timeline-body{flex:1;min-height:0;overflow-y:auto;padding:14px 16px;}
+.briefing-page-body{flex:1;min-height:0;overflow-y:auto;padding:24px 32px;}
+@media (max-width:600px){.briefing-page-body{padding:16px 14px;}}
+
+/* ── MORNING DIGEST ──────────────────────────────────────────────── */
+.md-date{font-family:"Share Tech Mono",monospace;font-size:10px;color:var(--mu);letter-spacing:.14em;text-transform:uppercase;margin-bottom:18px;}
+.md-lead{margin-bottom:16px;}
+.md-lead-title{display:block;font-size:21px;font-weight:700;color:var(--tx);text-decoration:none;line-height:1.35;}
+.md-lead-title:hover{color:var(--acc);}
+.md-lead-meta{font-size:11px;color:var(--mu);font-family:"Share Tech Mono",monospace;margin-top:6px;letter-spacing:.04em;}
+.md-divider{height:1px;background:var(--bd2);margin:16px 0;}
+.md-section-label{font-family:"Share Tech Mono",monospace;font-size:9px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--mu);border-left:2px solid var(--acc2);padding-left:7px;margin-bottom:10px;}
+.md-list{display:flex;flex-direction:column;}
+.md-item{display:flex;align-items:baseline;gap:14px;padding:10px 0;border-bottom:1px solid var(--bd);}
+.md-item:last-child{border-bottom:none;}
+.md-item-num{font-family:"Share Tech Mono",monospace;font-size:11px;color:var(--mu);min-width:18px;text-align:right;flex-shrink:0;}
+.md-item-body{flex:1;display:flex;align-items:baseline;gap:10px;min-width:0;}
+.md-item-title{font-size:14px;font-weight:600;color:var(--tx);text-decoration:none;line-height:1.35;flex:1;min-width:0;}
+.md-item-title:hover{color:var(--acc);}
+.md-item-meta{font-size:10px;color:var(--mu);font-family:"Share Tech Mono",monospace;white-space:nowrap;flex-shrink:0;}
+@media (max-width:600px){.md-item-body{flex-wrap:wrap;}.md-item-meta{white-space:normal;}}
+.md-theater-list{display:flex;flex-direction:column;}
+.md-theater-item{display:flex;align-items:baseline;gap:12px;padding:8px 0;border-bottom:1px solid var(--bd);}
+.md-theater-item:last-child{border-bottom:none;}
+.md-theater-label{font-family:"Share Tech Mono",monospace;font-size:9px;letter-spacing:.08em;text-transform:uppercase;color:var(--acc2);min-width:90px;flex-shrink:0;}
+@media (max-width:400px){.md-theater-label{min-width:72px;font-size:8px;}}
+.md-theater-title{font-size:13px;font-weight:600;color:var(--tx);text-decoration:none;flex:1;line-height:1.35;}
+.md-theater-title:hover{color:var(--acc);}
+.md-theater-src{font-size:10px;color:var(--mu);font-family:"Share Tech Mono",monospace;white-space:nowrap;flex-shrink:0;}
+.md-empty{color:var(--mu);font-family:"Share Tech Mono",monospace;font-size:11px;padding:28px 0;}
+#brief-banner{position:fixed;top:52px;left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--acc2);color:var(--acc);font-family:"Share Tech Mono",monospace;font-size:11px;padding:8px 16px;z-index:600;display:none;align-items:center;gap:12px;box-shadow:0 4px 20px rgba(0,0,0,.3);letter-spacing:.04em;border-radius:2px;}
+#brief-banner button{background:var(--acc2);border:none;color:#fff;font-family:"Share Tech Mono",monospace;font-size:10px;padding:4px 10px;cursor:pointer;letter-spacing:.06em;}
+#brief-banner .bb-close{background:none;border:none;color:var(--mu);cursor:pointer;font-size:14px;padding:0 2px;margin-left:4px;}
 .timeline-day{margin-bottom:18px;}
 .timeline-day-label{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--tx2);text-transform:uppercase;margin-bottom:10px;}
 .timeline-item{display:grid;grid-template-columns:74px 12px 1fr;gap:10px;padding:10px 0;border-bottom:1px solid var(--bd);align-items:start;}
@@ -2443,47 +2475,59 @@ function renderBriefingPage(){
   var status=document.getElementById('briefing-status');
   if(!articles||!articles.length){
     if(status)status.textContent='Nessuna notizia caricata';
-    body.innerHTML='<div class="briefing-page-empty">Nessuna notizia caricata.</div>';
+    body.innerHTML='<div class="md-empty">Nessuna notizia caricata — attendi il refresh dei feed.</div>';
     return;
   }
+  var now=new Date();
   var data=buildBriefingData();
-  if(status)status.textContent='Aggiornato '+data.updated.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
-  var html='';
-  html+='<section class="briefing-hero">';
-  html+='<div class="briefing-card"><div class="briefing-card-title">Apertura</div>';
-  if(data.opening){
-    html+='<div class="briefing-lead">'+esc(data.opening.title)+'</div>';
-    html+='<div class="briefing-sublead">'+esc(data.opening.description||('Fonte: '+(data.opening.src||'')+' · '+(REGION_LABELS[data.opening.region]||data.opening.region||'Globale')) )+'</div>';
-  } else {
-    html+='<div class="briefing-sublead">Nessuna apertura disponibile.</div>';
+  if(status)status.textContent='Aggiornato '+now.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
+
+  // Sorted list: recency first
+  var allSorted=(articles||[]).slice().sort(function(a,b){return (b.ts||0)-(a.ts||0);});
+  var lead=allSorted[0]||null;
+  var rest=lead?allSorted.filter(function(a){return a.title!==lead.title;}):allSorted.slice(1);
+  var top9=rest.slice(0,9);
+
+  var dateStr=now.toLocaleDateString('it-IT',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  var html='<div class="md-date">'+esc(dateStr)+'</div>';
+
+  // Lead
+  if(lead){
+    html+='<div class="md-lead">'
+      +'<a class="md-lead-title" href="'+esc(lead.link||'#')+'" target="_blank" rel="noopener">'+esc(lead.title)+'</a>'
+      +'<div class="md-lead-meta">'+esc(lead.src||'')+' · '+esc(REGION_LABELS[lead.region]||lead.region||'Globale')+(lead.pub?' · '+fmtTime(lead.pub):'')+'</div>'
+      +'</div>';
   }
+
+  html+='<div class="md-divider"></div>';
+  html+='<div class="md-section-label">Da seguire oggi</div>';
+  html+='<div class="md-list">';
+  top9.forEach(function(a,i){
+    var theater=REGION_LABELS[a.region]||a.region||'Globale';
+    html+='<div class="md-item">'
+      +'<span class="md-item-num">'+(i+1)+'</span>'
+      +'<div class="md-item-body">'
+      +'<a class="md-item-title" href="'+esc(a.link||'#')+'" target="_blank" rel="noopener">'+esc(a.title)+'</a>'
+      +'<span class="md-item-meta">'+esc(a.src||'')+' · '+esc(theater)+'</span>'
+      +'</div></div>';
+  });
   html+='</div>';
-  html+='<div class="briefing-card"><div class="briefing-card-title">Cosa è successo</div><div class="briefing-bullets">';
-  data.happened.forEach(function(a){
-    html+='<div class="briefing-bullet"><span class="briefing-bullet-dot" style="background:'+_sevColor(a.sev)+'"></span><div class="briefing-bullet-body"><div class="briefing-bullet-head">'+esc(a.title)+'</div><div class="briefing-bullet-meta">'+esc(a.src||'')+' · '+esc(REGION_LABELS[a.region]||a.region||'Globale')+'</div></div></div>';
+
+  // Per teatro: top story per ogni teatro attivo
+  html+='<div class="md-divider"></div>';
+  html+='<div class="md-section-label">Per teatro</div>';
+  html+='<div class="md-theater-list">';
+  data.sections.forEach(function(sec){
+    var a=sec.items[0]; if(!a) return;
+    var label=REGION_LABELS[sec.region]||sec.region;
+    html+='<div class="md-theater-item">'
+      +'<span class="md-theater-label">'+esc(label)+'</span>'
+      +'<a class="md-theater-title" href="'+esc(a.link||'#')+'" target="_blank" rel="noopener">'+esc(a.title)+'</a>'
+      +'<span class="md-theater-src">'+esc(a.src||'')+'</span>'
+      +'</div>';
   });
-  html+='</div></div></section>';
-  html+='<section class="briefing-deck">';
-  html+='<div class="briefing-card"><div class="briefing-card-title">Cosa guardare adesso</div><div class="briefing-mini-list">';
-  data.watch.forEach(function(a){
-    html+='<div class="briefing-mini-item"><a href="'+esc(a.link||'#')+'" target="_blank" rel="noopener">'+esc(a.title)+'</a><div class="meta">'+esc(a.src||'')+' · '+(a.sev||'low').toUpperCase()+'</div></div>';
-  });
-  html+='</div></div>';
-  html+='<div class="briefing-card"><div class="briefing-card-title">Quadro rapido</div><div class="briefing-mini-list">';
-  data.sections.slice(0,4).forEach(function(sec){
-    var a=sec.items[0];
-    html+='<div class="briefing-mini-item"><a href="'+esc(a.link||'#')+'" target="_blank" rel="noopener">'+esc(REGION_LABELS[sec.region]||sec.region)+': '+esc(a.title)+'</a><div class="meta">'+esc(a.src||'')+' · '+(a.sev||'low').toUpperCase()+'</div></div>';
-  });
-  html+='</div></div></section>';
-  html+='<section class="briefing-region-grid">';
-  data.sections.forEach(function(sec,idx){
-    html+='<section class="briefing-page-section"><div class="briefing-page-section-hd"><span class="briefing-page-section-num">'+String(idx+1).padStart(2,'0')+'</span><span class="briefing-page-section-name">'+esc(REGION_LABELS[sec.region]||sec.region)+'</span></div>';
-    sec.items.forEach(function(a){
-      html+='<div class="br-item"><span class="br-sev-badge '+a.sev+'">'+esc(a.sev||'low')+'</span><div class="br-item-body"><a class="br-item-headline" href="'+esc(a.link||'#')+'" target="_blank" rel="noopener">'+esc(a.title)+'</a><div class="br-item-meta">'+esc(a.src||'')+(a.pub?' · '+fmtTime(a.pub):'')+'</div></div></div>';
-    });
-    html+='</section>';
-  });
-  html+='</section>';
+  html+='</div>';
+
   body.innerHTML=html;
 }
 function briefingPlainText(){
@@ -5302,13 +5346,14 @@ body.desktop-browser-upgrade #page-4{width:100%;min-width:0;min-height:0;}
         <span class="analisi-key-status" id="analisi-key-status">Senza key: analisi locale</span>
       </div>
       <!-- Bottone run -->
-      <div style="display:flex;gap:8px;align-items:center">
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
         <button class="analisi-run-btn" id="analisi-run-btn" onclick="runAnalisi()">▶ Esegui analisi</button>
+        <button class="analisi-run-btn" id="analisi-claude-btn" onclick="portaSuClaude()" style="background:linear-gradient(180deg,rgba(0,184,255,.16),rgba(0,184,255,.06));border-color:rgba(0,184,255,.45);color:#67e8f9;" title="Copia il contesto e apri Claude.ai in una nuova tab">↗ Porta su Claude.ai</button>
         <span id="analisi-spinner" style="display:none;font-family:'Share Tech Mono',monospace;font-size:10px;color:#a78bfa;letter-spacing:.08em">Elaborazione…</span>
       </div>
       <!-- Risultato -->
       <div class="analisi-result" id="analisi-result">
-        <span style="color:var(--mu);font-family:'Share Tech Mono',monospace;font-size:11px">Seleziona tipo di analisi e premi Esegui.</span>
+        <span style="color:var(--mu);font-family:'Share Tech Mono',monospace;font-size:11px">Seleziona tipo di analisi e premi <b>Esegui</b> (richiede API key) oppure <b>Porta su Claude.ai</b> per analizzare senza chiave.</span>
       </div>
     </div>
   </div>
@@ -5406,6 +5451,65 @@ function runAnalisi(){
   }
 }
 
+// ── PORTA SU CLAUDE.AI ───────────────────────────────────────────
+var _TIPO_LABELS={
+  swot:'una SWOT Analysis geopolitica (Strengths, Weaknesses, Opportunities, Threats)',
+  competitive:'un\'analisi degli attori geopolitici (posizione, vantaggi, vulnerabilità di ciascuno)',
+  devil:'un\'analisi Devil\'s Advocate (identifica le narrative dominanti e smontale)',
+  scenario:'3 scenari evolutivi per i prossimi 3-6 mesi (con probabilità e driver)'
+};
+
+function portaSuClaude(){
+  var ctx=_buildAnalisiCtx();
+  var arts=(window.articles||[]);
+  var focus=(document.getElementById('analisi-focus')||{}).value||'';
+  var tipo=_TIPO_LABELS[_analisiTab]||_TIPO_LABELS.swot;
+  var count=focus
+    ? arts.filter(function(a){return ((a.title||'')+(a.description||'')).toLowerCase().indexOf(focus.toLowerCase())>=0;}).length
+    : Math.min(arts.length,80);
+
+  if(!ctx.trim()){
+    notify('Nessun articolo disponibile — attendi il caricamento dei feed');
+    return;
+  }
+
+  var prompt='Sei un analista geopolitico senior di Limes.\n'
+    +(focus?'Focus tematico: '+focus+'.\n':'')
+    +'Di seguito trovi '+count+' notizie estratte dal mio dashboard Sherlock aggiornate in tempo reale.\n'
+    +'Produci '+tipo+'.\n'
+    +'Rispondi in italiano, in modo preciso e sintetico.\n\n'
+    +'---\n'
+    +ctx;
+
+  // Copy to clipboard then open Claude.ai
+  var doOpen=function(){
+    window.open('https://claude.ai/new','_blank','noopener');
+  };
+
+  try{
+    navigator.clipboard.writeText(prompt).then(function(){
+      var res=document.getElementById('analisi-result');
+      if(res){
+        res.innerHTML='<div style="font-family:\'Share Tech Mono\',monospace;font-size:11px;line-height:1.9">'
+          +'<div style="color:#67e8f9;font-weight:700;margin-bottom:8px">✓ Testo copiato negli appunti</div>'
+          +'<div style="color:var(--tx2)">1. Si apre una nuova tab su <b>Claude.ai</b></div>'
+          +'<div style="color:var(--tx2)">2. Crea una nuova conversazione</div>'
+          +'<div style="color:var(--tx2)">3. Incolla (<kbd style="background:var(--s2);border:1px solid var(--bd);padding:1px 5px;border-radius:3px">⌘V</kbd> / <kbd style="background:var(--s2);border:1px solid var(--bd);padding:1px 5px;border-radius:3px">Ctrl+V</kbd>) e invia</div>'
+          +'<div style="color:var(--mu);margin-top:8px;font-size:10px">Articoli inclusi: <b>'+count+'</b>'+(focus?' · filtro: '+esc(focus):'')+'</div>'
+          +'</div>';
+      }
+      notify('Testo copiato — apertura Claude.ai…');
+      doOpen();
+    }).catch(function(){
+      _fallbackCopyMD(prompt);
+      doOpen();
+    });
+  }catch(e){
+    _fallbackCopyMD(prompt);
+    doOpen();
+  }
+}
+
 // Sync model selector with _analisiModel on modal open
 var _origOpenAnalisi=window.openAnalisi;
 window.openAnalisi=function(){
@@ -5498,6 +5602,87 @@ window.openAnalisi=function(){
   }
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', addAnalisiBtn);
   else addAnalisiBtn();
+})();
+</script>
+
+<!-- ── BANNER 08:00 ────────────────────────────────────────────── -->
+<div id="brief-banner">
+  <span>☀ Briefing delle 08:00</span>
+  <button onclick="_briefBannerGo()">Vai al briefing</button>
+  <button class="bb-close" onclick="_briefBannerDismiss()">✕</button>
+</div>
+
+<script>
+(function(){
+  var BRIEF_KEY='sh3_brief_shown';
+  var BRIEF_HOUR=8;
+  var BRIEF_END=10;
+
+  function todayStr(){return new Date().toISOString().slice(0,10);}
+  function shownToday(){try{return localStorage.getItem(BRIEF_KEY)===todayStr();}catch(e){return false;}}
+  function markShown(){try{localStorage.setItem(BRIEF_KEY,todayStr());}catch(e){}}
+
+  window._briefBannerGo=function(){
+    _briefBannerDismiss();
+    markShown();
+    if(typeof switchPage==='function') switchPage(4);
+  };
+  window._briefBannerDismiss=function(){
+    var b=document.getElementById('brief-banner');
+    if(b){b.style.display='none';}
+  };
+
+  function showBanner(){
+    var b=document.getElementById('brief-banner');
+    if(b) b.style.display='flex';
+  }
+
+  function autoShowBriefing(){
+    markShown();
+    if(typeof switchPage==='function') switchPage(4);
+    if(typeof renderBriefingPage==='function') setTimeout(renderBriefingPage,300);
+    notify('☀ Briefing delle 08:00');
+  }
+
+  function checkNow(){
+    var h=new Date().getHours(), m=new Date().getMinutes();
+    // Exact 08:00 — show banner (or auto-switch if not already on page 4)
+    if(h===BRIEF_HOUR && m===0 && !shownToday()){
+      var page4=document.getElementById('page-4');
+      var onPage4=page4&&page4.classList.contains('on');
+      if(onPage4){
+        autoShowBriefing();
+      } else {
+        showBanner();
+      }
+    }
+  }
+
+  // On load: auto-switch if we're in the 08:00-10:00 window and haven't shown yet
+  function onReady(){
+    var h=new Date().getHours();
+    if(h>=BRIEF_HOUR && h<BRIEF_END && !shownToday()){
+      // Give feeds ~2s to load, then switch
+      setTimeout(function(){
+        autoShowBriefing();
+      }, 2200);
+    }
+    // Also re-check when tab becomes visible after being hidden (e.g. phone sleep)
+    document.addEventListener('visibilitychange',function(){
+      if(document.visibilityState==='visible'){
+        var h2=new Date().getHours();
+        if(h2>=BRIEF_HOUR && h2<BRIEF_END && !shownToday()){
+          setTimeout(autoShowBriefing, 1500);
+        }
+      }
+    });
+  }
+
+  // Poll every 30s to catch the 08:00 moment
+  setInterval(checkNow, 30000);
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', onReady);
+  else onReady();
 })();
 </script>
 
