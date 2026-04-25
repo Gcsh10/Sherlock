@@ -1417,6 +1417,35 @@ html[data-theme=light] .timeline-item-desc,[data-theme=light] .timeline-item-des
 @media (max-width:600px){.p2-map-hd>span:first-child{font-size:10.5px;letter-spacing:.08em;}.p2-timeline-bar{min-width:190px;}.p2-search-input{width:150px;}.p2-search-input:focus{width:180px;}.p2-pin .dot,.p2-hotspot .hs-inner{width:12px;height:12px;}.timeline-title,.briefing-page-title{font-size:11px;}.timeline-day-label{font-size:10.5px;}.timeline-item{grid-template-columns:52px 14px minmax(0,1fr);gap:8px;}.timeline-item::before{left:58px;}.timeline-dot{width:11px;height:11px;}.timeline-item-title{font-size:15.8px;}.timeline-item-meta{font-size:10px;}.md-date{margin-bottom:14px;}.md-lead-title{font-size:20px;}.md-section-label{font-size:9.5px;}.md-list,.md-theater-list{border-radius:14px;}.md-item{display:grid;grid-template-columns:22px minmax(0,1fr);gap:8px;align-items:start;}.md-item-body{display:flex;flex-direction:column;align-items:flex-start;}.md-item-title{font-size:15px;}}
 </style>
 
+
+<style id="source-modal-layout-fix">
+/* Fonte modal: layout più leggibile + scroll affidabile su iPadOS/iOS */
+.src-modal-bg{align-items:center;justify-content:center;padding:max(14px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) max(14px,env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left));overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}
+.src-modal-card{width:min(920px,96vw);max-width:920px;min-width:0;max-height:min(86vh,720px);padding:0;display:flex;flex-direction:column;overflow:hidden;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.012)),var(--s);box-shadow:0 28px 80px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.04);}
+.src-modal-top{padding:15px 17px;margin:0;border-bottom:1px solid rgba(122,154,184,.18);background:rgba(255,255,255,.025);align-items:flex-start;gap:14px;}
+.src-modal-sub{margin-top:5px;color:var(--tx2);font-size:12px;line-height:1.35;}
+.src-modal-close{appearance:none;border:1px solid rgba(122,154,184,.22);background:rgba(255,255,255,.035);color:var(--tx2);cursor:pointer;min-width:38px;min-height:38px;border-radius:999px;font-size:18px;line-height:1;}
+.src-modal-close:hover{color:var(--re);border-color:rgba(239,68,68,.35);}
+.src-modal-body{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(260px,.8fr);gap:14px;padding:14px;overflow:hidden;}
+.src-panel{min-height:0;border:1px solid rgba(122,154,184,.15);border-radius:14px;background:rgba(255,255,255,.024);padding:13px;}
+.src-presets-panel{display:flex;flex-direction:column;overflow:hidden;}
+.src-manual-panel{align-self:start;}
+.src-panel-head{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;margin-bottom:10px;}
+.src-panel-kicker{font-size:9.5px;color:var(--mu);letter-spacing:.14em;font-family:'Share Tech Mono',monospace;text-transform:uppercase;margin-bottom:5px;}
+.src-panel-title{font-size:13px;color:var(--tx);font-weight:700;}
+.src-search{margin-bottom:10px;min-height:38px;font-family:'Inter',sans-serif;font-size:13px;border-radius:10px;}
+.src-preset-grid{flex:1;min-height:160px;max-height:none;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding-right:4px;display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));align-content:start;gap:7px;}
+.src-preset-grid::-webkit-scrollbar{width:5px;}.src-preset-grid::-webkit-scrollbar-thumb{background:var(--bd2);border-radius:999px;}
+.src-preset-grid .pbtn{width:100%;min-height:44px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;gap:3px;padding:8px 10px;border-radius:10px;text-align:left;white-space:normal;line-height:1.2;font-family:'Inter',sans-serif;font-weight:700;}
+.src-preset-grid .pbtn small{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--mu);text-transform:uppercase;letter-spacing:.08em;}.src-preset-grid .pbtn.added small{color:var(--acc);}
+.src-preset-empty{padding:18px 10px;color:var(--mu);font-size:12px;font-family:'Share Tech Mono',monospace;text-align:center;border:1px dashed var(--bd);border-radius:10px;}
+.src-manual-panel .mf{margin-bottom:12px;}.src-manual-panel .mf label{font-size:11px;letter-spacing:.04em;text-transform:uppercase;}.src-manual-panel .mi{min-height:40px;border-radius:10px;font-family:'Inter',sans-serif;font-size:13px;}
+.src-modal-actions{margin-top:12px;gap:8px;}.src-modal-actions .hbtn{min-height:40px;padding:8px 14px;}
+#pane-s{min-height:0;}#pane-s:not(.hidden){display:flex!important;flex-direction:column;}#srclist{flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;}#srclist::-webkit-scrollbar{width:4px;}#srclist::-webkit-scrollbar-thumb{background:var(--bd2);}
+@media (max-width:767px){.src-modal-bg{align-items:stretch;justify-content:center;padding:10px max(10px,env(safe-area-inset-right)) calc(10px + env(safe-area-inset-bottom)) max(10px,env(safe-area-inset-left));}.src-modal-card{width:100%;max-height:calc(100dvh - 20px - env(safe-area-inset-bottom));border-radius:16px;}.src-modal-top{padding:13px 14px;}.src-modal-body{grid-template-columns:1fr;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:12px;gap:12px;}.src-presets-panel{min-height:48vh;}.src-preset-grid{min-height:220px;grid-template-columns:1fr 1fr;}.src-manual-panel{align-self:stretch;}.src-search,.src-manual-panel .mi{font-size:16px;}}
+@media (max-width:480px){.src-preset-grid{grid-template-columns:1fr;}.src-modal-sub{font-size:11px;}}
+</style>
+
 </head>
 <body>
 <header>
@@ -1478,30 +1507,50 @@ html[data-theme=light] .timeline-item-desc,[data-theme=light] .timeline-item-des
 })();
 </script>
 
-<div class="modal-bg" id="src-modal" style="display:none" onclick="if(event.target===this)closeSrcModal()">
-  <div class="modal">
-    <div class="modal-h"><div class="modal-t">Aggiungi fonte RSS</div>
-      <button style="background:none;border:none;color:var(--mu);cursor:pointer;font-size:18px" onclick="closeSrcModal()">&#x2715;</button></div>
-    <div style="font-size:9px;color:var(--mu);letter-spacing:.14em;margin-bottom:5px;font-family:'Share Tech Mono',monospace">// PRESET RAPIDI</div>
-    <div class="pgrid" id="pgrid"></div>
-    <div class="rsshub-note">Fonti RSSHub/relay disponibili nei preset cinesi: attivale se vuoi più copertura in lingua cinese.</div>
-    <hr style="border:none;border-top:1px solid var(--bd);margin:8px 0">
-    <div class="mf"><label>Nome fonte</label><input class="mi" id="mn" placeholder="es. Jane's Intelligence"></div>
-    <div class="mf"><label>URL Feed RSS</label><input class="mi" id="murl" placeholder="https://..."></div>
-    <div class="mf"><label>Categoria</label>
-      <select class="mi" id="mcat">
-        <option value="media">Media internazionale</option><option value="italia">Media italiano</option>
-        <option value="think">Think tank</option><option value="ist">Istituzioni</option>
-        <option value="cyber">Cyber / OSINT</option><option value="finance">Finanza</option>
-        <option value="regional">Regionale</option><option value="agenzie">Agenzia</option>
-        <option value="osint">OSINT</option>
-        <option value="analisti_cn">Analisti CN</option>
-        <option value="analisti_jp">Analisti JP</option>
-        <option value="giappone">Giappone</option>
-      </select></div>
-    <div class="mrow">
-      <button class="hbtn" onclick="closeSrcModal()">Annulla</button>
-      <button class="hbtn acc" onclick="addSrc()">Aggiungi</button>
+<div class="modal-bg src-modal-bg" id="src-modal" style="display:none" onclick="if(event.target===this)closeSrcModal()">
+  <div class="modal src-modal-card" role="dialog" aria-modal="true" aria-labelledby="src-modal-title">
+    <div class="modal-h src-modal-top">
+      <div>
+        <div class="modal-t" id="src-modal-title">Aggiungi fonte RSS</div>
+        <div class="src-modal-sub">Preset rapidi o inserimento manuale. Le fonti aggiunte restano salvate nel browser.</div>
+      </div>
+      <button class="src-modal-close" aria-label="Chiudi" onclick="closeSrcModal()">&#x2715;</button>
+    </div>
+
+    <div class="src-modal-body">
+      <section class="src-panel src-presets-panel" aria-label="Preset fonti">
+        <div class="src-panel-head">
+          <div>
+            <div class="src-panel-kicker">// PRESET RAPIDI</div>
+            <div class="src-panel-title"><span id="preset-count">0</span> fonti disponibili</div>
+          </div>
+        </div>
+        <input class="mi src-search" id="preset-search" placeholder="Cerca preset, es. Xinhua, Giappone, think tank" oninput="renderSrcPresets(this.value)">
+        <div class="pgrid src-preset-grid" id="pgrid"></div>
+        <div class="rsshub-note">I preset cinesi possono usare RSSHub/relay: attivali per aumentare la copertura in lingua cinese.</div>
+      </section>
+
+      <section class="src-panel src-manual-panel" aria-label="Fonte manuale">
+        <div class="src-panel-kicker">// INSERIMENTO MANUALE</div>
+        <div class="mf"><label>Nome fonte</label><input class="mi" id="mn" placeholder="es. Jane's Intelligence" autocomplete="off"></div>
+        <div class="mf"><label>URL feed RSS</label><input class="mi" id="murl" placeholder="https://..." inputmode="url" autocomplete="off"></div>
+        <div class="mf"><label>Categoria</label>
+          <select class="mi" id="mcat">
+            <option value="media">Media internazionale</option><option value="italia">Media italiano</option>
+            <option value="think">Think tank</option><option value="ist">Istituzioni</option>
+            <option value="cyber">Cyber / OSINT</option><option value="finance">Finanza</option>
+            <option value="regional">Regionale</option><option value="agenzie">Agenzia</option>
+            <option value="osint">OSINT</option>
+            <option value="analisti_cn">Analisti CN</option>
+            <option value="analisti_jp">Analisti JP</option>
+            <option value="giappone">Giappone</option>
+          </select>
+        </div>
+        <div class="mrow src-modal-actions">
+          <button class="hbtn" onclick="closeSrcModal()">Annulla</button>
+          <button class="hbtn acc" onclick="addSrc()">Aggiungi fonte</button>
+        </div>
+      </section>
     </div>
   </div>
 </div>
@@ -2737,10 +2786,26 @@ function addInline(){
   persist();renderSrcList();document.getElementById('qi-nm').value='';document.getElementById('qi-url').value='';
   notify('Aggiunto: '+nm);doRefresh();
 }
-function openSrcModal(){
+function renderSrcPresets(q){
   var grid=document.getElementById('pgrid');if(!grid)return;
-  grid.innerHTML=PRESETS.map(function(p){var added=sources.find(function(s){return s.id===p.id;});return '<button class="pbtn'+(added?' added':'')+'" onclick="addPreset(\''+p.id+'\')">'+esc(p.name)+'</button>';}).join('');
-  document.getElementById('src-modal').style.display='flex';
+  var query=(q||'').toLowerCase().trim();
+  var items=PRESETS.filter(function(p){
+    if(!query)return true;
+    return [p.name,p.cat,p.url].join(' ').toLowerCase().indexOf(query)>-1;
+  });
+  var count=document.getElementById('preset-count');if(count)count.textContent=items.length;
+  grid.innerHTML=items.map(function(p){
+    var added=sources.find(function(s){return s.id===p.id;});
+    return '<button class="pbtn'+(added?' added':'')+'" onclick="addPreset(\''+p.id+'\')">'
+      +'<span>'+esc(p.name)+'</span><small>'+esc(p.cat||'media')+'</small></button>';
+  }).join('') || '<div class="src-preset-empty">Nessun preset trovato.</div>';
+}
+function openSrcModal(){
+  var m=document.getElementById('src-modal');if(!m)return;
+  var search=document.getElementById('preset-search');if(search)search.value='';
+  renderSrcPresets('');
+  m.style.display='flex';
+  setTimeout(function(){var first=document.getElementById('mn');if(first&&window.innerWidth>767)first.focus();},40);
 }
 function closeSrcModal(){document.getElementById('src-modal').style.display='none';}
 function addSrc(){
