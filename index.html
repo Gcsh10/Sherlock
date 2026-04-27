@@ -1446,6 +1446,55 @@ html[data-theme=light] .timeline-item-desc,[data-theme=light] .timeline-item-des
 @media (max-width:480px){.src-preset-grid{grid-template-columns:1fr;}.src-modal-sub{font-size:11px;}}
 </style>
 
+
+<style id="sherlock-user-fixes-20260427">
+/* User fix: niente colori di criticità sulle notizie. Manteniamo data-sev per filtri/logica, ma senza codifica visiva. */
+.card[data-sev],
+.card[data-sev="critical"],
+.card[data-sev="high"],
+.card[data-sev="medium"],
+.card[data-sev="low"],
+.alert-card[data-sev],
+.alert-card[data-sev="critical"],
+.alert-card[data-sev="high"],
+.alert-card[data-sev="medium"],
+.alert-card[data-sev="low"]{
+  border-left:1px solid rgba(122,154,184,.10) !important;
+  background:rgba(255,255,255,.025) !important;
+}
+.card.card-new,
+.card.card-new-flash{
+  border-left:1px solid rgba(122,154,184,.10) !important;
+}
+.card:not([data-sev="critical"]):not([data-sev="high"]) .cdesc,
+.card[data-sev="critical"] .cdesc,
+.card[data-sev="high"] .cdesc,
+.card[data-sev="medium"] .cdesc{
+  color:rgba(216,228,240,.72) !important;
+  -webkit-line-clamp:2;
+}
+.alert-badge,
+.alert-badge.critical,
+.alert-badge.high,
+.alert-badge.medium,
+.br-sev-badge,
+.br-sev-badge.critical,
+.br-sev-badge.high,
+.br-sev-badge.medium{
+  color:var(--tx2) !important;
+  background:rgba(255,255,255,.04) !important;
+  border:1px solid rgba(122,154,184,.16) !important;
+}
+/* Il bottone Salvati usa lo stesso font degli altri bottoni della barra. */
+#pin-filter-btn{
+  font-family:'Inter',sans-serif !important;
+  font-size:11px !important;
+  font-weight:600 !important;
+  letter-spacing:.02em !important;
+  text-transform:none !important;
+}
+</style>
+
 </head>
 <body>
 <header>
@@ -1929,6 +1978,15 @@ var DEFAULTS=[
   {id:'wsj_world',name:'WSJ World',url:'https://feeds.a.dj.com/rss/RSSWorldNews.xml',cat:'media',max:15,on:true},
   {id:'nyt_world',name:'NYT World',url:'https://rss.nytimes.com/services/xml/rss/nyt/World.xml',cat:'media',max:15,on:true},
   {id:'washpost',name:'Washington Post',url:'https://feeds.washingtonpost.com/rss/world',cat:'media',max:12},
+  // ── CARTOGRAFIA GEOPOLITICA ───────────────────────────────────
+  {id:'carto_maps_general', name:'Geopolitical Maps — Google News', cat:'cartografia', url:'https://news.google.com/rss/search?q=%22geopolitical+map%22+OR+%22geopolitical+maps%22+OR+%22strategic+map%22&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'carto_visualcapitalist', name:'Visual Capitalist — Maps', cat:'cartografia', url:'https://news.google.com/rss/search?q=site:visualcapitalist.com+map+geopolitics+OR+%22mapped%22&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'carto_geocurrents', name:'GeoCurrents', cat:'cartografia', url:'https://www.geocurrents.info/feed/', on:true},
+  {id:'carto_reliefweb_maps', name:'ReliefWeb — Maps', cat:'cartografia', url:'https://news.google.com/rss/search?q=site:reliefweb.int+map+OR+infographic+conflict+OR+displacement&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'carto_isw_maps', name:'ISW — Campaign Maps', cat:'cartografia', url:'https://news.google.com/rss/search?q=site:understandingwar.org+map+OR+campaign+assessment&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'carto_acled_maps', name:'ACLED — Maps', cat:'cartografia', url:'https://news.google.com/rss/search?q=site:acleddata.com+map+OR+dashboard+conflict&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'carto_csis_maps', name:'CSIS — Maps', cat:'cartografia', url:'https://news.google.com/rss/search?q=site:csis.org+map+geopolitics+OR+interactive+map&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'carto_mapaction', name:'MapAction', cat:'cartografia', url:'https://news.google.com/rss/search?q=site:mapaction.org+map+crisis+OR+humanitarian&hl=en&gl=US&ceid=US:en', on:false},
 ];
 
 var PRESETS=[
@@ -2106,6 +2164,8 @@ var PRESETS=[
     url:'https://news.google.com/rss/search?q=%22Brad+Glosserman%22+Japan+security+OR+Indo-Pacific&hl=en&gl=US&ceid=US:en', on:true},
   {id:'yuki_tatsumi', name:'Yuki Tatsumi (Stimson)', cat:'analisti_jp',
     url:'https://news.google.com/rss/search?q=%22Yuki+Tatsumi%22+Japan+defense+OR+security&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'toshi_yoshihara', name:'Toshi Yoshihara', cat:'analisti_jp',
+    url:'https://news.google.com/rss/search?q=%22Toshi+Yoshihara%22+Japan+maritime+OR+seapower+OR+China&hl=en&gl=US&ceid=US:en', on:true},
   {id:'james_brown_jp', name:'James Brown — Japan', cat:'analisti_jp',
     url:'https://news.google.com/rss/search?q=%22James+Brown%22+Japan+politics+OR+security+Sophia&hl=en&gl=US&ceid=US:en', on:false},
   // Aggregatori / Substack
@@ -2127,6 +2187,7 @@ var ALL_COLS=[
   {id:'indopacifico', name:'Indo-Pacifico',     icon:'&#127759;', regions:['indopacifico','sudest_asia']},
   {id:'americas',     name:'Americhe',          icon:'&#127758;', regions:['americas']},
   {id:'osint',        name:'OSINT',             icon:'&#128065;', regions:['osint']},
+  {id:'cartografia',  name:'Cartografia',       icon:'🗺️', regions:['cartografia']},
   {id:'russia',       name:'Russia',            icon:'🇷🇺', regions:['russia']},
   {id:'africa',       name:'Africa',            icon:'🌍', regions:['africa']},
   {id:'analisti_cn',  name:'Analisti CN',       icon:'🔎', regions:['analisti_cn']},
@@ -2144,7 +2205,7 @@ function persist(){
 }
 function loadPersist(){
   var DEFAULT_CLOSED=['russia','africa','americas','medioriente'];
-  var LAYOUT_VER='v10';
+  var LAYOUT_VER='v11';
   var REMOVED_SOURCE_IDS=['ccg','caixin','almonitor','mei','mideasteye','arabnews','bbcme','arabiya','trtworld','meduza','moscowtimes','carnegie_russia','lowy','scmp_cn','rti_tw','globaltimes','globaltimes_zh','xinhua_en','xinhua_zh','people_en','people_zh','chinadaily','csis_china','merics','bbcafrica','warontherocks','defensenews','breakingdefense','janes','isw','acled','onu','un','un_news','unnews','iaea'];
   try{
     // Migrate from old key if present
@@ -2214,7 +2275,7 @@ function loadPersist(){
       'ciis','cicir','siis','cfau','ciss','cass','huanqiu_zh','rand','brookings','iiss',
       'scmp_cn','merics','cna','cna_sg','people_world_zh','arabnews','xinhua_en','cgtn_en',
       'globaltimes_en','chinadaily','people_en','xinhua_zh','people_zh','nyt_world','wsj_world','chinadigitaltimes','do_intel_china',
-      'sun_chenghao','lingua_sinica','he_yuzhe'
+      'sun_chenghao','lingua_sinica','he_yuzhe','carto_maps_general','carto_visualcapitalist','carto_geocurrents','carto_reliefweb_maps','carto_isw_maps','carto_acled_maps','carto_csis_maps','toshi_yoshihara'
     ];
     // Force requested sources ON unconditionally (every load, regardless of saved prefs)
     sources.forEach(function(s){
@@ -2722,6 +2783,7 @@ var THEATER_META={
   cina:{label:'Cina', cats:['cina','analisti_cn'], ids:['xinhua','xinhua_cina','pekingnology','peoples_daily','globaltimes_default','globaltimes_cn_main','pla_daily','pla_eastern','pla_southern','pla_western','pla_northern','pla_central','chinadaily_default','qstheory','beijingdaily','ce_cn','gmw','mingpao_hk','cna_tw']},
   giappone:{label:'Giappone', cats:['giappone'], ids:['nhk_japan','nikkei_japan','japantimes_japan','asahi_japan','yomiuri_japan','mainichi_japan','sankei_japan','kazuto_suzuki','stephen_nagy','hirohito_ogi','haruo_tohmatsu','watanabe_nabe','kawashima_shin','marina_fujita_dickson','alessio_patalano_jp']},
   analisti_jp:{label:'Analisti JP', cats:['analisti_jp']},
+  cartografia:{label:'Cartografia', cats:['cartografia'], ids:['carto_maps_general','carto_visualcapitalist','carto_geocurrents','carto_reliefweb_maps','carto_isw_maps','carto_acled_maps','carto_csis_maps','carto_mapaction']},
   africa:{label:'Africa', ids:['news24','afp','rfi']},
   difesa:{label:'Difesa / OSINT', cats:['osint','ist','cyber'], ids:['warzone','defone','osint_janes','osint_acled','osint_oryx','gpf','rane_worldview','intelligence_online','intelonline']}
 };
@@ -2734,6 +2796,7 @@ function sourceTheater(s){
   if(THEATER_META.medioriente.ids.indexOf(id)>=0) return 'medioriente';
   if(THEATER_META.russia.ids.indexOf(id)>=0) return 'russia';
   if(THEATER_META.africa.ids.indexOf(id)>=0) return 'africa';
+  if(THEATER_META.cartografia.ids.indexOf(id)>=0 || THEATER_META.cartografia.cats.indexOf(cat)>=0) return 'cartografia';
   if(THEATER_META.difesa.ids.indexOf(id)>=0 || THEATER_META.difesa.cats.indexOf(cat)>=0) return 'difesa';
   if(THEATER_META.europa.cats.indexOf(cat)>=0) return 'europa';
   if(THEATER_META.global.cats.indexOf(cat)>=0) return 'global';
@@ -2749,7 +2812,7 @@ function activateTheater(theater){
 
 function renderSrcList(){
   var el=document.getElementById('srclist');if(!el)return;
-  var CAT={agenzie:'Agenzie',media:'Media',italia:'Italia',think:'Think tank',ist:'Ist.',cyber:'Cyber',finance:'Finance',regional:'Reg.',osint:'OSINT',cina:'Cina',giappone:'Giappone',sudest_asia:'Sud-est Asia',analisti_cn:'Analisti CN',analisti_jp:'Analisti JP'};
+  var CAT={agenzie:'Agenzie',media:'Media',italia:'Italia',think:'Think tank',ist:'Ist.',cyber:'Cyber',finance:'Finance',regional:'Reg.',osint:'OSINT',cina:'Cina',giappone:'Giappone',sudest_asia:'Sud-est Asia',analisti_cn:'Analisti CN',analisti_jp:'Analisti JP',cartografia:'Cartografia'};
   var catmap={};
   sources.forEach(function(s){var c=s.cat||'media';if(!catmap[c])catmap[c]=[];catmap[c].push(s);});
   var html='';
@@ -2886,9 +2949,10 @@ var REGION_LABELS={
   osint:'OSINT / Analisi difesa',
   sudest_asia:'Sud-Est asiatico',
   analisti_cn:'Analisti geopolitici cinesi',
-  analisti_jp:'Analisti geopolitici giapponesi'
+  analisti_jp:'Analisti geopolitici giapponesi',
+  cartografia:'Cartografia geopolitica'
 };
-var REGION_ORDER=['medioriente','russia','europa','cina','giappone','analisti_cn','analisti_jp','indopacifico','sudest_asia','americas','africa','italia','osint','global'];
+var REGION_ORDER=['medioriente','russia','europa','cina','giappone','analisti_cn','analisti_jp','indopacifico','sudest_asia','americas','africa','italia','cartografia','osint','global'];
 
 function _sevRank(sev){return ({critical:4,high:3,medium:2,low:1})[sev]||0;}
 function _sevColor(sev){return sev==='critical'?'#ef4444':sev==='high'?'#f59e0b':sev==='medium'?'#3b82f6':'#22d35e';}
@@ -5573,6 +5637,43 @@ window._refreshP2Overlay=function(){
 
 
 
+/* ── iPadOS: scroll colonne più fluido ───────────────────────────
+   Su iPad lo snap obbligatorio rendeva lo scorrimento a scatti.
+   Qui lo disattiviamo solo tra 768 e 1199px, mantenendo il layout a colonne. */
+@media (min-width:768px) and (max-width:1199px){
+  body.desktop-browser-upgrade #page-1 .cols-wrap,
+  body.desktop-browser-upgrade.sidebar-collapsed #page-1 .cols-wrap,
+  body.desktop-browser-upgrade .cols-wrap{
+    overflow-x:scroll !important;
+    overflow-y:hidden !important;
+    scroll-snap-type:none !important;
+    scroll-behavior:auto !important;
+    -webkit-overflow-scrolling:touch !important;
+    overscroll-behavior-x:contain;
+    touch-action:pan-x;
+    will-change:scroll-position;
+    transform:translateZ(0);
+    backface-visibility:hidden;
+  }
+  body.desktop-browser-upgrade #page-1 .acol,
+  body.desktop-browser-upgrade.sidebar-collapsed #page-1 .acol,
+  body.desktop-browser-upgrade .cols-wrap .acol,
+  body.desktop-browser-upgrade .cols-wrap .acol.is-priority,
+  body.desktop-browser-upgrade .cols-wrap .acol.is-secondary,
+  body.desktop-browser-upgrade .cols-wrap .acol.is-tools{
+    scroll-snap-align:none !important;
+    scroll-snap-stop:normal !important;
+    contain:layout paint;
+    transform:translateZ(0);
+    backface-visibility:hidden;
+  }
+  body.desktop-browser-upgrade .col-feed{
+    touch-action:pan-y;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
+  }
+}
+
 
 </style>
 
@@ -5643,6 +5744,36 @@ body.desktop-browser-upgrade #page-4{width:100%;min-width:0;min-height:0;}
 }
 
 
+
+/* ── iPadOS: override finale per scroll colonne fluido ─────────── */
+@media (min-width:768px) and (max-width:1199px){
+  body.desktop-browser-upgrade #page-1 .cols-wrap,
+  body.desktop-browser-upgrade.sidebar-collapsed #page-1 .cols-wrap,
+  body.desktop-browser-upgrade .cols-wrap{
+    overflow-x:scroll !important;
+    scroll-snap-type:none !important;
+    scroll-behavior:auto !important;
+    -webkit-overflow-scrolling:touch !important;
+    overscroll-behavior-x:contain;
+    touch-action:pan-x;
+    will-change:scroll-position;
+  }
+  body.desktop-browser-upgrade #page-1 .acol,
+  body.desktop-browser-upgrade.sidebar-collapsed #page-1 .acol,
+  body.desktop-browser-upgrade .cols-wrap .acol,
+  body.desktop-browser-upgrade .cols-wrap .acol.is-priority,
+  body.desktop-browser-upgrade .cols-wrap .acol.is-secondary,
+  body.desktop-browser-upgrade .cols-wrap .acol.is-tools{
+    scroll-snap-align:none !important;
+    scroll-snap-stop:normal !important;
+    contain:layout paint;
+  }
+  body.desktop-browser-upgrade .col-feed{
+    touch-action:pan-y;
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior:contain;
+  }
+}
 
 
 </style>
@@ -5758,6 +5889,43 @@ body.desktop-browser-upgrade #page-4{width:100%;min-width:0;min-height:0;}
   window.addEventListener('resize', markDesktopMode);
   if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', initBrowserUpgrade);
   else initBrowserUpgrade();
+})();
+</script>
+
+<script id="ipad-scroll-smoothness-fix">
+(function(){
+  function isIPadWidth(){ return window.innerWidth>=768 && window.innerWidth<=1199; }
+  function tuneColumnScroller(){
+    var wrap=document.getElementById('cols-wrap');
+    if(!wrap) return;
+    if(isIPadWidth()){
+      wrap.style.scrollSnapType='none';
+      wrap.style.scrollBehavior='auto';
+      wrap.style.webkitOverflowScrolling='touch';
+    }else{
+      wrap.style.scrollSnapType='';
+      wrap.style.scrollBehavior='';
+      wrap.style.webkitOverflowScrolling='';
+    }
+  }
+  var raf=0;
+  function scheduleTune(){
+    cancelAnimationFrame(raf);
+    raf=requestAnimationFrame(tuneColumnScroller);
+  }
+  document.addEventListener('DOMContentLoaded',scheduleTune);
+  window.addEventListener('resize',scheduleTune,{passive:true});
+  window.addEventListener('orientationchange',function(){setTimeout(scheduleTune,250);},{passive:true});
+  var oldRender=window.renderColumns;
+  if(typeof oldRender==='function' && !oldRender.__ipadScrollPatched){
+    var patched=function(){
+      var r=oldRender.apply(this,arguments);
+      scheduleTune();
+      return r;
+    };
+    patched.__ipadScrollPatched=true;
+    window.renderColumns=patched;
+  }
 })();
 </script>
 
