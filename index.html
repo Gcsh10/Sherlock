@@ -97,10 +97,6 @@ body.col-touch-sorting .col-hd{cursor:grabbing;}
 .live-controls{display:flex;align-items:center;gap:6px;margin-left:6px;}
 .live-interval,.tvsel{appearance:none;background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));border:1px solid rgba(122,154,184,.22);color:var(--tx);font-size:11px;font-family:'Inter',sans-serif;font-weight:600;padding:6px 28px 6px 10px;border-radius:999px;outline:none;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 6px 18px rgba(0,0,0,.14);}
 .live-interval:hover,.tvsel:hover{border-color:rgba(0,184,255,.35);}
-.live-status{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;letter-spacing:.02em;color:var(--tx2);padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(122,154,184,.14);}
-.live-status.on{color:#67e8f9;border-color:rgba(0,184,255,.32);background:rgba(0,184,255,.1);}
-.live-status.busy{color:#fde68a;border-color:rgba(245,158,11,.3);background:rgba(245,158,11,.1);}
-.live-status.off{color:var(--mu);}
 .live-toggle.on{border-color:rgba(0,184,255,.42);color:#eaf6ff;background:linear-gradient(180deg,rgba(0,184,255,.18),rgba(0,184,255,.08));}
 .live-toggle.off{color:var(--tx2);}
 .col-feed{flex:1;overflow-y:auto;overflow-x:hidden;padding:4px 0;-webkit-overflow-scrolling:touch;}
@@ -894,21 +890,6 @@ body.sidebar-collapsed #sidebar-toggle-btn{
   background:var(--acc3);
 }
 
-
-/* Analisi panel readability */
-#analisi-chatgpt-panel textarea::placeholder{color:#cbd5e1;}
-#analisi-chatgpt-panel button:hover{box-shadow:0 0 0 1px rgba(255,255,255,.08),0 0 10px rgba(255,255,255,.08);}
-html[data-theme=dark] #analisi-chatgpt-panel,
-[data-theme=dark] #analisi-chatgpt-panel{
-  background:#111827 !important;
-  border-color:#4b5563 !important;
-}
-html[data-theme=dark] #analisi-chatgpt-panel textarea,
-[data-theme=dark] #analisi-chatgpt-panel textarea{
-  background:#0b1220 !important;
-  color:#f9fafb !important;
-  border-color:#6b7280 !important;
-}
 
 
 
@@ -1948,6 +1929,7 @@ var DEFAULTS=[
   {id:'warzone',   name:'The War Zone',       cat:'think',   url:'https://news.google.com/rss/search?q=site:twz.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'defone',    name:'Defense One',        cat:'think',   url:'https://news.google.com/rss/search?q=site:defenseone.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'diplomat',  name:'The Diplomat',       cat:'think',   url:'https://thediplomat.com/feed/',on:true},
+  {id:'amti_csis', name:'AMTI / CSIS',         cat:'osint',   url:'https://amti.csis.org/feed/',regions:['indopacifico'],on:true},
   {id:'politico',  name:'Politico EU',        cat:'think',   url:'https://news.google.com/rss/search?q=site:politico.eu&hl=en&gl=US&ceid=US:en',on:true},
   {id:'economist', name:'The Economist',      cat:'think',   url:'https://news.google.com/rss/search?q=site:economist.com&hl=en',on:true},
   {id:'sipri',     name:'SIPRI',              cat:'think',   url:'https://www.sipri.org/rss.xml',on:true},
@@ -2197,7 +2179,7 @@ var ALL_COLS=[
 var sources=[],articles=[],colOrder=[],colClosed=[],timerSec=120,timerInt=null,sourceStatus={},pIdx=0;
 
 // ── Chronological hygiene: keep news recent and truly sorted ──────
-var MAX_ARTICLE_AGE_DAYS=7;
+var MAX_ARTICLE_AGE_DAYS=1;
 function articleTsFromPub(pub){
   if(!pub) return 0;
   var t=Date.parse(pub);
@@ -2261,6 +2243,7 @@ function loadPersist(){
           // Always sync cat and url from DEFAULTS — fixes migrations when categories change
           existing.cat=d.cat;
           existing.url=d.url;
+          if(d.regions) existing.regions=d.regions; else delete existing.regions;
           return existing;
         });
         // Also keep any custom user-added sources not in DEFAULTS
@@ -2297,7 +2280,7 @@ function loadPersist(){
       'ciis','cicir','siis','cfau','ciss','cass','huanqiu_zh','rand','brookings','iiss',
       'scmp_cn','merics','cna','cna_sg','people_world_zh','arabnews','xinhua_en','cgtn_en',
       'globaltimes_en','chinadaily','people_en','xinhua_zh','people_zh','nyt_world','wsj_world','chinadigitaltimes','do_intel_china',
-      'sun_chenghao','lingua_sinica','he_yuzhe','carto_maps_general','carto_visualcapitalist','carto_geocurrents','carto_reliefweb_maps','carto_isw_maps','carto_acled_maps','carto_csis_maps','toshi_yoshihara'
+      'sun_chenghao','lingua_sinica','he_yuzhe','carto_maps_general','carto_visualcapitalist','carto_geocurrents','carto_reliefweb_maps','carto_isw_maps','carto_acled_maps','carto_csis_maps','toshi_yoshihara','amti_csis'
     ];
     // Force requested sources ON unconditionally (every load, regardless of saved prefs)
     sources.forEach(function(s){
@@ -2449,7 +2432,7 @@ function parseRSS(xml,src){
       desc=desc.substring(0,220);
       if(!title)return;
       var ts=articleTsFromPub(pub);
-      var item=classify({title:title,link:link,description:desc,pub:pub,src:src.name,cat:src.cat,ts:ts});
+      var item=classify({title:title,link:link,description:desc,pub:pub,src:src.name,srcId:src.id,sourceRegions:src.regions||[],cat:src.cat,ts:ts});
       if(isFreshEnoughArticle(item)) out.push(item);
     });
   }catch(e){}
@@ -2639,6 +2622,7 @@ function _articleMatchesCol(a, def){
   if(def.regions[0]==='osint') return a.cat==='osint';
   if(def.regions[0]==='analisti_cn') return a.cat==='analisti_cn';
   if(def.regions[0]==='analisti_jp') return a.cat==='analisti_jp';
+  if(a.sourceRegions && a.sourceRegions.some(function(r){return r===def.id || def.regions.indexOf(r)>=0;})) return true;
   return def.regions.indexOf(a.region)>=0;
 }
 
@@ -2803,7 +2787,7 @@ var THEATER_META={
   europa:{label:'Europa', cats:['italia']},
   medioriente:{label:'Medio Oriente', ids:['haaretz','meye','aljazeera','anadolu','wam']},
   russia:{label:'Russia / Eurasia', ids:['tass','kyivindep','osint_rferl','dpa']},
-  indopacifico:{label:'Indo-Pacifico', cats:['sudest_asia'], ids:['diplomat','nikkei','scmp','rappler','jakartapost','straitstimes','cna_sg','cna_tw','nhk','kyodo','yonhap','pti','the_hindu','dawn']},
+  indopacifico:{label:'Indo-Pacifico', cats:['sudest_asia'], ids:['diplomat','amti_csis','nikkei','scmp','rappler','jakartapost','straitstimes','cna_sg','cna_tw','nhk','kyodo','yonhap','pti','the_hindu','dawn']},
   cina:{label:'Cina', cats:['cina','analisti_cn'], ids:['xinhua','xinhua_cina','pekingnology','peoples_daily','globaltimes_default','globaltimes_cn_main','pla_daily','pla_eastern','pla_southern','pla_western','pla_northern','pla_central','chinadaily_default','qstheory','beijingdaily','ce_cn','gmw','mingpao_hk','cna_tw']},
   giappone:{label:'Giappone', cats:['giappone'], ids:['nhk_japan','nikkei_japan','japantimes_japan','asahi_japan','yomiuri_japan','mainichi_japan','sankei_japan','kazuto_suzuki','stephen_nagy','hirohito_ogi','haruo_tohmatsu','watanabe_nabe','kawashima_shin','marina_fujita_dickson','alessio_patalano_jp']},
   analisti_jp:{label:'Analisti JP', cats:['analisti_jp']},
@@ -4570,93 +4554,6 @@ function hardReset(){
   renderAll();doRefresh();
   notify('Reset completato');
 }
-// ── ANALISI INTELLIGENCE ─────────────────────────────────────────
-var _analisiTab='swot';
-var _analisiSrc='dashboard'; // 'dashboard' | 'urls'
-var _analisiModel='claude-sonnet-4-6'; // selezionabile dall'utente
-
-function openAnalisi(){
-  var m=document.getElementById('analisi-modal');
-  if(!m)return;
-  m.style.display='flex';
-  var saved=localStorage.getItem('sh3_apikey')||'';
-  var inp=document.getElementById('analisi-apikey');
-  if(inp&&!inp.value&&saved)inp.value=saved;
-  _updateAnalisiKeyStatus();
-}
-function closeAnalisi(){
-  var m=document.getElementById('analisi-modal');
-  if(m)m.style.display='none';
-}
-function _updateAnalisiKeyStatus(){
-  var inp=document.getElementById('analisi-apikey');
-  var ks=document.getElementById('analisi-key-status');
-  var key=(inp&&inp.value)||localStorage.getItem('sh3_apikey')||'';
-  if(ks){
-    if(key){ks.textContent='✓ Key pronta';ks.style.color='var(--acc)';}
-    else{ks.textContent='Senza key: analisi locale';ks.style.color='var(--mu)';}
-  }
-}
-function selectAnalisiTab(tab,el){
-  _analisiTab=tab;
-  document.querySelectorAll('.analisi-tab').forEach(function(b){b.classList.remove('active');});
-  if(el)el.classList.add('active');
-}
-function _buildPrompt(tab,ctx,focus){
-  var focusStr=focus?' Focus tematico: '+focus+'.':'';
-  var prompts={
-    swot:'Sei un analista geopolitico senior di Limes.'+focusStr+'\nAnalizza il seguente contenuto e produci una SWOT Analysis geopolitica. Per ogni quadrante (Strengths, Weaknesses, Opportunities, Threats) fornisci 4-5 punti concreti e specifici. Rispondi SOLO con JSON valido:\n{"strengths":["..."],"weaknesses":["..."],"opportunities":["..."],"threats":["..."]}\n\n'+ctx,
-    competitive:'Sei un analista geopolitico senior.'+focusStr+'\nAnalizza il seguente contenuto. Identifica e analizza i principali attori geopolitici: per ognuno dai posizione attuale, vantaggi strategici, vulnerabilità. Usa intestazioni ### Nome Attore. Rispondi SOLO in italiano. Max 700 parole.\n\n'+ctx,
-    devil:'Sei un analista che pratica il Devil\'s Advocacy.'+focusStr+'\nAnalizza il seguente contenuto. Identifica le 3-4 narrative dominanti e smontale con argomentazioni rigorose. Struttura: ### Narrativa → controargomentazioni → punto cieco. Rispondi SOLO in italiano. Max 700 parole.\n\n'+ctx,
-    scenario:'Sei un analista strategico.'+focusStr+'\nAnalizza il seguente contenuto. Produci 3 scenari evolutivi per i prossimi 3-6 mesi. SOLO JSON valido:\n[{"label":"...","prob":XX,"drivers":["..."],"implications":"...","type":"low-prob|med-prob|high-prob"}]\n\n'+ctx
-  };
-  return prompts[tab]||prompts.swot;
-}
-
-function setAnalisiModel(sel){
-  _analisiModel=sel.value;
-  notify('Modello: '+_analisiModel);
-}
-
-function _callClaudeAPI(tab,ctx,focus,apiKey,onSuccess,onError){
-  fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
-    headers:{
-      'Content-Type':'application/json',
-      'x-api-key':apiKey,
-      'anthropic-version':'2023-06-01',
-      'anthropic-dangerous-direct-browser-access':'true'
-    },
-    body:JSON.stringify({
-      model:_analisiModel,
-      max_tokens:(_analisiModel.indexOf('opus')>=0?2000:1400),
-      system:'Sei un analista geopolitico senior di Limes. Rispondi SEMPRE in italiano, in modo preciso e sintetico.',
-      messages:[{role:'user',content:_buildPrompt(tab,ctx,focus)}]
-    })
-  })
-  .then(function(r){
-    if(!r.ok)return r.json().then(function(e){throw new Error((e.error&&e.error.message)||r.status);});
-    return r.json();
-  })
-  .then(function(data){
-    var text=(data.content&&data.content[0]&&data.content[0].text)||'';
-    onSuccess(_renderAnalisiAPI(tab,text));
-  })
-  .catch(function(e){onError(e.message);});
-}
-
-// ── RENDER API RESULT ─────────────────────────────────────────────
-function _buildLocalFromText(tab,ctx,count){
-  return '<div style="background:rgba(139,92,246,.07);border:1px solid rgba(139,92,246,.25);border-radius:6px;padding:12px;font-size:12px;line-height:1.6">'+
-    '<b style="color:#a78bfa">&#9872; Analisi locale — '+count+' articoli recuperati</b><br><br>'+
-    '<span style="color:var(--mu)">Inserisci una Anthropic API key per ottenere un\'analisi Claude contestuale sul contenuto degli URL forniti.<br><br>'+
-    'Contenuto estratto: <b>'+Math.round(ctx.length/1000)+'k caratteri</b> da '+count+' articoli.</span>'+
-    '<div style="margin-top:10px;font-size:10px;font-family:\'Share Tech Mono\',monospace;color:var(--mu)">Preview contenuto:</div>'+
-    '<div style="font-size:10px;font-family:\'Share Tech Mono\',monospace;color:var(--tx2);background:var(--s2);padding:8px;border-radius:4px;margin-top:4px;max-height:120px;overflow-y:auto;white-space:pre-wrap">'+
-    esc(ctx.substring(0,600))+'…</div>'+
-    '</div>';
-}
-
 // ── OPS MAP UI HELPERS ────────────────────────────────────────────
 function opsTab(btn){
   try{
@@ -5151,8 +5048,7 @@ function toggleSidebar(){
       +'<option value="120" selected>120s</option>'
       +'<option value="300">5 min</option>'
       +'<option value="600">10 min</option>'
-      +'</select>'
-+'<span class="live-status on" id="live-status">attivo</span>';
+      +'</select>';
     timerWrap.appendChild(box);
     document.getElementById('live-toggle').addEventListener('click', function(){
       liveCfg.enabled=!liveCfg.enabled;
@@ -5964,255 +5860,6 @@ body.desktop-browser-upgrade #page-4{width:100%;min-width:0;min-height:0;}
 })();
 </script>
 
-<!-- ── MODAL ANALISI INTELLIGENCE ──────────────────────────────── -->
-<style>
-.analisi-bg{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:750;display:flex;align-items:center;justify-content:center;padding:16px;}
-.analisi-modal{background:var(--bg);border:1px solid var(--bd2);width:100%;max-width:680px;max-height:92vh;display:flex;flex-direction:column;border-top:2px solid #a78bfa;}
-.analisi-topbar{display:flex;align-items:center;gap:8px;padding:8px 14px;background:var(--bg2);border-bottom:1px solid var(--bd2);flex-shrink:0;}
-.analisi-topbar-title{font-family:'Share Tech Mono',monospace;font-size:11px;color:#a78bfa;letter-spacing:.14em;flex:1;}
-.analisi-body{flex:1;overflow-y:auto;padding:16px 18px;display:flex;flex-direction:column;gap:12px;}
-.analisi-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
-.analisi-lbl{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--mu);text-transform:uppercase;letter-spacing:.1em;min-width:56px;}
-.analisi-tabs-row{display:flex;gap:4px;flex-wrap:wrap;}
-.analisi-tab{appearance:none;background:var(--s2);border:1px solid var(--bd2);color:var(--tx2);cursor:pointer;font-size:10px;padding:5px 11px;font-family:'Share Tech Mono',monospace;letter-spacing:.06em;border-radius:999px;transition:all .15s;}
-.analisi-tab.active,.analisi-tab:hover{border-color:#a78bfa;color:#a78bfa;background:rgba(167,139,250,.08);}
-.analisi-inp{width:100%;background:var(--s2);border:1px solid var(--bd2);color:var(--tx);padding:7px 10px;font-size:12px;font-family:'Share Tech Mono',monospace;outline:none;border-radius:4px;}
-.analisi-inp:focus{border-color:#a78bfa;}
-.analisi-model-sel{appearance:none;background:var(--s2);border:1px solid var(--bd2);color:var(--tx);font-size:11px;font-family:'Share Tech Mono',monospace;padding:6px 10px;border-radius:999px;outline:none;cursor:pointer;}
-.analisi-model-sel:hover{border-color:#a78bfa;}
-.analisi-key-row{display:flex;align-items:center;gap:8px;}
-.analisi-key-status{font-size:10px;font-family:'Share Tech Mono',monospace;min-width:110px;}
-.analisi-run-btn{appearance:none;background:linear-gradient(180deg,rgba(167,139,250,.2),rgba(167,139,250,.08));border:1px solid rgba(167,139,250,.45);color:#a78bfa;cursor:pointer;font-size:11px;padding:8px 20px;font-family:'Share Tech Mono',monospace;letter-spacing:.08em;border-radius:999px;transition:all .15s;font-weight:700;}
-.analisi-run-btn:hover{background:rgba(167,139,250,.2);box-shadow:0 0 0 1px rgba(167,139,250,.25);}
-.analisi-result{flex:1;min-height:120px;max-height:340px;overflow-y:auto;background:var(--s2);border:1px solid var(--bd);padding:12px;font-size:13px;line-height:1.6;color:var(--tx);}
-.analisi-result::-webkit-scrollbar{width:3px;}
-.analisi-result::-webkit-scrollbar-thumb{background:var(--bd2);}
-.analisi-result .ar-section{margin-bottom:10px;}
-.analisi-result .ar-head{font-weight:700;color:#a78bfa;font-size:11px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px;font-family:'Share Tech Mono',monospace;}
-.analisi-result .ar-item{padding:2px 0;color:var(--tx2);}
-.analisi-result .ar-scenario{background:var(--s);border:1px solid var(--bd);padding:8px 10px;margin-bottom:6px;border-radius:4px;}
-.analisi-result .ar-prob{font-size:10px;font-family:'Share Tech Mono',monospace;color:var(--am);font-weight:700;}
-</style>
-
-<div class="analisi-bg" id="analisi-modal" style="display:none" onclick="if(event.target===this)closeAnalisi()">
-  <div class="analisi-modal">
-    <div class="analisi-topbar">
-      <span class="analisi-topbar-title">⬡ ANALISI INTELLIGENCE</span>
-      <button class="hbtn" onclick="closeAnalisi()">✕</button>
-    </div>
-    <div class="analisi-body">
-      <!-- Tipo analisi -->
-      <div>
-        <div class="analisi-lbl" style="margin-bottom:6px">Tipo di analisi</div>
-        <div class="analisi-tabs-row">
-          <button class="analisi-tab active" onclick="selectAnalisiTab('swot',this)">SWOT</button>
-          <button class="analisi-tab" onclick="selectAnalisiTab('competitive',this)">Attori</button>
-          <button class="analisi-tab" onclick="selectAnalisiTab('devil',this)">Devil's Advocate</button>
-          <button class="analisi-tab" onclick="selectAnalisiTab('scenario',this)">Scenari</button>
-        </div>
-      </div>
-      <!-- Focus tematico -->
-      <div>
-        <div class="analisi-lbl" style="margin-bottom:4px">Focus tematico <span style="color:var(--mu)">(opzionale)</span></div>
-        <input class="analisi-inp" id="analisi-focus" placeholder="es. Stretto di Taiwan, Mar Rosso, rapporti Cina-UE…">
-      </div>
-      <!-- Modello e API key -->
-      <div class="analisi-row">
-        <span class="analisi-lbl">Modello</span>
-        <select class="analisi-model-sel" id="analisi-model-sel" onchange="setAnalisiModel(this)">
-          <option value="claude-sonnet-4-6">Sonnet 4.6 (veloce)</option>
-          <option value="claude-opus-4-6">Opus 4.6 (profondo)</option>
-          <option value="claude-haiku-4-5-20251001">Haiku 4.5 (rapido)</option>
-        </select>
-      </div>
-      <div class="analisi-key-row">
-        <span class="analisi-lbl">API Key</span>
-        <input class="analisi-inp" id="analisi-apikey" type="password" placeholder="sk-ant-…" oninput="_updateAnalisiKeyStatus()" style="flex:1;max-width:340px">
-        <button class="hbtn" onclick="_saveAnalisiKey()">Salva</button>
-        <span class="analisi-key-status" id="analisi-key-status">Senza key: analisi locale</span>
-      </div>
-      <!-- Bottone run -->
-      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-        <button class="analisi-run-btn" id="analisi-run-btn" onclick="runAnalisi()">▶ Esegui analisi</button>
-        <button class="analisi-run-btn" id="analisi-claude-btn" onclick="portaSuClaude()" style="background:linear-gradient(180deg,rgba(0,184,255,.16),rgba(0,184,255,.06));border-color:rgba(0,184,255,.45);color:#67e8f9;" title="Copia il contesto e apri Claude.ai in una nuova tab">↗ Porta su Claude.ai</button>
-        <span id="analisi-spinner" style="display:none;font-family:'Share Tech Mono',monospace;font-size:10px;color:#a78bfa;letter-spacing:.08em">Elaborazione…</span>
-      </div>
-      <!-- Risultato -->
-      <div class="analisi-result" id="analisi-result">
-        <span style="color:var(--mu);font-family:'Share Tech Mono',monospace;font-size:11px">Seleziona tipo di analisi e premi <b>Esegui</b> (richiede API key) oppure <b>Porta su Claude.ai</b> per analizzare senza chiave.</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-// ── ANALISI MODAL HELPERS ─────────────────────────────────────────
-function _saveAnalisiKey(){
-  var inp=document.getElementById('analisi-apikey');
-  if(!inp)return;
-  try{localStorage.setItem('sh3_apikey',inp.value||'');}catch(e){}
-  _updateAnalisiKeyStatus();
-  notify(inp.value?'API key salvata':'Key rimossa');
-}
-
-function _renderAnalisiAPI(tab, text){
-  // Clean potential markdown fences
-  var raw=text.replace(/```json|```/g,'').trim();
-  if(tab==='swot'){
-    try{
-      var d=JSON.parse(raw);
-      var out='<div class="ar-section"><div class="ar-head">💪 Strengths</div>'+
-        (d.strengths||[]).map(function(x){return '<div class="ar-item">▸ '+esc(x)+'</div>';}).join('')+'</div>'+
-        '<div class="ar-section"><div class="ar-head">⚠ Weaknesses</div>'+
-        (d.weaknesses||[]).map(function(x){return '<div class="ar-item">▸ '+esc(x)+'</div>';}).join('')+'</div>'+
-        '<div class="ar-section"><div class="ar-head">🔓 Opportunities</div>'+
-        (d.opportunities||[]).map(function(x){return '<div class="ar-item">▸ '+esc(x)+'</div>';}).join('')+'</div>'+
-        '<div class="ar-section"><div class="ar-head">🔴 Threats</div>'+
-        (d.threats||[]).map(function(x){return '<div class="ar-item">▸ '+esc(x)+'</div>';}).join('')+'</div>';
-      return out;
-    }catch(e){}
-  }
-  if(tab==='scenario'){
-    try{
-      var arr=JSON.parse(raw);
-      return arr.map(function(s){
-        return '<div class="ar-scenario"><div style="font-weight:700;color:var(--tx);margin-bottom:4px">'+esc(s.label||'')+'</div>'+
-          '<div class="ar-prob">Probabilità: '+s.prob+'%</div>'+
-          (s.drivers?'<div style="font-size:11px;color:var(--tx2);margin-top:4px">'+s.drivers.map(function(d){return '▸ '+esc(d);}).join(' ')+'</div>':'')+'</div>';
-      }).join('');
-    }catch(e){}
-  }
-  // Fallback: render as markdown-ish text
-  return raw.split('\n').map(function(line){
-    if(line.startsWith('### ')) return '<div class="ar-head" style="margin-top:8px">'+esc(line.slice(4))+'</div>';
-    if(line.startsWith('## '))  return '<div class="ar-head" style="font-size:12px;margin-top:10px">'+esc(line.slice(3))+'</div>';
-    if(line.startsWith('- ')||line.startsWith('* ')) return '<div class="ar-item">▸ '+esc(line.slice(2))+'</div>';
-    if(line.trim()==='') return '<div style="height:6px"></div>';
-    return '<div class="ar-item">'+esc(line)+'</div>';
-  }).join('');
-}
-
-function _buildAnalisiCtx(){
-  var arts=(window.articles||[]);
-  var focus=(document.getElementById('analisi-focus')||{}).value||'';
-  if(focus){
-    var fl=focus.toLowerCase();
-    arts=arts.filter(function(a){
-      return ((a.title||'')+(a.description||'')+(a.src||'')).toLowerCase().indexOf(fl)>=0;
-    });
-  }
-  arts=arts.slice(0,80);
-  return arts.map(function(a){return '['+( a.src||'' )+'] '+(a.title||'')+(a.description?' — '+a.description.substring(0,120):'');}).join('\n');
-}
-
-function runAnalisi(){
-  var res=document.getElementById('analisi-result');
-  var spinner=document.getElementById('analisi-spinner');
-  var runBtn=document.getElementById('analisi-run-btn');
-  if(!res)return;
-  var ctx=_buildAnalisiCtx();
-  if(!ctx.trim()){res.innerHTML='<span style="color:var(--re);font-family:\'Share Tech Mono\',monospace;font-size:11px">Nessun articolo disponibile. Attendi il caricamento dei feed.</span>';return;}
-  var focus=(document.getElementById('analisi-focus')||{}).value||'';
-  var key=(document.getElementById('analisi-apikey')||{}).value||localStorage.getItem('sh3_apikey')||'';
-  if(spinner) spinner.style.display='';
-  if(runBtn){runBtn.disabled=true;runBtn.style.opacity='.5';}
-  res.innerHTML='<span style="color:var(--mu);font-family:\'Share Tech Mono\',monospace;font-size:11px">⌛ Elaborazione in corso…</span>';
-  if(key){
-    _callClaudeAPI(_analisiTab, ctx, focus, key,
-      function(html){
-        if(spinner) spinner.style.display='none';
-        if(runBtn){runBtn.disabled=false;runBtn.style.opacity='';}
-        res.innerHTML=html;
-      },
-      function(err){
-        if(spinner) spinner.style.display='none';
-        if(runBtn){runBtn.disabled=false;runBtn.style.opacity='';}
-        res.innerHTML='<span style="color:var(--re);font-family:\'Share Tech Mono\',monospace;font-size:11px">Errore API: '+esc(err)+'</span>';
-      }
-    );
-  }else{
-    if(spinner) spinner.style.display='none';
-    if(runBtn){runBtn.disabled=false;runBtn.style.opacity='';}
-    res.innerHTML=_buildLocalFromText(_analisiTab, ctx, (window.articles||[]).length);
-  }
-}
-
-// ── PORTA SU CLAUDE.AI ───────────────────────────────────────────
-var _TIPO_LABELS={
-  swot:'una SWOT Analysis geopolitica (Strengths, Weaknesses, Opportunities, Threats)',
-  competitive:'un\'analisi degli attori geopolitici (posizione, vantaggi, vulnerabilità di ciascuno)',
-  devil:'un\'analisi Devil\'s Advocate (identifica le narrative dominanti e smontale)',
-  scenario:'3 scenari evolutivi per i prossimi 3-6 mesi (con probabilità e driver)'
-};
-
-function portaSuClaude(){
-  var ctx=_buildAnalisiCtx();
-  var arts=(window.articles||[]);
-  var focus=(document.getElementById('analisi-focus')||{}).value||'';
-  var tipo=_TIPO_LABELS[_analisiTab]||_TIPO_LABELS.swot;
-  var count=focus
-    ? arts.filter(function(a){return ((a.title||'')+(a.description||'')).toLowerCase().indexOf(focus.toLowerCase())>=0;}).length
-    : Math.min(arts.length,80);
-
-  if(!ctx.trim()){
-    notify('Nessun articolo disponibile — attendi il caricamento dei feed');
-    return;
-  }
-
-  var prompt='Sei un analista geopolitico senior di Limes.\n'
-    +(focus?'Focus tematico: '+focus+'.\n':'')
-    +'Di seguito trovi '+count+' notizie estratte dal mio dashboard Sherlock aggiornate in tempo reale.\n'
-    +'Produci '+tipo+'.\n'
-    +'Rispondi in italiano, in modo preciso e sintetico.\n\n'
-    +'---\n'
-    +ctx;
-
-  // Copy to clipboard then open Claude.ai
-  var doOpen=function(){
-    window.open('https://claude.ai/new','_blank','noopener');
-  };
-
-  try{
-    navigator.clipboard.writeText(prompt).then(function(){
-      var res=document.getElementById('analisi-result');
-      if(res){
-        res.innerHTML='<div style="font-family:\'Share Tech Mono\',monospace;font-size:11px;line-height:1.9">'
-          +'<div style="color:#67e8f9;font-weight:700;margin-bottom:8px">✓ Testo copiato negli appunti</div>'
-          +'<div style="color:var(--tx2)">1. Si apre una nuova tab su <b>Claude.ai</b></div>'
-          +'<div style="color:var(--tx2)">2. Crea una nuova conversazione</div>'
-          +'<div style="color:var(--tx2)">3. Incolla (<kbd style="background:var(--s2);border:1px solid var(--bd);padding:1px 5px;border-radius:3px">⌘V</kbd> / <kbd style="background:var(--s2);border:1px solid var(--bd);padding:1px 5px;border-radius:3px">Ctrl+V</kbd>) e invia</div>'
-          +'<div style="color:var(--mu);margin-top:8px;font-size:10px">Articoli inclusi: <b>'+count+'</b>'+(focus?' · filtro: '+esc(focus):'')+'</div>'
-          +'</div>';
-      }
-      notify('Testo copiato — apertura Claude.ai…');
-      doOpen();
-    }).catch(function(){
-      _fallbackCopyMD(prompt);
-      doOpen();
-    });
-  }catch(e){
-    _fallbackCopyMD(prompt);
-    doOpen();
-  }
-}
-
-// Sync model selector with _analisiModel on modal open
-var _origOpenAnalisi=window.openAnalisi;
-window.openAnalisi=function(){
-  var sel=document.getElementById('analisi-model-sel');
-  if(sel) sel.value=_analisiModel;
-  if(typeof _origOpenAnalisi==='function') _origOpenAnalisi();
-  else{
-    var m=document.getElementById('analisi-modal');
-    if(m) m.style.display='flex';
-    var saved=localStorage.getItem('sh3_apikey')||'';
-    var inp=document.getElementById('analisi-apikey');
-    if(inp&&!inp.value&&saved) inp.value=saved;
-    _updateAnalisiKeyStatus();
-  }
-};
-</script>
-
 <!-- ── KEYBOARD SHORTCUTS ─────────────────────────────────────────-->
 <script>
 (function(){
@@ -6243,17 +5890,13 @@ window.openAnalisi=function(){
         e.preventDefault();
         if(typeof switchPage==='function') switchPage(4);
         break;
-      case 'a': case 'A':
-        e.preventDefault();
-        if(typeof openAnalisi==='function') openAnalisi();
-        break;
       case 's': case 'S':
         e.preventDefault();
         if(typeof toggleSidebar==='function') toggleSidebar();
         break;
       case 'Escape':
         // Close any open modal
-        ['analisi-modal','src-modal','restore-modal'].forEach(function(id){
+        ['src-modal','restore-modal'].forEach(function(id){
           var m=document.getElementById(id);
           if(m && m.style.display!=='none') m.style.display='none';
         });
@@ -6263,31 +5906,7 @@ window.openAnalisi=function(){
     }
   });
   // Show shortcut hint in console once
-  console.log('%cSHERLOCK shortcuts: 1-4 pagine | R refresh | M mappa | B briefing | A analisi | S pannello | Esc chiudi', 'color:#00b8ff;font-family:monospace');
-})();
-</script>
-
-<!-- ── ANALISI button in header ────────────────────────────────── -->
-<script>
-(function(){
-  function addAnalisiBtn(){
-    var hright=document.querySelector('.hright');
-    if(!hright||document.getElementById('analisi-hbtn')) return;
-    var btn=document.createElement('button');
-    btn.id='analisi-hbtn';
-    btn.className='hbtn';
-    btn.style.borderColor='rgba(167,139,250,.42)';
-    btn.style.color='#c4b5fd';
-    btn.textContent='Analisi';
-    btn.title='Analisi Intelligence (A)';
-    btn.onclick=function(){ if(typeof openAnalisi==='function') openAnalisi(); };
-    // Insert before Reset button
-    var resetBtn=hright.querySelector('[onclick*="hardReset"]');
-    if(resetBtn) hright.insertBefore(btn, resetBtn);
-    else hright.appendChild(btn);
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', addAnalisiBtn);
-  else addAnalisiBtn();
+  console.log('%cSHERLOCK shortcuts: 1-4 pagine | R refresh | M mappa | B briefing | S pannello | Esc chiudi', 'color:#00b8ff;font-family:monospace');
 })();
 </script>
 
