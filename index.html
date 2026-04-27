@@ -2179,7 +2179,7 @@ var ALL_COLS=[
 var sources=[],articles=[],colOrder=[],colClosed=[],timerSec=120,timerInt=null,sourceStatus={},pIdx=0;
 
 // ── Chronological hygiene: keep news recent and truly sorted ──────
-var MAX_ARTICLE_AGE_DAYS=1;
+var MAX_ARTICLE_AGE_DAYS=3;
 function articleTsFromPub(pub){
   if(!pub) return 0;
   var t=Date.parse(pub);
