@@ -113,7 +113,7 @@ body.col-touch-sorting .col-hd{cursor:grabbing;}
 .ctlink{display:block;font-size:15px;font-weight:600;color:var(--tx);text-decoration:none;line-height:1.4;}
 .ctlink:hover{color:var(--acc);}
 .cdesc{color:#c9d1d9;font-size:13px;margin-top:3px;line-height:1.4;}
-.cfoot{margin-top:4px;}.ctime{font-size:12px;color:var(--mu);font-family:'Share Tech Mono',monospace;}
+.cfoot{margin-top:4px;}.ctime{font-size:12px;color:var(--mu);font-family:'Inter',sans-serif;font-weight:500;letter-spacing:.01em;}
 .empty{padding:24px 12px;text-align:center;font-size:11px;color:var(--mu);font-family:'Share Tech Mono',monospace;line-height:1.8;}
 .skel{height:58px;background:var(--s2);margin:4px 8px;animation:shimmer 1.2s infinite;}
 @keyframes shimmer{0%{opacity:.4}50%{opacity:.9}100%{opacity:.4}}
@@ -1530,9 +1530,7 @@ html[data-theme=light] .timeline-item-desc,[data-theme=light] .timeline-item-des
   <div class="hright">
     <span id="clock"></span>
     <button class="hbtn" onclick="toggleTheme()">Tema</button>
-    <button class="hbtn" id="sidebar-toggle-btn" onclick="toggleSidebar()" title="Mostra/Nascondi filtri e fonti">Pannello</button>
-    <button class="hbtn acc" onclick="openSrcModal()">Fonte</button>
-    <button class="hbtn" onclick="openRestoreModal()">Colonne</button>
+    <button class="hbtn acc" onclick="openSrcModal()">Fonti</button>
     <button class="hbtn" onclick="hardReset()" title="Reset completo localStorage">Reset</button>
     <button class="hbtn" id="trbtn" onclick="translateAll()" data-alltr="0" title="Traduci articoli cinesi con Google Translate">Traduci</button>
   </div>
@@ -1563,47 +1561,67 @@ html[data-theme=light] .timeline-item-desc,[data-theme=light] .timeline-item-des
 })();
 </script>
 
-<div class="modal-bg src-modal-bg" id="src-modal" style="display:none" onclick="if(event.target===this)closeSrcModal()">
-  <div class="modal src-modal-card" role="dialog" aria-modal="true" aria-labelledby="src-modal-title">
-    <div class="modal-h src-modal-top">
+<div class="modal-bg src-modal-bg source-manager-bg" id="src-modal" style="display:none" onclick="if(event.target===this)closeSrcModal()">
+  <div class="modal source-manager-modal" role="dialog" aria-modal="true" aria-labelledby="src-modal-title">
+    <div class="modal-h source-manager-top">
       <div>
-        <div class="modal-t" id="src-modal-title">Aggiungi fonte RSS</div>
-        <div class="src-modal-sub">Preset rapidi o inserimento manuale. Le fonti aggiunte restano salvate nel browser.</div>
+        <div class="modal-t" id="src-modal-title">Fonti</div>
+        <div class="src-modal-sub">Le colonne servono a leggere. Qui decidi cosa entra nelle colonne.</div>
       </div>
       <button class="src-modal-close" aria-label="Chiudi" onclick="closeSrcModal()">&#x2715;</button>
     </div>
-
-    <div class="src-modal-body">
-      <section class="src-panel src-presets-panel" aria-label="Preset fonti">
-        <div class="src-panel-head">
-          <div>
-            <div class="src-panel-kicker">// PRESET RAPIDI</div>
-            <div class="src-panel-title"><span id="preset-count">0</span> fonti disponibili</div>
-          </div>
-        </div>
-        <input class="mi src-search" id="preset-search" placeholder="Cerca preset, es. Xinhua, Giappone, think tank" oninput="renderSrcPresets(this.value)">
-        <div class="pgrid src-preset-grid" id="pgrid"></div>
-        <div class="rsshub-note">I preset cinesi possono usare RSSHub/relay: attivali per aumentare la copertura in lingua cinese.</div>
+    <div class="source-manager-body">
+      <section class="source-manager-panel manager-columns-panel">
+        <div class="src-panel-kicker">// COLONNE VISIBILI</div>
+        <div class="source-manager-help">Attiva o nascondi le colonne della dashboard.</div>
+        <div id="manager-col-list" class="manager-col-list"></div>
       </section>
-
-      <section class="src-panel src-manual-panel" aria-label="Fonte manuale">
-        <div class="src-panel-kicker">// INSERIMENTO MANUALE</div>
-        <div class="mf"><label>Nome fonte</label><input class="mi" id="mn" placeholder="es. Jane's Intelligence" autocomplete="off"></div>
-        <div class="mf"><label>URL feed RSS</label><input class="mi" id="murl" placeholder="https://..." inputmode="url" autocomplete="off"></div>
-        <div class="mf"><label>Categoria</label>
-          <select class="mi" id="mcat">
-            <option value="media">Media internazionale</option><option value="italia">Media italiano</option>
-            <option value="think">Think tank</option><option value="ist">Istituzioni</option>
-            <option value="cyber">Cyber / OSINT</option><option value="finance">Finanza</option>
-            <option value="regional">Regionale</option><option value="agenzie">Agenzia</option>
-            <option value="osint">OSINT</option>
-            <option value="analisti_cn">Analisti CN</option>
-            <option value="giappone">Giappone</option>
-          </select>
+      <section class="source-manager-panel manager-sources-panel">
+        <div class="source-manager-section-head">
+          <div>
+            <div class="src-panel-kicker">// FONTI PER COLONNA</div>
+            <div class="source-manager-help">Apri una sezione e scegli le fonti da includere.</div>
+          </div>
+          <input class="mi source-manager-search" id="manager-source-search" placeholder="Cerca fonte..." oninput="renderSourceManager()">
         </div>
-        <div class="mrow src-modal-actions">
-          <button class="hbtn" onclick="closeSrcModal()">Annulla</button>
-          <button class="hbtn acc" onclick="addSrc()">Aggiungi fonte</button>
+        <div id="manager-source-list" class="manager-source-list"></div>
+      </section>
+      <section class="source-manager-panel manager-presets-panel">
+        <div class="src-panel-kicker">// PRESET EDITORIALI</div>
+        <div class="source-manager-help">Scorciatoie per cambiare rapidamente assetto delle fonti.</div>
+        <div class="manager-preset-row">
+          <button class="hbtn" onclick="applySourcePreset('essenziale')">Essenziale</button>
+          <button class="hbtn" onclick="applySourcePreset('esteso')">Esteso</button>
+          <button class="hbtn" onclick="applySourcePreset('cina')">Cina intensivo</button>
+          <button class="hbtn" onclick="applySourcePreset('osint')">OSINT</button>
+        </div>
+        <div class="source-manager-add">
+          <details>
+            <summary>Aggiungi fonte manuale o preset singolo</summary>
+            <div class="source-manager-add-grid">
+              <section>
+                <div class="src-panel-kicker">Preset singoli</div>
+                <input class="mi src-search" id="preset-search" placeholder="Cerca preset, es. Xinhua, Giappone, think tank" oninput="renderSrcPresets(this.value)">
+                <div class="pgrid src-preset-grid" id="pgrid"></div>
+              </section>
+              <section>
+                <div class="src-panel-kicker">Inserimento manuale</div>
+                <div class="mf"><label>Nome fonte</label><input class="mi" id="mn" placeholder="es. Jane's Intelligence" autocomplete="off"></div>
+                <div class="mf"><label>URL feed RSS</label><input class="mi" id="murl" placeholder="https://..." inputmode="url" autocomplete="off"></div>
+                <div class="mf"><label>Categoria</label>
+                  <select class="mi" id="mcat">
+                    <option value="media">Media internazionale</option><option value="italia">Media italiano</option>
+                    <option value="think">Think tank</option><option value="ist">Istituzioni</option>
+                    <option value="cyber">Cyber / OSINT</option><option value="finance">Finanza</option>
+                    <option value="regional">Regionale</option><option value="agenzie">Agenzia</option>
+                    <option value="osint">OSINT</option><option value="analisti_cn">Analisti CN</option>
+                    <option value="giappone">Giappone</option>
+                  </select>
+                </div>
+                <button class="hbtn acc" onclick="addSrc()">Aggiungi fonte</button>
+              </section>
+            </div>
+          </details>
         </div>
       </section>
     </div>
@@ -1892,17 +1910,21 @@ var DEFAULTS=[
   {id:'pla_northern',name:'Northern Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+北部战区&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
   {id:'pla_central',name:'Central Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+中部战区&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
   {id:'qstheory',name:'Seeking Truth',url:'https://news.google.com/rss/search?q=site:qstheory.cn&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
-  {id:'beijingdaily',name:'Beijing Daily',url:'https://news.google.com/rss/search?q=site:bjd.com.cn&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
+  {id:'beijingdaily',name:'Beijing Daily',url:'https://news.google.com/rss/search?q=site%3Abjd.com.cn%20%28%E5%8C%97%E4%BA%AC%E6%97%A5%E6%8A%A5%20OR%20%E5%9B%BD%E9%99%85%20OR%20China%20OR%20Beijing%29&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',on:true},
   {id:'ce_cn',name:'China Economic Net',url:'https://news.google.com/rss/search?q=site:ce.cn&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
   {id:'gmw',name:'Guangming Daily',url:'https://news.google.com/rss/search?q=site:gmw.cn&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
   {id:'pekingnology',name:'Pekingnology (Substack feed)',url:'https://pekingnology.substack.com/feed',cat:'analisti_cn',on:true},
   {id:'sun_chenghao',name:'Sun Chenghao',url:'https://www.chinaffairsplus.com/feed',cat:'analisti_cn',on:true},
   {id:'lingua_sinica',name:'Lingua Sinica',url:'https://linguasinica.substack.com/feed',cat:'analisti_cn',on:true},
   {id:'he_yuzhe',name:'He Yuzhe',url:'https://www.yuzhehe.com/feed',cat:'analisti_cn',on:true},
+  {id:'ccg_en',name:'CCG / Center for China and Globalization',url:'https://news.google.com/rss/search?q=site%3Aen.ccg.org.cn%20%28China%20OR%20Globalization%20OR%20governance%20OR%20BRI%20OR%20foreign%20policy%29&hl=en&gl=US&ceid=US:en',cat:'analisti_cn',regions:['analisti_cn'],on:true},
+  {id:'greenfdc_brigc',name:'BRIGC / Green FDC',url:'https://news.google.com/rss/search?q=site%3Agreenfdc.org%20%28%22Belt%20and%20Road%22%20OR%20BRIGC%20OR%20China%20OR%20green%20finance%20OR%20coalition%29&hl=en&gl=US&ceid=US:en',cat:'analisti_cn',regions:['analisti_cn'],on:true},
+  {id:'yidaiyilu_gov',name:'Yidaiyilu.gov.cn / 一带一路',url:'https://news.google.com/rss/search?q=site%3Ayidaiyilu.gov.cn%20%28%E4%B8%80%E5%B8%A6%E4%B8%80%E8%B7%AF%20OR%20%E5%85%B1%E5%BB%BA%20OR%20%E4%B8%AD%E5%9B%BD%20OR%20BRI%29&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'analisti_cn',regions:['analisti_cn'],on:true},
+  {id:'wire_china',name:'The Wire China',url:'https://www.thewirechina.com/feed/',cat:'analisti_cn',regions:['analisti_cn'],on:true},
   {id:'china_global_south',name:'China Global South Project',url:'https://news.google.com/rss/search?q=site%3Achinaglobalsouth.com%20%28China%20OR%20Beijing%20OR%20Global%20South%20OR%20Africa%20OR%20Asia%20OR%20Latin%20America%29&hl=en&gl=US&ceid=US:en',cat:'analisti_cn',regions:['analisti_cn'],on:true},
   {id:'paul_triolo_x',name:'Paul Triolo / X',url:'https://news.google.com/rss/search?q=site%3Ax.com%2FpstAsiatech%20OR%20%22Paul%20Triolo%22%20%28China%20OR%20semiconductors%20OR%20AI%20OR%20technology%20OR%20geopolitics%29&hl=en&gl=US&ceid=US:en',cat:'analisti_cn',regions:['analisti_cn'],on:true},
-  {id:'aspi_china',name:'ASPI / China',url:'https://news.google.com/rss/search?q=site%3Aaspi.org.au%20%28China%20OR%20Taiwan%20OR%20Indo-Pacific%20OR%20AUKUS%29&hl=en&gl=US&ceid=US:en',cat:'analisti_cn',regions:['analisti_cn'],on:true},
-  {id:'aspi_strategist',name:'The Strategist / ASPI',url:'https://www.aspistrategist.org.au/feed/',cat:'analisti_cn',regions:['analisti_cn','indopacifico'],on:true},
+  {id:'aspi_china',name:'ASPI / China',url:'https://news.google.com/rss/search?q=site%3Aaspi.org.au%20%28China%20OR%20Taiwan%20OR%20Indo-Pacific%20OR%20AUKUS%29&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',regions:['indopacifico'],on:true},
+  {id:'aspi_strategist',name:'The Strategist / ASPI',url:'https://www.aspistrategist.org.au/feed/',cat:'sudest_asia',regions:['indopacifico'],on:true},
 
   {id:'reuters',   name:'Reuters',            cat:'agenzie', url:'https://news.google.com/rss/search?q=reuters+world+news&hl=en&gl=US&ceid=US:en',on:true},
   {id:'ap',        name:'AP',                 cat:'agenzie', url:'https://news.google.com/rss/search?q=associated+press+world&hl=en&gl=US&ceid=US:en',on:true},
@@ -1930,7 +1952,7 @@ var DEFAULTS=[
   {id:'euronews',  name:'Euronews',           cat:'media',   url:'https://news.google.com/rss/search?q=euronews+world&hl=en',on:true},
   {id:'guardian',  name:'The Guardian',       cat:'media',   url:'https://news.google.com/rss/search?q=site:theguardian.com+world&hl=en&gl=US&ceid=US:en',on:true},
   {id:'spiegel',   name:'Der Spiegel EN',     cat:'media',   url:'https://news.google.com/rss/search?q=site:spiegel.de+international&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'lemonde',   name:'Le Monde EN',        cat:'media',   url:'https://news.google.com/rss/search?q=site:lemonde.fr&hl=en',on:true},
+  {id:'lemonde',   name:'Le Monde EN',        cat:'media',   url:'https://www.lemonde.fr/en/international/rss_full.xml',on:true},
   {id:'elpais',    name:'El Pais EN',         cat:'media',   url:'https://news.google.com/rss/search?q=site:elpais.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'rfi',       name:'RFI English',        cat:'media',   url:'https://news.google.com/rss/search?q=site:rfi.fr&hl=en&gl=US&ceid=US:en',on:true},
   {id:'voa',       name:'VOA News',           cat:'media',   url:'https://news.google.com/rss/search?q=site:voanews.com&hl=en',on:true},
@@ -1968,8 +1990,8 @@ var DEFAULTS=[
   {id:'diplomat',  name:'The Diplomat',       cat:'think',   url:'https://thediplomat.com/feed/',on:true},
   {id:'amti_csis', name:'AMTI / CSIS',         cat:'osint',   url:'https://amti.csis.org/feed/',regions:['indopacifico'],on:true},
   {id:'iseas_yusof',name:'ISEAS - Yusof Ishak Institute',cat:'think',url:'https://news.google.com/rss/search?q=site%3Aiseas.edu.sg%20%28Southeast%20Asia%20OR%20ASEAN%20OR%20Indo-Pacific%20OR%20China%29&hl=en&gl=US&ceid=US:en',regions:['indopacifico','sudest_asia'],on:true},
-  {id:'politico',  name:'Politico EU',        cat:'think',   url:'https://news.google.com/rss/search?q=site:politico.eu&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'economist', name:'The Economist',      cat:'think',   url:'https://news.google.com/rss/search?q=site:economist.com&hl=en',on:true},
+  {id:'politico',  name:'Politico EU',        cat:'think',   url:'https://www.politico.eu/feed/',on:true},
+  {id:'economist', name:'The Economist',      cat:'think',   url:'https://news.google.com/rss/search?q=site%3Aeconomist.com%20%28China%20OR%20Europe%20OR%20United%20States%20OR%20Russia%20OR%20war%20OR%20geopolitics%29&hl=en&gl=US&ceid=US:en',on:true},
   {id:'sipri',     name:'SIPRI',              cat:'osint',   url:'https://www.sipri.org/rss/combined.xml',regions:['osint'],on:true},
   {id:'intelonline',name:'Intelligence Online',cat:'think',  url:'https://news.google.com/rss/search?q=site:intelligenceonline.com&hl=en',on:true},
   {id:'nato',      name:'NATO',               cat:'ist',     url:'https://news.google.com/rss/search?q=NATO+statement&hl=en',on:true},
@@ -2024,7 +2046,7 @@ var PRESETS=[
   {id:'rsshub_bilibili_guancha',name:'RSSHub B站 观察者网',cat:'cina',url:'https://news.google.com/rss/search?q=%E8%A7%82%E5%AF%9F%E8%80%85%E7%BD%91+%E5%9C%B0%E7%BC%98%E6%94%BF%E6%B2%BB&hl=en&gl=US&ceid=US:en',on:true},
   {id:'baidu_huanqiu',name:'Baidu 环球时报/环球网',cat:'cina',url:'https://news.google.com/rss/search?q=%E7%8E%AF%E7%90%83%E6%97%B6%E6%8A%A5+%E5%9B%BD%E9%99%85&hl=en&gl=US&ceid=US:en',on:true},
   {id:'baidu_gmw',name:'Baidu 光明网',cat:'cina',url:'https://news.google.com/rss/search?q=site:gmw.cn+%E5%9B%BD%E9%99%85&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'baidu_bjd',name:'Baidu 北京日报',cat:'cina',url:'https://news.google.com/rss/search?q=site:bjd.com.cn+%E5%9B%BD%E9%99%85&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'baidu_bjd',name:'Baidu 北京日报',cat:'cina',url:'https://news.google.com/rss/search?q=site%3Abjd.com.cn%20%E5%9B%BD%E9%99%85%20%E5%8C%97%E4%BA%AC%E6%97%A5%E6%8A%A5&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
   {id:'baidu_qst',name:'Baidu 求是',cat:'cina',url:'https://news.google.com/rss/search?q=site:qstheory.cn&hl=en&gl=US&ceid=US:en',on:true},
   {id:'baidu_81cn',name:'Baidu 81.cn / 解放军',cat:'cina',url:'https://news.google.com/rss/search?q=site:81.cn+%E8%A7%A3%E6%94%BE%E5%86%9B+%E6%88%98%E5%8C%BA&hl=en&gl=US&ceid=US:en',on:true},
   {id:'baidu_thepaper',name:'Baidu 澎湃新闻',cat:'cina',url:'https://news.google.com/rss/search?q=site:thepaper.cn+%E5%9B%BD%E9%99%85&hl=en&gl=US&ceid=US:en',on:true},
@@ -2034,7 +2056,7 @@ var PRESETS=[
   {id:'hk01_zh',name:'HK01 香港01 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:hk01.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'singtao_zh',name:'星岛日报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:stheadline.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'gmw_zh',name:'光明网 Guangming (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:gmw.cn&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'beijingdaily_zh',name:'北京日报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:bjd.com.cn&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'beijingdaily_zh',name:'北京日报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site%3Abjd.com.cn%20%28%E5%8C%97%E4%BA%AC%E6%97%A5%E6%8A%A5%20OR%20%E5%9B%BD%E9%99%85%20OR%20%E5%A4%96%E4%BA%A4%29&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
   {id:'qstheory_zh',name:'求是理论网 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:qstheory.cn&hl=en&gl=US&ceid=US:en',on:true},
   {id:'huanqiu_zh',name:'环球网 / 环球时报 (中)',cat:'cina',url:'https://news.google.com/rss/search?q=site:huanqiu.com+OR+环球时报&hl=en&gl=US&ceid=US:en',on:true},
   {id:'rand',      name:'RAND Corp.',  cat:'think',   url:'https://news.google.com/rss/search?q=site:rand.org&hl=en'},
@@ -2058,7 +2080,7 @@ var PRESETS=[
   {id:'rti_tw',      name:'RTI Taiwan (中)',      cat:'cina', url:'https://news.google.com/rss/search?q=site:rti.org.tw&hl=en&gl=US&ceid=US:en', on:true},
   {id:'rfa_zh',      name:'自由亚洲 RFA (中)',    cat:'cina', url:'https://news.google.com/rss/search?q=site:rfa.org+chinese&hl=en&gl=US&ceid=US:en', on:true},
   {id:'voachinese',  name:'美国之音 VOA (中)',    cat:'cina', url:'https://news.google.com/rss/search?q=site:voachinese.com&hl=en&gl=US&ceid=US:en', on:true},
-  {id:'scmp_cn',     name:'SCMP China',           cat:'cina', url:'https://news.google.com/rss/search?q=site:scmp.com+china&hl=en', on:true},
+  {id:'scmp_cn',     name:'SCMP China',           cat:'cina', url:'https://www.scmp.com/rss/4/feed', on:true},
   // Think tank / analysis on China
   {id:'merics',      name:'MERICS (China)',       cat:'cina', url:'https://news.google.com/rss/search?q=MERICS+china&hl=en', on:true},
   {id:'csis_china',  name:'CSIS China',           cat:'cina', url:'https://news.google.com/rss/search?q=site:csis.org+china&hl=en', on:true},
@@ -2087,7 +2109,7 @@ var PRESETS=[
   {id:'wyzxwk_wenmu', name:'张文木 乌有之乡', cat:'analisti_cn',
     url:'https://news.google.com/rss/search?q=%E5%BC%A0%E6%96%87%E6%9C%A8+%E4%B9%8C%E6%9C%89%E4%B9%8B%E4%B9%A1+OR+%22Zhang+Wenmu%22+wyzxwk&hl=en&gl=US&ceid=US:en', on:true},
   {id:'hu_xijin', name:'胡锡进 Hu Xijin', cat:'analisti_cn',
-    url:'https://news.google.com/rss/search?q=%E8%83%A1%E9%94%A1%E8%BF%9B+OR+%22Hu+Xijin%22+%E7%8E%AF%E7%90%83%E6%97%B6%E6%8A%A5&hl=en&gl=US&ceid=US:en', on:true},
+    url:'https://news.google.com/rss/search?q=%28%22Hu%20Xijin%22%20OR%20%22HuXijin_GT%22%20OR%20%E8%83%A1%E9%94%A1%E8%BF%9B%29%20%28China%20OR%20%E4%B8%AD%E5%9B%BD%20OR%20Global%20Times%20OR%20%E7%8E%AF%E7%90%83%E6%97%B6%E6%8A%A5%29&hl=en&gl=US&ceid=US:en', on:true},
   {id:'wang_xiangsui', name:'王湘穗 Wang Xiangsui', cat:'analisti_cn',
     url:'https://news.google.com/rss/search?q=%E7%8E%8B%E6%B9%98%E7%A9%97+OR+%22Wang+Xiangsui%22+%E6%88%98%E7%95%A5&hl=en&gl=US&ceid=US:en', on:true},
   {id:'yan_xuetong', name:'阎学通 Yan Xuetong', cat:'analisti_cn',
@@ -2101,14 +2123,14 @@ var PRESETS=[
   {id:'ge_jianxiong', name:'葛剑雄 Ge Jianxiong', cat:'analisti_cn',
     url:'https://news.google.com/rss/search?q=%E8%91%9B%E5%89%91%E9%9B%84+OR+%22Ge+Jianxiong%22+%E5%8E%86%E5%8F%B2+geopolitics&hl=en&gl=US&ceid=US:en', on:true},
   {id:'zhao_long', name:'赵龙 Zhao Long SIIS', cat:'analisti_cn',
-    url:'https://news.google.com/rss/search?q=%E8%B5%B5%E9%BE%99+%E4%B8%8A%E6%B5%B7%E5%9B%BD%E9%99%85+OR+%22Zhao+Long%22+SIIS+global&hl=en&gl=US&ceid=US:en', on:true},
+    url:'https://news.google.com/rss/search?q=%28%22Zhao%20Long%22%20OR%20%E8%B5%B5%E9%BE%99%29%20%28SIIS%20OR%20%22Shanghai%20Institutes%20for%20International%20Studies%22%20OR%20China%20OR%20Taiwan%29&hl=en&gl=US&ceid=US:en', on:true},
   {id:'zheng_yongnian', name:'郑永年 Zheng Yongnian', cat:'analisti_cn',
     url:'https://news.google.com/rss/search?q=%E9%83%91%E6%B0%B8%E5%B9%B4+OR+%22Zheng+Yongnian%22+%E9%A6%99%E6%B8%AF+%E4%B8%AD%E5%9B%BD&hl=en&gl=US&ceid=US:en', on:true},
   {id:'sun_yanhong', name:'孙艳红 Sun Yanhong CASS', cat:'analisti_cn',
     url:'https://news.google.com/rss/search?q=%E5%AD%99%E8%89%B3%E7%BA%A2+%E7%A4%BE%E7%A7%91%E9%99%A2+OR+%22Sun+Yanhong%22+CASS+China&hl=en&gl=US&ceid=US:en', on:true},
   // Substack — RSS diretto
   {id:'ginger_river', name:'Jiang Jiang — Ginger River', cat:'analisti_cn',
-    url:'https://gingerriver.substack.com/feed', on:true},
+    url:'https://www.gingerriver.com/feed', on:true},
   {id:'wang_zichen', name:'Wang Zichen — Pekingnology+', cat:'analisti_cn',
     url:'https://zichenwang.substack.com/feed', on:true},
   {id:'deng_yuwen', name:'邓聿文 Deng Yuwen / Yuwen Deng', cat:'analisti_cn',
@@ -2272,7 +2294,38 @@ function persist(){
 function loadPersist(){
   var DEFAULT_CLOSED=['russia','africa','americas','medioriente'];
   var LAYOUT_VER='v12';
-  var REMOVED_SOURCE_IDS=['ccg','caixin','almonitor','mei','mideasteye','arabnews','bbcme','arabiya','trtworld','meduza','moscowtimes','carnegie_russia','lowy','scmp_cn','rti_tw','globaltimes','globaltimes_zh','xinhua_en','xinhua_zh','people_en','people_zh','chinadaily','csis_china','merics','bbcafrica','warontherocks','defensenews','breakingdefense','janes','isw','acled','onu','un','un_news','unnews','iaea'];
+  var REMOVED_SOURCE_IDS=['ccg','caixin','almonitor','mei','mideasteye','arabnews','bbcme','arabiya','trtworld','meduza','moscowtimes','carnegie_russia','lowy','rti_tw','globaltimes','globaltimes_zh','people_en','people_zh','chinadaily','csis_china','merics','bbcafrica','warontherocks','defensenews','breakingdefense','janes','isw','acled','onu','un','un_news','unnews','iaea'];
+
+// Feed sanitizzati: sovrascrivono anche le vecchie URL rimaste in localStorage.
+var SOURCE_URL_FIXES={
+  politico:'https://www.politico.eu/feed/',
+  economist:'https://news.google.com/rss/search?q=site%3Aeconomist.com%20%28China%20OR%20Europe%20OR%20United%20States%20OR%20Russia%20OR%20war%20OR%20geopolitics%29&hl=en&gl=US&ceid=US:en',
+  lemonde:'https://www.lemonde.fr/en/international/rss_full.xml',
+  beijingdaily:'https://news.google.com/rss/search?q=site%3Abjd.com.cn%20%28%E5%8C%97%E4%BA%AC%E6%97%A5%E6%8A%A5%20OR%20%E5%9B%BD%E9%99%85%20OR%20China%20OR%20Beijing%29&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',
+  beijingdaily_zh:'https://news.google.com/rss/search?q=site%3Abjd.com.cn%20%28%E5%8C%97%E4%BA%AC%E6%97%A5%E6%8A%A5%20OR%20%E5%9B%BD%E9%99%85%20OR%20%E5%A4%96%E4%BA%A4%29&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',
+  baidu_bjd:'https://news.google.com/rss/search?q=site%3Abjd.com.cn%20%E5%9B%BD%E9%99%85%20%E5%8C%97%E4%BA%AC%E6%97%A5%E6%8A%A5&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',
+  ginger_river:'https://www.gingerriver.com/feed',
+  hu_xijin:'https://news.google.com/rss/search?q=%28%22Hu%20Xijin%22%20OR%20%22HuXijin_GT%22%20OR%20%E8%83%A1%E9%94%A1%E8%BF%9B%29%20%28China%20OR%20%E4%B8%AD%E5%9B%BD%20OR%20Global%20Times%20OR%20%E7%8E%AF%E7%90%83%E6%97%B6%E6%8A%A5%29&hl=en&gl=US&ceid=US:en',
+  zhao_long:'https://news.google.com/rss/search?q=%28%22Zhao%20Long%22%20OR%20%E8%B5%B5%E9%BE%99%29%20%28SIIS%20OR%20%22Shanghai%20Institutes%20for%20International%20Studies%22%20OR%20China%20OR%20Taiwan%29&hl=en&gl=US&ceid=US:en',
+  scmp_cn:'https://www.scmp.com/rss/4/feed'
+};
+function applySourceUrlFixes(list){
+  (list||[]).forEach(function(s){
+    if(!s)return;
+    if(SOURCE_URL_FIXES[s.id])s.url=SOURCE_URL_FIXES[s.id];
+    var nm=((s.name||'')+'').toLowerCase();
+    if(nm.indexOf('south china morning post')>=0||nm.indexOf('scmp')>=0)s.url=SOURCE_URL_FIXES.scmp_cn;
+    if(nm.indexOf('politico')>=0)s.url=SOURCE_URL_FIXES.politico;
+    if(nm.indexOf('economist')>=0)s.url=SOURCE_URL_FIXES.economist;
+    if(nm.indexOf('le monde')>=0)s.url=SOURCE_URL_FIXES.lemonde;
+    if(nm.indexOf('beijing daily')>=0||nm.indexOf('北京日报')>=0)s.url=SOURCE_URL_FIXES.beijingdaily;
+    if(nm.indexOf('jiang jiang')>=0||nm.indexOf('ginger river')>=0)s.url=SOURCE_URL_FIXES.ginger_river;
+    if(nm.indexOf('hu xijin')>=0||nm.indexOf('胡锡进')>=0)s.url=SOURCE_URL_FIXES.hu_xijin;
+    if(nm.indexOf('zhao long')>=0||nm.indexOf('赵龙')>=0)s.url=SOURCE_URL_FIXES.zhao_long;
+  });
+  return list;
+}
+
   try{
     // Migrate from old key if present
     if(!localStorage.getItem('sh3_sources_v3')&&localStorage.getItem('sh3_sources_v2')){
@@ -2299,7 +2352,7 @@ function loadPersist(){
         var merged=DEFAULTS.map(function(d){
           var existing=savedIds[d.id]?savedIds[d.id]:d;
           if(d.id==='rane_worldview') existing.url='https://news.google.com/rss/search?q=%28site%3Aworldview.stratfor.com%20OR%20site%3Aranenetwork.com%29%20%28RANE%20OR%20Stratfor%20OR%20Worldview%29&hl=en&gl=US&ceid=US:en';
-          if(['xinhua','peoples_daily','cgtn_default','globaltimes_default','chinadaily_default','thepaper_zh','xinhua_cina','xinhua_en','xinhua_zh','globaltimes_cn_main','globaltimes_en','globaltimes_zh','chinadaily'].indexOf(d.id)>=0) existing.on=true;
+          if(['xinhua','xinhua_cina','xinhua_en','xinhua_zh','rsshub_wechat_xinhua','rsshub_weibo_xinhua','scmp_cn','peoples_daily','cgtn_default','globaltimes_default','chinadaily_default','thepaper_zh','globaltimes_cn_main','globaltimes_en','globaltimes_zh','chinadaily'].indexOf(d.id)>=0) existing.on=true;
           // Force all analisti_cn sources ON
           if(d.cat==='analisti_cn') existing.on=true;
           // Always sync cat and url from DEFAULTS — fixes migrations when categories change
@@ -2342,15 +2395,18 @@ function loadPersist(){
       'deng_yuwen','china_thought_express','bill_bishop','sinocism','geopolitechs',
       'guancha_diyuan','huanqiu_opinion','baidu_diyuan','zhipu_diyuan','csis_china',
       'ciis','cicir','siis','cfau','ciss','cass','huanqiu_zh','rand','brookings','iiss',
-      'scmp_cn','merics','cna','cna_sg','people_world_zh','arabnews','xinhua_en','cgtn_en',
-      'globaltimes_en','chinadaily','people_en','xinhua_zh','people_zh','nyt_world','wsj_world','chinadigitaltimes','do_intel_china',
-      'sun_chenghao','lingua_sinica','he_yuzhe','carto_maps_general','carto_visualcapitalist','carto_geocurrents','carto_reliefweb_maps','carto_isw_maps','carto_acled_maps','carto_csis_maps','toshi_yoshihara','amti_csis','first_things','rane_worldview','ansait','repubblica','corriere','rainews','sole24','stampa','messaggero','adnkronos_esteri','adnkronos_politica','agi_it','sky_tg24_it','formiche_it','decode39'
+      'scmp_cn','merics','cna','cna_sg','people_world_zh','arabnews','xinhua','xinhua_cina','xinhua_en','xinhua_zh','rsshub_wechat_xinhua','rsshub_weibo_xinhua','cgtn_en',
+      'globaltimes_en','chinadaily','people_en','people_zh','nyt_world','wsj_world','chinadigitaltimes','do_intel_china',
+      'sun_chenghao','lingua_sinica','he_yuzhe','ccg_en','greenfdc_brigc','yidaiyilu_gov','wire_china','carto_maps_general','carto_visualcapitalist','carto_geocurrents','carto_reliefweb_maps','carto_isw_maps','carto_acled_maps','carto_csis_maps','toshi_yoshihara','amti_csis','first_things','rane_worldview','ansait','repubblica','corriere','rainews','sole24','stampa','messaggero','adnkronos_esteri','adnkronos_politica','agi_it','sky_tg24_it','formiche_it','decode39'
     ];
     // Force requested sources ON unconditionally (every load, regardless of saved prefs)
     sources.forEach(function(s){
       if(s.cat==='analisti_cn')s.on=true;
+      var nm=((s.name||'')+'').toLowerCase();
       if(FORCE_ON_IDS.indexOf(s.id)>=0)s.on=true;
+      if(nm.indexOf('south china morning post')>=0 || nm.indexOf('scmp')>=0 || nm.indexOf('xinhua')>=0 || (s.name||'').indexOf('新华社')>=0)s.on=true;
     });
+    sources=applySourceUrlFixes(sources);
     try{localStorage.setItem('sh3_sources_v3',JSON.stringify(sources));}catch(e){}
     ALL_COLS.forEach(function(c){if(colOrder.indexOf(c.id)<0)colOrder.push(c.id);});
     // Deduplication: rimuovi duplicati da colOrder
@@ -2772,7 +2828,6 @@ function updateColList(){
     var def=ALL_COLS.find(function(c){return c.id===cid;});if(!def)return '';
     return '<div style="display:flex;align-items:center;gap:5px;padding:3px 8px">'
       +'<span style="flex:1;font-size:13px;font-weight:600;color:var(--tx2)">'+def.name+'</span>'
-      +'<span style="font-size:10px;color:var(--mu);font-family:Share Tech Mono,monospace">'+getForCol(def).length+'</span>'
       +'</div>';
   }).join('');
 }
@@ -2878,7 +2933,7 @@ var THEATER_META={
   europa:{label:'Europa', cats:['italia']},
   medioriente:{label:'Medio Oriente', ids:['haaretz','meye','aljazeera','anadolu','wam']},
   russia:{label:'Russia / Eurasia', ids:['tass','kyivindep','osint_rferl','dpa']},
-  indopacifico:{label:'Indo-Pacifico', cats:['sudest_asia'], ids:['diplomat','amti_csis','iseas_yusof','aspi_strategist','nikkei','scmp','rappler','jakartapost','straitstimes','cna_sg','cna_tw','nhk','kyodo','yonhap','pti','the_hindu','dawn']},
+  indopacifico:{label:'Indo-Pacifico', cats:['sudest_asia'], ids:['diplomat','amti_csis','iseas_yusof','aspi_china','aspi_strategist','nikkei','scmp','rappler','jakartapost','straitstimes','cna_sg','cna_tw','nhk','kyodo','yonhap','pti','the_hindu','dawn']},
   cina:{label:'Cina', cats:['cina','analisti_cn'], ids:['xinhua','xinhua_cina','focus_taiwan','pekingnology','peoples_daily','globaltimes_default','globaltimes_cn_main','pla_daily','pla_eastern','pla_southern','pla_western','pla_northern','pla_central','chinadaily_default','qstheory','beijingdaily','ce_cn','gmw','mingpao_hk','cna_tw']},
   giappone:{label:'Giappone', cats:['giappone','analisti_jp'], ids:['nhk_japan','nikkei_japan','japantimes_japan','asahi_japan','yomiuri_japan','mainichi_japan','sankei_japan','kazuto_suzuki','stephen_nagy','hirohito_ogi','haruo_tohmatsu','watanabe_nabe','kawashima_shin','marina_fujita_dickson','alessio_patalano_jp']},
   cartografia:{label:'Cartografia', cats:['cartografia'], ids:['carto_maps_general','carto_visualcapitalist','carto_geocurrents','carto_reliefweb_maps','carto_isw_maps','carto_acled_maps','carto_csis_maps','carto_mapaction']},
@@ -2908,27 +2963,77 @@ function activateTheater(theater){
 }
 
 function renderSrcList(){
-  var el=document.getElementById('srclist');if(!el)return;
+  var legacy=document.getElementById('srclist');
   var CAT={agenzie:'Agenzie',media:'Media',italia:'Italia',think:'Think tank',ist:'Ist.',cyber:'Cyber',finance:'Finance',regional:'Reg.',osint:'OSINT',cina:'Cina',giappone:'Giappone',sudest_asia:'Sud-est Asia',analisti_cn:'Analisti CN',analisti_jp:'Giappone',cartografia:'Cartografia'};
-  var catmap={};
-  sources.forEach(function(s){var c=s.cat||'media';if(!catmap[c])catmap[c]=[];catmap[c].push(s);});
-  var html='';
-  Object.keys(catmap).forEach(function(cat){
-    html+='<div style="font-size:9px;color:var(--mu);padding:4px 8px 1px;font-family:Share Tech Mono,monospace;text-transform:uppercase;letter-spacing:.1em">'+(CAT[cat]||cat)+'</div>';
-    catmap[cat].forEach(function(s){
-      var st=sourceStatus[s.id],stCls=st==='ok'?'ok':st==='err'?'err':'lo',stTxt=st==='ok'?'●':st==='err'?'✕':'○';
-      html+='<div class="src-item"><div class="src-dot" style="background:'+(s.on?'var(--acc)':'var(--mu)')+'"></div>'
-        +'<span class="src-nm" title="'+esc(s.url)+'">'+esc(s.name)+'</span>'
-        +'<span class="src-st '+stCls+'">'+stTxt+'</span>'
-        +'<button class="tog '+(s.on?'on':'off')+'" onclick="toggleSrc(\''+s.id+'\')"></button>'
-        +'<button class="src-del" onclick="delSrc(\''+s.id+'\')" title="Rimuovi fonte">&#x2715;</button>'
-        +'</div>';
+  if(legacy){
+    var catmap={};
+    sources.forEach(function(s){var c=s.cat||'media';if(!catmap[c])catmap[c]=[];catmap[c].push(s);});
+    var html='';
+    Object.keys(catmap).forEach(function(cat){
+      html+='<div style="font-size:9px;color:var(--mu);padding:4px 8px 1px;font-family:Inter,sans-serif;text-transform:uppercase;letter-spacing:.04em">'+(CAT[cat]||cat)+'</div>';
+      catmap[cat].forEach(function(s){
+        var st=sourceStatus[s.id],stCls=st==='ok'?'ok':st==='err'?'err':'lo',stTxt=st==='ok'?'●':st==='err'?'✕':'○';
+        html+='<div class="src-item"><div class="src-dot" style="background:'+(s.on?'var(--acc)':'var(--mu)')+'"></div>'
+          +'<span class="src-nm" title="'+esc(s.url)+'">'+esc(s.name)+'</span>'
+          +'<span class="src-st '+stCls+'">'+stTxt+'</span>'
+          +'<button class="tog '+(s.on?'on':'off')+'" onclick="toggleSrc(\''+s.id+'\')"></button>'
+          +'<button class="src-del" onclick="delSrc(\''+s.id+'\')" title="Rimuovi fonte">&#x2715;</button></div>';
+      });
     });
-  });
-  el.innerHTML=html;
+    legacy.innerHTML=html;
+  }
   var ac=document.getElementById('actcount');if(ac)ac.textContent=sources.filter(function(s){return s.on;}).length;
+  renderSourceManager();
 }
-function toggleSrc(id){var s=sources.find(function(x){return x.id===id;});if(s){s.on=!s.on;persist();renderSrcList();}}
+function renderSourceManager(){
+  var colList=document.getElementById('manager-col-list');
+  var srcList=document.getElementById('manager-source-list');
+  if(colList){
+    colList.innerHTML=colOrder.map(function(cid){
+      var def=ALL_COLS.find(function(c){return c.id===cid;});if(!def)return '';
+      var on=colClosed.indexOf(cid)<0;
+      return '<button class="manager-col-toggle '+(on?'on':'off')+'" onclick="managerToggleCol(\''+cid+'\')"><span>'+esc(def.name)+'</span><b>'+(on?'ON':'OFF')+'</b></button>';
+    }).join('');
+  }
+  if(srcList){
+    var qEl=document.getElementById('manager-source-search');
+    var q=(qEl&&qEl.value?qEl.value:'').toLowerCase().trim();
+    var theaters=['global','cina','indopacifico','giappone','europa','medioriente','russia','africa','difesa','cartografia'];
+    var labels={global:'Globale',cina:'Cina & Taiwan / Analisti CN',indopacifico:'Indo-Pacifico',giappone:'Giappone',europa:'Europa / Italia',medioriente:'Medio Oriente',russia:'Russia / Eurasia',africa:'Africa',difesa:'Difesa / OSINT',cartografia:'Cartografia'};
+    var grouped={};
+    sources.forEach(function(s){var th=sourceTheater(s)||'global';if(!grouped[th])grouped[th]=[];grouped[th].push(s);});
+    var html='';
+    theaters.forEach(function(th){
+      var arr=(grouped[th]||[]).filter(function(s){if(!q)return true;return [s.name,s.cat,s.url].join(' ').toLowerCase().indexOf(q)>-1;});
+      if(!arr.length)return;
+      var active=arr.filter(function(s){return s.on;}).length;
+      html+='<details class="manager-source-group" open><summary><span>'+esc(labels[th]||th)+'</span><small>'+active+'/'+arr.length+' attive</small></summary>';
+      arr.sort(function(a,b){return (a.name||'').localeCompare(b.name||'');}).forEach(function(s){
+        var st=sourceStatus[s.id],stCls=st==='ok'?'ok':st==='err'?'err':'lo',stTxt=st==='ok'?'OK':st==='err'?'ERR':'LO';
+        var isCustom=s.id&&s.id.indexOf('c_')===0;
+        html+='<div class="manager-source-row"><button class="tog '+(s.on?'on':'off')+'" onclick="toggleSrc(\''+s.id+'\')" title="Attiva/disattiva"></button><div class="manager-source-main"><div class="manager-source-name">'+esc(s.name)+'</div><div class="manager-source-url">'+esc(s.url)+'</div></div><span class="src-st '+stCls+'">'+stTxt+'</span>'+(isCustom?'<button class="src-del" onclick="delSrc(\''+s.id+'\')" title="Rimuovi fonte">&#x2715;</button>':'')+'</div>';
+      });
+      html+='</details>';
+    });
+    srcList.innerHTML=html || '<div class="empty">Nessuna fonte trovata</div>';
+  }
+}
+function managerToggleCol(id){
+  if(colClosed.indexOf(id)>=0) colClosed=colClosed.filter(function(x){return x!==id;});
+  else colClosed.push(id);
+  persist();renderAll();renderSourceManager();
+}
+function applySourcePreset(kind){
+  var essential=['reuters','ap','afp','bbc','ft','wsj_world','nyt_world','scmp','xinhua','xinhua_cina','xinhua_cn','xinhua_cina_default','csis','iiss','rane_worldview','defone'];
+  if(kind==='esteso') sources.forEach(function(s){s.on=true;});
+  else{
+    sources.forEach(function(s){s.on=false;});
+    sources.forEach(function(s){var th=sourceTheater(s), id=(s.id||'').toLowerCase(), cat=(s.cat||'').toLowerCase();if(kind==='essenziale'&&essential.indexOf(id)>=0)s.on=true;if(kind==='cina'&&(th==='cina'||cat==='analisti_cn'||cat==='cina'))s.on=true;if(kind==='osint'&&(th==='difesa'||cat==='osint'||cat==='cyber'||cat==='ist'))s.on=true;});
+  }
+  persist();renderSrcList();doRefresh();notify('Preset applicato: '+kind);
+}
+
+function toggleSrc(id){var s=sources.find(function(x){return x.id===id;});if(s){s.on=!s.on;persist();renderSrcList();doRefresh();}}
 function delSrc(id){
   var s=sources.find(function(x){return x.id===id;});
   if(!s)return;
@@ -2963,9 +3068,11 @@ function renderSrcPresets(q){
 function openSrcModal(){
   var m=document.getElementById('src-modal');if(!m)return;
   var search=document.getElementById('preset-search');if(search)search.value='';
+  var mgrSearch=document.getElementById('manager-source-search');if(mgrSearch)mgrSearch.value='';
   renderSrcPresets('');
+  renderSourceManager();
   m.style.display='flex';
-  setTimeout(function(){var first=document.getElementById('mn');if(first&&window.innerWidth>767)first.focus();},40);
+  setTimeout(function(){var first=document.getElementById('manager-source-search');if(first&&window.innerWidth>767)first.focus();},40);
 }
 function closeSrcModal(){document.getElementById('src-modal').style.display='none';}
 function addSrc(){
@@ -6079,6 +6186,31 @@ body.desktop-browser-upgrade #page-4{width:100%;min-width:0;min-height:0;}
   else onReady();
 })();
 </script>
+
+<style id="source-manager-cleanup-css">
+#mobile-side-btn,#mobile-sidebar,#mobile-sidebar-overlay{display:none!important;}
+body.sidebar-collapsed .sidebar,.sidebar{display:none!important;}
+body.sidebar-collapsed .main-area,.main-area{width:100%;flex:1 1 auto;}
+body.desktop-browser-upgrade #page-1.on{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto minmax(0,1fr)!important;grid-template-areas:"toolbar" "main"!important;}
+body.desktop-browser-upgrade #page-1>.browser-toolbar{grid-area:toolbar;}
+body.desktop-browser-upgrade #page-1>.main-area{grid-area:main;min-width:0;min-height:0;}
+.source-manager-modal{width:min(1080px,94vw);max-width:1080px;max-height:92vh;display:flex;flex-direction:column;padding:0;overflow:hidden;}
+.source-manager-top{padding:14px 16px;background:var(--bg2);border-bottom:1px solid var(--bd2);}
+.source-manager-body{display:grid;grid-template-columns:240px minmax(0,1fr);grid-template-rows:auto minmax(0,1fr);gap:12px;padding:14px;min-height:0;overflow:hidden;}
+.source-manager-panel{background:rgba(255,255,255,.025);border:1px solid rgba(122,154,184,.16);border-radius:16px;padding:12px;min-height:0;overflow:hidden;}
+.manager-columns-panel{grid-row:1 / span 2;display:flex;flex-direction:column;}
+.manager-sources-panel{display:flex;flex-direction:column;min-height:320px;}
+.manager-presets-panel{display:flex;flex-direction:column;gap:8px;}
+.source-manager-help{font-size:12px;color:var(--tx2);line-height:1.4;margin:4px 0 10px;}
+.manager-col-list{display:flex;flex-direction:column;gap:6px;overflow:auto;}
+.manager-col-toggle{display:flex;align-items:center;justify-content:space-between;gap:10px;width:100%;border:1px solid rgba(122,154,184,.18);border-radius:12px;padding:9px 10px;background:rgba(255,255,255,.03);color:var(--tx);font-family:'Inter',sans-serif;font-size:13px;font-weight:650;cursor:pointer;text-align:left;}
+.manager-col-toggle.off{opacity:.55;}.manager-col-toggle b{font-size:10px;border-radius:999px;padding:3px 7px;background:rgba(255,255,255,.06);color:var(--tx2);}.manager-col-toggle.on b{background:rgba(0,184,255,.12);color:var(--acc);}
+.source-manager-section-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;}.source-manager-search{max-width:260px;}
+.manager-source-list{overflow:auto;padding-right:2px;}.manager-source-group{border:1px solid rgba(122,154,184,.14);border-radius:14px;margin-bottom:8px;background:rgba(0,0,0,.06);overflow:hidden;}.manager-source-group summary{display:flex;align-items:center;justify-content:space-between;gap:10px;cursor:pointer;padding:10px 12px;font-size:13px;font-weight:750;color:var(--tx);font-family:'Inter',sans-serif;}.manager-source-group summary small{font-size:11px;color:var(--tx2);font-weight:600;}
+.manager-source-row{display:flex;align-items:center;gap:9px;padding:8px 10px;border-top:1px solid rgba(122,154,184,.1);}.manager-source-main{min-width:0;flex:1;}.manager-source-name{font-size:13px;font-weight:650;color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.manager-source-url{font-size:11px;color:var(--tx2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.manager-preset-row{display:flex;flex-wrap:wrap;gap:8px;}.source-manager-add details{border-top:1px solid rgba(122,154,184,.14);padding-top:8px;margin-top:4px;}.source-manager-add summary{cursor:pointer;font-size:12px;color:var(--tx2);font-weight:650;}.source-manager-add-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;}
+@media (max-width:767px){.source-manager-bg{align-items:stretch;justify-content:stretch;padding:0!important;}.source-manager-modal{width:100vw;max-width:none;height:100dvh;max-height:none;border:none;border-radius:0;}.source-manager-body{display:flex;flex-direction:column;overflow:auto;padding:12px;}.manager-columns-panel,.manager-sources-panel,.manager-presets-panel{min-height:auto;overflow:visible;}.manager-source-list{overflow:visible;}.source-manager-section-head{flex-direction:column;}.source-manager-search{max-width:none;width:100%;}.source-manager-add-grid{grid-template-columns:1fr;}}
+</style>
 
 </body>
 </html>
