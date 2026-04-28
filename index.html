@@ -2421,8 +2421,8 @@ var CL={
   high:['conflict','troops','military','sanctions','coup','escalation','offensive','threat','conflitto','truppe','militare','sanzioni','golpe'],
   medium:['tension','protest','election','summit','negotiations','ceasefire','talks','tensione','protesta','elezione','vertice','negoziato'],
   regions:{
-    europa:['europe','european','nato','ukraine','poland','germany','france','uk','britain','romania','hungary','turkey','balkan','sweden','finland','spain','portugal','greece','serbia','moldova','georgia','armenia','azerbaijan','estonia','latvia','lithuania','czech','slovak','bulgaria','croatia','kosovo','europa','europeo','ucraina','polonia','germania','francia','grecia','turchia','svezia','finlandia','norvegia','danimarca','paesi bassi','olanda'],
-    italia:['italy','italian','italia','italiano','roma','rome','milan','milano','meloni','palazzo chigi','quirinale','farnesina','genova','napoli','torino','governo italiano'],
+    europa:['europe','european','nato','ukraine','poland','germany','france','uk','britain','romania','romanian','罗马尼亚','hungary','turkey','balkan','sweden','finland','spain','portugal','greece','serbia','moldova','georgia','armenia','azerbaijan','estonia','latvia','lithuania','czech','slovak','bulgaria','croatia','kosovo','europa','europeo','ucraina','polonia','germania','francia','grecia','turchia','svezia','finlandia','norvegia','danimarca','paesi bassi','olanda'],
+    italia:['italy','italian','italia','italiano','roma','rome','罗马','milan','milano','meloni','palazzo chigi','quirinale','farnesina','genova','napoli','torino','governo italiano'],
     medioriente:['middle east','iran','israel','gaza','palestine','syria','iraq','lebanon','saudi','yemen','hamas','hezbollah','idf','tehran','jerusalem','riyadh','medio oriente','israele','palestina','siria','libano','giordania','kuwait','qatar','emirati','oman','bahrein','egitto','egypt','cairo','libia','libya'],
     cina:['china','chinese','xi jinping','pla','bri','cina','cinese','pechino','beijing','shanghai','hong kong','xinjiang','tibet','taiwan','taipei','tsai','lai ching','formosa','stretto di taiwan','taiwan strait','foxconn','huawei','people\'s daily','xinhua','cgtn','global times','renminbi','yuan'],
     giappone:['japan','japanese','giappone','giapponese','tokyo','nippon','kishida','ishiba','diet japan','jsdf','self-defense forces','yokosuka','okinawa','osaka','sdf','jmsdf','nhk world japan','nikkei asia','japan times','asahi','yomiuri','mainichi','sankei','kawashima shin','kazuto suzuki'],
@@ -2433,6 +2433,15 @@ var CL={
     russia:['russia','putin','kremlin','moscow','wagner','cremlino','mosca','siberia','san pietroburgo','bielorussia','belarus','minsk','lukashenko'],
   }
 };
+function regionKeywordHit(txt,rk,kw){
+  // Evita falsi positivi nella colonna Italia: Roma/Rome/罗马 non deve catturare Romania/Romanian/罗马尼亚.
+  if(rk==='italia'){
+    if(kw==='roma') return /(^|[^a-zà-ÿ])roma([^a-zà-ÿ]|$)/i.test(txt);
+    if(kw==='rome') return /(^|[^a-z])rome([^a-z]|$)/i.test(txt);
+    if(kw==='罗马') return /罗马(?!尼亚)/u.test(txt);
+  }
+  return txt.indexOf(kw)>=0;
+}
 function classify(item){
   var txt=((item.title||'')+' '+(item.description||'')).toLowerCase();
   var sev='low';
@@ -2446,7 +2455,7 @@ function classify(item){
     var rk=REGION_PRIORITY[r];
     var kw=CL.regions[rk];
     for(var k=0;k<kw.length;k++){
-      if(txt.indexOf(kw[k])>=0){reg=rk;break;}
+      if(regionKeywordHit(txt,rk,kw[k])){reg=rk;break;}
     }
     if(reg!=='global')break;
   }
@@ -2674,7 +2683,14 @@ function togglePinFilter(){
 // Each article belongs to exactly ONE column based on its region.
 // The 'global' column catches only articles with region==='global'.
 // OSINT column matches by cat regardless of region.
+function _isRomaniaNotRomeArticle(a){
+  var t=((a&&a.title||'')+' '+(a&&a.description||'')).toLowerCase();
+  var hasRomania=/(^|[^a-z])romania(n)?([^a-z]|$)/i.test(t) || /罗马尼亚/u.test(t);
+  var hasRome=/(^|[^a-zà-ÿ])roma([^a-zà-ÿ]|$)/i.test(t) || /(^|[^a-z])rome([^a-z]|$)/i.test(t) || /罗马(?!尼亚)/u.test(t);
+  return hasRomania && !hasRome;
+}
 function _articleMatchesCol(a, def){
+  if(def.id==='italia' && _isRomaniaNotRomeArticle(a)) return false;
   if(def.regions[0]==='osint') return a.cat==='osint';
   if(def.regions[0]==='analisti_cn') return a.cat==='analisti_cn';
   if(def.id==='giappone' && (a.cat==='giappone'||a.cat==='analisti_jp')) return true;
