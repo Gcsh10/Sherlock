@@ -1884,6 +1884,7 @@ var DEFAULTS=[
   {id:'myanmarnow',name:'Myanmar Now',url:'https://news.google.com/rss/search?q=site:myanmar-now.org&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
   {id:'mingpao_hk',name:'Ming Pao (HK)',url:'https://news.google.com/rss/search?q=site:mingpao.com+China+OR+%E4%B8%AD%E5%9B%BD&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
   {id:'cna_tw',name:'Central News Agency',url:'https://news.google.com/rss/search?q=site:cna.com.tw&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
+  {id:'focus_taiwan',name:'Focus Taiwan',url:'https://feeds.feedburner.com/rsscna/engnews/',cat:'cina',regions:['cina'],on:true},
   {id:'pla_daily',name:'PLA Daily',url:'https://news.google.com/rss/search?q=site:81.cn+解放军报&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
   {id:'pla_eastern',name:'Eastern Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+东部战区&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
   {id:'pla_southern',name:'Southern Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+南部战区&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
@@ -1898,6 +1899,10 @@ var DEFAULTS=[
   {id:'sun_chenghao',name:'Sun Chenghao',url:'https://www.chinaffairsplus.com/feed',cat:'analisti_cn',on:true},
   {id:'lingua_sinica',name:'Lingua Sinica',url:'https://linguasinica.substack.com/feed',cat:'analisti_cn',on:true},
   {id:'he_yuzhe',name:'He Yuzhe',url:'https://www.yuzhehe.com/feed',cat:'analisti_cn',on:true},
+  {id:'china_global_south',name:'China Global South Project',url:'https://news.google.com/rss/search?q=site%3Achinaglobalsouth.com%20%28China%20OR%20Beijing%20OR%20Global%20South%20OR%20Africa%20OR%20Asia%20OR%20Latin%20America%29&hl=en&gl=US&ceid=US:en',cat:'analisti_cn',regions:['analisti_cn'],on:true},
+  {id:'paul_triolo_x',name:'Paul Triolo / X',url:'https://news.google.com/rss/search?q=site%3Ax.com%2FpstAsiatech%20OR%20%22Paul%20Triolo%22%20%28China%20OR%20semiconductors%20OR%20AI%20OR%20technology%20OR%20geopolitics%29&hl=en&gl=US&ceid=US:en',cat:'analisti_cn',regions:['analisti_cn'],on:true},
+  {id:'aspi_china',name:'ASPI / China',url:'https://news.google.com/rss/search?q=site%3Aaspi.org.au%20%28China%20OR%20Taiwan%20OR%20Indo-Pacific%20OR%20AUKUS%29&hl=en&gl=US&ceid=US:en',cat:'analisti_cn',regions:['analisti_cn'],on:true},
+  {id:'aspi_strategist',name:'The Strategist / ASPI',url:'https://www.aspistrategist.org.au/feed/',cat:'analisti_cn',regions:['analisti_cn','indopacifico'],on:true},
 
   {id:'reuters',   name:'Reuters',            cat:'agenzie', url:'https://news.google.com/rss/search?q=reuters+world+news&hl=en&gl=US&ceid=US:en',on:true},
   {id:'ap',        name:'AP',                 cat:'agenzie', url:'https://news.google.com/rss/search?q=associated+press+world&hl=en&gl=US&ceid=US:en',on:true},
@@ -1962,9 +1967,10 @@ var DEFAULTS=[
   {id:'defone',    name:'Defense One',        cat:'think',   url:'https://news.google.com/rss/search?q=site:defenseone.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'diplomat',  name:'The Diplomat',       cat:'think',   url:'https://thediplomat.com/feed/',on:true},
   {id:'amti_csis', name:'AMTI / CSIS',         cat:'osint',   url:'https://amti.csis.org/feed/',regions:['indopacifico'],on:true},
+  {id:'iseas_yusof',name:'ISEAS - Yusof Ishak Institute',cat:'think',url:'https://news.google.com/rss/search?q=site%3Aiseas.edu.sg%20%28Southeast%20Asia%20OR%20ASEAN%20OR%20Indo-Pacific%20OR%20China%29&hl=en&gl=US&ceid=US:en',regions:['indopacifico','sudest_asia'],on:true},
   {id:'politico',  name:'Politico EU',        cat:'think',   url:'https://news.google.com/rss/search?q=site:politico.eu&hl=en&gl=US&ceid=US:en',on:true},
   {id:'economist', name:'The Economist',      cat:'think',   url:'https://news.google.com/rss/search?q=site:economist.com&hl=en',on:true},
-  {id:'sipri',     name:'SIPRI',              cat:'think',   url:'https://www.sipri.org/rss.xml',on:true},
+  {id:'sipri',     name:'SIPRI',              cat:'osint',   url:'https://www.sipri.org/rss/combined.xml',regions:['osint'],on:true},
   {id:'intelonline',name:'Intelligence Online',cat:'think',  url:'https://news.google.com/rss/search?q=site:intelligenceonline.com&hl=en',on:true},
   {id:'nato',      name:'NATO',               cat:'ist',     url:'https://news.google.com/rss/search?q=NATO+statement&hl=en',on:true},
   {id:'ft',        name:'Financial Times',    cat:'finance', url:'https://news.google.com/rss/search?q=site:ft.com+world&hl=en',on:true},
@@ -2687,8 +2693,9 @@ function togglePinFilter(){
 }
 
 
-// Each article belongs to exactly ONE column based on its region.
-// The 'global' column catches only articles with region==='global'.
+// Each article belongs to its thematic column based on region/category.
+// The 'global' column is a true aggregate feed: it shows ALL articles
+// collected by the other columns, deduplicated and sorted chronologically.
 // OSINT column matches by cat regardless of region.
 function _isRomaniaNotRomeArticle(a){
   var t=((a&&a.title||'')+' '+(a&&a.description||'')).toLowerCase();
@@ -2697,6 +2704,9 @@ function _isRomaniaNotRomeArticle(a){
   return hasRomania && !hasRome;
 }
 function _articleMatchesCol(a, def){
+  // Globale = feed unico: raccoglie tutte le notizie disponibili,
+  // non solo quelle classificate come "global".
+  if(def.id==='global') return true;
   if(def.id==='italia' && _isRomaniaNotRomeArticle(a)) return false;
   if(def.regions[0]==='osint') return a.cat==='osint';
   if(def.regions[0]==='analisti_cn') return a.cat==='analisti_cn';
@@ -2717,6 +2727,9 @@ function _dedup(arts){
 }
 
 function getForCol(def){
+  if(def.id==='global'){
+    return sortArticlesChronologically(_dedup(articles||[]));
+  }
   var filtered=articles.filter(function(a){ return _articleMatchesCol(a,def); });
   return sortArticlesChronologically(_dedup(filtered));
 }
@@ -2865,8 +2878,8 @@ var THEATER_META={
   europa:{label:'Europa', cats:['italia']},
   medioriente:{label:'Medio Oriente', ids:['haaretz','meye','aljazeera','anadolu','wam']},
   russia:{label:'Russia / Eurasia', ids:['tass','kyivindep','osint_rferl','dpa']},
-  indopacifico:{label:'Indo-Pacifico', cats:['sudest_asia'], ids:['diplomat','amti_csis','nikkei','scmp','rappler','jakartapost','straitstimes','cna_sg','cna_tw','nhk','kyodo','yonhap','pti','the_hindu','dawn']},
-  cina:{label:'Cina', cats:['cina','analisti_cn'], ids:['xinhua','xinhua_cina','pekingnology','peoples_daily','globaltimes_default','globaltimes_cn_main','pla_daily','pla_eastern','pla_southern','pla_western','pla_northern','pla_central','chinadaily_default','qstheory','beijingdaily','ce_cn','gmw','mingpao_hk','cna_tw']},
+  indopacifico:{label:'Indo-Pacifico', cats:['sudest_asia'], ids:['diplomat','amti_csis','iseas_yusof','aspi_strategist','nikkei','scmp','rappler','jakartapost','straitstimes','cna_sg','cna_tw','nhk','kyodo','yonhap','pti','the_hindu','dawn']},
+  cina:{label:'Cina', cats:['cina','analisti_cn'], ids:['xinhua','xinhua_cina','focus_taiwan','pekingnology','peoples_daily','globaltimes_default','globaltimes_cn_main','pla_daily','pla_eastern','pla_southern','pla_western','pla_northern','pla_central','chinadaily_default','qstheory','beijingdaily','ce_cn','gmw','mingpao_hk','cna_tw']},
   giappone:{label:'Giappone', cats:['giappone','analisti_jp'], ids:['nhk_japan','nikkei_japan','japantimes_japan','asahi_japan','yomiuri_japan','mainichi_japan','sankei_japan','kazuto_suzuki','stephen_nagy','hirohito_ogi','haruo_tohmatsu','watanabe_nabe','kawashima_shin','marina_fujita_dickson','alessio_patalano_jp']},
   cartografia:{label:'Cartografia', cats:['cartografia'], ids:['carto_maps_general','carto_visualcapitalist','carto_geocurrents','carto_reliefweb_maps','carto_isw_maps','carto_acled_maps','carto_csis_maps','carto_mapaction']},
   africa:{label:'Africa', ids:['news24','afp','rfi']},
