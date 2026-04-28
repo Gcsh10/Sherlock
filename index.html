@@ -1864,7 +1864,8 @@ html[data-theme=light] .timeline-item-desc,[data-theme=light] .timeline-item-des
 
 var DEFAULTS=[
   {id:'gpf',name:'Geopolitical Futures (feed)',url:'https://geopoliticalfutures.com/feed',cat:'osint',on:true},
-  {id:'rane_worldview',name:'RANE Worldview',url:'https://news.google.com/rss/search?q=RANE+worldview+stratfor+geopolitics&hl=en&gl=US&ceid=US:en',cat:'osint',on:true},
+  {id:'rane_worldview',name:'RANE Worldview',url:'https://news.google.com/rss/search?q=%28site%3Aworldview.stratfor.com%20OR%20site%3Aranenetwork.com%29%20%28RANE%20OR%20Stratfor%20OR%20Worldview%29&hl=en&gl=US&ceid=US:en',cat:'osint',on:true},
+  {id:'first_things',name:'First Things',url:'https://news.google.com/rss/search?q=site%3Afirstthings.com%20%28%22American%20Politics%22%20OR%20America%20OR%20Trump%20OR%20%22United%20States%22%20OR%20conservatism%29&hl=en&gl=US&ceid=US:en',cat:'think',regions:['americas'],on:true},
 
   {id:'intelligence_online',name:'Intelligence Online (RSS)',url:'https://feeds.feedburner.com/IntelligenceOnline',cat:'osint',on:true},
 
@@ -1902,7 +1903,7 @@ var DEFAULTS=[
   {id:'ap',        name:'AP',                 cat:'agenzie', url:'https://news.google.com/rss/search?q=associated+press+world&hl=en&gl=US&ceid=US:en',on:true},
   {id:'afp',       name:'AFP',                cat:'agenzie', url:'https://news.google.com/rss/search?q=agence+france+presse+AFP&hl=en&gl=US&ceid=US:en',on:true},
   {id:'ansa',      name:'ANSA Mondo',         cat:'agenzie', url:'https://news.google.com/rss/search?q=site:ansa.it+mondo&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'ansait',    name:'ANSA Italia',        cat:'agenzie', url:'https://news.google.com/rss/search?q=site:ansa.it+politica&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'ansait',    name:'ANSA Italia',        cat:'agenzie', url:'https://news.google.com/rss/search?q=site%3Aansa.it%20%28politica%20OR%20esteri%20OR%20governo%20OR%20Meloni%29&hl=it&gl=IT&ceid=IT:it',on:true},
   {id:'tass',      name:'TASS',               cat:'agenzie', url:'https://news.google.com/rss/search?q=site:tass.com&hl=en',on:true},
   {id:'xinhua',    name:'Xinhua',             cat:'agenzie', url:'https://news.google.com/rss/search?q=site:xinhua.net+OR+Xinhua+world+news&hl=en&gl=US&ceid=US:en',on:true},
   {id:'peoples_daily', name:"People's Daily",      cat:'cina',    url:'https://news.google.com/rss/search?q=site:en.people.cn+world&hl=en&gl=US&ceid=US:en',on:true},
@@ -1939,12 +1940,18 @@ var DEFAULTS=[
   {id:'news24',    name:'News24 Africa',      cat:'regional',url:'https://news.google.com/rss/search?q=site:news24.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'dawn',      name:'Dawn Pakistan',      cat:'regional',url:'https://news.google.com/rss/search?q=site:dawn.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'caixinglobal_regional',name:'Caixin Global',cat:'regional',url:'https://news.google.com/rss/search?q=site:caixinglobal.com&hl=en',on:true},
-  {id:'repubblica',name:'La Repubblica',      cat:'italia',  url:'https://news.google.com/rss/search?q=site:repubblica.it+esteri&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'corriere',  name:'Corriere della S.',  cat:'italia',  url:'https://news.google.com/rss/search?q=site:corriere.it+esteri&hl=en',on:true},
-  {id:'rainews',   name:'Rainews 24',         cat:'italia',  url:'https://news.google.com/rss/search?q=site:rainews.it&hl=en',on:true},
-  {id:'sole24',    name:'Sole 24 Ore',        cat:'italia',  url:'https://news.google.com/rss/search?q=site:ilsole24ore.com+mondo&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'stampa',    name:'La Stampa',          cat:'italia',  url:'https://news.google.com/rss/search?q=site:lastampa.it+esteri&hl=en',on:true},
-  {id:'messaggero',name:'Il Messaggero',      cat:'italia',  url:'https://news.google.com/rss/search?q=site:ilmessaggero.it+mondo&hl=en',on:true},
+  {id:'repubblica',name:'La Repubblica',      cat:'italia',  url:'https://news.google.com/rss/search?q=site%3Arepubblica.it%20%28esteri%20OR%20politica%20OR%20governo%20OR%20Meloni%29&hl=it&gl=IT&ceid=IT:it',on:true},
+  {id:'corriere',  name:'Corriere della S.',  cat:'italia',  url:'https://news.google.com/rss/search?q=site%3Acorriere.it%20%28esteri%20OR%20politica%20OR%20governo%20OR%20Meloni%29&hl=it&gl=IT&ceid=IT:it',on:true},
+  {id:'rainews',   name:'Rainews 24',         cat:'italia',  url:'https://news.google.com/rss/search?q=site%3Arainews.it%20%28politica%20OR%20esteri%20OR%20governo%20OR%20Meloni%29&hl=it&gl=IT&ceid=IT:it',on:true},
+  {id:'sole24',    name:'Sole 24 Ore',        cat:'italia',  url:'https://news.google.com/rss/search?q=site%3Ailsole24ore.com%20%28mondo%20OR%20esteri%20OR%20politica%20OR%20Italia%29&hl=it&gl=IT&ceid=IT:it',on:true},
+  {id:'stampa',    name:'La Stampa',          cat:'italia',  url:'https://news.google.com/rss/search?q=site%3Alastampa.it%20%28esteri%20OR%20politica%20OR%20governo%20OR%20Meloni%29&hl=it&gl=IT&ceid=IT:it',on:true},
+  {id:'messaggero',name:'Il Messaggero',      cat:'italia',  url:'https://news.google.com/rss/search?q=site%3Ailmessaggero.it%20%28mondo%20OR%20politica%20OR%20esteri%20OR%20governo%29&hl=it&gl=IT&ceid=IT:it',on:true},
+  {id:'adnkronos_esteri',name:'Adnkronos Esteri', cat:'italia', url:'https://www.adnkronos.com/RSS_Esteri.xml',on:true},
+  {id:'adnkronos_politica',name:'Adnkronos Politica', cat:'italia', url:'https://news.google.com/rss/search?q=site%3Aadnkronos.com%20%28politica%20OR%20governo%20OR%20Meloni%20OR%20Italia%29&hl=it&gl=IT&ceid=IT:it',on:true},
+  {id:'agi_it',name:'AGI Italia', cat:'italia', url:'https://news.google.com/rss/search?q=site%3Aagi.it%20%28politica%20OR%20estero%20OR%20governo%20OR%20Meloni%29&hl=it&gl=IT&ceid=IT:it',on:true},
+  {id:'sky_tg24_it',name:'Sky TG24 Italia', cat:'italia', url:'https://news.google.com/rss/search?q=site%3Askytg24.sky.it%20%28politica%20OR%20mondo%20OR%20esteri%20OR%20governo%29&hl=it&gl=IT&ceid=IT:it',on:true},
+  {id:'formiche_it',name:'Formiche', cat:'italia', url:'https://news.google.com/rss/search?q=site%3Aformiche.net%20%28politica%20OR%20esteri%20OR%20difesa%20OR%20governo%29&hl=it&gl=IT&ceid=IT:it',on:true},
+  {id:'decode39',name:'Decode39', cat:'italia', url:'https://news.google.com/rss/search?q=site%3Adecode39.com%20%28Italy%20OR%20Italian%20OR%20Rome%20OR%20Meloni%29&hl=en&gl=US&ceid=US:en',on:true},
   {id:'fp',        name:'Foreign Policy',     cat:'think',   url:'https://news.google.com/rss/search?q=site:foreignpolicy.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'foreignaff',name:'Foreign Affairs',    cat:'think',   url:'https://news.google.com/rss/search?q=site:foreignaffairs.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'crisisgrp', name:'Crisis Group',       cat:'think',   url:'https://news.google.com/rss/search?q=site:crisisgroup.org&hl=en&gl=US&ceid=US:en',on:true},
@@ -2285,7 +2292,7 @@ function loadPersist(){
         var savedIds={};saved.forEach(function(x){savedIds[x.id]=x;});
         var merged=DEFAULTS.map(function(d){
           var existing=savedIds[d.id]?savedIds[d.id]:d;
-          if(d.id==='rane_worldview') existing.url='https://news.google.com/rss/search?q=RANE+worldview+stratfor+geopolitics&hl=en&gl=US&ceid=US:en';
+          if(d.id==='rane_worldview') existing.url='https://news.google.com/rss/search?q=%28site%3Aworldview.stratfor.com%20OR%20site%3Aranenetwork.com%29%20%28RANE%20OR%20Stratfor%20OR%20Worldview%29&hl=en&gl=US&ceid=US:en';
           if(['xinhua','peoples_daily','cgtn_default','globaltimes_default','chinadaily_default','thepaper_zh','xinhua_cina','xinhua_en','xinhua_zh','globaltimes_cn_main','globaltimes_en','globaltimes_zh','chinadaily'].indexOf(d.id)>=0) existing.on=true;
           // Force all analisti_cn sources ON
           if(d.cat==='analisti_cn') existing.on=true;
@@ -2331,7 +2338,7 @@ function loadPersist(){
       'ciis','cicir','siis','cfau','ciss','cass','huanqiu_zh','rand','brookings','iiss',
       'scmp_cn','merics','cna','cna_sg','people_world_zh','arabnews','xinhua_en','cgtn_en',
       'globaltimes_en','chinadaily','people_en','xinhua_zh','people_zh','nyt_world','wsj_world','chinadigitaltimes','do_intel_china',
-      'sun_chenghao','lingua_sinica','he_yuzhe','carto_maps_general','carto_visualcapitalist','carto_geocurrents','carto_reliefweb_maps','carto_isw_maps','carto_acled_maps','carto_csis_maps','toshi_yoshihara','amti_csis'
+      'sun_chenghao','lingua_sinica','he_yuzhe','carto_maps_general','carto_visualcapitalist','carto_geocurrents','carto_reliefweb_maps','carto_isw_maps','carto_acled_maps','carto_csis_maps','toshi_yoshihara','amti_csis','first_things','rane_worldview','ansait','repubblica','corriere','rainews','sole24','stampa','messaggero','adnkronos_esteri','adnkronos_politica','agi_it','sky_tg24_it','formiche_it','decode39'
     ];
     // Force requested sources ON unconditionally (every load, regardless of saved prefs)
     sources.forEach(function(s){
