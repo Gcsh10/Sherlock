@@ -38,7 +38,7 @@ header{
 .timer-wrap{display:flex;align-items:center;gap:5px;}
 .ring svg{transform:rotate(-90deg);}.ring circle{fill:none;stroke-width:2.5;}
 .bgc{stroke:var(--bd2);}.fgc{stroke:var(--acc);stroke-linecap:round;transition:stroke-dashoffset .9s linear;}
-#tlbl{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--mu);}
+#tlbl{font-family:'Inter',sans-serif;font-size:11px;font-weight:600;color:var(--mu);letter-spacing:.02em;}
 .hright{margin-left:auto;display:flex;align-items:center;gap:5px;}
 .hbtn{appearance:none;background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border:1px solid rgba(122,154,184,.22);color:var(--tx);cursor:pointer;font-size:11px;padding:6px 12px;line-height:1.2;font-family:'Inter',sans-serif;font-weight:600;transition:transform .15s ease,border-color .15s ease,background .15s ease,box-shadow .15s ease,color .15s ease;letter-spacing:.02em;border-radius:999px;box-shadow:inset 0 1px 0 rgba(255,255,255,.04),0 6px 18px rgba(0,0,0,.16);}
 .hbtn:hover{border-color:rgba(0,184,255,.45);color:#eaf6ff;background:linear-gradient(180deg,rgba(0,184,255,.16),rgba(0,184,255,.06));box-shadow:inset 0 1px 0 rgba(255,255,255,.05),0 10px 24px rgba(0,0,0,.2);transform:translateY(-1px);}
@@ -91,7 +91,7 @@ body.col-touch-sorting .cols-wrap{scroll-behavior:auto;}
 body.col-touch-sorting .col-hd{cursor:grabbing;}
 .col-hd{display:flex;align-items:center;gap:8px;padding:9px 10px;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent),var(--bg2);border-bottom:1px solid var(--bd2);flex-shrink:0;cursor:grab;user-select:none;}
 .col-icon{display:none!important;}.col-name{font-family:'Inter',sans-serif;font-size:11px;font-weight:700;color:var(--tx);letter-spacing:.08em;text-transform:uppercase;flex:1;}
-.col-cnt{font-size:10px;color:var(--tx2);font-family:'Share Tech Mono',monospace;background:rgba(255,255,255,.05);padding:2px 7px;border-radius:999px;border:1px solid rgba(122,154,184,.14);}
+.col-cnt{display:none!important;}
 .col-close{background:none;border:none;color:var(--mu);cursor:pointer;font-size:13px;padding:0 2px;transition:color .15s;flex-shrink:0;}
 .col-close:hover{color:var(--re);}
 .live-controls{display:flex;align-items:center;gap:6px;margin-left:6px;}
@@ -1023,11 +1023,7 @@ html[data-theme=dark],
   font-size:11px;
   letter-spacing:.105em;
 }
-.col-cnt{
-  color:var(--tx2);
-  background:rgba(255,255,255,.045);
-  border-color:rgba(122,154,184,.16);
-}
+.col-cnt{display:none!important;}
 .col-feed{
   padding:8px 8px 12px;
 }
@@ -1489,8 +1485,6 @@ html[data-theme=light] .timeline-item-desc,[data-theme=light] .timeline-item-des
     <span id="tlbl">120s</span>
     <button class="hbtn" id="rbtn" onclick="doRefresh()">&#8635;</button>
   </div>
-  <div class="hsep"></div>
-  <div class="live-dot"></div><span class="live-lbl">LIVE</span>
   <button class="hbtn mobile-side-btn" id="mobile-side-btn" onclick="toggleMobileSidebar()">☰</button>
   <!-- page-tabs: visible in header on desktop, moved to bottom bar on mobile via CSS -->
   <div class="page-tabs" id="page-tabs-header">
@@ -1498,7 +1492,6 @@ html[data-theme=light] .timeline-item-desc,[data-theme=light] .timeline-item-des
     <button class="page-tab" id="ptab-2" onclick="switchPage(2)">Mappa</button>
     <button class="page-tab" id="ptab-3" onclick="switchPage(3)">Timeline</button>
     <button class="page-tab" id="ptab-4" onclick="switchPage(4)">Briefing</button>
-    <button class="page-tab" id="ptab-5" onclick="tvToggle()">Live TV</button>
   </div>
   <div class="hright">
     <span id="clock"></span>
@@ -1520,8 +1513,7 @@ html[data-theme=light] .timeline-item-desc,[data-theme=light] .timeline-item-des
     {label:'Notizie',  page:1},
     {label:'Mappa',    page:2},
     {label:'Timeline', page:3},
-    {label:'Briefing', page:4},
-    {label:'Live TV',  live:true}
+    {label:'Briefing', page:4}
   ];
   tabs.forEach(function(t){
     var btn=document.createElement('button');
@@ -1572,7 +1564,6 @@ html[data-theme=light] .timeline-item-desc,[data-theme=light] .timeline-item-des
             <option value="regional">Regionale</option><option value="agenzie">Agenzia</option>
             <option value="osint">OSINT</option>
             <option value="analisti_cn">Analisti CN</option>
-            <option value="analisti_jp">Analisti JP</option>
             <option value="giappone">Giappone</option>
           </select>
         </div>
@@ -2123,39 +2114,39 @@ var PRESETS=[
   {id:'alessio_patalano_jp', name:'Alessio Patalano', cat:'giappone', url:'https://news.google.com/rss/search?q="Alessio+Patalano"+Japan+maritime+OR+strategy&hl=en&gl=US&ceid=US:en', on:false},
   // ── ANALISTI GEOPOLITICI GIAPPONESI ──────────────────────────────
   // Think tank ufficiali
-  {id:'jiia_jp', name:'JIIA 日本国際問題研究所', cat:'analisti_jp',
+  {id:'jiia_jp', name:'JIIA 日本国際問題研究所', cat:'giappone',
     url:'https://news.google.com/rss/search?q=%22Japan+Institute+of+International+Affairs%22+OR+%E6%97%A5%E6%9C%AC%E5%9B%BD%E9%9A%9B%E5%95%8F%E9%A1%8C%E7%A0%94%E7%A9%B6%E6%89%80+OR+JIIA&hl=en&gl=US&ceid=US:en', on:true},
-  {id:'nids_jp', name:'NIDS 防衛研究所', cat:'analisti_jp',
+  {id:'nids_jp', name:'NIDS 防衛研究所', cat:'giappone',
     url:'https://news.google.com/rss/search?q=%22National+Institute+for+Defense+Studies%22+OR+%E9%98%B2%E8%A1%9B%E7%A0%94%E7%A9%B6%E6%89%80+OR+NIDS+Japan&hl=en&gl=US&ceid=US:en', on:true},
-  {id:'sasakawa_jp', name:'Sasakawa Peace Foundation', cat:'analisti_jp',
+  {id:'sasakawa_jp', name:'Sasakawa Peace Foundation', cat:'giappone',
     url:'https://news.google.com/rss/search?q=%22Sasakawa+Peace+Foundation%22+Japan+geopolitics+OR+security&hl=en&gl=US&ceid=US:en', on:true},
-  {id:'canon_igs', name:'Canon Institute for Global Studies', cat:'analisti_jp',
+  {id:'canon_igs', name:'Canon Institute for Global Studies', cat:'giappone',
     url:'https://news.google.com/rss/search?q=%22Canon+Institute+for+Global+Studies%22+OR+CIGS+Japan&hl=en&gl=US&ceid=US:en', on:true},
-  {id:'tokyo_foundation', name:'Tokyo Foundation for Policy Research', cat:'analisti_jp',
+  {id:'tokyo_foundation', name:'Tokyo Foundation for Policy Research', cat:'giappone',
     url:'https://news.google.com/rss/search?q=%22Tokyo+Foundation+for+Policy+Research%22+Japan&hl=en&gl=US&ceid=US:en', on:true},
-  {id:'rips_jp', name:'RIPS 平和・安全保障研究所', cat:'analisti_jp',
+  {id:'rips_jp', name:'RIPS 平和・安全保障研究所', cat:'giappone',
     url:'https://news.google.com/rss/search?q=%22Research+Institute+for+Peace+and+Security%22+OR+RIPS+Japan+security&hl=en&gl=US&ceid=US:en', on:false},
   // Analisti — query EN+JA
-  {id:'funabashi_yoichi', name:'船橋洋一 Funabashi Yoichi', cat:'analisti_jp',
+  {id:'funabashi_yoichi', name:'船橋洋一 Funabashi Yoichi', cat:'giappone',
     url:'https://news.google.com/rss/search?q=%22Funabashi+Yoichi%22+OR+%E8%88%B9%E6%A9%8B%E6%B4%8B%E4%B8%80+Japan+geopolitics&hl=en&gl=US&ceid=US:en', on:true},
-  {id:'akio_takahara', name:'高原明生 Akio Takahara', cat:'analisti_jp',
+  {id:'akio_takahara', name:'高原明生 Akio Takahara', cat:'giappone',
     url:'https://news.google.com/rss/search?q=%22Akio+Takahara%22+OR+%E9%AB%98%E5%8E%9F%E6%98%8E%E7%94%9F+China+Japan&hl=en&gl=US&ceid=US:en', on:true},
-  {id:'sheila_smith', name:'Sheila Smith (CFR–Japan)', cat:'analisti_jp',
+  {id:'sheila_smith', name:'Sheila Smith (CFR–Japan)', cat:'giappone',
     url:'https://news.google.com/rss/search?q=%22Sheila+Smith%22+Japan+CFR+geopolitics&hl=en&gl=US&ceid=US:en', on:true},
-  {id:'brad_glosserman', name:'Brad Glosserman', cat:'analisti_jp',
+  {id:'brad_glosserman', name:'Brad Glosserman', cat:'giappone',
     url:'https://news.google.com/rss/search?q=%22Brad+Glosserman%22+Japan+security+OR+Indo-Pacific&hl=en&gl=US&ceid=US:en', on:true},
-  {id:'yuki_tatsumi', name:'Yuki Tatsumi (Stimson)', cat:'analisti_jp',
+  {id:'yuki_tatsumi', name:'Yuki Tatsumi (Stimson)', cat:'giappone',
     url:'https://news.google.com/rss/search?q=%22Yuki+Tatsumi%22+Japan+defense+OR+security&hl=en&gl=US&ceid=US:en', on:true},
-  {id:'toshi_yoshihara', name:'Toshi Yoshihara', cat:'analisti_jp',
+  {id:'toshi_yoshihara', name:'Toshi Yoshihara', cat:'giappone',
     url:'https://news.google.com/rss/search?q=%22Toshi+Yoshihara%22+Japan+maritime+OR+seapower+OR+China&hl=en&gl=US&ceid=US:en', on:true},
-  {id:'james_brown_jp', name:'James Brown — Japan', cat:'analisti_jp',
+  {id:'james_brown_jp', name:'James Brown — Japan', cat:'giappone',
     url:'https://news.google.com/rss/search?q=%22James+Brown%22+Japan+politics+OR+security+Sophia&hl=en&gl=US&ceid=US:en', on:false},
   // Aggregatori / Substack
-  {id:'japan_forward', name:'Japan Forward', cat:'analisti_jp',
+  {id:'japan_forward', name:'Japan Forward', cat:'giappone',
     url:'https://japan-forward.com/feed/', on:true},
-  {id:'the_diplomat_jp', name:'The Diplomat — Japan', cat:'analisti_jp',
+  {id:'the_diplomat_jp', name:'The Diplomat — Japan', cat:'giappone',
     url:'https://news.google.com/rss/search?q=site:thediplomat.com+Japan&hl=en&gl=US&ceid=US:en', on:true},
-  {id:'tokyoreview', name:'Tokyo Review', cat:'analisti_jp',
+  {id:'tokyoreview', name:'Tokyo Review', cat:'giappone',
     url:'https://news.google.com/rss/search?q=site:tokyoreview.net&hl=en&gl=US&ceid=US:en', on:false},
 ];
 
@@ -2165,7 +2156,7 @@ var ALL_COLS=[
   {id:'medioriente',  name:'Medio Oriente',     icon:'&#128332;', regions:['medioriente']},
   {id:'italia',       name:'Italia',            icon:'&#127470;&#127481;', regions:['italia']},
   {id:'cina',         name:'Cina & Taiwan',     icon:'&#127464;&#127475;', regions:['cina']},
-  {id:'giappone',     name:'Giappone',          icon:'&#127471;&#127477;', regions:['giappone']},
+  {id:'giappone',     name:'Giappone',          icon:'&#127471;&#127477;', regions:['giappone','analisti_jp']},
   {id:'indopacifico', name:'Indo-Pacifico',     icon:'&#127759;', regions:['indopacifico','sudest_asia']},
   {id:'americas',     name:'Americhe',          icon:'&#127758;', regions:['americas']},
   {id:'osint',        name:'OSINT',             icon:'&#128065;', regions:['osint']},
@@ -2173,13 +2164,12 @@ var ALL_COLS=[
   {id:'russia',       name:'Russia',            icon:'🇷🇺', regions:['russia']},
   {id:'africa',       name:'Africa',            icon:'🌍', regions:['africa']},
   {id:'analisti_cn',  name:'Analisti CN',       icon:'🔎', regions:['analisti_cn']},
-  {id:'analisti_jp',  name:'Analisti JP',       icon:'🗾', regions:['analisti_jp']},
 ];
 
 var sources=[],articles=[],colOrder=[],colClosed=[],timerSec=120,timerInt=null,sourceStatus={},pIdx=0;
 
 // ── Chronological hygiene: keep news recent and truly sorted ──────
-var MAX_ARTICLE_AGE_DAYS=3;
+var MAX_ARTICLE_AGE_DAYS=2;
 function articleTsFromPub(pub){
   if(!pub) return 0;
   var raw=String(pub).trim();
@@ -2299,6 +2289,8 @@ function loadPersist(){
     }
     sources=sources.filter(function(s){return REMOVED_SOURCE_IDS.indexOf(s.id)<0;});
     DEFAULTS.forEach(function(d){if(REMOVED_SOURCE_IDS.indexOf(d.id)<0&&!sources.find(function(s){return s.id===d.id;}))sources.push(d);});
+    // Unifica le vecchie fonti Analisti JP nella colonna/categoria Giappone
+    sources.forEach(function(s){ if(s.cat==='analisti_jp') s.cat='giappone'; });
     var FORCE_ON_IDS=[
       'deng_yuwen','china_thought_express','bill_bishop','sinocism','geopolitechs',
       'guancha_diyuan','huanqiu_opinion','baidu_diyuan','zhipu_diyuan','csis_china',
@@ -2432,11 +2424,11 @@ function classify(item){
     else if(item.cat==='giappone') item.region='giappone';
     else if(item.cat==='italia') item.region='italia';
     else if(item.cat==='analisti_cn') item.region='analisti_cn';
-    else if(item.cat==='analisti_jp') item.region='analisti_jp';
+    else if(item.cat==='analisti_jp') item.region='giappone';
   }
-  // analisti_cn/jp always stay in their own columns
+  // analisti_cn resta in colonna propria; analisti_jp confluisce in Giappone
   if(item.cat==='analisti_cn') item.region='analisti_cn';
-  if(item.cat==='analisti_jp') item.region='analisti_jp';
+  if(item.cat==='analisti_jp') item.region='giappone';
   return item;
 }
 
@@ -2651,7 +2643,7 @@ function togglePinFilter(){
 function _articleMatchesCol(a, def){
   if(def.regions[0]==='osint') return a.cat==='osint';
   if(def.regions[0]==='analisti_cn') return a.cat==='analisti_cn';
-  if(def.regions[0]==='analisti_jp') return a.cat==='analisti_jp';
+  if(def.id==='giappone' && (a.cat==='giappone'||a.cat==='analisti_jp')) return true;
   if(a.sourceRegions && a.sourceRegions.some(function(r){return r===def.id || def.regions.indexOf(r)>=0;})) return true;
   return def.regions.indexOf(a.region)>=0;
 }
@@ -2689,7 +2681,6 @@ function buildCol(def,arts){
   col.className='acol';col.id='col-'+def.id;col.setAttribute('data-colid',def.id);col.setAttribute('draggable','true');
   var hd=document.createElement('div');hd.className='col-hd';
   hd.innerHTML='<span class="col-name">'+def.name+'</span>'
-    +'<span class="col-cnt" id="colcnt-'+def.id+'">'+arts.length+'</span>'
     +'<span class="col-new-badge" id="new-badge-'+def.id+'" style="display:none">0 nuovi</span>'
     +'<button class="col-close" onclick="closeCol(\''+def.id+'\')">&#x2715;</button>';
   col.appendChild(hd);
@@ -2819,8 +2810,7 @@ var THEATER_META={
   russia:{label:'Russia / Eurasia', ids:['tass','kyivindep','osint_rferl','dpa']},
   indopacifico:{label:'Indo-Pacifico', cats:['sudest_asia'], ids:['diplomat','amti_csis','nikkei','scmp','rappler','jakartapost','straitstimes','cna_sg','cna_tw','nhk','kyodo','yonhap','pti','the_hindu','dawn']},
   cina:{label:'Cina', cats:['cina','analisti_cn'], ids:['xinhua','xinhua_cina','pekingnology','peoples_daily','globaltimes_default','globaltimes_cn_main','pla_daily','pla_eastern','pla_southern','pla_western','pla_northern','pla_central','chinadaily_default','qstheory','beijingdaily','ce_cn','gmw','mingpao_hk','cna_tw']},
-  giappone:{label:'Giappone', cats:['giappone'], ids:['nhk_japan','nikkei_japan','japantimes_japan','asahi_japan','yomiuri_japan','mainichi_japan','sankei_japan','kazuto_suzuki','stephen_nagy','hirohito_ogi','haruo_tohmatsu','watanabe_nabe','kawashima_shin','marina_fujita_dickson','alessio_patalano_jp']},
-  analisti_jp:{label:'Analisti JP', cats:['analisti_jp']},
+  giappone:{label:'Giappone', cats:['giappone','analisti_jp'], ids:['nhk_japan','nikkei_japan','japantimes_japan','asahi_japan','yomiuri_japan','mainichi_japan','sankei_japan','kazuto_suzuki','stephen_nagy','hirohito_ogi','haruo_tohmatsu','watanabe_nabe','kawashima_shin','marina_fujita_dickson','alessio_patalano_jp']},
   cartografia:{label:'Cartografia', cats:['cartografia'], ids:['carto_maps_general','carto_visualcapitalist','carto_geocurrents','carto_reliefweb_maps','carto_isw_maps','carto_acled_maps','carto_csis_maps','carto_mapaction']},
   africa:{label:'Africa', ids:['news24','afp','rfi']},
   difesa:{label:'Difesa / OSINT', cats:['osint','ist','cyber'], ids:['warzone','defone','osint_janes','osint_acled','osint_oryx','gpf','rane_worldview','intelligence_online','intelonline']}
@@ -2828,7 +2818,6 @@ var THEATER_META={
 function sourceTheater(s){
   var id=(s.id||'').toLowerCase(), cat=(s.cat||'').toLowerCase();
   if(THEATER_META.cina.ids.indexOf(id)>=0 || THEATER_META.cina.cats.indexOf(cat)>=0) return 'cina';
-  if(THEATER_META.analisti_jp.cats.indexOf(cat)>=0) return 'analisti_jp';
   if(THEATER_META.giappone.ids.indexOf(id)>=0 || THEATER_META.giappone.cats.indexOf(cat)>=0) return 'giappone';
   if(THEATER_META.indopacifico.ids.indexOf(id)>=0 || THEATER_META.indopacifico.cats.indexOf(cat)>=0) return 'indopacifico';
   if(THEATER_META.medioriente.ids.indexOf(id)>=0) return 'medioriente';
@@ -2850,7 +2839,7 @@ function activateTheater(theater){
 
 function renderSrcList(){
   var el=document.getElementById('srclist');if(!el)return;
-  var CAT={agenzie:'Agenzie',media:'Media',italia:'Italia',think:'Think tank',ist:'Ist.',cyber:'Cyber',finance:'Finance',regional:'Reg.',osint:'OSINT',cina:'Cina',giappone:'Giappone',sudest_asia:'Sud-est Asia',analisti_cn:'Analisti CN',analisti_jp:'Analisti JP',cartografia:'Cartografia'};
+  var CAT={agenzie:'Agenzie',media:'Media',italia:'Italia',think:'Think tank',ist:'Ist.',cyber:'Cyber',finance:'Finance',regional:'Reg.',osint:'OSINT',cina:'Cina',giappone:'Giappone',sudest_asia:'Sud-est Asia',analisti_cn:'Analisti CN',analisti_jp:'Giappone',cartografia:'Cartografia'};
   var catmap={};
   sources.forEach(function(s){var c=s.cat||'media';if(!catmap[c])catmap[c]=[];catmap[c].push(s);});
   var html='';
