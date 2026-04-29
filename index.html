@@ -1993,6 +1993,7 @@ var DEFAULTS=[
   {id:'politico',  name:'Politico EU',        cat:'think',   url:'https://www.politico.eu/feed/',on:true},
   {id:'economist', name:'The Economist',      cat:'think',   url:'https://news.google.com/rss/search?q=site%3Aeconomist.com%20%28China%20OR%20Europe%20OR%20United%20States%20OR%20Russia%20OR%20war%20OR%20geopolitics%29&hl=en&gl=US&ceid=US:en',on:true},
   {id:'sipri',     name:'SIPRI',              cat:'osint',   url:'https://www.sipri.org/rss/combined.xml',regions:['osint'],on:true},
+  {id:'war_on_the_rocks', name:'War on the Rocks', cat:'osint', url:'https://news.google.com/rss/search?q=site:warontherocks.com+%28strategy+OR+military+OR+security+OR+war%29&hl=en&gl=US&ceid=US:en', regions:['osint'], on:true},
   {id:'intelonline',name:'Intelligence Online',cat:'think',  url:'https://news.google.com/rss/search?q=site:intelligenceonline.com&hl=en',on:true},
   {id:'nato',      name:'NATO',               cat:'ist',     url:'https://news.google.com/rss/search?q=NATO+statement&hl=en',on:true},
   {id:'ft',        name:'Financial Times',    cat:'finance', url:'https://news.google.com/rss/search?q=site:ft.com+world&hl=en',on:true},
@@ -2046,7 +2047,6 @@ var PRESETS=[
   {id:'rsshub_bilibili_guancha',name:'RSSHub B站 观察者网',cat:'cina',url:'https://news.google.com/rss/search?q=%E8%A7%82%E5%AF%9F%E8%80%85%E7%BD%91+%E5%9C%B0%E7%BC%98%E6%94%BF%E6%B2%BB&hl=en&gl=US&ceid=US:en',on:true},
   {id:'baidu_huanqiu',name:'Baidu 环球时报/环球网',cat:'cina',url:'https://news.google.com/rss/search?q=%E7%8E%AF%E7%90%83%E6%97%B6%E6%8A%A5+%E5%9B%BD%E9%99%85&hl=en&gl=US&ceid=US:en',on:true},
   {id:'baidu_gmw',name:'Baidu 光明网',cat:'cina',url:'https://news.google.com/rss/search?q=site:gmw.cn+%E5%9B%BD%E9%99%85&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'baidu_bjd',name:'Baidu 北京日报',cat:'cina',url:'https://news.google.com/rss/search?q=site%3Abjd.com.cn%20%E5%9B%BD%E9%99%85%20%E5%8C%97%E4%BA%AC%E6%97%A5%E6%8A%A5&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',on:true},
   {id:'baidu_qst',name:'Baidu 求是',cat:'cina',url:'https://news.google.com/rss/search?q=site:qstheory.cn&hl=en&gl=US&ceid=US:en',on:true},
   {id:'baidu_81cn',name:'Baidu 81.cn / 解放军',cat:'cina',url:'https://news.google.com/rss/search?q=site:81.cn+%E8%A7%A3%E6%94%BE%E5%86%9B+%E6%88%98%E5%8C%BA&hl=en&gl=US&ceid=US:en',on:true},
   {id:'baidu_thepaper',name:'Baidu 澎湃新闻',cat:'cina',url:'https://news.google.com/rss/search?q=site:thepaper.cn+%E5%9B%BD%E9%99%85&hl=en&gl=US&ceid=US:en',on:true},
@@ -2080,6 +2080,7 @@ var PRESETS=[
   {id:'rti_tw',      name:'RTI Taiwan (中)',      cat:'cina', url:'https://news.google.com/rss/search?q=site:rti.org.tw&hl=en&gl=US&ceid=US:en', on:true},
   {id:'rfa_zh',      name:'自由亚洲 RFA (中)',    cat:'cina', url:'https://news.google.com/rss/search?q=site:rfa.org+chinese&hl=en&gl=US&ceid=US:en', on:true},
   {id:'voachinese',  name:'美国之音 VOA (中)',    cat:'cina', url:'https://news.google.com/rss/search?q=site:voachinese.com&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'taipei_times', name:'Taipei Times',        cat:'cina', url:'https://www.taipeitimes.com/xml/index.rss', on:true},
   {id:'scmp_cn',     name:'SCMP China',           cat:'cina', url:'https://www.scmp.com/rss/4/feed', on:true},
   // Think tank / analysis on China
   {id:'merics',      name:'MERICS (China)',       cat:'cina', url:'https://news.google.com/rss/search?q=MERICS+china&hl=en', on:true},
@@ -2108,6 +2109,8 @@ var PRESETS=[
     url:'https://news.google.com/rss/search?q=%E5%BC%A0%E6%96%87%E6%9C%A8+OR+%22Zhang+Wenmu%22+%E5%9C%B0%E7%BC%98+%E6%88%98%E7%95%A5&hl=en&gl=US&ceid=US:en', on:true},
   {id:'wyzxwk_wenmu', name:'张文木 乌有之乡', cat:'analisti_cn',
     url:'https://news.google.com/rss/search?q=%E5%BC%A0%E6%96%87%E6%9C%A8+%E4%B9%8C%E6%9C%89%E4%B9%8B%E4%B9%A1+OR+%22Zhang+Wenmu%22+wyzxwk&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'wyzxwk_wenmu_author', name:'张文木 乌有之乡作者页', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q=site:wyzxwk.com+%E5%BC%A0%E6%96%87%E6%9C%A8+OR+site:wyzxwk.com/author/c3/145.html&hl=zh-CN&gl=CN&ceid=CN:zh-Hans', on:true},
   {id:'hu_xijin', name:'胡锡进 Hu Xijin', cat:'analisti_cn',
     url:'https://news.google.com/rss/search?q=%28%22Hu%20Xijin%22%20OR%20%22HuXijin_GT%22%20OR%20%E8%83%A1%E9%94%A1%E8%BF%9B%29%20%28China%20OR%20%E4%B8%AD%E5%9B%BD%20OR%20Global%20Times%20OR%20%E7%8E%AF%E7%90%83%E6%97%B6%E6%8A%A5%29&hl=en&gl=US&ceid=US:en', on:true},
   {id:'wang_xiangsui', name:'王湘穗 Wang Xiangsui', cat:'analisti_cn',
@@ -2143,6 +2146,8 @@ var PRESETS=[
     url:'https://sinocism.com/feed', on:true},
   {id:'sinification', name:'Sinification', cat:'analisti_cn',
     url:'https://www.sinification.org/feed', on:false},
+  {id:'whatsonweibo', name:'Whats on Weibo', cat:'analisti_cn',
+    url:'https://news.google.com/rss/search?q=site:whatsonweibo.com&hl=en&gl=US&ceid=US:en', on:true},
   {id:'geopolitechs', name:'Geopolitechs', cat:'analisti_cn',
     url:'https://geotechnopolitics.substack.com/feed', on:true},
   // Jamestown Foundation — China Brief
@@ -2294,7 +2299,7 @@ function persist(){
 function loadPersist(){
   var DEFAULT_CLOSED=['russia','africa','americas','medioriente'];
   var LAYOUT_VER='v12';
-  var REMOVED_SOURCE_IDS=['ccg','caixin','almonitor','mei','mideasteye','arabnews','bbcme','arabiya','trtworld','meduza','moscowtimes','carnegie_russia','lowy','rti_tw','globaltimes','globaltimes_zh','people_en','people_zh','chinadaily','csis_china','merics','bbcafrica','warontherocks','defensenews','breakingdefense','janes','isw','acled','onu','un','un_news','unnews','iaea'];
+  var REMOVED_SOURCE_IDS=['ccg','caixin','almonitor','mei','mideasteye','arabnews','bbcme','arabiya','trtworld','meduza','moscowtimes','carnegie_russia','lowy','rti_tw','globaltimes','globaltimes_zh','people_en','people_zh','chinadaily','csis_china','merics','bbcafrica','defensenews','breakingdefense','janes','isw','acled','onu','un','un_news','unnews','iaea'];
 
 // Feed sanitizzati: sovrascrivono anche le vecchie URL rimaste in localStorage.
 var SOURCE_URL_FIXES={
