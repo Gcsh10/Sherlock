@@ -3035,7 +3035,7 @@ function renderSourceManager(){
   if(srcList){
     var qEl=document.getElementById('manager-source-search');
     var q=(qEl&&qEl.value?qEl.value:'').toLowerCase().trim();
-    var theaters=['global','cina','indopacifico','giappone','europa','medioriente','russia','africa','difesa','cartografia'];
+    var theaters=['global','cina','analisti_cn','wechat_cn','indopacifico','giappone','europa','medioriente','russia','africa','difesa','cartografia'];
     var labels={global:'Globale',cina:'Cina & Taiwan',analisti_cn:'Analisti CN',wechat_cn:'WeChat CN',indopacifico:'Indo-Pacifico',giappone:'Giappone',europa:'Europa / Italia',medioriente:'Medio Oriente',russia:'Russia / Eurasia',africa:'Africa',difesa:'Difesa / OSINT',cartografia:'Cartografia'};
     var grouped={};
     sources.forEach(function(s){var th=sourceTheater(s)||'global';if(!grouped[th])grouped[th]=[];grouped[th].push(s);});
