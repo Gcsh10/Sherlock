@@ -2745,34 +2745,95 @@ function cardHTML(a){
 
 // ── PIN SYSTEM ────────────────────────────────────────────────────
 var _pinnedKeys=new Set();
+var _pinnedStore={};
 var _pinFilterActive=false;
 (function _loadPins(){
   try{
     var saved=JSON.parse(localStorage.getItem('sh3_pinned')||'[]');
     if(Array.isArray(saved)) saved.forEach(function(k){_pinnedKeys.add(k);});
   }catch(e){}
+  try{
+    var savedArticles=JSON.parse(localStorage.getItem('sh3_pinned_articles')||'{}');
+    if(savedArticles&&typeof savedArticles==='object'&&!Array.isArray(savedArticles)) _pinnedStore=savedArticles;
+  }catch(e){}
 })();
 function articlePinKey(a){return ((a.link||'')+'|'+(a.title||'').trim().substring(0,60)).trim();}
-function _savePins(){try{localStorage.setItem('sh3_pinned',JSON.stringify(Array.from(_pinnedKeys)));}catch(e){}}
+function _normalizePinnedArticle(a,key){
+  if(!a) return null;
+  var ts=Number(a.ts)||_articleTimestamp(a.pub)||Date.now();
+  return {
+    key:key||articlePinKey(a),
+    title:a.title||'',
+    src:a.src||'',
+    link:a.link||'',
+    pub:a.pub||'',
+    ts:ts,
+    description:a.description||'',
+    sev:a.sev||'medium',
+    cat:a.cat||'',
+    region:a.region||'',
+    savedAt:Number(a.savedAt)||Date.now()
+  };
+}
+function _savePins(){
+  try{localStorage.setItem('sh3_pinned',JSON.stringify(Array.from(_pinnedKeys)));}catch(e){}
+  try{localStorage.setItem('sh3_pinned_articles',JSON.stringify(_pinnedStore));}catch(e){}
+}
+function _findArticleByKey(key){
+  var found=(articles||[]).find(function(a){return articlePinKey(a)===key;});
+  return found||null;
+}
+function _articleFromCard(card,key){
+  if(!card) return null;
+  var titleEl=card.querySelector('.ctlink');
+  var srcEl=card.querySelector('.csrc');
+  var descEl=card.querySelector('.cdesc');
+  return _normalizePinnedArticle({
+    title:titleEl?titleEl.textContent.trim():'',
+    src:srcEl?srcEl.textContent.trim():'',
+    link:titleEl?titleEl.getAttribute('href')||'':'',
+    description:descEl?descEl.textContent.trim():'',
+    ts:Number(card.getAttribute('data-ts'))||Date.now(),
+    sev:card.getAttribute('data-sev')||'medium'
+  },key);
+}
+function _sortPinnedArticles(list){
+  return (list||[]).slice().sort(function(a,b){
+    var ta=Number(a.ts)||0,tb=Number(b.ts)||0;
+    if(tb!==ta) return tb-ta;
+    return (Number(b.savedAt)||0)-(Number(a.savedAt)||0);
+  });
+}
+function getPinnedForCol(def){
+  var list=Object.keys(_pinnedStore).map(function(k){return _pinnedStore[k];}).filter(Boolean);
+  if(def.id==='global') return _sortPinnedArticles(_dedup(list));
+  return _sortPinnedArticles(_dedup(list.filter(function(a){return _articleMatchesCol(a,def);}))); 
+}
 function togglePin(btn, key){
+  var card=btn.closest('.card');
   if(_pinnedKeys.has(key)){
     _pinnedKeys.delete(key);
+    delete _pinnedStore[key];
     btn.classList.remove('pinned');
     btn.title='Salva articolo';
-    var card=btn.closest('.card');
     if(card){card.classList.remove('is-pinned');}
-    if(_pinFilterActive) card&&card.remove();
+    _savePins();
+    _updatePinFilterBtn();
+    if(_pinFilterActive){ renderAll(); }
     notify('Rimosso dai salvati');
   }else{
     _pinnedKeys.add(key);
+    var article=_findArticleByKey(key) || _articleFromCard(card,key);
+    var normalized=_normalizePinnedArticle(article,key);
+    if(normalized) _pinnedStore[key]=normalized;
     btn.classList.add('pinned');
     btn.title='Rimuovi dai salvati';
-    var card2=btn.closest('.card');
-    if(card2) card2.classList.add('is-pinned');
-    notify('Salvato ★');
+    if(card) card.classList.add('is-pinned');
+    _savePins();
+    _updatePinFilterBtn();
+    if(_pinFilterActive){ renderAll(); }
+    notify("Salvato nell'archivio ★");
   }
-  _savePins();
-  _updatePinFilterBtn();
 }
 function _updatePinFilterBtn(){
   var btn=document.getElementById('pin-filter-btn');
@@ -2782,17 +2843,8 @@ function togglePinFilter(){
   _pinFilterActive=!_pinFilterActive;
   var btn=document.getElementById('pin-filter-btn');
   if(btn) btn.classList.toggle('active',_pinFilterActive);
-  if(_pinFilterActive){
-    // Hide all non-pinned cards
-    document.querySelectorAll('.card').forEach(function(c){
-      var k=c.getAttribute('data-akey');
-      c.style.display=(k&&_pinnedKeys.has(k))?'':'none';
-    });
-    notify('Vista: solo articoli salvati');
-  }else{
-    document.querySelectorAll('.card').forEach(function(c){c.style.display='';});
-    notify('Vista: tutti gli articoli');
-  }
+  renderAll();
+  notify(_pinFilterActive?'Vista: archivio salvati':'Vista: tutti gli articoli');
 }
 
 
@@ -2846,7 +2898,7 @@ function renderColumns(){
   colOrder.forEach(function(cid){
     if(colClosed.indexOf(cid)>=0)return;
     var def=ALL_COLS.find(function(c){return c.id===cid;});if(!def)return;
-    wrap.insertBefore(buildCol(def,getForCol(def)),addBtn);
+    wrap.insertBefore(buildCol(def,_pinFilterActive?getPinnedForCol(def):getForCol(def)),addBtn);
   });
 }
 function buildCol(def,arts){
