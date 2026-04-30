@@ -2736,7 +2736,7 @@ function cardHTML(a){
   var aKey=articlePinKey(a);
   var isPinned=_pinnedKeys.has(aKey);
   var pinBtn='<button class="cpin'+(isPinned?' pinned':'')+'" onclick="togglePin(this,\''+esc(aKey)+'\')" title="'+(isPinned?'Rimuovi dai salvati':'Salva articolo')+'">★</button>';
-  return '<div class="card'+(isPinned?' is-pinned':'')+'" data-sev="'+a.sev+'" data-ts="'+(a.ts||0)+'" data-akey="'+esc(aKey)+'"'+needsAttr+'>'
+  return '<div class="card'+(isPinned?' is-pinned':'')+'" data-sev="'+a.sev+'" data-ts="'+(a.ts||0)+'" data-akey="'+esc(aKey)+'" data-cat="'+esc(a.cat||'')+'" data-region="'+esc(a.region||'')+'"'+needsAttr+'>'
     +'<div class="ctop"><span class="csrc">'+esc(a.src)+'</span>'+langBadge+'</div>'
     +'<a class="ctlink" href="'+esc(a.link||'')+'" target="_blank" rel="noopener">'+esc(a.title)+'</a>'
     +(a.description?'<div class="cdesc">'+esc(a.description)+'</div>':'')
@@ -2757,7 +2757,7 @@ var _pinFilterActive=false;
     if(savedArticles&&typeof savedArticles==='object'&&!Array.isArray(savedArticles)) _pinnedStore=savedArticles;
   }catch(e){}
 })();
-function articlePinKey(a){return ((a.link||'')+'|'+(a.title||'').trim().substring(0,60)).trim();}
+function articlePinKey(a){return ((a.src||'')+'|'+(a.link||'')+'|'+(a.title||'').trim().substring(0,80)).trim();}
 function _normalizePinnedArticle(a,key){
   if(!a) return null;
   var ts=Number(a.ts)||_articleTimestamp(a.pub)||Date.now();
@@ -2794,7 +2794,9 @@ function _articleFromCard(card,key){
     link:titleEl?titleEl.getAttribute('href')||'':'',
     description:descEl?descEl.textContent.trim():'',
     ts:Number(card.getAttribute('data-ts'))||Date.now(),
-    sev:card.getAttribute('data-sev')||'medium'
+    sev:card.getAttribute('data-sev')||'medium',
+    cat:card.getAttribute('data-cat')||'',
+    region:card.getAttribute('data-region')||''
   },key);
 }
 function _sortPinnedArticles(list){
@@ -5283,7 +5285,7 @@ function toggleSidebar(){
 
 <script>
 (function(){
-  var APP_VERSION='2.6';
+  var APP_VERSION='2.7';
   var VERSION_KEY='sh3_app_version';
   try{
     var savedVersion=localStorage.getItem(VERSION_KEY)||'';
@@ -5292,7 +5294,9 @@ function toggleSidebar(){
         'sh3_sources',
         'sh3_colorder',
         'sh3_colclosed',
-        'sh3_live_cfg_v1'
+        'sh3_live_cfg_v1',
+        'sh3_pinned',
+        'sh3_pinned_articles'
       ].forEach(function(key){
         try{localStorage.removeItem(key);}catch(e){}
       });
