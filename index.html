@@ -1615,6 +1615,7 @@ html[data-theme=light] .timeline-item-desc,[data-theme=light] .timeline-item-des
                     <option value="cyber">Cyber / OSINT</option><option value="finance">Finanza</option>
                     <option value="regional">Regionale</option><option value="agenzie">Agenzia</option>
                     <option value="osint">OSINT</option><option value="analisti_cn">Analisti CN</option>
+                    <option value="stampa">Stampa</option>
                     
                     <option value="giappone">Giappone</option>
                   </select>
@@ -2234,6 +2235,7 @@ var PRESETS=[
 
 var ALL_COLS=[
   {id:'global',       name:'Globale',           icon:'&#127758;', regions:['global']},
+  {id:'stampa',       name:'Stampa',            icon:'📰', regions:['stampa']},
   {id:'europa',       name:'Europa',            icon:'&#127466;&#127482;', regions:['europa']},
   {id:'medioriente',  name:'Medio Oriente',     icon:'&#128332;', regions:['medioriente']},
   {id:'italia',       name:'Italia',            icon:'&#127470;&#127481;', regions:['italia']},
@@ -2247,7 +2249,33 @@ var ALL_COLS=[
   {id:'russia',       name:'Russia',            icon:'🇷🇺', regions:['russia']},
   {id:'africa',       name:'Africa',            icon:'🌍', regions:['africa']}];
 
+
 var sources=[],articles=[],colOrder=[],colClosed=[],timerSec=120,timerInt=null,sourceStatus={},pIdx=0;
+
+var PRESS_SOURCE_IDS=['reuters','ap','afp','ansa','ansait','repubblica','corriere','sole24','stampa','messaggero','adnkronos_esteri','adnkronos_politica','agi_it','sky_tg24_it','nyt_world','wsj_world','ft','politico','economist','lemonde','guardian','elpais','bloomberg','bbc','kyodo','yonhap','nikkei','scmp','taipei_times'];
+function syncPressSources(){
+  try{
+    var keep={};
+    PRESS_SOURCE_IDS.forEach(function(baseId){
+      var base=sources.find(function(s){return s.id===baseId;});
+      if(!base)return;
+      var pid='press_'+base.id;
+      keep[pid]=true;
+      var existing=sources.find(function(s){return s.id===pid;});
+      if(existing){
+        existing.name=base.name;
+        existing.url=base.url;
+        existing.cat='stampa';
+        if(typeof existing.on==='undefined') existing.on=true;
+      }else{
+        sources.push({id:pid,name:base.name,url:base.url,cat:'stampa',on:true});
+      }
+    });
+    sources=sources.filter(function(s){
+      return !(s.cat==='stampa' && s.id.indexOf('press_')===0 && !keep[s.id]);
+    });
+  }catch(e){}
+}
 
 // ── Chronological hygiene: keep news recent and truly sorted ──────
 var MAX_ARTICLE_AGE_DAYS=2;
@@ -2419,8 +2447,10 @@ function applySourceUrlFixes(list){
       if(nm.indexOf('south china morning post')>=0 || nm.indexOf('scmp')>=0 || nm.indexOf('xinhua')>=0 || (s.name||'').indexOf('新华社')>=0)s.on=true;
     });
     sources=applySourceUrlFixes(sources);
+    syncPressSources();
     try{localStorage.setItem('sh3_sources_v3',JSON.stringify(sources));}catch(e){}
     ALL_COLS.forEach(function(c){if(colOrder.indexOf(c.id)<0)colOrder.push(c.id);});
+    if(colOrder.indexOf('stampa')<0) colOrder.splice(Math.min(1,colOrder.length),0,'stampa');
     // Deduplication: rimuovi duplicati da colOrder
     var seen={};
     colOrder=colOrder.filter(function(id){if(seen[id])return false;seen[id]=true;return true;});
@@ -2546,10 +2576,12 @@ function classify(item){
     else if(item.cat==='sudest_asia') item.region='sudest_asia';
     else if(item.cat==='giappone') item.region='giappone';
     else if(item.cat==='italia') item.region='italia';
+    else if(item.cat==='stampa') item.region='stampa';
     else if(item.cat==='analisti_cn') item.region='analisti_cn';
     else if(item.cat==='analisti_jp') item.region='giappone';
   }
   // analisti_cn resta in colonna propria; analisti_jp confluisce in Giappone
+  if(item.cat==='stampa') item.region='stampa';
   if(item.cat==='analisti_cn') item.region='analisti_cn';
   if(item.cat==='analisti_jp') item.region='giappone';
   return item;
@@ -2945,6 +2977,7 @@ function showTab(id){
 }
 var THEATER_META={
   global:{label:'Globale', cats:['agenzie','media','finance']},
+  stampa:{label:'Stampa', cats:['stampa']},
   europa:{label:'Europa', cats:['italia']},
   medioriente:{label:'Medio Oriente', ids:['haaretz','meye','aljazeera','anadolu','wam']},
   russia:{label:'Russia / Eurasia', ids:['tass','kyivindep','osint_rferl','dpa']},
@@ -2964,6 +2997,7 @@ function sourceTheater(s){
   if(THEATER_META.giappone.ids.indexOf(id)>=0 || THEATER_META.giappone.cats.indexOf(cat)>=0) return 'giappone';
   if(THEATER_META.indopacifico.ids.indexOf(id)>=0 || THEATER_META.indopacifico.cats.indexOf(cat)>=0) return 'indopacifico';
   if(THEATER_META.medioriente.ids.indexOf(id)>=0) return 'medioriente';
+  if(THEATER_META.stampa.cats.indexOf(cat)>=0) return 'stampa';
   if(THEATER_META.russia.ids.indexOf(id)>=0) return 'russia';
   if(THEATER_META.africa.ids.indexOf(id)>=0) return 'africa';
   if(THEATER_META.cartografia.ids.indexOf(id)>=0 || THEATER_META.cartografia.cats.indexOf(cat)>=0) return 'cartografia';
@@ -2982,7 +3016,7 @@ function activateTheater(theater){
 
 function renderSrcList(){
   var legacy=document.getElementById('srclist');
-  var CAT={agenzie:'Agenzie',media:'Media',italia:'Italia',think:'Think tank',ist:'Ist.',cyber:'Cyber',finance:'Finance',regional:'Reg.',osint:'OSINT',cina:'Cina',giappone:'Giappone',sudest_asia:'Sud-est Asia',analisti_cn:'Analisti CN',analisti_jp:'Giappone',cartografia:'Cartografia'};
+  var CAT={agenzie:'Agenzie',media:'Media',italia:'Italia',stampa:'Stampa',think:'Think tank',ist:'Ist.',cyber:'Cyber',finance:'Finance',regional:'Reg.',osint:'OSINT',cina:'Cina',giappone:'Giappone',sudest_asia:'Sud-est Asia',analisti_cn:'Analisti CN',analisti_jp:'Giappone',cartografia:'Cartografia'};
   if(legacy){
     var catmap={};
     sources.forEach(function(s){var c=s.cat||'media';if(!catmap[c])catmap[c]=[];catmap[c].push(s);});
@@ -3016,8 +3050,8 @@ function renderSourceManager(){
   if(srcList){
     var qEl=document.getElementById('manager-source-search');
     var q=(qEl&&qEl.value?qEl.value:'').toLowerCase().trim();
-    var theaters=['global','cina','analisti_cn','indopacifico','giappone','europa','medioriente','russia','africa','difesa','cartografia'];
-    var labels={global:'Globale',cina:'Cina & Taiwan',analisti_cn:'Analisti CN',indopacifico:'Indo-Pacifico',giappone:'Giappone',europa:'Europa / Italia',medioriente:'Medio Oriente',russia:'Russia / Eurasia',africa:'Africa',difesa:'Difesa / OSINT',cartografia:'Cartografia'};
+    var theaters=['global','stampa','cina','analisti_cn','indopacifico','giappone','europa','medioriente','russia','africa','difesa','cartografia'];
+    var labels={global:'Globale',stampa:'Stampa',cina:'Cina & Taiwan',analisti_cn:'Analisti CN',indopacifico:'Indo-Pacifico',giappone:'Giappone',europa:'Europa / Italia',medioriente:'Medio Oriente',russia:'Russia / Eurasia',africa:'Africa',difesa:'Difesa / OSINT',cartografia:'Cartografia'};
     var grouped={};
     sources.forEach(function(s){var th=sourceTheater(s)||'global';if(!grouped[th])grouped[th]=[];grouped[th].push(s);});
     var html='';
