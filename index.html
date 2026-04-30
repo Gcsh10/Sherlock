@@ -2807,7 +2807,10 @@ function _sortPinnedArticles(list){
 function getPinnedForCol(def){
   var list=Object.keys(_pinnedStore).map(function(k){return _pinnedStore[k];}).filter(Boolean);
   if(def.id==='global') return _sortPinnedArticles(_dedup(list));
-  return _sortPinnedArticles(_dedup(list.filter(function(a){return _articleMatchesCol(a,def);}))); 
+  var filtered=list.filter(function(a){return _articleMatchesCol(a,def);});
+  // Fallback for older saved items that were archived without enough metadata
+  // to be mapped back into thematic columns: keep them visible in Globale only.
+  return _sortPinnedArticles(_dedup(filtered)); 
 }
 function togglePin(btn, key){
   var card=btn.closest('.card');
@@ -2843,8 +2846,12 @@ function togglePinFilter(){
   _pinFilterActive=!_pinFilterActive;
   var btn=document.getElementById('pin-filter-btn');
   if(btn) btn.classList.toggle('active',_pinFilterActive);
+  if(_pinFilterActive && colClosed.indexOf('global')>=0){
+    colClosed=colClosed.filter(function(x){return x!=='global';});
+    persist();
+  }
   renderAll();
-  notify(_pinFilterActive?'Vista: archivio salvati':'Vista: tutti gli articoli');
+  notify(_pinFilterActive?'Vista: archivio salvati (colonna Globale sempre visibile)':'Vista: tutti gli articoli');
 }
 
 
@@ -2910,7 +2917,9 @@ function buildCol(def,arts){
     +'<button class="col-close" onclick="closeCol(\''+def.id+'\')">&#x2715;</button>';
   col.appendChild(hd);
   var feed=document.createElement('div');feed.className='col-feed';feed.id='colfeed-'+def.id;
-  feed.innerHTML=arts.length?arts.slice(0,200).map(cardHTML).join(''):'<div class="empty">Nessun articolo</div>';
+  var emptyMsg='Nessun articolo';
+  if(_pinFilterActive && def.id!=='global') emptyMsg='Nessun salvato classificabile in questa colonna';
+  feed.innerHTML=arts.length?arts.slice(0,200).map(cardHTML).join(''):'<div class="empty">'+emptyMsg+'</div>';
   col.appendChild(feed);
   col.addEventListener('dragstart',onDragStart);col.addEventListener('dragover',onDragOver);
   col.addEventListener('dragleave',onDragLeave);col.addEventListener('drop',onDrop);col.addEventListener('dragend',onDragEnd);
