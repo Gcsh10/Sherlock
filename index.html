@@ -6333,46 +6333,47 @@ body.desktop-browser-upgrade #page-1>.main-area{grid-area:main;min-width:0;min-h
 
 
 <style id="touch-scroll-fix-ipad-ios">
+/* Usa lo scrolling nativo, senza drag JS: più fluido e uguale allo scroll verticale */
 @media (max-width:1199px){
-  .cols-wrap{touch-action:pan-x pinch-zoom;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;}
-  .acol{touch-action:pan-x pan-y pinch-zoom;}
-  .col-feed,.card{touch-action:pan-y pinch-zoom;}
+  .cols-wrap{
+    -webkit-overflow-scrolling:touch;
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    overscroll-behavior-x:contain;
+    overscroll-behavior-y:none;
+    touch-action:pan-x pinch-zoom;
+    scroll-behavior:auto !important;
+  }
+  .acol{
+    touch-action:auto;
+  }
+  .col-feed{
+    -webkit-overflow-scrolling:touch;
+    overscroll-behavior-y:contain;
+    touch-action:pan-y pinch-zoom;
+  }
+  .card,.ctlink,.cdesc,.ctop,.cfoot{
+    touch-action:auto;
+  }
+}
+@media (min-width:768px) and (max-width:1199px){
+  body.desktop-browser-upgrade #page-1 .cols-wrap,
+  body.desktop-browser-upgrade.sidebar-collapsed #page-1 .cols-wrap,
+  body.desktop-browser-upgrade .cols-wrap{
+    scroll-snap-type:none !important;
+  }
+  body.desktop-browser-upgrade #page-1 .acol,
+  body.desktop-browser-upgrade.sidebar-collapsed #page-1 .acol,
+  body.desktop-browser-upgrade .cols-wrap .acol{
+    scroll-snap-align:none !important;
+  }
+}
+@media (max-width:767px){
+  .cols-wrap{
+    scroll-snap-type:x proximity !important;
+  }
 }
 </style>
-<script id="touch-scroll-fix-ipad-ios-script">
-(function(){
-  function enableColumnSwipe(){
-    var wrap=document.querySelector('.cols-wrap');
-    if(!wrap || wrap.dataset.touchScrollFix==='1') return;
-    wrap.dataset.touchScrollFix='1';
-    var state={active:false,horizontal:false,startX:0,startY:0,startLeft:0};
-    function getTouch(ev){ return ev.touches&&ev.touches[0] ? ev.touches[0] : null; }
-    wrap.addEventListener('touchstart', function(ev){
-      if(!ev.target.closest('.acol')) return;
-      var t=getTouch(ev); if(!t) return;
-      state.active=true; state.horizontal=false;
-      state.startX=t.clientX; state.startY=t.clientY; state.startLeft=wrap.scrollLeft;
-    }, {passive:true});
-    wrap.addEventListener('touchmove', function(ev){
-      if(!state.active) return;
-      var t=getTouch(ev); if(!t) return;
-      var dx=t.clientX-state.startX, dy=t.clientY-state.startY;
-      if(!state.horizontal){
-        if(Math.abs(dx) < 8) return;
-        if(Math.abs(dx) <= Math.abs(dy)) { state.active=false; return; }
-        state.horizontal=true;
-      }
-      ev.preventDefault();
-      wrap.scrollLeft = state.startLeft - dx;
-    }, {passive:false});
-    function stop(){ state.active=false; state.horizontal=false; }
-    wrap.addEventListener('touchend', stop, {passive:true});
-    wrap.addEventListener('touchcancel', stop, {passive:true});
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', enableColumnSwipe);
-  else enableColumnSwipe();
-})();
-</script>
 
 </body>
 </html>
