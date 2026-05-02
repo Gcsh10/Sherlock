@@ -1937,6 +1937,7 @@ var DEFAULTS=[
   {id:'aspi_strategist',name:'The Strategist / ASPI',url:'https://www.aspistrategist.org.au/feed/',cat:'sudest_asia',regions:['indopacifico'],on:true},
 
   {id:'reuters',   name:'Reuters',            cat:'agenzie', url:'https://news.google.com/rss/search?q=reuters+world+news&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'reuters_x', name:'Reuters / X',         cat:'agenzie', url:'https://news.google.com/rss/search?q=site%3Ax.com%2Freuters%20OR%20%22Reuters%22%20%28breaking%20OR%20world%20OR%20markets%20OR%20politics%29&hl=en&gl=US&ceid=US:en',on:true},
   {id:'ap',        name:'AP',                 cat:'agenzie', url:'https://news.google.com/rss/search?q=associated+press+world&hl=en&gl=US&ceid=US:en',on:true},
   {id:'afp',       name:'AFP',                cat:'agenzie', url:'https://news.google.com/rss/search?q=agence+france+presse+AFP&hl=en&gl=US&ceid=US:en',on:true},
   {id:'ansa',      name:'ANSA Mondo',         cat:'agenzie', url:'https://news.google.com/rss/search?q=site:ansa.it+mondo&hl=en&gl=US&ceid=US:en',on:true},
@@ -1988,6 +1989,7 @@ var DEFAULTS=[
   {id:'agi_it',name:'AGI Italia', cat:'italia', url:'https://news.google.com/rss/search?q=site%3Aagi.it%20%28politica%20OR%20estero%20OR%20governo%20OR%20Meloni%29&hl=it&gl=IT&ceid=IT:it',on:true},
   {id:'sky_tg24_it',name:'Sky TG24 Italia', cat:'italia', url:'https://news.google.com/rss/search?q=site%3Askytg24.sky.it%20%28politica%20OR%20mondo%20OR%20esteri%20OR%20governo%29&hl=it&gl=IT&ceid=IT:it',on:true},
   {id:'formiche_it',name:'Formiche', cat:'italia', url:'https://news.google.com/rss/search?q=site%3Aformiche.net%20%28politica%20OR%20esteri%20OR%20difesa%20OR%20governo%29&hl=it&gl=IT&ceid=IT:it',on:true},
+  {id:'formiche_x',name:'Formiche / X', cat:'italia', url:'https://news.google.com/rss/search?q=site%3Ax.com%2Fformichenews%20OR%20%22Formiche%22%20%28Italia%20OR%20politica%20OR%20esteri%20OR%20difesa%29&hl=it&gl=IT&ceid=IT:it',on:true},
   {id:'decode39',name:'Decode39', cat:'italia', url:'https://news.google.com/rss/search?q=site%3Adecode39.com%20%28Italy%20OR%20Italian%20OR%20Rome%20OR%20Meloni%29&hl=en&gl=US&ceid=US:en',on:true},
   {id:'fp',        name:'Foreign Policy',     cat:'think',   url:'https://news.google.com/rss/search?q=site:foreignpolicy.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'foreignaff',name:'Foreign Affairs',    cat:'think',   url:'https://news.google.com/rss/search?q=site:foreignaffairs.com&hl=en&gl=US&ceid=US:en',on:true},
@@ -2005,6 +2007,7 @@ var DEFAULTS=[
   {id:'sipri',     name:'SIPRI',              cat:'osint',   url:'https://www.sipri.org/rss/combined.xml',regions:['osint'],on:true},
   {id:'war_on_the_rocks', name:'War on the Rocks', cat:'osint', url:'https://news.google.com/rss/search?q=site:warontherocks.com+%28strategy+OR+military+OR+security+OR+war%29&hl=en&gl=US&ceid=US:en', regions:['osint'], on:true},
   {id:'isw',       name:'ISW',                cat:'osint',   url:'https://news.google.com/rss/search?q=site:understandingwar.org+%28assessment+OR+campaign+OR+war+OR+front%29&hl=en&gl=US&ceid=US:en', regions:['osint'], on:true},
+  {id:'isw_x',     name:'ISW / X',            cat:'osint',   url:'https://news.google.com/rss/search?q=site%3Ax.com%2Fthestudyofwar%20OR%20site%3Atwitter.com%2FTheStudyofWar%20OR%20%22Institute%20for%20the%20Study%20of%20War%22%20%28Ukraine%20OR%20Russia%20OR%20Iran%20OR%20Israel%20OR%20China%20OR%20Taiwan%20OR%20war%29&hl=en&gl=US&ceid=US:en', regions:['osint'], on:true},
   {id:'intelonline',name:'Intelligence Online',cat:'think',  url:'https://news.google.com/rss/search?q=site:intelligenceonline.com&hl=en',on:true},
   {id:'nato',      name:'NATO',               cat:'ist',     url:'https://news.google.com/rss/search?q=NATO+statement&hl=en',on:true},
   {id:'ft',        name:'Financial Times',    cat:'finance', url:'https://news.google.com/rss/search?q=site:ft.com+world&hl=en',on:true},
@@ -2189,6 +2192,7 @@ var PRESETS=[
   {id:'mainichi_japan', name:'毎日新聞 Mainichi', cat:'giappone', url:'https://news.google.com/rss/search?q=site:mainichi.jp+%E6%97%A5%E6%9C%AC+%E5%A4%96%E4%BA%A4+OR+%E5%AE%89%E5%85%A8%E4%BF%9D%E9%9A%9C&hl=en&gl=US&ceid=US:en', on:false},
   {id:'sankei_japan', name:'産経新聞 Sankei', cat:'giappone', url:'https://news.google.com/rss/search?q=site:sankei.com+%E6%97%A5%E6%9C%AC+%E5%AE%89%E5%85%A8%E4%BF%9D%E9%9A%9C+OR+%E5%A4%96%E4%BA%A4&hl=en&gl=US&ceid=US:en', on:false},
   {id:'kazuto_suzuki', name:'Kazuto Suzuki', cat:'giappone', url:'https://news.google.com/rss/search?q="Kazuto+Suzuki"+Japan+security+OR+space&hl=en&gl=US&ceid=US:en', on:true},
+  {id:'kazuto_suzuki_x', name:'Kazuto Suzuki / X', cat:'giappone', url:'https://news.google.com/rss/search?q=site%3Ax.com%2Fks_1013%20OR%20%22Kazuto%20Suzuki%22%20%28%E6%97%A5%E6%9C%AC%20OR%20Japan%20OR%20security%20OR%20space%20OR%20%E5%AE%89%E5%85%A8%E4%BF%9D%E9%9A%9C%29&hl=ja&gl=JP&ceid=JP:ja', on:true},
   {id:'stephen_nagy', name:'Stephen Nagy', cat:'giappone', url:'https://news.google.com/rss/search?q="Stephen+Nagy"+Japan+geopolitics+OR+Indo-Pacific&hl=en&gl=US&ceid=US:en', on:true},
   {id:'hirohito_ogi', name:'Hirohito Ogi', cat:'giappone', url:'https://news.google.com/rss/search?q="Hirohito+Ogi"+Japan&hl=en&gl=US&ceid=US:en', on:true},
   {id:'haruo_tohmatsu', name:'Haruo Tohmatsu', cat:'giappone', url:'https://news.google.com/rss/search?q="Haruo+Tohmatsu"+Japan+strategy+OR+security&hl=en&gl=US&ceid=US:en', on:true},
@@ -2334,7 +2338,7 @@ function persist(){
 function loadPersist(){
   var DEFAULT_CLOSED=['russia','africa','americas','medioriente'];
   var LAYOUT_VER='v13';
-  var REMOVED_SOURCE_IDS=['ccg','caixin','almonitor','mei','mideasteye','arabnews','bbcme','arabiya','trtworld','meduza','moscowtimes','carnegie_russia','lowy','rti_tw','globaltimes','globaltimes_zh','people_en','people_zh','chinadaily','csis_china','merics','bbcafrica','defensenews','breakingdefense','janes','isw','acled','onu','un','un_news','unnews','iaea'];
+  var REMOVED_SOURCE_IDS=['ccg','caixin','almonitor','mei','mideasteye','arabnews','bbcme','arabiya','trtworld','meduza','moscowtimes','carnegie_russia','lowy','rti_tw','globaltimes','globaltimes_zh','people_en','people_zh','chinadaily','csis_china','merics','bbcafrica','defensenews','breakingdefense','janes','acled','onu','un','un_news','unnews','iaea'];
 
 // Feed sanitizzati: sovrascrivono anche le vecchie URL rimaste in localStorage.
 var SOURCE_URL_FIXES={
@@ -2437,7 +2441,7 @@ function applySourceUrlFixes(list){
       'ciis','cicir','siis','cfau','ciss','cass','huanqiu_zh','rand','brookings','iiss',
       'scmp_cn','merics','cna','cna_sg','people_world_zh','arabnews','xinhua','xinhua_cina','xinhua_en','xinhua_zh','rsshub_wechat_xinhua','rsshub_weibo_xinhua','cgtn_en',
       'globaltimes_en','chinadaily','people_en','people_zh','nyt_world','wsj_world','chinadigitaltimes','do_intel_china',
-      'sun_chenghao','lingua_sinica','he_yuzhe','ccg_en','greenfdc_brigc','yidaiyilu_gov','wire_china','pekingnology','beijing_channel','the_paper_cn','wu_xinbo','wang_jisi','iiss_pku','fudan_iis','tsinghua_ir','carto_maps_general','carto_visualcapitalist','carto_geocurrents','carto_reliefweb_maps','carto_isw_maps','carto_acled_maps','carto_csis_maps','toshi_yoshihara','amti_csis','first_things','rane_worldview','ansait','repubblica','corriere','rainews','sole24','stampa','messaggero','adnkronos_esteri','adnkronos_politica','agi_it','sky_tg24_it','formiche_it','decode39'
+      'sun_chenghao','lingua_sinica','he_yuzhe','ccg_en','greenfdc_brigc','yidaiyilu_gov','wire_china','pekingnology','beijing_channel','the_paper_cn','wu_xinbo','wang_jisi','iiss_pku','fudan_iis','tsinghua_ir','carto_maps_general','carto_visualcapitalist','carto_geocurrents','carto_reliefweb_maps','carto_isw_maps','carto_acled_maps','carto_csis_maps','toshi_yoshihara','amti_csis','first_things','rane_worldview','ansait','repubblica','corriere','rainews','sole24','stampa','messaggero','adnkronos_esteri','adnkronos_politica','agi_it','sky_tg24_it','formiche_it','formiche_x','decode39','reuters_x','kazuto_suzuki_x'
     ];
     // Force requested sources ON unconditionally (every load, regardless of saved prefs)
     sources.forEach(function(s){
@@ -3047,10 +3051,10 @@ var THEATER_META={
   indopacifico:{label:'Indo-Pacifico', cats:['sudest_asia'], ids:['diplomat','amti_csis','iseas_yusof','aspi_china','aspi_strategist','nikkei','scmp','rappler','jakartapost','straitstimes','cna_sg','cna_tw','nhk','kyodo','yonhap','pti','the_hindu','dawn']},
   cina:{label:'Cina', cats:['cina'], ids:['xinhua','xinhua_cina','focus_taiwan','peoples_daily','globaltimes_default','globaltimes_cn_main','pla_daily','pla_eastern','pla_southern','pla_western','pla_northern','pla_central','chinadaily_default','qstheory','beijingdaily','ce_cn','gmw','mingpao_hk','cna_tw']},
   analisti_cn:{label:'Analisti CN', cats:['analisti_cn'], ids:['sun_chenghao','lingua_sinica','he_yuzhe','china_global_south','paul_triolo_x','wire_china','whatsonweibo','ginger_river','wang_zichen','deng_yuwen','china_thought_express','bill_bishop','sinocism','sinification','geopolitechs','jamestown_cb','do_intel_china','guancha_zhuanlan','huanqiu_opinion','baidu_diyuan','zhipu_diyuan','zhipu_ai','guancha_diyuan','chinadigitaltimes','pekingnology','beijing_channel','the_paper_cn','ccg_en','greenfdc_brigc','yidaiyilu_gov','ciis','cicir','siis','cfau','ciss','cass','wu_xinbo','wang_jisi','iiss_pku','fudan_iis','tsinghua_ir','jin_canrong','zhang_weiwei','zhang_wenmu','wyzxwk_wenmu','wyzxwk_wenmu_author','hu_xijin','wang_xiangsui','yan_xuetong','da_wei','hou_aijun','you_ji','ge_jianxiong','zhao_long','zheng_yongnian','sun_yanhong']},
-  giappone:{label:'Giappone', cats:['giappone','analisti_jp'], ids:['nhk_japan','nikkei_japan','japantimes_japan','asahi_japan','yomiuri_japan','mainichi_japan','sankei_japan','kazuto_suzuki','stephen_nagy','hirohito_ogi','haruo_tohmatsu','watanabe_nabe','kawashima_shin','marina_fujita_dickson','alessio_patalano_jp']},
+  giappone:{label:'Giappone', cats:['giappone','analisti_jp'], ids:['nhk_japan','nikkei_japan','japantimes_japan','asahi_japan','yomiuri_japan','mainichi_japan','sankei_japan','kazuto_suzuki','kazuto_suzuki_x','stephen_nagy','hirohito_ogi','haruo_tohmatsu','watanabe_nabe','kawashima_shin','marina_fujita_dickson','alessio_patalano_jp']},
   cartografia:{label:'Cartografia', cats:['cartografia'], ids:['carto_maps_general','carto_visualcapitalist','carto_geocurrents','carto_reliefweb_maps','carto_isw_maps','carto_acled_maps','carto_csis_maps','carto_mapaction']},
   africa:{label:'Africa', ids:['news24','afp','rfi']},
-  difesa:{label:'Difesa / OSINT', cats:['osint','ist','cyber'], ids:['warzone','defone','osint_janes','osint_acled','osint_oryx','gpf','rane_worldview','intelligence_online','intelonline']}
+  difesa:{label:'Difesa / OSINT', cats:['osint','ist','cyber'], ids:['warzone','defone','osint_janes','osint_acled','osint_oryx','gpf','rane_worldview','intelligence_online','intelonline','isw','isw_x']}
 };
 function sourceTheater(s){
   var id=(s.id||'').toLowerCase(), cat=(s.cat||'').toLowerCase();
