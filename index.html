@@ -3442,7 +3442,84 @@ function printBriefingPage(){
   var w=window.open('','_blank','width=980,height=760');
   if(!w){notify('Popup bloccato');return;}
   var content=document.getElementById('briefing-page-body').innerHTML;
-  w.document.write('<!DOCTYPE html><html lang="it"><head><meta charset="utf-8"><title>Briefing strategico</title><style>body{font-family:Arial,sans-serif;margin:24px;color:#111;}a{color:#111;text-decoration:none;} .briefing-page-section,.briefing-card{border:1px solid #bbb;padding:14px 16px;margin-bottom:14px;} .briefing-card-title,.briefing-page-section-name{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#0b5cad;} .briefing-hero,.briefing-deck,.briefing-region-grid{display:block;} .briefing-lead{font-size:20px;font-weight:700;line-height:1.4;} .briefing-sublead,.briefing-mini-item .meta,.br-item-meta,.briefing-bullet-meta{font-size:12px;color:#555;} .briefing-bullet,.br-item,.briefing-mini-item{margin:10px 0;} .br-sev-badge{display:inline-block;font-size:10px;padding:2px 6px;border:1px solid #bbb;margin-right:8px;} </style></head><body><h1>Briefing strategico</h1><div style="margin-bottom:14px;color:#555;">Aggiornato '+new Date().toLocaleString('it-IT')+'</div>'+content+'</body></html>');
+  w.document.write('<!DOCTYPE html><html lang="it"><head><meta charset="utf-8"><title>Briefing strategico</title><style>body{font-family:Arial,sans-serif;margin:24px;color:#111;}a{color:#111;text-decoration:none;} .briefing-page-section,.briefing-card{border:1px solid #bbb;padding:14px 16px;margin-bottom:14px;} .briefing-card-title,.briefing-page-section-name{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#0b5cad;} .briefing-hero,.briefing-deck,.briefing-region-grid{display:block;} .briefing-lead{font-size:20px;font-weight:700;line-height:1.4;} .briefing-sublead,.briefing-mini-item .meta,.br-item-meta,.briefing-bullet-meta{font-size:12px;color:#555;} .briefing-bullet,.br-item,.briefing-mini-item{margin:10px 0;} .br-sev-badge{display:inline-block;font-size:10px;padding:2px 6px;border:1px solid #bbb;margin-right:8px;} </style></head><body><h1>Briefing strategico</h1><div style="margin-bottom:14px;color:#555;">Aggiornato '+new Date().toLocaleString('it-IT')+'</div>'+content+'
+<style id="touch-anywhere-column-scroll-fix">
+@media (pointer:coarse){
+  #page-1 .cols-wrap,
+  body.desktop-browser-upgrade #page-1 .cols-wrap,
+  body.desktop-browser-upgrade.sidebar-collapsed #page-1 .cols-wrap{
+    touch-action:pan-x pan-y !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+  #page-1 .acol,
+  #page-1 .col-feed,
+  #page-1 .card{
+    touch-action:auto !important;
+  }
+}
+</style>
+<script id="touch-anywhere-column-scroll-script">
+(function(){
+  var state={active:false,horizontal:false,startX:0,startY:0,startScrollLeft:0,wrap:null};
+  function isCoarse(){
+    return !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+  }
+  function inNewsPage(){
+    var p=document.getElementById('page-1');
+    return !!(p && p.classList.contains('on'));
+  }
+  function reset(){
+    state={active:false,horizontal:false,startX:0,startY:0,startScrollLeft:0,wrap:null};
+  }
+  function isInteractive(el){
+    return !!(el && el.closest && el.closest('a,button,input,select,textarea,label,summary,.cpin,.ctranslate,.col-close,.hbtn,.page-tab,.manager-col-toggle,.tog'));
+  }
+  function eligibleTarget(el){
+    return !!(el && el.closest && el.closest('#page-1 .acol'));
+  }
+  document.addEventListener('touchstart',function(e){
+    if(!isCoarse() || !inNewsPage()) return;
+    if(e.touches.length!==1) return;
+    if(document.body.classList.contains('col-touch-sorting')) return;
+    var target=e.target;
+    if(!eligibleTarget(target) || isInteractive(target)) return;
+    var wrap=document.getElementById('cols-wrap');
+    if(!wrap) return;
+    var t=e.touches[0];
+    state.active=true;
+    state.horizontal=false;
+    state.startX=t.clientX;
+    state.startY=t.clientY;
+    state.startScrollLeft=wrap.scrollLeft;
+    state.wrap=wrap;
+  },{passive:true});
+
+  document.addEventListener('touchmove',function(e){
+    if(!state.active || !state.wrap) return;
+    if(e.touches.length!==1){ reset(); return; }
+    var t=e.touches[0];
+    var dx=t.clientX-state.startX;
+    var dy=t.clientY-state.startY;
+    if(!state.horizontal){
+      if(Math.abs(dx) > 14 && Math.abs(dx) > Math.abs(dy) + 6){
+        state.horizontal=true;
+      }else if(Math.abs(dy) > 14 && Math.abs(dy) > Math.abs(dx) + 6){
+        reset();
+        return;
+      }else{
+        return;
+      }
+    }
+    e.preventDefault();
+    state.wrap.scrollLeft = state.startScrollLeft - dx;
+  },{passive:false});
+
+  document.addEventListener('touchend',reset,{passive:true});
+  document.addEventListener('touchcancel',reset,{passive:true});
+})();
+</script>
+
+</body></html>');
   w.document.close();
   w.focus();
   setTimeout(function(){w.print();},250);
@@ -6327,6 +6404,83 @@ body.desktop-browser-upgrade #page-1>.main-area{grid-area:main;min-width:0;min-h
 .manager-preset-row{display:flex;flex-wrap:wrap;gap:8px;}.source-manager-add details{border-top:1px solid rgba(122,154,184,.14);padding-top:8px;margin-top:4px;}.source-manager-add summary{cursor:pointer;font-size:12px;color:var(--tx2);font-weight:650;}.source-manager-add-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:10px;}
 @media (max-width:767px){.source-manager-bg{align-items:stretch;justify-content:stretch;padding:0!important;}.source-manager-modal{width:100vw;max-width:none;height:100dvh;max-height:none;border:none;border-radius:0;}.source-manager-body{display:flex;flex-direction:column;overflow:auto;padding:12px;}.manager-columns-panel,.manager-sources-panel,.manager-presets-panel{min-height:auto;overflow:visible;}.manager-source-list{overflow:visible;}.source-manager-section-head{flex-direction:column;}.source-manager-search{max-width:none;width:100%;}.source-manager-add-grid{grid-template-columns:1fr;}}
 </style>
+
+
+<style id="touch-anywhere-column-scroll-fix">
+@media (pointer:coarse){
+  #page-1 .cols-wrap,
+  body.desktop-browser-upgrade #page-1 .cols-wrap,
+  body.desktop-browser-upgrade.sidebar-collapsed #page-1 .cols-wrap{
+    touch-action:pan-x pan-y !important;
+    -webkit-overflow-scrolling:touch !important;
+  }
+  #page-1 .acol,
+  #page-1 .col-feed,
+  #page-1 .card{
+    touch-action:auto !important;
+  }
+}
+</style>
+<script id="touch-anywhere-column-scroll-script">
+(function(){
+  var state={active:false,horizontal:false,startX:0,startY:0,startScrollLeft:0,wrap:null};
+  function isCoarse(){
+    return !!(window.matchMedia && window.matchMedia('(pointer: coarse)').matches);
+  }
+  function inNewsPage(){
+    var p=document.getElementById('page-1');
+    return !!(p && p.classList.contains('on'));
+  }
+  function reset(){
+    state={active:false,horizontal:false,startX:0,startY:0,startScrollLeft:0,wrap:null};
+  }
+  function isInteractive(el){
+    return !!(el && el.closest && el.closest('a,button,input,select,textarea,label,summary,.cpin,.ctranslate,.col-close,.hbtn,.page-tab,.manager-col-toggle,.tog'));
+  }
+  function eligibleTarget(el){
+    return !!(el && el.closest && el.closest('#page-1 .acol'));
+  }
+  document.addEventListener('touchstart',function(e){
+    if(!isCoarse() || !inNewsPage()) return;
+    if(e.touches.length!==1) return;
+    if(document.body.classList.contains('col-touch-sorting')) return;
+    var target=e.target;
+    if(!eligibleTarget(target) || isInteractive(target)) return;
+    var wrap=document.getElementById('cols-wrap');
+    if(!wrap) return;
+    var t=e.touches[0];
+    state.active=true;
+    state.horizontal=false;
+    state.startX=t.clientX;
+    state.startY=t.clientY;
+    state.startScrollLeft=wrap.scrollLeft;
+    state.wrap=wrap;
+  },{passive:true});
+
+  document.addEventListener('touchmove',function(e){
+    if(!state.active || !state.wrap) return;
+    if(e.touches.length!==1){ reset(); return; }
+    var t=e.touches[0];
+    var dx=t.clientX-state.startX;
+    var dy=t.clientY-state.startY;
+    if(!state.horizontal){
+      if(Math.abs(dx) > 14 && Math.abs(dx) > Math.abs(dy) + 6){
+        state.horizontal=true;
+      }else if(Math.abs(dy) > 14 && Math.abs(dy) > Math.abs(dx) + 6){
+        reset();
+        return;
+      }else{
+        return;
+      }
+    }
+    e.preventDefault();
+    state.wrap.scrollLeft = state.startScrollLeft - dx;
+  },{passive:false});
+
+  document.addEventListener('touchend',reset,{passive:true});
+  document.addEventListener('touchcancel',reset,{passive:true});
+})();
+</script>
 
 </body>
 </html>
