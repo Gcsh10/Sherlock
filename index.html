@@ -3244,6 +3244,14 @@ function switchPage(n){
   var liveMobile=document.querySelector('#bottom-nav [data-live="1"]');
   if(liveMobile) liveMobile.classList.remove('on');
 
+  // Close map popups/panels when leaving the map page
+  if(n!==2){
+    try{ if(typeof closePinPopup==='function') closePinPopup(); }catch(e){}
+    try{ if(typeof closeCountryPanel==='function') closeCountryPanel(); }catch(e){}
+    var mapTip=document.getElementById('p2-map-tip');
+    if(mapTip) mapTip.style.display='none';
+  }
+
   // Pause pin/hotspot CSS animations when NOT on map — saves GPU
   var st=document.getElementById('_mapAnimPause');
   if(n===2){
@@ -6037,6 +6045,61 @@ body.desktop-browser-upgrade #page-4{width:100%;min-width:0;min-height:0;}
   }
 }
 
+
+
+/* ── Scroll orizzontale più fluido su iPadOS e iOS ─────────────── */
+@media (max-width:1199px){
+  body.desktop-browser-upgrade #page-1 .cols-wrap,
+  body.desktop-browser-upgrade.sidebar-collapsed #page-1 .cols-wrap,
+  body.desktop-browser-upgrade .cols-wrap,
+  #page-1 .cols-wrap,
+  .cols-wrap{
+    overflow-x:auto !important;
+    overflow-y:hidden !important;
+    scroll-snap-type:none !important;
+    scroll-behavior:auto !important;
+    -webkit-overflow-scrolling:touch !important;
+    overscroll-behavior-x:auto !important;
+    touch-action:auto !important;
+    will-change:auto !important;
+    scroll-padding-inline:0 !important;
+  }
+  body.desktop-browser-upgrade #page-1 .acol,
+  body.desktop-browser-upgrade.sidebar-collapsed #page-1 .acol,
+  body.desktop-browser-upgrade .cols-wrap .acol,
+  body.desktop-browser-upgrade .cols-wrap .acol.is-priority,
+  body.desktop-browser-upgrade .cols-wrap .acol.is-secondary,
+  body.desktop-browser-upgrade .cols-wrap .acol.is-tools,
+  #page-1 .cols-wrap .acol,
+  .cols-wrap .acol{
+    scroll-snap-align:none !important;
+    scroll-snap-stop:normal !important;
+    contain:none !important;
+    transform:none !important;
+    backface-visibility:visible !important;
+  }
+  .acol,
+  .col-feed,
+  .card,
+  .ctlink,
+  .cdesc{
+    touch-action:auto !important;
+  }
+  .col-feed{
+    -webkit-overflow-scrolling:touch !important;
+    overscroll-behavior:auto !important;
+  }
+}
+
+/* iPhone: stesso comportamento fluido, senza snap rigido */
+@media (max-width:767px){
+  .cols-wrap{
+    scroll-snap-type:none !important;
+    -webkit-overflow-scrolling:touch !important;
+    overscroll-behavior-x:auto !important;
+  }
+  .acol{scroll-snap-align:none !important;}
+}
 
 </style>
 <script id="browser-upgrade-script">
