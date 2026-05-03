@@ -86,9 +86,10 @@ header{
 .cols-wrap::-webkit-scrollbar-thumb{background:var(--bd2);}
 .acol{min-width:clamp(220px,28vw,280px);max-width:100%;flex:1 1 300px;display:flex;flex-direction:column;border-right:1px solid var(--bd);min-height:0;overflow:hidden;background:var(--bg);}
 .acol.drag-over{border-right:2px solid var(--acc);}
-.acol.touch-dragging{opacity:.96;box-shadow:0 22px 56px rgba(0,0,0,.38);z-index:60;will-change:transform;transition:none!important;}
-.acol.touch-shift-left{transform:translateX(-42px);transition:transform .12s ease;}
-.acol.touch-shift-right{transform:translateX(42px);transition:transform .12s ease;}
+.acol.touch-dragging{opacity:.98;box-shadow:0 28px 72px rgba(0,0,0,.42);z-index:90;will-change:transform;transition:none!important;position:relative;}
+.acol.touch-shift-left{transition:transform .16s ease,box-shadow .16s ease;}
+.acol.touch-shift-right{transition:transform .16s ease,box-shadow .16s ease;}
+.acol.touch-gap-target{box-shadow:inset 0 0 0 2px rgba(0,184,255,.45), 0 14px 32px rgba(0,0,0,.18);border-right-color:rgba(0,184,255,.55)!important;}
 body.col-touch-sorting .cols-wrap{scroll-behavior:auto;}
 body.col-touch-sorting .col-hd{cursor:grabbing;}
 body.col-touch-sorting .acol:not(.touch-dragging){transition:transform .12s ease,border-color .12s ease,box-shadow .12s ease;}
@@ -2986,7 +2987,7 @@ function isTouchSortable(){return window.matchMedia && window.matchMedia('(point
 function clearTouchColumnSort(){
   clearTimeout(touchSortState.timer);touchSortState.timer=null;
   document.body.classList.remove('col-touch-sorting');
-  document.querySelectorAll('.acol.drag-over,.acol.touch-dragging,.acol.touch-shift-left,.acol.touch-shift-right').forEach(function(el){el.classList.remove('drag-over','touch-dragging','touch-shift-left','touch-shift-right');el.style.transform='';el.style.pointerEvents='';});
+  document.querySelectorAll('.acol.drag-over,.acol.touch-dragging,.acol.touch-shift-left,.acol.touch-shift-right,.acol.touch-gap-target').forEach(function(el){el.classList.remove('drag-over','touch-dragging','touch-shift-left','touch-shift-right','touch-gap-target');el.style.transform='';el.style.pointerEvents='';el.style.zIndex='';el.style.boxShadow='';});
   touchSortState={col:null,target:null,header:null,timer:null,startX:0,startY:0,dragging:false,lastClientX:0,lastClientY:0};
 }
 function getTouchSortTarget(clientX, draggedCol){
@@ -3003,16 +3004,29 @@ function getTouchSortTarget(clientX, draggedCol){
 }
 function updateTouchSortVisuals(draggedCol,targetCol,clientX,dx,dy){
   var cols=[].slice.call(document.querySelectorAll('.cols-wrap .acol'));
-  cols.forEach(function(el){
-    if(el!==draggedCol){el.classList.remove('touch-shift-left','touch-shift-right');el.style.transform='';}
-  });
-  draggedCol.style.transform='translate('+dx+'px,'+Math.max(-10,Math.min(10,dy*0.15))+'px) scale(1.03)';
-  if(!targetCol || targetCol===draggedCol)return;
+  var srcIndex=cols.indexOf(draggedCol);
+  var targetIndex=targetCol ? cols.indexOf(targetCol) : srcIndex;
   var dragRect=draggedCol.getBoundingClientRect();
-  var targetRect=targetCol.getBoundingClientRect();
-  var movingRight=clientX>dragRect.left + dragRect.width/2;
+  var shift=Math.max(56,Math.min(Math.round(dragRect.width*0.72),120));
+  cols.forEach(function(el,idx){
+    if(el===draggedCol)return;
+    el.classList.remove('touch-shift-left','touch-shift-right','drag-over','touch-gap-target');
+    el.style.transform='';
+    el.style.boxShadow='';
+    if(targetIndex>srcIndex && idx>srcIndex && idx<=targetIndex){
+      el.classList.add('touch-shift-left');
+      el.style.transform='translateX(-'+shift+'px)';
+    }else if(targetIndex<srcIndex && idx>=targetIndex && idx<srcIndex){
+      el.classList.add('touch-shift-right');
+      el.style.transform='translateX('+shift+'px)';
+    }
+  });
+  draggedCol.style.zIndex='95';
+  draggedCol.style.boxShadow='0 30px 80px rgba(0,0,0,.45)';
+  draggedCol.style.transform='translate('+dx+'px,'+Math.max(-12,Math.min(12,dy*0.18))+'px) scale(1.04)';
+  if(!targetCol || targetCol===draggedCol)return;
   targetCol.classList.add('drag-over');
-  targetCol.classList.add(movingRight ? 'touch-shift-left' : 'touch-shift-right');
+  targetCol.classList.add('touch-gap-target');
 }
 function attachTouchColumnSort(col,hd){
   if(!hd || hd.dataset.touchSortBound==='1')return;
