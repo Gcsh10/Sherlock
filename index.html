@@ -1529,6 +1529,7 @@ html[data-theme=light] .timeline-item-desc,[data-theme=light] .timeline-item-des
   </div>
   <div class="hright">
     <span id="clock"></span>
+    <button class="hbtn" id="live-tv-btn" onclick="tvToggle()" title="Apri o chiudi il player Live TV">Live TV</button>
     <button class="hbtn" onclick="toggleTheme()">Tema</button>
     <button class="hbtn acc" onclick="openSrcModal()">Fonti</button>
     <button class="hbtn" onclick="hardReset()" title="Reset completo localStorage">Reset</button>
@@ -1545,7 +1546,8 @@ html[data-theme=light] .timeline-item-desc,[data-theme=light] .timeline-item-des
     {label:'Notizie',  page:1},
     {label:'Mappa',    page:2},
     {label:'Timeline', page:3},
-    {label:'Briefing', page:4}
+    {label:'Briefing', page:4},
+    {label:'Live TV',  live:true}
   ];
   tabs.forEach(function(t){
     var btn=document.createElement('button');
@@ -1927,7 +1929,7 @@ var DEFAULTS=[
   {id:'china_global_south',name:'China Global South Project',url:'https://news.google.com/rss/search?q=site%3Achinaglobalsouth.com%20%28China%20OR%20Beijing%20OR%20Global%20South%20OR%20Africa%20OR%20Asia%20OR%20Latin%20America%29&hl=en&gl=US&ceid=US:en',cat:'analisti_cn',regions:['analisti_cn'],on:true},
   {id:'paul_triolo_x',name:'Paul Triolo / X',url:'https://news.google.com/rss/search?q=site%3Ax.com%2FpstAsiatech%20OR%20%22Paul%20Triolo%22%20%28China%20OR%20semiconductors%20OR%20AI%20OR%20technology%20OR%20geopolitics%29&hl=en&gl=US&ceid=US:en',cat:'analisti_cn',regions:['analisti_cn'],on:true},
   {id:'beijing_channel',name:'Beijing Channel',url:'https://news.google.com/rss/search?q=site%3Abeijingchannelnewsletter.com%20%28China%20OR%20policy%20OR%20WeChat%20OR%20government%29&hl=en&gl=US&ceid=US:en',cat:'analisti_cn',regions:['analisti_cn'],on:true},
-  {id:'the_paper_cn',name:'澎湃 The Paper',url:'https://news.google.com/rss/search?q=site%3Athepaper.cn%20%28%E5%9B%BD%E9%99%85%20OR%20%E5%A4%96%E4%BA%A4%20OR%20%E4%B8%AD%E7%BE%8E%20OR%20%E5%8F%B0%E6%B9%BE%20OR%20%E4%BF%84%E7%BD%97%E6%96%AF%29&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'analisti_cn',regions:['analisti_cn'],on:true},
+  {id:'the_paper_cn',name:'澎湃 The Paper',url:'https://news.google.com/rss/search?q=site%3Athepaper.cn%20%28%E5%9B%BD%E9%99%85%20OR%20%E5%A4%96%E4%BA%A4%20OR%20%E4%B8%AD%E7%BE%8E%20OR%20%E5%8F%B0%E6%B9%BE%20OR%20%E4%BF%84%E7%BD%97%E6%96%AF%29&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'cina',regions:['cina'],on:true},
   {id:'wu_xinbo',name:'吴心伯 Wu Xinbo',url:'https://news.google.com/rss/search?q=%28%22Wu%20Xinbo%22%20OR%20%E5%90%B4%E5%BF%83%E4%BC%AF%29%20%28Fudan%20OR%20%E5%A4%8D%E6%97%A6%20OR%20%22Institute%20of%20International%20Studies%22%20OR%20Taiwan%20OR%20US-China%29&hl=en&gl=US&ceid=US:en',cat:'analisti_cn',regions:['analisti_cn'],on:true},
   {id:'wang_jisi',name:'王缉思 Wang Jisi',url:'https://news.google.com/rss/search?q=%28%22Wang%20Jisi%22%20OR%20%E7%8E%8B%E8%BE%91%E6%80%9D%29%20%28Peking%20University%20OR%20%E5%8C%97%E5%A4%A7%20OR%20US-China%20OR%20geopolitics%29&hl=en&gl=US&ceid=US:en',cat:'analisti_cn',regions:['analisti_cn'],on:true},
   {id:'iiss_pku',name:'北大国际战略研究院 IISS-PKU',url:'https://news.google.com/rss/search?q=%28%22Institute%20of%20International%20and%20Strategic%20Studies%22%20OR%20%22IISS-PKU%22%20OR%20%E5%8C%97%E4%BA%AC%E5%A4%A7%E5%AD%A6%E5%9B%BD%E9%99%85%E6%88%98%E7%95%A5%E7%A0%94%E7%A9%B6%E9%99%A2%29&hl=en&gl=US&ceid=US:en',cat:'analisti_cn',regions:['analisti_cn'],on:true},
@@ -4786,13 +4788,27 @@ function tvToggle(){
     panel.classList.add('tv-off');
     _tvResetSurface();
   }
+  _syncTvButtons();
 }
+function _syncTvButtons(){
+  var panel=document.getElementById('tv-panel');
+  var isOpen=panel && !panel.classList.contains('tv-off');
+  var btn=document.getElementById('live-tv-btn');
+  if(btn){
+    btn.classList.toggle('acc', !!isOpen);
+    btn.setAttribute('aria-pressed', isOpen?'true':'false');
+  }
+  var tabs=document.querySelectorAll('#bottom-nav .page-tab[data-live="1"]');
+  tabs.forEach(function(tab){ tab.classList.toggle('on', !!isOpen); });
+}
+
 function tvClose(){
   var panel=document.getElementById('tv-panel');
   if(!panel)return;
   panel.classList.remove('tv-page-mode');
   panel.classList.add('tv-off');
   _tvResetSurface();
+  _syncTvButtons();
 }
 function tvOpenYT(){var ch=TV_CH[_tvIdx];if(!ch)return;var url=_tvOpenUrlFor(_tvIdx);if(url)window.open(url,'_blank');}
 (function(){
