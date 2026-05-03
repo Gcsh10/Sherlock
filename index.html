@@ -1526,10 +1526,10 @@ html[data-theme=light] .timeline-item-desc,[data-theme=light] .timeline-item-des
     <button class="page-tab" id="ptab-2" onclick="switchPage(2)">Mappa</button>
     <button class="page-tab" id="ptab-3" onclick="switchPage(3)">Timeline</button>
     <button class="page-tab" id="ptab-4" onclick="switchPage(4)">Briefing</button>
+    <button class="page-tab" id="ptab-5" onclick="tvToggle()" title="Apri o chiudi il player Live TV">Live TV</button>
   </div>
   <div class="hright">
     <span id="clock"></span>
-    <button class="hbtn" id="live-tv-btn" onclick="tvToggle()" title="Apri o chiudi il player Live TV">Live TV</button>
     <button class="hbtn" onclick="toggleTheme()">Tema</button>
     <button class="hbtn acc" onclick="openSrcModal()">Fonti</button>
     <button class="hbtn" onclick="hardReset()" title="Reset completo localStorage">Reset</button>
@@ -4793,9 +4793,9 @@ function tvToggle(){
 function _syncTvButtons(){
   var panel=document.getElementById('tv-panel');
   var isOpen=panel && !panel.classList.contains('tv-off');
-  var btn=document.getElementById('live-tv-btn');
+  var btn=document.getElementById('ptab-5');
   if(btn){
-    btn.classList.toggle('acc', !!isOpen);
+    btn.classList.toggle('on', !!isOpen);
     btn.setAttribute('aria-pressed', isOpen?'true':'false');
   }
   var tabs=document.querySelectorAll('#bottom-nav .page-tab[data-live="1"]');
