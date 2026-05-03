@@ -1974,7 +1974,8 @@ var DEFAULTS=[
   {id:'voa',       name:'VOA News',           cat:'media',   url:'https://news.google.com/rss/search?q=site:voanews.com&hl=en',on:true},
   {id:'nhk',       name:'NHK World',          cat:'media',   url:'https://news.google.com/rss/search?q=site:nhk.or.jp&hl=en&gl=US&ceid=US:en',on:true},
   {id:'thehill',   name:'The Hill',           cat:'media',   url:'https://news.google.com/rss/search?q=site:thehill.com&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'axios',     name:'Axios World',        cat:'media',   url:'https://news.google.com/rss/search?q=site:axios.com+world&hl=en',on:true},
+  {id:'axios',     name:'Axios World',        cat:'media',   url:'https://news.google.com/rss/search?q=site:axios.com+world&hl=en',regions:['stampa','global'],on:true},
+  {id:'axios_china', name:'Axios China',      cat:'analisti_cn', url:'https://news.google.com/rss/search?q=site%3Aaxios.com%2Fworld%2Fchina%20OR%20site%3Aaxios.com%20China%20%28Taiwan%20OR%20Beijing%20OR%20Xi%20OR%20US-China%29&hl=en&gl=US&ceid=US:en',on:true},
   {id:'nikkei',    name:'Nikkei Asia',        cat:'regional',url:'https://asia.nikkei.com/rss/feed/nar',on:true},
   {id:'scmp',      name:'S.China Morning',    cat:'regional',url:'https://news.google.com/rss/search?q=site:scmp.com&hl=en',on:true},
   {id:'haaretz',   name:'Haaretz',            cat:'regional',url:'https://news.google.com/rss/search?q=site:haaretz.com&hl=en',on:true},
@@ -2006,6 +2007,7 @@ var DEFAULTS=[
   {id:'defone',    name:'Defense One',        cat:'think',   url:'https://news.google.com/rss/search?q=site:defenseone.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'diplomat',  name:'The Diplomat',       cat:'think',   url:'https://thediplomat.com/feed/',on:true},
   {id:'amti_csis', name:'AMTI / CSIS',         cat:'osint',   url:'https://amti.csis.org/feed/',regions:['indopacifico'],on:true},
+  {id:'amti_x',     name:'AMTI / X',          cat:'analisti_cn', url:'https://news.google.com/rss/search?q=site%3Ax.com%2Fasiamti%20OR%20site%3Atwitter.com%2FAsiaMTI%20OR%20%22Asia%20Maritime%20Transparency%20Initiative%22%20OR%20AMTI%20%28South%20China%20Sea%20OR%20Taiwan%20OR%20Indo-Pacific%20OR%20China%29&hl=en&gl=US&ceid=US:en',regions:['analisti_cn','indopacifico'],on:true},
   {id:'iseas_yusof',name:'ISEAS - Yusof Ishak Institute',cat:'think',url:'https://news.google.com/rss/search?q=site%3Aiseas.edu.sg%20%28Southeast%20Asia%20OR%20ASEAN%20OR%20Indo-Pacific%20OR%20China%29&hl=en&gl=US&ceid=US:en',regions:['indopacifico','sudest_asia'],on:true},
   {id:'politico',  name:'Politico EU',        cat:'think',   url:'https://www.politico.eu/feed/',on:true},
   {id:'economist', name:'The Economist',      cat:'think',   url:'https://news.google.com/rss/search?q=site%3Aeconomist.com%20%28China%20OR%20Europe%20OR%20United%20States%20OR%20Russia%20OR%20war%20OR%20geopolitics%29&hl=en&gl=US&ceid=US:en',on:true},
@@ -2081,6 +2083,7 @@ var PRESETS=[
   {id:'rand',      name:'RAND Corp.',  cat:'think',   url:'https://news.google.com/rss/search?q=site:rand.org&hl=en'},
   {id:'brookings', name:'Brookings',   cat:'think',   url:'https://news.google.com/rss/search?q=site:brookings.edu&hl=en'},
   {id:'iiss',      name:'IISS',        cat:'think',   url:'https://news.google.com/rss/search?q=site:iiss.org&hl=en'},
+  {id:'iiss_x',    name:'IISS / X',          cat:'osint',   url:'https://news.google.com/rss/search?q=site%3Ax.com%2Fiiss_org%20OR%20site%3Atwitter.com%2Fiiss_org%20OR%20%22International%20Institute%20for%20Strategic%20Studies%22%20OR%20IISS%20%28security%20OR%20defence%20OR%20military%20OR%20geopolitics%29&hl=en&gl=US&ceid=US:en',regions:['osint'],on:true},
   {id:'cna',       name:'CNA',         cat:'regional',url:'https://news.google.com/rss/search?q=site:channelnewsasia.com&hl=en&gl=US&ceid=US:en'},
   {id:'arabnews',  name:'Arab News',   cat:'regional',url:'https://news.google.com/rss/search?q=site:arabnews.com&hl=en'},
   // ── FONTI CINESI (in lingua cinese e inglese) ──────────────────
@@ -3071,18 +3074,18 @@ function showTab(id){
 }
 var THEATER_META={
   global:{label:'Globale', cats:['agenzie','media','finance']},
-  stampa:{label:'Stampa', cats:['stampa']},
+  stampa:{label:'Stampa', cats:['stampa'], ids:['axios']},
   europa:{label:'Europa', cats:['italia'], ids:['dis_x','formiche_x']},
   americas:{label:'Americhe', ids:['first_things','naval_news_x']},
   medioriente:{label:'Medio Oriente', ids:['haaretz','meye','aljazeera','anadolu','wam']},
   russia:{label:'Russia / Eurasia', ids:['tass','kyivindep','osint_rferl','dpa']},
-  indopacifico:{label:'Indo-Pacifico', cats:['sudest_asia'], ids:['diplomat','amti_csis','iseas_yusof','aspi_china','aspi_strategist','nikkei','scmp','rappler','jakartapost','straitstimes','cna_sg','cna_tw','nhk','kyodo','yonhap','pti','the_hindu','dawn']},
+  indopacifico:{label:'Indo-Pacifico', cats:['sudest_asia'], ids:['diplomat','amti_csis','amti_x','iseas_yusof','aspi_china','aspi_strategist','nikkei','scmp','rappler','jakartapost','straitstimes','cna_sg','cna_tw','nhk','kyodo','yonhap','pti','the_hindu','dawn']},
   cina:{label:'Cina', cats:['cina'], ids:['xinhua','xinhua_cina','focus_taiwan','peoples_daily','globaltimes_default','globaltimes_cn_main','pla_daily','pla_eastern','pla_southern','pla_western','pla_northern','pla_central','chinadaily_default','qstheory','beijingdaily','ce_cn','gmw','mingpao_hk','cna_tw']},
-  analisti_cn:{label:'Analisti CN', cats:['analisti_cn'], ids:['sun_chenghao','lingua_sinica','he_yuzhe','china_global_south','paul_triolo_x','wire_china','whatsonweibo','ginger_river','wang_zichen','deng_yuwen','china_thought_express','bill_bishop','sinocism','sinification','geopolitechs','jamestown_cb','do_intel_china','guancha_zhuanlan','huanqiu_opinion','baidu_diyuan','zhipu_diyuan','zhipu_ai','guancha_diyuan','chinadigitaltimes','pekingnology','beijing_channel','the_paper_cn','ccg_en','greenfdc_brigc','yidaiyilu_gov','ciis','cicir','siis','cfau','ciss','cass','wu_xinbo','wang_jisi','iiss_pku','fudan_iis','tsinghua_ir','jin_canrong','zhang_weiwei','zhang_wenmu','wyzxwk_wenmu','wyzxwk_wenmu_author','hu_xijin','wang_xiangsui','yan_xuetong','da_wei','da_wei_x','hou_aijun','you_ji','ge_jianxiong','zhao_long','zheng_yongnian','sun_yanhong']},
+  analisti_cn:{label:'Analisti CN', cats:['analisti_cn'], ids:['sun_chenghao','lingua_sinica','axios_china','amti_x','he_yuzhe','china_global_south','paul_triolo_x','wire_china','whatsonweibo','ginger_river','wang_zichen','deng_yuwen','china_thought_express','bill_bishop','sinocism','sinification','geopolitechs','jamestown_cb','do_intel_china','guancha_zhuanlan','huanqiu_opinion','baidu_diyuan','zhipu_diyuan','zhipu_ai','guancha_diyuan','chinadigitaltimes','pekingnology','beijing_channel','the_paper_cn','ccg_en','greenfdc_brigc','yidaiyilu_gov','ciis','cicir','siis','cfau','ciss','cass','wu_xinbo','wang_jisi','iiss_pku','fudan_iis','tsinghua_ir','jin_canrong','zhang_weiwei','zhang_wenmu','wyzxwk_wenmu','wyzxwk_wenmu_author','hu_xijin','wang_xiangsui','yan_xuetong','da_wei','da_wei_x','hou_aijun','you_ji','ge_jianxiong','zhao_long','zheng_yongnian','sun_yanhong']},
   giappone:{label:'Giappone', cats:['giappone','analisti_jp'], ids:['nhk_japan','nikkei_japan','japantimes_japan','asahi_japan','yomiuri_japan','mainichi_japan','sankei_japan','kazuto_suzuki','kazuto_suzuki_x','the_japan_news_x','stephen_nagy','hirohito_ogi','haruo_tohmatsu','watanabe_nabe','kawashima_shin','marina_fujita_dickson','alessio_patalano_jp']},
   cartografia:{label:'Cartografia', cats:['cartografia'], ids:['carto_maps_general','carto_visualcapitalist','carto_geocurrents','carto_reliefweb_maps','carto_isw_maps','carto_acled_maps','carto_csis_maps','carto_mapaction']},
   africa:{label:'Africa', ids:['news24','afp','rfi']},
-  difesa:{label:'Difesa / OSINT', cats:['osint','ist','cyber'], ids:['warzone','defone','osint_janes','osint_acled','osint_oryx','gpf','rane_worldview','intelligence_online','intelonline','isw','isw_x','dis_x','naval_news_x']}
+  difesa:{label:'Difesa / OSINT', cats:['osint','ist','cyber'], ids:['warzone','defone','iiss_x','osint_janes','osint_acled','osint_oryx','gpf','rane_worldview','intelligence_online','intelonline','isw','isw_x','dis_x','naval_news_x']}
 };
 function sourceTheater(s){
   var id=(s.id||'').toLowerCase(), cat=(s.cat||'').toLowerCase();
