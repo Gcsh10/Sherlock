@@ -1347,6 +1347,7 @@ html[data-theme=light] .csrc,
 .src-st{
   letter-spacing:.04em !important;
 }
+
 </style>
 
 <style id="ops-timeline-briefing-readability-pass">
@@ -1735,10 +1736,13 @@ html[data-theme=light] .timeline-item-desc,[data-theme=light] .timeline-item-des
                 <span><i style="background:#3b82f6"></i> Medio</span>
                 <span><i style="background:#22d35e"></i> Basso</span>
               </div>
+              <div id="p2-coords" style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--mu);letter-spacing:.06em;margin-left:10px;white-space:nowrap;display:none;">—</div>
             </div>
             <div class="p2-map-toolbar" id="p2-toolbar">
               <div class="p2-region-btns">
                 <button class="p2-rbtn active" onclick="p2SetView('global')">&#127758; Global</button>
+                <button class="p2-rbtn" onclick="p2SetView('indopac')">&#127468; Indo-Pac</button>
+                <button class="p2-rbtn" onclick="p2SetView('scs')">&#9874; SCS / Taiwan</button>
                 <button class="p2-rbtn p2-zoom-btn" onclick="p2ZoomStep(1.5)" title="Zoom in">+</button>
                 <button class="p2-rbtn p2-zoom-btn" onclick="p2ZoomStep(0.67)" title="Zoom out">&minus;</button>
               </div>
@@ -1761,6 +1765,7 @@ html[data-theme=light] .timeline-item-desc,[data-theme=light] .timeline-item-des
                 <button class="p2-lbtn on" id="lbtn-naval" onclick="p2ToggleLayer('naval',this)">&#9875; Flotte</button>
                 <button class="p2-lbtn on" id="lbtn-chokepoints" onclick="p2ToggleLayer('chokepoints',this)">&#9830; Chokepoint</button>
                 <button class="p2-lbtn on" id="lbtn-routes" onclick="p2ToggleLayer('routes',this)">&#9783; Rotte</button>
+                <button class="p2-lbtn" id="lbtn-arcs" onclick="p2ToggleLayer('arcs',this)">&#8634; Archi</button>
               </div>
               <div style="width:1px;height:16px;background:var(--bd2);margin:0 2px;flex-shrink:0;"></div>
               <div class="p2-timeline-bar" id="p2-timeline-bar">
@@ -3654,7 +3659,9 @@ var P2_VIEWS={
   mena:     {s:2.8, tx:-780, ty:-250},
   asia:     {s:2.5, tx:-1050,ty:-200},
   americas: {s:2.2, tx:350,  ty:-120},
-  africa:   {s:2.8, tx:-550, ty:-340}
+  africa:   {s:2.8, tx:-550, ty:-340},
+  indopac:  {s:2.6, tx:-980, ty:-160},
+  scs:      {s:4.8, tx:-1460,ty:-340}
 };
 
 // ── Geo-hub: keyword → [lat,lng] ────────────────────────────────
@@ -4507,6 +4514,26 @@ function _drawP2Map(){
   _p2SVG=d3.select(svgNode);
   _p2SVG.call(_p2ZoomBeh);
 
+  // ── Coordinate display on mousemove ──────────────────────
+  var _coordEl=document.getElementById('p2-coords');
+  _p2SVG.on('mousemove.coords',function(event){
+    if(!_p2Proj||!_coordEl)return;
+    var rect=svgNode.getBoundingClientRect();
+    var mx=event.clientX-rect.left, my=event.clientY-rect.top;
+    var curT=d3.zoomTransform(svgNode);
+    var ix=curT.invertX(mx), iy=curT.invertY(my);
+    var geo=_p2Proj.invert([ix,iy]);
+    if(geo&&isFinite(geo[0])&&isFinite(geo[1])){
+      var lat=geo[1],lng=geo[0];
+      var latStr=(lat>=0?'N':'S')+Math.abs(lat).toFixed(1)+'\u00b0';
+      var lngStr=(lng>=0?'E':'W')+Math.abs(lng).toFixed(1)+'\u00b0';
+      _coordEl.textContent=latStr+' '+lngStr;
+      _coordEl.style.display='';
+    }
+  }).on('mouseleave.coords',function(){
+    if(_coordEl)_coordEl.style.display='none';
+  });
+
   // Draw HTML overlay (pins + hotspots)
   _redrawOverlay();
   _updateStats();
@@ -4543,13 +4570,23 @@ function _refreshP2Overlay(){
 
 function initP2Map(){
   function _doLoad(){
-    fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json')
-      .then(function(r){return r.json();})
-      .then(function(w){_p2MapWorld=w;_drawP2Map();})
-      .catch(function(){
-        var wrap=document.getElementById('p2-map-wrap');
-        if(wrap)wrap.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--mu);font-size:11px">Mappa non disponibile</div>';
-      });
+    var CACHE_KEY='sherlock_world_50m_v2';
+    function _parse(w){_p2MapWorld=w;_drawP2Map();}
+    function _fail(){
+      var wrap=document.getElementById('p2-map-wrap');
+      if(wrap)wrap.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100%;color:var(--mu);font-size:11px;font-family:Share Tech Mono,monospace;">&#9888; Mappa non disponibile</div>';
+    }
+    try{
+      var cached=sessionStorage.getItem(CACHE_KEY);
+      if(cached){_parse(JSON.parse(cached));return;}
+    }catch(e){}
+    fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json')
+      .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+      .then(function(w){
+        try{sessionStorage.setItem(CACHE_KEY,JSON.stringify(w));}catch(e){}
+        _parse(w);
+      })
+      .catch(_fail);
   }
   function _loadD3(cb){
     if(window.d3){cb();return;}
@@ -6493,6 +6530,7 @@ body.desktop-browser-upgrade #page-1>.main-area{grid-area:main;min-width:0;min-h
   }
 }
 </style>
+
 
 </body>
 </html>
