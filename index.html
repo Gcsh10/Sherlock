@@ -2506,8 +2506,39 @@ var PROXIES=[
   function(u){return 'https://corsproxy.io/?'+encodeURIComponent(u);},
   // codetabs
   function(u){return 'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(u);}];
+
+// ── F: Proxy memory — remember which proxy worked per feed domain ──
+var _PM_KEY='sh_proxy_mem';
+var _proxyMem={};
+(function(){
+  try{
+    var raw=localStorage.getItem(_PM_KEY);
+    if(raw){var pm=JSON.parse(raw);if(pm&&typeof pm==='object')_proxyMem=pm;}
+  }catch(e){}
+})();
+function _pmDomain(url){
+  try{return new URL(url).hostname;}catch(e){return url.substring(0,60);}
+}
+function _pmSave(domain,idx){
+  _proxyMem[domain]=idx;
+  try{localStorage.setItem(_PM_KEY,JSON.stringify(_proxyMem));}catch(e){}
+}
+// Prune proxy memory if it grows beyond 300 entries
+(function _pmPrune(){
+  var keys=Object.keys(_proxyMem);
+  if(keys.length>300){
+    var keep={};
+    keys.slice(keys.length-200).forEach(function(k){keep[k]=_proxyMem[k];});
+    _proxyMem=keep;
+    try{localStorage.setItem(_PM_KEY,JSON.stringify(_proxyMem));}catch(e){}
+  }
+})();
+
 function fetchRSS(url){
-  var TIMEOUT_MS=12000;
+  var TIMEOUT_MS=10000;
+  var domain=_pmDomain(url);
+  // Start from the last known working proxy for this domain
+  var _startIdx=(_proxyMem[domain]!==undefined)?_proxyMem[domain]:0;
   function makeOpts(){
     try{return AbortSignal.timeout?{signal:AbortSignal.timeout(TIMEOUT_MS)}:{};}catch(e){return {};}
   }
@@ -2535,12 +2566,19 @@ function fetchRSS(url){
     if(!t||t.trim().length<30)throw new Error('empty');
     return t;
   }
-  function tryNext(i){
-    if(i>=PROXIES.length)return Promise.reject(new Error('all failed'));
+  // Rotate through proxies starting from best known, wrapping around
+  function tryNext(attempt){
+    if(attempt>=PROXIES.length)return Promise.reject(new Error('all failed'));
+    var i=(_startIdx+attempt)%PROXIES.length;
     return fetch(PROXIES[i](url),makeOpts())
       .then(function(r){if(!r.ok)throw new Error(r.status);return r.text();})
-      .then(function(t){return parseResult(t,i);})
-      .catch(function(e){return tryNext(i+1);});
+      .then(function(t){
+        var result=parseResult(t,i);
+        // Remember this proxy worked for this domain
+        if(i!==_proxyMem[domain]) _pmSave(domain,i);
+        return result;
+      })
+      .catch(function(e){return tryNext(attempt+1);});
   }
   return tryNext(0);
 }
@@ -2659,7 +2697,16 @@ function doRefresh(){
     showSkeletons();
   }
 
-  active.forEach(function(src){
+  // ── Bounded concurrency queue: max 10 parallel fetches ───────────
+  var CONCURRENCY=10;
+  var _qIdx=0;
+  function _onFeedDone(){
+    done++;
+    // Launch next pending feed if any
+    if(_qIdx<active.length) _runFeed(active[_qIdx++]);
+    if(done===active.length) _onAllDone();
+  }
+  function _runFeed(src){
     fetchRSS(src.url)
       .then(function(xml){
         sourceStatus[src.id]='ok';
@@ -2668,75 +2715,84 @@ function doRefresh(){
       .catch(function(){
         sourceStatus[src.id]='err';
       })
-      .then(function(){
-        done++;
-        if(done===active.length){
-          var seenLocal={};
-          newArts=newArts.filter(function(a){
-            var k=articleKey ? articleKey(a) : ((a.link||'')+'|'+(a.title||''));
-            if(seenLocal[k]) return false;
-            seenLocal[k]=true;
-            return true;
-          });
-
-          newArts.sort(function(a,b){
-            var td=(b.ts||0)-(a.ts||0);
-            if(td!==0) return td;
-            var SO={critical:4,high:3,medium:2,low:1};
-            return (SO[b.sev]||1)-(SO[a.sev]||1);
-          });
-
-          // First load = full render once
-          if(!window._shInitialLoadDone){
-            articles=sortArticlesChronologically(newArts);
-            renderAll();
-            try{renderSrcList();}catch(e){}
-            try{_refreshP2Overlay();}catch(e){}
-            try{ensureSeenFromArticles&&ensureSeenFromArticles();}catch(e){}
-            window._shInitialLoadDone=true;
-            if(btn){btn.disabled=false;btn.textContent='↻';}
-            startTimer();
-            return;
-          }
-
-          // Subsequent loads = incremental only, no black screen, no full rerender
-          var fresh=newArts.filter(function(a){
-            var k=articleKey ? articleKey(a) : ((a.link||'')+'|'+(a.title||''));
-            if(window._seenArticleKeys && window._seenArticleKeys.has(k)) return false;
-            if(window._seenArticleKeys) window._seenArticleKeys.add(k);
-            return true;
-          });
-
-          if(fresh.length){
-            articles=sortArticlesChronologically(fresh.concat(articles||[]));
-            var colAdds={};
-
-            fresh.slice().reverse().forEach(function(a){
-              (ALL_COLS||[]).forEach(function(col){
-                if(colClosed && colClosed.indexOf(col.id)!==-1) return;
-                try{
-                  if(inCol(col,a)){
-                    if(typeof insertArticleIntoColumn==='function' && insertArticleIntoColumn(col.id,a)){
-                      colAdds[col.id]=(colAdds[col.id]||0)+1;
-                    }
-                  }
-                }catch(e){}
-              });
-            });
-
-            if(typeof updateColumnCounters==='function') updateColumnCounters();
-            Object.keys(colAdds).forEach(function(colId){
-              if(typeof updateNewBadge==='function') updateNewBadge(colId,colAdds[colId]);
-            });
-            try{renderSrcList();}catch(e){}
-            try{_refreshP2Overlay();}catch(e){}
-          }
-
-          if(btn){btn.disabled=false;btn.textContent='↻';}
-          startTimer();
-        }
+      .then(_onFeedDone);
+  }
+  function _onAllDone(){
+    var seenLocal={};
+    newArts=newArts.filter(function(a){
+      var k=articleKey ? articleKey(a) : ((a.link||'')+'|'+(a.title||''));
+      if(seenLocal[k]) return false;
+      seenLocal[k]=true;
+      return true;
+    });
+    newArts.sort(function(a,b){
+      var td=(b.ts||0)-(a.ts||0);
+      if(td!==0) return td;
+      var SO={critical:4,high:3,medium:2,low:1};
+      return (SO[b.sev]||1)-(SO[a.sev]||1);
+    });
+    // First load = full render once
+    if(!window._shInitialLoadDone){
+      articles=sortArticlesChronologically(newArts);
+      renderAll();
+      try{renderSrcList();}catch(e){}
+      try{_refreshP2Overlay();}catch(e){}
+      try{ensureSeenFromArticles&&ensureSeenFromArticles();}catch(e){}
+      window._shInitialLoadDone=true;
+      if(btn){btn.disabled=false;btn.textContent='↻';}
+      startTimer();
+      // ── C: auto-refresh briefing on first load
+      try{if(typeof renderBriefingPage==='function') renderBriefingPage();}catch(e){}
+      return;
+    }
+    // Subsequent loads = incremental only
+    var fresh=newArts.filter(function(a){
+      var k=articleKey ? articleKey(a) : ((a.link||'')+'|'+(a.title||''));
+      if(window._seenArticleKeys && window._seenArticleKeys.has(k)) return false;
+      if(window._seenArticleKeys) window._seenArticleKeys.add(k);
+      return true;
+    });
+    // ── G: prune _seenArticleKeys if it grows too large
+    if(window._seenArticleKeys && window._seenArticleKeys.size>4000){
+      var arr=Array.from(window._seenArticleKeys);
+      window._seenArticleKeys=new Set(arr.slice(arr.length-2000));
+    }
+    if(fresh.length){
+      articles=sortArticlesChronologically(fresh.concat(articles||[]));
+      var colAdds={};
+      fresh.slice().reverse().forEach(function(a){
+        (ALL_COLS||[]).forEach(function(col){
+          if(colClosed && colClosed.indexOf(col.id)!==-1) return;
+          try{
+            if(inCol(col,a)){
+              if(typeof insertArticleIntoColumn==='function' && insertArticleIntoColumn(col.id,a)){
+                colAdds[col.id]=(colAdds[col.id]||0)+1;
+              }
+            }
+          }catch(e){}
+        });
       });
-  });
+      if(typeof updateColumnCounters==='function') updateColumnCounters();
+      Object.keys(colAdds).forEach(function(colId){
+        if(typeof updateNewBadge==='function') updateNewBadge(colId,colAdds[colId]);
+      });
+      try{renderSrcList();}catch(e){}
+      try{_refreshP2Overlay();}catch(e){}
+      // ── C: auto-refresh briefing page if open and new articles arrived
+      try{
+        var bp=document.getElementById('page-4');
+        if(bp && bp.classList.contains('active') && typeof renderBriefingPage==='function'){
+          renderBriefingPage();
+        }
+      }catch(e){}
+    }
+    if(btn){btn.disabled=false;btn.textContent='↻';}
+    startTimer();
+  }
+  // Seed initial batch
+  var _initBatch=Math.min(CONCURRENCY,active.length);
+  _qIdx=_initBatch;
+  for(var _i=0;_i<_initBatch;_i++) _runFeed(active[_i]);
 }
 
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
@@ -3500,7 +3556,12 @@ function printBriefingPage(){
   var w=window.open('','_blank','width=980,height=760');
   if(!w){notify('Popup bloccato');return;}
   var content=document.getElementById('briefing-page-body').innerHTML;
-  w.document.write('<!DOCTYPE html><html lang="it"><head><meta charset="utf-8"><title>Briefing strategico</title><style>body{font-family:Arial,sans-serif;margin:24px;color:#111;}a{color:#111;text-decoration:none;} .briefing-page-section,.briefing-card{border:1px solid #bbb;padding:14px 16px;margin-bottom:14px;} .briefing-card-title,.briefing-page-section-name{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:#0b5cad;} .briefing-hero,.briefing-deck,.briefing-region-grid{display:block;} .briefing-lead{font-size:20px;font-weight:700;line-height:1.4;} .briefing-sublead,.briefing-mini-item .meta,.br-item-meta,.briefing-bullet-meta{font-size:12px;color:#555;} .briefing-bullet,.br-item,.briefing-mini-item{margin:10px 0;} .br-sev-badge{display:inline-block;font-size:10px;padding:2px 6px;border:1px solid #bbb;margin-right:8px;} </style></head><body><h1>Briefing strategico</h1><div style="margin-bottom:14px;color:#555;">Aggiornato '+new Date().toLocaleString('it-IT')+'</div>'+content+'</body></html>');
+  var _printCss=['body{font-family:Georgia,serif;margin:28px 36px;color:#111;font-size:14px;line-height:1.6;}','a{color:#111;text-decoration:none;}','h1{font-family:Arial,sans-serif;font-size:18px;font-weight:700;margin:0 0 4px;}','.md-date{font-size:11px;color:#555;letter-spacing:.06em;text-transform:uppercase;margin-bottom:18px;}','.md-lead{border:1px solid #bbb;padding:14px 16px;margin-bottom:18px;border-radius:4px;}','.md-lead-title{font-size:19px;font-weight:700;line-height:1.38;color:#111;display:block;margin-bottom:6px;}','.md-lead-meta{font-size:11px;color:#555;}','.md-divider{border:none;border-top:1px solid #ccc;margin:18px 0 10px;}','.md-section-label{font-family:Arial,sans-serif;font-size:10px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#0b5cad;margin-bottom:8px;}','.md-list{border:1px solid #ddd;border-radius:4px;overflow:hidden;margin-bottom:18px;}','.md-item{display:flex;gap:10px;padding:9px 12px;border-bottom:1px solid #eee;align-items:flex-start;}','.md-item:last-child{border-bottom:none;}','.md-item-num{font-family:Arial,sans-serif;font-size:11px;color:#888;min-width:18px;padding-top:2px;}','.md-item-title{font-size:13px;font-weight:600;line-height:1.4;color:#111;display:block;}','.md-item-meta{font-size:10px;color:#666;margin-top:2px;}','.md-theater-list{border:1px solid #ddd;border-radius:4px;overflow:hidden;}','.md-theater-item{display:grid;grid-template-columns:120px 1fr;gap:8px;padding:9px 12px;border-bottom:1px solid #eee;align-items:center;}','.md-theater-item:last-child{border-bottom:none;}','.md-theater-label{font-family:Arial,sans-serif;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#0b5cad;}','.md-theater-title{font-size:13px;font-weight:600;color:#111;}','.md-theater-src{font-size:10px;color:#666;}','.md-empty{color:#888;font-size:12px;padding:20px 0;}','@media print{body{margin:16px 20px;}.md-lead{break-inside:avoid;}.md-item{break-inside:avoid;}}'].join(' ');
+  w.document.write('<!DOCTYPE html><html lang="it"><head><meta charset="utf-8"><title>Briefing strategico</title>'
+    +'<style>'+_printCss+'</style></head><body>'
+    +'<h1>Briefing strategico</h1>'
+    +'<div class="md-date">Aggiornato '+new Date().toLocaleString('it-IT')+'</div>'
+    +content+'</body></html>');
   w.document.close();
   w.focus();
   setTimeout(function(){w.print();},250);
