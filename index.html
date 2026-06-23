@@ -1899,9 +1899,9 @@ var DEFAULTS=[
   {id:'rane_worldview',name:'RANE Worldview',url:'https://news.google.com/rss/search?q=%28site%3Aworldview.stratfor.com%20OR%20site%3Aranenetwork.com%29%20%28RANE%20OR%20Stratfor%20OR%20Worldview%29&hl=en&gl=US&ceid=US:en',cat:'osint',on:true},
   {id:'first_things',name:'First Things',url:'https://news.google.com/rss/search?q=site%3Afirstthings.com%20%28%22American%20Politics%22%20OR%20America%20OR%20Trump%20OR%20%22United%20States%22%20OR%20conservatism%29&hl=en&gl=US&ceid=US:en',cat:'think',regions:['americas'],on:true},
 
-  {id:'intelligence_online',name:'Intelligence Online (RSS)',url:'https://feeds.feedburner.com/IntelligenceOnline',cat:'osint',on:true},
+  {id:'intelligence_online',name:'Intelligence Online',url:'https://news.google.com/rss/search?q=site:intelligenceonline.com+OR+site:intelnews.com&hl=en&gl=US&ceid=US:en',cat:'osint',on:true},
 
-  {id:'straitstimes',name:'The Straits Times Asia (RSS)',url:'https://www.straitstimes.com/news/asia/rss.xml',cat:'sudest_asia',on:true},
+  {id:'straitstimes',name:'The Straits Times Asia (RSS)',url:'https://news.google.com/rss/search?q=site:straitstimes.com+asia&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
   {id:'cna_sg',name:'CNA Asia (RSS)',url:'https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml&category=6511',cat:'sudest_asia',on:true},
   {id:'bangkokpost',name:'Bangkok Post',url:'https://news.google.com/rss/search?q=site:bangkokpost.com&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
   {id:'nation_th',name:'The Nation Thailand',url:'https://news.google.com/rss/search?q=site:nationthailand.com&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
@@ -1916,7 +1916,7 @@ var DEFAULTS=[
   {id:'myanmarnow',name:'Myanmar Now',url:'https://news.google.com/rss/search?q=site:myanmar-now.org&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',on:true},
   {id:'mingpao_hk',name:'Ming Pao (HK)',url:'https://news.google.com/rss/search?q=site:mingpao.com+China+OR+%E4%B8%AD%E5%9B%BD&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
   {id:'cna_tw',name:'Central News Agency',url:'https://news.google.com/rss/search?q=site:cna.com.tw&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
-  {id:'focus_taiwan',name:'Focus Taiwan',url:'https://feeds.feedburner.com/rsscna/engnews/',cat:'cina',regions:['cina'],on:true},
+  {id:'focus_taiwan',name:'Focus Taiwan',url:'https://focustaiwan.tw/rss/cross-strait.xml',cat:'cina',regions:['cina'],on:true},
   {id:'pla_daily',name:'PLA Daily',url:'https://news.google.com/rss/search?q=site:81.cn+解放军报&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
   {id:'pla_eastern',name:'Eastern Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+东部战区&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
   {id:'pla_southern',name:'Southern Command PLA',url:'https://news.google.com/rss/search?q=site:81.cn+南部战区&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
@@ -1928,13 +1928,13 @@ var DEFAULTS=[
   {id:'ce_cn',name:'China Economic Net',url:'https://news.google.com/rss/search?q=site:ce.cn&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
   {id:'gmw',name:'Guangming Daily',url:'https://news.google.com/rss/search?q=site:gmw.cn&hl=en&gl=US&ceid=US:en',cat:'cina',on:true},
   {id:'pekingnology',name:'Pekingnology (Substack feed)',url:'https://pekingnology.substack.com/feed',cat:'analisti_cn',on:true},
-  {id:'sun_chenghao',name:'Sun Chenghao',url:'https://www.chinaffairsplus.com/feed',cat:'analisti_cn',on:true},
+  {id:'sun_chenghao',name:'Sun Chenghao',url:'https://news.google.com/rss/search?q=%22Sun+Chenghao%22+China+foreign+policy&hl=en&gl=US&ceid=US:en',cat:'analisti_cn',on:true},
   {id:'lingua_sinica',name:'Lingua Sinica',url:'https://linguasinica.substack.com/feed',cat:'analisti_cn',on:true},
-  {id:'he_yuzhe',name:'He Yuzhe',url:'https://www.yuzhehe.com/feed',cat:'analisti_cn',on:true},
+  {id:'he_yuzhe',name:'He Yuzhe',url:'https://news.google.com/rss/search?q=%22He+Yuzhe%22+China+policy+OR+%22He+Yuzhe%22+geopolitics&hl=en&gl=US&ceid=US:en',cat:'analisti_cn',on:true},
   {id:'ccg_en',name:'CCG / Center for China and Globalization',url:'https://news.google.com/rss/search?q=site%3Aen.ccg.org.cn%20%28China%20OR%20Globalization%20OR%20governance%20OR%20BRI%20OR%20foreign%20policy%29&hl=en&gl=US&ceid=US:en',cat:'analisti_cn',regions:['analisti_cn'],on:true},
   {id:'greenfdc_brigc',name:'BRIGC / Green FDC',url:'https://news.google.com/rss/search?q=site%3Agreenfdc.org%20%28%22Belt%20and%20Road%22%20OR%20BRIGC%20OR%20China%20OR%20green%20finance%20OR%20coalition%29&hl=en&gl=US&ceid=US:en',cat:'analisti_cn',regions:['analisti_cn'],on:true},
   {id:'yidaiyilu_gov',name:'Yidaiyilu.gov.cn / 一带一路',url:'https://news.google.com/rss/search?q=site%3Ayidaiyilu.gov.cn%20%28%E4%B8%80%E5%B8%A6%E4%B8%80%E8%B7%AF%20OR%20%E5%85%B1%E5%BB%BA%20OR%20%E4%B8%AD%E5%9B%BD%20OR%20BRI%29&hl=zh-CN&gl=CN&ceid=CN:zh-Hans',cat:'analisti_cn',regions:['analisti_cn'],on:true},
-  {id:'wire_china',name:'The Wire China',url:'https://www.thewirechina.com/feed/',cat:'analisti_cn',regions:['analisti_cn'],on:true},
+  {id:'wire_china',name:'The Wire China',url:'https://news.google.com/rss/search?q=site:thewirechina.com&hl=en&gl=US&ceid=US:en',cat:'analisti_cn',regions:['analisti_cn'],on:true},
   {id:'china_global_south',name:'China Global South Project',url:'https://news.google.com/rss/search?q=site%3Achinaglobalsouth.com%20%28China%20OR%20Beijing%20OR%20Global%20South%20OR%20Africa%20OR%20Asia%20OR%20Latin%20America%29&hl=en&gl=US&ceid=US:en',cat:'analisti_cn',regions:['analisti_cn'],on:true},
   {id:'paul_triolo_x',name:'Paul Triolo / X',url:'https://news.google.com/rss/search?q=site%3Ax.com%2FpstAsiatech%20OR%20%22Paul%20Triolo%22%20%28China%20OR%20semiconductors%20OR%20AI%20OR%20technology%20OR%20geopolitics%29&hl=en&gl=US&ceid=US:en',cat:'analisti_cn',regions:['analisti_cn'],on:true},
   {id:'beijing_channel',name:'Beijing Channel',url:'https://news.google.com/rss/search?q=site%3Abeijingchannelnewsletter.com%20%28China%20OR%20policy%20OR%20WeChat%20OR%20government%29&hl=en&gl=US&ceid=US:en',cat:'analisti_cn',regions:['analisti_cn'],on:true},
@@ -2167,13 +2167,15 @@ var PRESETS=[
   {id:'deng_yuwen', name:'邓聿文 Deng Yuwen / Yuwen Deng', cat:'analisti_cn',
     url:'https://yuwendeng.substack.com/feed', on:true},
   {id:'china_thought_express', name:'中国思想快递 China Thought Express', cat:'analisti_cn',
-    url:'https://minellc.substack.com/feed', on:true},
+    url:'https://ctexp.substack.com/feed', on:true},
+  {id:'china_dream', name:'China Dream / Reading the China Dream', cat:'analisti_cn',
+    url:'https://www.readingthechinadream.com/feed', on:true},
   {id:'bill_bishop', name:'Bill Bishop', cat:'analisti_cn',
     url:'https://news.google.com/rss/search?q=%22Bill+Bishop%22+Sinocism+China&hl=en&gl=US&ceid=US:en', on:true},
   {id:'sinocism', name:'Sinocism', cat:'analisti_cn',
-    url:'https://sinocism.com/feed', on:true},
+    url:'https://news.google.com/rss/search?q=site:sinocism.com+OR+%22Bill+Bishop%22+China&hl=en&gl=US&ceid=US:en', on:true},
   {id:'sinification', name:'Sinification', cat:'analisti_cn',
-    url:'https://www.sinification.org/feed', on:false},
+    url:'https://news.google.com/rss/search?q=%22Sinification%22+China+CCP+OR+site:sinification.com&hl=en&gl=US&ceid=US:en', on:false},
   {id:'whatsonweibo', name:'Whats on Weibo', cat:'analisti_cn',
     url:'https://news.google.com/rss/search?q=site:whatsonweibo.com&hl=en&gl=US&ceid=US:en', on:true},
   {id:'geopolitechs', name:'Geopolitechs', cat:'analisti_cn',
@@ -2452,7 +2454,7 @@ function applySourceUrlFixes(list){
     // Unifica le vecchie fonti Analisti JP nella colonna/categoria Giappone
     sources.forEach(function(s){ if(s.cat==='analisti_jp') s.cat='giappone'; });
     var FORCE_ON_IDS=[
-      'deng_yuwen','china_thought_express','bill_bishop','sinocism','geopolitechs',
+      'deng_yuwen','china_thought_express','china_dream','bill_bishop','sinocism','geopolitechs',
       'guancha_diyuan','huanqiu_opinion','baidu_diyuan','zhipu_diyuan','csis_china',
       'ciis','cicir','siis','cfau','ciss','cass','huanqiu_zh','rand','brookings','iiss',
       'scmp_cn','merics','cna','cna_sg','people_world_zh','arabnews','xinhua','xinhua_cina','xinhua_en','xinhua_zh','rsshub_wechat_xinhua','rsshub_weibo_xinhua','cgtn_en',
@@ -2505,7 +2507,11 @@ var PROXIES=[
   // corsproxy.io
   function(u){return 'https://corsproxy.io/?'+encodeURIComponent(u);},
   // codetabs
-  function(u){return 'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(u);}];
+  function(u){return 'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(u);},
+  // thingproxy — buon fallback per Substack e feed diretti
+  function(u){return 'https://thingproxy.freeboard.io/fetch/'+u;},
+  // cors.eu.org — proxy leggero
+  function(u){return 'https://cors.eu.org/'+u;}];
 
 // ── F: Proxy memory — remember which proxy worked per feed domain ──
 var _PM_KEY='sh_proxy_mem';
@@ -2535,7 +2541,7 @@ function _pmSave(domain,idx){
 })();
 
 function fetchRSS(url){
-  var TIMEOUT_MS=5000;
+  var TIMEOUT_MS=8000;
   var domain=_pmDomain(url);
   // Start from the last known working proxy for this domain
   var _startIdx=(_proxyMem[domain]!==undefined)?_proxyMem[domain]:0;
@@ -3170,7 +3176,7 @@ var THEATER_META={
   russia:{label:'Russia / Eurasia', ids:['tass','kyivindep','osint_rferl','dpa']},
   indopacifico:{label:'Indo-Pacifico', cats:['sudest_asia'], ids:['diplomat','amti_csis','amti_x','iseas_yusof','aspi_china','aspi_strategist','nikkei','scmp','rappler','jakartapost','straitstimes','cna_sg','cna_tw','nhk','kyodo','yonhap','pti','the_hindu','dawn']},
   cina:{label:'Cina', cats:['cina'], ids:['xinhua','xinhua_cina','focus_taiwan','peoples_daily','globaltimes_default','globaltimes_cn_main','pla_daily','pla_eastern','pla_southern','pla_western','pla_northern','pla_central','chinadaily_default','qstheory','beijingdaily','ce_cn','gmw','mingpao_hk','cna_tw']},
-  analisti_cn:{label:'Analisti CN', cats:['analisti_cn'], ids:['sun_chenghao','lingua_sinica','axios_china','amti_x','he_yuzhe','china_global_south','paul_triolo_x','wire_china','whatsonweibo','ginger_river','wang_zichen','deng_yuwen','china_thought_express','bill_bishop','sinocism','sinification','geopolitechs','jamestown_cb','do_intel_china','guancha_zhuanlan','huanqiu_opinion','baidu_diyuan','zhipu_diyuan','zhipu_ai','guancha_diyuan','chinadigitaltimes','pekingnology','beijing_channel','the_paper_cn','ccg_en','greenfdc_brigc','yidaiyilu_gov','ciis','cicir','siis','cfau','ciss','cass','wu_xinbo','wang_jisi','iiss_pku','fudan_iis','tsinghua_ir','jin_canrong','zhang_weiwei','zhang_wenmu','wyzxwk_wenmu','wyzxwk_wenmu_author','hu_xijin','wang_xiangsui','yan_xuetong','da_wei','da_wei_x','hou_aijun','you_ji','ge_jianxiong','zhao_long','zheng_yongnian','sun_yanhong']},
+  analisti_cn:{label:'Analisti CN', cats:['analisti_cn'], ids:['sun_chenghao','lingua_sinica','axios_china','amti_x','he_yuzhe','china_global_south','paul_triolo_x','wire_china','whatsonweibo','ginger_river','wang_zichen','deng_yuwen','china_thought_express','china_dream','bill_bishop','sinocism','sinification','geopolitechs','jamestown_cb','do_intel_china','guancha_zhuanlan','huanqiu_opinion','baidu_diyuan','zhipu_diyuan','zhipu_ai','guancha_diyuan','chinadigitaltimes','pekingnology','beijing_channel','the_paper_cn','ccg_en','greenfdc_brigc','yidaiyilu_gov','ciis','cicir','siis','cfau','ciss','cass','wu_xinbo','wang_jisi','iiss_pku','fudan_iis','tsinghua_ir','jin_canrong','zhang_weiwei','zhang_wenmu','wyzxwk_wenmu','wyzxwk_wenmu_author','hu_xijin','wang_xiangsui','yan_xuetong','da_wei','da_wei_x','hou_aijun','you_ji','ge_jianxiong','zhao_long','zheng_yongnian','sun_yanhong']},
   giappone:{label:'Giappone', cats:['giappone','analisti_jp'], ids:['nhk_japan','nikkei_japan','japantimes_japan','asahi_japan','yomiuri_japan','mainichi_japan','sankei_japan','kazuto_suzuki','kazuto_suzuki_x','the_japan_news_x','stephen_nagy','hirohito_ogi','haruo_tohmatsu','watanabe_nabe','kawashima_shin','marina_fujita_dickson','alessio_patalano_jp']},
   cartografia:{label:'Cartografia', cats:['cartografia'], ids:['carto_maps_general','carto_visualcapitalist','carto_geocurrents','carto_reliefweb_maps','carto_isw_maps','carto_acled_maps','carto_csis_maps','carto_mapaction']},
   africa:{label:'Africa', ids:['news24','afp','rfi']},
