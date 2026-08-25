@@ -2504,8 +2504,8 @@ var PROXIES=[
   function(u){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(u);},
   // allorigins /get — risposta JSON con .contents
   function(u){return 'https://api.allorigins.win/get?url='+encodeURIComponent(u);},
-  // corsproxy.io
-  function(u){return 'https://corsproxy.io/?'+encodeURIComponent(u);},
+  // corsproxy.io — richiede il parametro "url=" dal 2024, l'URL nudo non funziona più
+  function(u){return 'https://corsproxy.io/?url='+encodeURIComponent(u);},
   // codetabs
   function(u){return 'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(u);},
   // thingproxy — buon fallback per Substack e feed diretti
@@ -5271,17 +5271,14 @@ function refreshIncremental(){
 <script>
 (function(){
   if(typeof doRefresh!=='function') return;
-  var _origDoRefresh = null;
-  doRefresh = function(){
-    if(false&& !_initialRenderDone){
-      doRefresh();
-      setTimeout(function(){
-        try{ensureSeenFromArticles(); _initialRenderDone=true;}catch(e){}
-      }, 1200);
-      return;
-    }
-    refreshIncremental();
-  };
+  // FIX: non sovrascrivere più doRefresh con refreshIncremental.
+  // refreshIncremental() lancia TUTTE le fonti attive in parallelo senza
+  // alcun limite di concorrenza, mentre doRefresh() (definito sopra) usa
+  // già una coda con CONCURRENCY=20 + cache per URL duplicati e gestisce
+  // sia il primo caricamento sia gli inserimenti incrementali. Con 150+
+  // fonti attive, refreshIncremental saturava i CORS-proxy gratuiti
+  // (rss2json, allorigins, ecc.) ad ogni refresh automatico/manuale,
+  // causando il mancato caricamento diffuso delle fonti dopo il primo load.
   document.addEventListener('click', function(ev){
     var hd = ev.target && ev.target.closest ? ev.target.closest('.col-hd') : null;
     if(!hd) return;
