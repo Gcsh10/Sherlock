@@ -2497,21 +2497,29 @@ function applySourceUrlFixes(list){
   }catch(e){sources=DEFAULTS.slice();colOrder=ALL_COLS.map(function(c){return c.id;});colClosed=[];}
 }
 
+// Ogni proxy dichiara come va interpretata la risposta (type), non più per
+// indice numerico posizionale — evita che riordinare l'array rompa il parsing.
+// Verificato ad agosto 2026: thingproxy.freeboard.io è morto (dominio non
+// risolve più) ed è stato rimosso; rss2json.com senza API key risponde quasi
+// sempre 429 (quota condivisa esaurita) ed è stato spostato in fondo come
+// ultima risorsa; Corsfix (nessuna chiave, nessun limite dichiarato per uso
+// dev/open-source) è stato aggiunto come primo tentativo.
 var PROXIES=[
-  // rss2json — più affidabile per Google News, risponde con JSON pre-parsato
-  function(u){return 'https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(u);},
+  // Corsfix — nessuna chiave richiesta, nessun limite dichiarato per uso dev
+  {type:'raw', build:function(u){return 'https://proxy.corsfix.com/?'+encodeURIComponent(u);}},
+  // codetabs — leggero, ~5 richieste/sec
+  {type:'raw', build:function(u){return 'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(u);}},
   // allorigins /raw
-  function(u){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(u);},
+  {type:'raw', build:function(u){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(u);}},
+  // corsproxy.io — richiede "url=" dal 2024; tier gratuito pensato per dev/localhost
+  {type:'raw', build:function(u){return 'https://corsproxy.io/?url='+encodeURIComponent(u);}},
   // allorigins /get — risposta JSON con .contents
-  function(u){return 'https://api.allorigins.win/get?url='+encodeURIComponent(u);},
-  // corsproxy.io — richiede il parametro "url=" dal 2024, l'URL nudo non funziona più
-  function(u){return 'https://corsproxy.io/?url='+encodeURIComponent(u);},
-  // codetabs
-  function(u){return 'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(u);},
-  // thingproxy — buon fallback per Substack e feed diretti
-  function(u){return 'https://thingproxy.freeboard.io/fetch/'+u;},
-  // cors.eu.org — proxy leggero
-  function(u){return 'https://cors.eu.org/'+u;}];
+  {type:'json-contents', build:function(u){return 'https://api.allorigins.win/get?url='+encodeURIComponent(u);}},
+  // cors.eu.org — proxy leggero, rate limit stretto
+  {type:'raw', build:function(u){return 'https://cors.eu.org/'+u;}},
+  // rss2json — ultima risorsa: quota gratuita condivisa quasi sempre esaurita (429)
+  {type:'json-items', build:function(u){return 'https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(u);}}
+];
 
 // ── F: Proxy memory — remember which proxy worked per feed domain ──
 var _PM_KEY='sh_proxy_mem';
@@ -2541,16 +2549,27 @@ function _pmSave(domain,idx){
 })();
 
 function fetchRSS(url){
-  var TIMEOUT_MS=8000;
+  var TIMEOUT_MS=11000;
   var domain=_pmDomain(url);
   // Start from the last known working proxy for this domain
   var _startIdx=(_proxyMem[domain]!==undefined)?_proxyMem[domain]:0;
   function makeOpts(){
     try{return AbortSignal.timeout?{signal:AbortSignal.timeout(TIMEOUT_MS)}:{};}catch(e){return {};}
   }
-  function parseResult(t,proxyIdx){
-    // rss2json (index 0) returns JSON with .items
-    if(proxyIdx===0){
+  function looksLikeBlockPage(t){
+    // Alcuni proxy rispondono 200 OK ma con una pagina HTML (captcha/consenso/
+    // errore del sito di destinazione) invece del feed vero. Se non contiene
+    // markup RSS/Atom riconoscibile, trattalo come fallimento e prova il
+    // proxy successivo, invece di accettarlo silenziosamente come "ok" con
+    // zero notizie.
+    var head=t.slice(0,400).toLowerCase();
+    var looksHtml=head.indexOf('<!doctype html')>=0 || /<html[\s>]/.test(head);
+    var looksFeed=head.indexOf('<rss')>=0 || head.indexOf('<feed')>=0 || head.indexOf('<rdf')>=0 || head.indexOf('<?xml')>=0;
+    return looksHtml && !looksFeed;
+  }
+  function parseResult(t,type){
+    if(type==='json-items'){
+      // rss2json: JSON pre-parsato con .items
       try{
         var j=JSON.parse(t);
         if(j&&j.items&&j.items.length){
@@ -2564,22 +2583,27 @@ function fetchRSS(url){
         throw new Error('empty rss2json');
       }catch(e){throw new Error('rss2json parse fail');}
     }
-    // allorigins /get (index 2) returns {contents: '...'}
-    if(proxyIdx===2){
-      try{var j=JSON.parse(t);if(j&&j.contents&&j.contents.length>30)return j.contents;}catch(e){}
+    if(type==='json-contents'){
+      // allorigins /get: JSON con {contents:'...'}
+      var j2;
+      try{j2=JSON.parse(t);}catch(e){throw new Error('allorigins get: invalid json');}
+      if(!j2||!j2.contents||j2.contents.length<=30) throw new Error('allorigins get: empty contents');
+      if(looksLikeBlockPage(j2.contents)) throw new Error('allorigins get: block page');
+      return j2.contents;
     }
-    // Direct text (proxies 1,3,4)
+    // raw: testo diretto (XML/RSS atteso)
     if(!t||t.trim().length<30)throw new Error('empty');
+    if(looksLikeBlockPage(t))throw new Error('block page instead of feed');
     return t;
   }
   // Rotate through proxies starting from best known, wrapping around
   function tryNext(attempt){
     if(attempt>=PROXIES.length)return Promise.reject(new Error('all failed'));
     var i=(_startIdx+attempt)%PROXIES.length;
-    return fetch(PROXIES[i](url),makeOpts())
+    return fetch(PROXIES[i].build(url),makeOpts())
       .then(function(r){if(!r.ok)throw new Error(r.status);return r.text();})
       .then(function(t){
-        var result=parseResult(t,i);
+        var result=parseResult(t,PROXIES[i].type);
         // Remember this proxy worked for this domain
         if(i!==_proxyMem[domain]) _pmSave(domain,i);
         return result;
