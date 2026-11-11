@@ -1511,6 +1511,22 @@ html[data-theme=light] .timeline-item-desc,[data-theme=light] .timeline-item-des
 }
 </style>
 
+<style id="sherlock-v28-additions">
+.cpub{margin-left:4px;opacity:.65;font-weight:400;font-size:.92em;}
+.health-modal{width:min(980px,94vw);max-height:90vh;display:flex;flex-direction:column;padding:0;overflow:hidden;}
+.health-modal .modal-h{padding:14px 16px;border-bottom:1px solid var(--bd2);}
+.health-sum{padding:10px 16px;font-size:13px;color:var(--tx2);line-height:1.5;}
+.health-sum b{color:var(--tx);}
+.health-px{font-size:11px;color:var(--mu);margin-top:4px;word-break:break-word;}
+.health-actions{display:flex;gap:8px;padding:0 16px 10px;}
+.health-body{overflow:auto;padding:0 16px 16px;min-height:0;}
+.health-tbl{width:100%;border-collapse:collapse;font-size:12px;}
+.health-tbl th{position:sticky;top:0;background:var(--bg2);text-align:left;padding:6px 8px;color:var(--tx2);font-weight:600;border-bottom:1px solid var(--bd2);}
+.health-tbl td{padding:5px 8px;border-bottom:1px solid var(--bd);vertical-align:top;}
+.health-tbl .hs-err td:first-child{color:var(--re);}
+.health-tbl td.hs-err{color:var(--mu);font-size:11px;word-break:break-word;max-width:260px;}
+@media (max-width:767px){.health-modal{width:100vw;height:100dvh;max-height:none;border-radius:0;}.health-tbl td:nth-child(5),.health-tbl th:nth-child(5),.health-tbl td:nth-child(6),.health-tbl th:nth-child(6){display:none;}}
+</style>
 </head>
 <body>
 <header>
@@ -1522,7 +1538,7 @@ html[data-theme=light] .timeline-item-desc,[data-theme=light] .timeline-item-des
       <circle class="fgc" id="tarc" cx="9" cy="9" r="7" stroke-dasharray="44" stroke-dashoffset="0"/>
     </svg></div>
     <span id="tlbl">120s</span>
-    <button class="hbtn" id="rbtn" onclick="doRefresh()">&#8635;</button>
+    <button class="hbtn" id="rbtn" onclick="doRefresh(true)">&#8635;</button>
   </div>
   <button class="hbtn mobile-side-btn" id="mobile-side-btn" onclick="toggleMobileSidebar()">☰</button>
   <!-- page-tabs: visible in header on desktop, moved to bottom bar on mobile via CSS -->
@@ -1601,6 +1617,8 @@ html[data-theme=light] .timeline-item-desc,[data-theme=light] .timeline-item-des
           <button class="hbtn" onclick="applySourcePreset('esteso')">Esteso</button>
           <button class="hbtn" onclick="applySourcePreset('cina')">Cina intensivo</button>
           <button class="hbtn" onclick="applySourcePreset('osint')">OSINT</button>
+          <button class="hbtn" onclick="openHealthModal()" title="Controlla quali fonti rispondono">Verifica fonti</button>
+          <button class="hbtn" onclick="setCustomProxy()" title="Imposta un proxy CORS personale">Proxy…</button>
         </div>
         <div class="source-manager-add">
           <details>
@@ -1947,9 +1965,9 @@ var DEFAULTS=[
   {id:'aspi_china',name:'ASPI / China',url:'https://news.google.com/rss/search?q=site%3Aaspi.org.au%20%28China%20OR%20Taiwan%20OR%20Indo-Pacific%20OR%20AUKUS%29&hl=en&gl=US&ceid=US:en',cat:'sudest_asia',regions:['indopacifico'],on:true},
   {id:'aspi_strategist',name:'The Strategist / ASPI',url:'https://www.aspistrategist.org.au/feed/',cat:'sudest_asia',regions:['indopacifico'],on:true},
 
-  {id:'reuters',   name:'Reuters',            cat:'agenzie', url:'https://news.google.com/rss/search?q=reuters+world+news&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'reuters',   name:'Reuters',            cat:'agenzie', url:'https://news.google.com/rss/search?q=site:reuters.com+world&hl=en&gl=US&ceid=US:en',on:true},
   {id:'reuters_x', name:'Reuters / X',         cat:'agenzie', url:'https://news.google.com/rss/search?q=site%3Ax.com%2Freuters%20OR%20%22Reuters%22%20%28breaking%20OR%20world%20OR%20markets%20OR%20politics%29&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'ap',        name:'AP',                 cat:'agenzie', url:'https://news.google.com/rss/search?q=associated+press+world&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'ap',        name:'AP',                 cat:'agenzie', url:'https://news.google.com/rss/search?q=site:apnews.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'afp',       name:'AFP',                cat:'agenzie', url:'https://news.google.com/rss/search?q=agence+france+presse+AFP&hl=en&gl=US&ceid=US:en',on:true},
   {id:'ansa',      name:'ANSA Mondo',         cat:'agenzie', url:'https://news.google.com/rss/search?q=site:ansa.it+mondo&hl=en&gl=US&ceid=US:en',on:true},
   {id:'ansait',    name:'ANSA Italia',        cat:'agenzie', url:'https://news.google.com/rss/search?q=site%3Aansa.it%20%28politica%20OR%20esteri%20OR%20governo%20OR%20Meloni%29&hl=it&gl=IT&ceid=IT:it',on:true},
@@ -1959,19 +1977,19 @@ var DEFAULTS=[
   {id:'cgtn_default',   name:'CGTN',              cat:'cina',    url:'https://news.google.com/rss/search?q=site:cgtn.com+world&hl=en&gl=US&ceid=US:en',on:true},
   {id:'globaltimes_default',name:'Global Times',  cat:'cina',    url:'https://news.google.com/rss/search?q=site:globaltimes.cn&hl=en&gl=US&ceid=US:en',on:true},
   {id:'chinadaily_default', name:'China Daily',   cat:'cina',    url:'https://news.google.com/rss/search?q=site:chinadaily.com.cn&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'kyodo',     name:'Kyodo News',         cat:'agenzie', url:'https://news.google.com/rss/search?q=kyodo+news&hl=en',on:true},
+  {id:'kyodo',     name:'Kyodo News',         cat:'agenzie', url:'https://news.google.com/rss/search?q=site:english.kyodonews.net&hl=en&gl=US&ceid=US:en',on:true},
   {id:'yonhap',    name:'Yonhap (KR)',        cat:'agenzie', url:'https://news.google.com/rss/search?q=site:en.yna.co.kr&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'dpa',       name:'DPA (DE)',           cat:'agenzie', url:'https://news.google.com/rss/search?q=dpa+news+agency&hl=en',on:true},
+  {id:'dpa',       name:'DPA (DE)',           cat:'agenzie', url:'https://news.google.com/rss/search?q=site:dpa-international.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'efe',       name:'EFE (ES)',           cat:'agenzie', url:'https://news.google.com/rss/search?q=site:efe.com&hl=en',on:true},
   {id:'anadolu',   name:'Anadolu Agency',     cat:'agenzie', url:'https://news.google.com/rss/search?q=site:aa.com.tr&hl=en',on:true},
   {id:'wam',       name:'WAM (UAE)',           cat:'agenzie', url:'https://news.google.com/rss/search?q=site:wam.ae&hl=en',on:true},
-  {id:'pti',       name:'PTI (India)',        cat:'agenzie', url:'https://news.google.com/rss/search?q=press+trust+india&hl=en',on:true},
+  {id:'pti',       name:'PTI (India)',        cat:'agenzie', url:'https://news.google.com/rss/search?q=site:ptinews.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'the_hindu', name:'The Hindu',          cat:'sudest_asia', url:'https://news.google.com/rss/search?q=site:thehindu.com+india+OR+indopacific&hl=en&gl=US&ceid=US:en',on:true},
   {id:'bbc',       name:'BBC World',          cat:'media',   url:'https://news.google.com/rss/search?q=site:bbc.co.uk+world+news&hl=en&gl=US&ceid=US:en',on:true},
   {id:'aljazeera', name:'Al Jazeera',         cat:'media',   url:'https://news.google.com/rss/search?q=site:aljazeera.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'france24',  name:'France 24',          cat:'media',   url:'https://news.google.com/rss/search?q=site:france24.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'dwnews',    name:'DW News',            cat:'media',   url:'https://news.google.com/rss/search?q=site:dw.com&hl=en&gl=US&ceid=US:en',on:true},
-  {id:'euronews',  name:'Euronews',           cat:'media',   url:'https://news.google.com/rss/search?q=euronews+world&hl=en',on:true},
+  {id:'euronews',  name:'Euronews',           cat:'media',   url:'https://news.google.com/rss/search?q=site:euronews.com+world&hl=en&gl=US&ceid=US:en',on:true},
   {id:'guardian',  name:'The Guardian',       cat:'media',   url:'https://news.google.com/rss/search?q=site:theguardian.com+world&hl=en&gl=US&ceid=US:en',on:true},
   {id:'spiegel',   name:'Der Spiegel EN',     cat:'media',   url:'https://news.google.com/rss/search?q=site:spiegel.de+international&hl=en&gl=US&ceid=US:en',on:true},
   {id:'lemonde',   name:'Le Monde EN',        cat:'media',   url:'https://www.lemonde.fr/en/international/rss_full.xml',on:true},
@@ -2022,10 +2040,9 @@ var DEFAULTS=[
   {id:'isw',       name:'ISW',                cat:'osint',   url:'https://news.google.com/rss/search?q=site:understandingwar.org+%28assessment+OR+campaign+OR+war+OR+front%29&hl=en&gl=US&ceid=US:en', regions:['osint'], on:true},
   {id:'isw_x',     name:'ISW / X',            cat:'osint',   url:'https://news.google.com/rss/search?q=site%3Ax.com%2Fthestudyofwar%20OR%20site%3Atwitter.com%2FTheStudyofWar%20OR%20%22Institute%20for%20the%20Study%20of%20War%22%20%28Ukraine%20OR%20Russia%20OR%20Iran%20OR%20Israel%20OR%20China%20OR%20Taiwan%20OR%20war%29&hl=en&gl=US&ceid=US:en', regions:['osint'], on:true},
   {id:'naval_news_x', name:'Naval News / X',     cat:'osint',   url:'https://news.google.com/rss/search?q=site%3Ax.com%2Fnavalnewscom%20OR%20site%3Atwitter.com%2Fnavalnewscom%20OR%20%22Naval%20News%22%20navy%20maritime%20defense&hl=en&gl=US&ceid=US:en', regions:['osint','americas'], on:true},
-  {id:'intelonline',name:'Intelligence Online',cat:'think',  url:'https://news.google.com/rss/search?q=site:intelligenceonline.com&hl=en',on:true},
-  {id:'nato',      name:'NATO',               cat:'ist',     url:'https://news.google.com/rss/search?q=NATO+statement&hl=en',on:true},
+  {id:'nato',      name:'NATO',               cat:'ist',     url:'https://news.google.com/rss/search?q=site:nato.int&hl=en&gl=US&ceid=US:en',on:true},
   {id:'ft',        name:'Financial Times',    cat:'finance', url:'https://news.google.com/rss/search?q=site:ft.com+world&hl=en',on:true},
-  {id:'bloomberg', name:'Bloomberg',          cat:'finance', url:'https://news.google.com/rss/search?q=bloomberg+geopolitics+economy+war&hl=en&gl=US&ceid=US:en',on:true},
+  {id:'bloomberg', name:'Bloomberg',          cat:'finance', url:'https://news.google.com/rss/search?q=site:bloomberg.com+%28geopolitics+OR+war+OR+sanctions+OR+China%29&hl=en&gl=US&ceid=US:en',on:true},
   {id:'therecord', name:'The Record',         cat:'cyber',   url:'https://news.google.com/rss/search?q=site:therecord.media&hl=en&gl=US&ceid=US:en',on:true},
   {id:'bellingcat',name:'Bellingcat',         cat:'cyber',   url:'https://news.google.com/rss/search?q=site%3Abellingcat.com&hl=en&gl=US&ceid=US:en',on:true},
   {id:'osint_rferl',  name:'RFE/RL',          cat:'osint',   url:'https://news.google.com/rss/search?q=site:rferl.org&hl=en&gl=US&ceid=US:en',on:true},
@@ -2301,6 +2318,25 @@ function syncPressSources(){
 
 // ── Chronological hygiene: keep news recent and truly sorted ──────
 var MAX_ARTICLE_AGE_DAYS=2;
+// Fonti "lente" (think tank, analisti, Substack, cartografia): pubblicano di rado,
+// con il limite di 2 giorni venivano scartate in silenzio. Hanno una finestra più ampia.
+var SLOW_MAX_AGE_DAYS=10;
+var SLOW_CATS={analisti_cn:1,analisti_jp:1,think:1,cartografia:1};
+var SLOW_SRC_IDS={amti_csis:1,sipri:1,osint_oryx:1,gpf:1,war_on_the_rocks:1,osint_geopol:1,osint_acled:1,rane_worldview:1};
+function articleMaxAgeMs(a){
+  var slow=SLOW_CATS[a.cat]||SLOW_SRC_IDS[a.srcId];
+  return (slow?SLOW_MAX_AGE_DAYS:MAX_ARTICLE_AGE_DAYS)*86400000;
+}
+function _articleTimestamp(p){return articleTsFromPub(p);}
+// Notizie senza data: usa il momento in cui le abbiamo viste la prima volta (stabile tra i refresh)
+var _firstSeen={};
+function _firstSeenTs(k){
+  if(!_firstSeen[k]){
+    if(Object.keys(_firstSeen).length>8000)_firstSeen={};
+    _firstSeen[k]=Date.now();
+  }
+  return _firstSeen[k];
+}
 function articleTsFromPub(pub){
   if(!pub) return 0;
   var raw=String(pub).trim();
@@ -2331,15 +2367,15 @@ function articleTsFromPub(pub){
   var t=Date.parse(raw);
   return isNaN(t)?0:t;
 }
-function isFreshEnoughArticle(a){
+function isFreshEnoughArticle(a,maxMs){
   if(!a || !a.ts) return false;
   var age=Date.now()-a.ts;
   if(age<0) return true; // tolerate timezone/clock quirks
-  return age <= MAX_ARTICLE_AGE_DAYS*24*60*60*1000;
+  return age <= (maxMs||articleMaxAgeMs(a));
 }
-function sortArticlesChronologically(list){
+function sortArticlesChronologically(list,maxMs){
   var SO={critical:4,high:3,medium:2,low:1};
-  return (list||[]).filter(isFreshEnoughArticle).sort(function(a,b){
+  return (list||[]).filter(function(a){return isFreshEnoughArticle(a,maxMs);}).sort(function(a,b){
     var td=(b.ts||0)-(a.ts||0);
     if(td!==0) return td;
     return (SO[b.sev]||1)-(SO[a.sev]||1);
@@ -2356,7 +2392,7 @@ function persist(){
 function loadPersist(){
   var DEFAULT_CLOSED=['russia','africa','americas','medioriente'];
   var LAYOUT_VER='v13';
-  var REMOVED_SOURCE_IDS=['ccg','caixin','almonitor','mei','mideasteye','arabnews','bbcme','arabiya','trtworld','meduza','moscowtimes','carnegie_russia','lowy','rti_tw','globaltimes','globaltimes_zh','people_en','people_zh','chinadaily','csis_china','merics','bbcafrica','defensenews','breakingdefense','janes','acled','onu','un','un_news','unnews','iaea','osint_twz','osint_defone'];
+  var REMOVED_SOURCE_IDS=['ccg','caixin','almonitor','mei','mideasteye','arabnews','bbcme','arabiya','trtworld','meduza','moscowtimes','carnegie_russia','lowy','rti_tw','globaltimes','globaltimes_zh','people_en','people_zh','chinadaily','csis_china','merics','bbcafrica','defensenews','breakingdefense','janes','acled','intelonline','onu','un','un_news','unnews','iaea','osint_twz','osint_defone'];
 
 // Feed sanitizzati: sovrascrivono anche le vecchie URL rimaste in localStorage.
 var SOURCE_URL_FIXES={
@@ -2497,120 +2533,155 @@ function applySourceUrlFixes(list){
   }catch(e){sources=DEFAULTS.slice();colOrder=ALL_COLS.map(function(c){return c.id;});colClosed=[];}
 }
 
-// Ogni proxy dichiara come va interpretata la risposta (type), non più per
-// indice numerico posizionale — evita che riordinare l'array rompa il parsing.
-// Verificato ad agosto 2026: thingproxy.freeboard.io è morto (dominio non
-// risolve più) ed è stato rimosso; rss2json.com senza API key risponde quasi
-// sempre 429 (quota condivisa esaurita) ed è stato spostato in fondo come
-// ultima risorsa; Corsfix (nessuna chiave, nessun limite dichiarato per uso
-// dev/open-source) è stato aggiunto come primo tentativo.
+// ── Proxy CORS ────────────────────────────────────────────────────
+// Ogni proxy ha un id stabile e dichiara come va interpretata la risposta (type).
+// Verificato ad agosto 2026: thingproxy.freeboard.io è morto; rss2json senza chiave
+// risponde quasi sempre 429 ed è l'ultima risorsa. Un proxy personale (es. un
+// Cloudflare Worker) può essere impostato dal pannello Fonti e passa davanti a tutti.
 var PROXIES=[
-  // Corsfix — nessuna chiave richiesta, nessun limite dichiarato per uso dev
-  {type:'raw', build:function(u){return 'https://proxy.corsfix.com/?'+encodeURIComponent(u);}},
-  // codetabs — leggero, ~5 richieste/sec
-  {type:'raw', build:function(u){return 'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(u);}},
-  // allorigins /raw
-  {type:'raw', build:function(u){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(u);}},
-  // corsproxy.io — richiede "url=" dal 2024; tier gratuito pensato per dev/localhost
-  {type:'raw', build:function(u){return 'https://corsproxy.io/?url='+encodeURIComponent(u);}},
-  // allorigins /get — risposta JSON con .contents
-  {type:'json-contents', build:function(u){return 'https://api.allorigins.win/get?url='+encodeURIComponent(u);}},
-  // cors.eu.org — proxy leggero, rate limit stretto
-  {type:'raw', build:function(u){return 'https://cors.eu.org/'+u;}},
-  // rss2json — ultima risorsa: quota gratuita condivisa quasi sempre esaurita (429)
-  {type:'json-items', build:function(u){return 'https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(u);}}
+  {id:'corsfix',        type:'raw',           build:function(u){return 'https://proxy.corsfix.com/?'+encodeURIComponent(u);}},
+  {id:'codetabs',       type:'raw',           build:function(u){return 'https://api.codetabs.com/v1/proxy?quest='+encodeURIComponent(u);}},
+  {id:'allorigins',     type:'raw',           build:function(u){return 'https://api.allorigins.win/raw?url='+encodeURIComponent(u);}},
+  {id:'corsproxy',      type:'raw',           build:function(u){return 'https://corsproxy.io/?url='+encodeURIComponent(u);}},
+  {id:'allorigins-get', type:'json-contents', build:function(u){return 'https://api.allorigins.win/get?url='+encodeURIComponent(u);}},
+  {id:'cors-eu',        type:'raw',           build:function(u){return 'https://cors.eu.org/'+u;}},
+  {id:'rss2json',       type:'json-items',    build:function(u){return 'https://api.rss2json.com/v1/api.json?rss_url='+encodeURIComponent(u);}}
 ];
+var CUSTOM_PROXY_KEY='sh_custom_proxy';
+function getCustomProxy(){try{return (localStorage.getItem(CUSTOM_PROXY_KEY)||'').trim();}catch(e){return '';}}
+function setCustomProxy(){
+  var cur=getCustomProxy();
+  var v=prompt('URL del tuo proxy CORS. Usa {url} come segnaposto, ad es.\nhttps://tuo-worker.workers.dev/?url={url}\n\nLascia vuoto per usare solo i proxy pubblici.',cur);
+  if(v===null)return;
+  v=v.trim();
+  try{if(v)localStorage.setItem(CUSTOM_PROXY_KEY,v);else localStorage.removeItem(CUSTOM_PROXY_KEY);}catch(e){}
+  _proxyMem={};_pxHealth={};_pmFlush();
+  notify(v?'Proxy personale attivo':'Proxy personale rimosso');
+}
+function _proxyChain(){
+  var c=getCustomProxy();
+  if(!c)return PROXIES;
+  return [{id:'custom',type:'raw',build:function(u){
+    return c.indexOf('{url}')>=0?c.replace('{url}',encodeURIComponent(u)):c+encodeURIComponent(u);
+  }}].concat(PROXIES);
+}
 
-// ── F: Proxy memory — remember which proxy worked per feed domain ──
-var _PM_KEY='sh_proxy_mem';
+// Memoria del proxy che ha funzionato per ciascun dominio + salute dei proxy
+var _PM_KEY='sh_proxy_mem2';
 var _proxyMem={};
+var _pxHealth={};   // id -> {f:fallimenti consecutivi, until:timestamp fine cooldown, last:errore}
 (function(){
   try{
     var raw=localStorage.getItem(_PM_KEY);
     if(raw){var pm=JSON.parse(raw);if(pm&&typeof pm==='object')_proxyMem=pm;}
+    localStorage.removeItem('sh_proxy_mem'); // vecchio formato (indici numerici)
   }catch(e){}
 })();
 function _pmDomain(url){
   try{return new URL(url).hostname;}catch(e){return url.substring(0,60);}
 }
-function _pmSave(domain,idx){
-  _proxyMem[domain]=idx;
-  try{localStorage.setItem(_PM_KEY,JSON.stringify(_proxyMem));}catch(e){}
-}
-// Prune proxy memory if it grows beyond 300 entries
-(function _pmPrune(){
+function _pmFlush(){
   var keys=Object.keys(_proxyMem);
   if(keys.length>300){
     var keep={};
     keys.slice(keys.length-200).forEach(function(k){keep[k]=_proxyMem[k];});
     _proxyMem=keep;
-    try{localStorage.setItem(_PM_KEY,JSON.stringify(_proxyMem));}catch(e){}
   }
-})();
+  try{localStorage.setItem(_PM_KEY,JSON.stringify(_proxyMem));}catch(e){}
+}
+function _pmSave(domain,id){_proxyMem[domain]=id;_pmFlush();}
+function _pxOk(id){var h=_pxHealth[id];if(h){h.f=0;h.until=0;}}
+function _pxFail(id,e){
+  // Penalizza solo i guasti del proxy (429/403/5xx, timeout, rete); non quelli del feed di destinazione
+  var s=e&&e.status;
+  var soft=s?(s===429||s===403||s>=500):!(e&&e.noPenalty);
+  if(!soft)return;
+  var h=_pxHealth[id]||(_pxHealth[id]={f:0,until:0});
+  h.f=Math.min(h.f+1,6);
+  h.until=Date.now()+Math.min(300000,10000*Math.pow(2,h.f-1));
+  h.last=(e&&e.message)||'errore';
+}
+function _perr(msg){var e=new Error(msg);e.noPenalty=true;return e;}
 
-function fetchRSS(url){
-  var TIMEOUT_MS=11000;
-  var domain=_pmDomain(url);
-  // Start from the last known working proxy for this domain
-  var _startIdx=(_proxyMem[domain]!==undefined)?_proxyMem[domain]:0;
-  function makeOpts(){
-    try{return AbortSignal.timeout?{signal:AbortSignal.timeout(TIMEOUT_MS)}:{};}catch(e){return {};}
+var PROXY_TIMEOUT_MS=9000, MAX_PROXY_ATTEMPTS=5;
+// fetch con timeout reale anche dove AbortSignal.timeout non esiste (Safari/iOS < 16):
+// senza, un proxy appeso bloccava per sempre il refresh e il pulsante restava disabilitato.
+function _fetchTO(url,ms){
+  var ctl=(typeof AbortController!=='undefined')?new AbortController():null;
+  var timer;
+  var hard=new Promise(function(_,rej){
+    timer=setTimeout(function(){
+      if(ctl){try{ctl.abort();}catch(e){}}
+      rej(new Error('timeout'));
+    },ms);
+  });
+  var p=fetch(url,ctl?{signal:ctl.signal}:{});
+  return Promise.race([p,hard]).then(function(r){clearTimeout(timer);return r;},function(e){clearTimeout(timer);throw e;});
+}
+
+function _looksLikeBlockPage(t){
+  // Alcuni proxy rispondono 200 con una pagina HTML (captcha/consenso/errore) invece del feed.
+  var head=t.slice(0,400).toLowerCase();
+  var looksHtml=head.indexOf('<!doctype html')>=0 || /<html[\s>]/.test(head);
+  var looksFeed=head.indexOf('<rss')>=0 || head.indexOf('<feed')>=0 || head.indexOf('<rdf')>=0 || head.indexOf('<?xml')>=0;
+  return looksHtml && !looksFeed;
+}
+function _parseProxyResult(t,type){
+  if(type==='json-items'){
+    var j;
+    try{j=JSON.parse(t);}catch(e){throw _perr('rss2json: JSON non valido');}
+    if(!j||!j.items||!j.items.length)throw _perr('rss2json: nessun item');
+    var items=j.items.map(function(it){
+      return '<item><title>'+esc(it.title||'')+'</title><link>'+esc(it.link||it.url||'')+'</link>'
+        +'<description>'+esc(it.description||it.content||'')+'</description>'
+        +'<pubDate>'+esc(it.pubDate||it.published||it.updated||it.created||it.date||'')+'</pubDate></item>';
+    }).join('');
+    return '<rss><channel>'+items+'</channel></rss>';
   }
-  function looksLikeBlockPage(t){
-    // Alcuni proxy rispondono 200 OK ma con una pagina HTML (captcha/consenso/
-    // errore del sito di destinazione) invece del feed vero. Se non contiene
-    // markup RSS/Atom riconoscibile, trattalo come fallimento e prova il
-    // proxy successivo, invece di accettarlo silenziosamente come "ok" con
-    // zero notizie.
-    var head=t.slice(0,400).toLowerCase();
-    var looksHtml=head.indexOf('<!doctype html')>=0 || /<html[\s>]/.test(head);
-    var looksFeed=head.indexOf('<rss')>=0 || head.indexOf('<feed')>=0 || head.indexOf('<rdf')>=0 || head.indexOf('<?xml')>=0;
-    return looksHtml && !looksFeed;
+  if(type==='json-contents'){
+    var j2;
+    try{j2=JSON.parse(t);}catch(e){throw _perr('allorigins: JSON non valido');}
+    if(!j2||!j2.contents||j2.contents.length<=30)throw _perr('allorigins: contenuto vuoto');
+    if(_looksLikeBlockPage(j2.contents))throw _perr('allorigins: pagina di blocco');
+    return j2.contents;
   }
-  function parseResult(t,type){
-    if(type==='json-items'){
-      // rss2json: JSON pre-parsato con .items
-      try{
-        var j=JSON.parse(t);
-        if(j&&j.items&&j.items.length){
-          var items=j.items.map(function(it){
-            return '<item><title>'+esc(it.title||'')+'</title><link>'+esc(it.link||it.url||'')+'</link>'
-              +'<description>'+esc(it.description||it.content||'')+'</description>'
-              +'<pubDate>'+esc(it.pubDate||it.published||it.updated||it.created||it.date||'')+'</pubDate></item>';
-          }).join('');
-          return '<rss><channel>'+items+'</channel></rss>';
-        }
-        throw new Error('empty rss2json');
-      }catch(e){throw new Error('rss2json parse fail');}
-    }
-    if(type==='json-contents'){
-      // allorigins /get: JSON con {contents:'...'}
-      var j2;
-      try{j2=JSON.parse(t);}catch(e){throw new Error('allorigins get: invalid json');}
-      if(!j2||!j2.contents||j2.contents.length<=30) throw new Error('allorigins get: empty contents');
-      if(looksLikeBlockPage(j2.contents)) throw new Error('allorigins get: block page');
-      return j2.contents;
-    }
-    // raw: testo diretto (XML/RSS atteso)
-    if(!t||t.trim().length<30)throw new Error('empty');
-    if(looksLikeBlockPage(t))throw new Error('block page instead of feed');
-    return t;
-  }
-  // Rotate through proxies starting from best known, wrapping around
-  function tryNext(attempt){
-    if(attempt>=PROXIES.length)return Promise.reject(new Error('all failed'));
-    var i=(_startIdx+attempt)%PROXIES.length;
-    return fetch(PROXIES[i].build(url),makeOpts())
-      .then(function(r){if(!r.ok)throw new Error(r.status);return r.text();})
-      .then(function(t){
-        var result=parseResult(t,PROXIES[i].type);
-        // Remember this proxy worked for this domain
-        if(i!==_proxyMem[domain]) _pmSave(domain,i);
-        return result;
+  if(!t||t.trim().length<30)throw _perr('risposta vuota');
+  if(_looksLikeBlockPage(t))throw _perr('pagina di blocco al posto del feed');
+  return t;
+}
+
+// meta (opzionale) viene riempito con {via, tries} per la diagnostica
+function fetchRSS(url,meta){
+  meta=meta||{};
+  var chain=_proxyChain(), domain=_pmDomain(url), now=Date.now(), pref=_proxyMem[domain];
+  var order=[];
+  chain.forEach(function(p){if(p.id===pref)order.unshift(p);else order.push(p);});
+  // Salta i proxy in cooldown (429/timeout recenti); se lo sono tutti, riprova comunque
+  var avail=order.filter(function(p){var hh=_pxHealth[p.id];return !hh||hh.until<=now;});
+  if(!avail.length)avail=order;
+  avail=avail.slice(0,MAX_PROXY_ATTEMPTS);
+  var lastErr=null;
+  function attempt(i){
+    if(i>=avail.length)return Promise.reject(lastErr||new Error('tutti i proxy hanno fallito'));
+    var p=avail[i];
+    return _fetchTO(p.build(url),PROXY_TIMEOUT_MS)
+      .then(function(r){
+        if(!r.ok){var e=new Error('HTTP '+r.status);e.status=r.status;throw e;}
+        return r.text();
       })
-      .catch(function(e){return tryNext(attempt+1);});
+      .then(function(t){
+        var res=_parseProxyResult(t,p.type);
+        _pxOk(p.id);
+        if(_proxyMem[domain]!==p.id)_pmSave(domain,p.id);
+        meta.via=p.id;meta.tries=i+1;
+        return res;
+      })
+      .catch(function(e){
+        lastErr=e;_pxFail(p.id,e);
+        return attempt(i+1);
+      });
   }
-  return tryNext(0);
+  return attempt(0);
 }
 
 
@@ -2675,166 +2746,300 @@ function classify(item){
   return item;
 }
 
-function parseRSS(xml,src){
+// ── Parsing ───────────────────────────────────────────────────────
+var _entTA=document.createElement('textarea');
+function _decodeEnt(s){
+  if(!s||s.indexOf('&')<0)return s||'';
+  _entTA.innerHTML=s;var v=_entTA.value;
+  if(v.indexOf('&')>=0&&/&#?\w+;/.test(v)){_entTA.innerHTML=v;v=_entTA.value;} // doppia codifica (WordPress)
+  return v;
+}
+function _cleanText(s){
+  return _decodeEnt(String(s||'').replace(/<[^>]*>/g,' ')).replace(/\s+/g,' ').trim();
+}
+function safeUrl(u){
+  u=String(u||'').trim();
+  return /^https?:\/\//i.test(u)?u:''; // blocca javascript:, data: ecc. provenienti dai feed
+}
+function _kidText(el,names){
+  // solo figli diretti: querySelector('content') catturava anche <media:content> (vuoto)
+  var kids=el.children||[];
+  for(var n=0;n<names.length;n++){
+    for(var i=0;i<kids.length;i++){
+      var ln=(kids[i].localName||kids[i].nodeName||'').toLowerCase();
+      if(ln===names[n]){
+        var t=kids[i].textContent||'';
+        if(t.trim())return t;
+      }
+    }
+  }
+  return '';
+}
+function _itemLink(el){
+  var link='',kids=el.children||[];
+  for(var i=0;i<kids.length;i++){
+    var c=kids[i];
+    if((c.localName||'').toLowerCase()!=='link')continue;
+    var href=c.getAttribute('href');
+    if(href){
+      var rel=c.getAttribute('rel')||'alternate'; // Atom: ignora rel=self/replies/enclosure
+      if(rel==='alternate'&&!link)link=href;
+    }else if(!link){
+      link=(c.textContent||'').trim();
+    }
+  }
+  if(!link){var g=_kidText(el,['guid','id']).trim();if(/^https?:\/\//i.test(g))link=g;}
+  return safeUrl(link);
+}
+function parseRSS(xml,src,stats){
   var out=[];
+  stats=stats||{};
+  stats.total=0;stats.newest=0;stats.parseError=false;
   try{
     var doc=new DOMParser().parseFromString(xml,'text/xml');
-    doc.querySelectorAll('item, entry').forEach(function(el){
-      var title=(el.querySelector('title')||{}).textContent||'';
-      var lo=el.querySelector('link');
-      var link=lo?(lo.getAttribute('href')||lo.textContent||''):'';
-      var desc=(el.querySelector('description, summary, content')||{}).textContent||'';
-      var pub=(el.querySelector('pubDate, published, updated, date, dc\\:date, atom\\:updated')||{}).textContent||'';
-      title=title.replace(/<[^>]+>/g,'').trim();
-      desc=desc.replace(/<[^>]+>/g,'').trim();
-      // Decode common HTML entities
-      desc=desc.replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"').replace(/&#39;/g,"'").replace(/&apos;/g,"'");
-      title=title.replace(/&nbsp;/g,' ').replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&quot;/g,'"');
-      // Strip trailing " — Source Name" or " Source Name" patterns added by Google News / RSS aggregators
-      desc=desc.replace(/\s{2,}.*$/, '').trim();
-      // Remove description if it's just a repeat of the title
-      if(desc.toLowerCase().indexOf(title.toLowerCase().substring(0,40))===0) desc='';
-      desc=desc.substring(0,220);
-      if(!title)return;
+    var nodes=doc.querySelectorAll('item, entry');
+    if(!nodes.length&&doc.getElementsByTagName('parsererror').length){stats.parseError=true;return out;}
+    stats.total=nodes.length;
+    var isGN=/news\.google\.com/.test(src.url||'');
+    var limit=src.max||50;
+    var list=[];
+    for(var i=0;i<nodes.length;i++){
+      var el=nodes[i];
+      var title=_cleanText(_kidText(el,['title']));
+      if(!title)continue;
+      var link=_itemLink(el);
+      var pub=_kidText(el,['pubdate','published','updated','date','created','issued']).trim();
+      var pubName='';
+      if(isGN){
+        pubName=_cleanText(_kidText(el,['source']));
+        // Google News aggiunge " - Testata" al titolo: è ridondante col nome testata
+        if(pubName&&title.length>pubName.length+3&&title.slice(-(pubName.length+3))===' - '+pubName)title=title.slice(0,-(pubName.length+3));
+      }
+      var desc='';
+      if(!isGN){ // in Google News la description è solo un elenco di titoli correlati
+        desc=_cleanText(_kidText(el,['description','summary','encoded','content']));
+        if(desc.toLowerCase().indexOf(title.toLowerCase().substring(0,40))===0)desc='';
+        if(desc.length>220)desc=desc.substring(0,220).replace(/\s+\S*$/,'')+'…';
+      }
       var ts=articleTsFromPub(pub);
-      var item=classify({title:title,link:link,description:desc,pub:pub,src:src.name,srcId:src.id,sourceRegions:src.regions||[],cat:src.cat,ts:ts});
-      if(isFreshEnoughArticle(item)) out.push(item);
-    });
-  }catch(e){}
+      if(!ts)ts=_firstSeenTs((link||'')+'|'+title); // senza data: primo avvistamento
+      if(ts>stats.newest)stats.newest=ts;
+      list.push({title:title,link:link,description:desc,pub:pub,ts:ts,pubName:pubName});
+    }
+    list.sort(function(a,b){return b.ts-a.ts;});
+    for(var k=0;k<list.length&&out.length<limit;k++){
+      var it=list[k];
+      var item=classify({title:it.title,link:it.link,description:it.description,pub:it.pub,pubName:it.pubName,src:src.name,srcId:src.id,sourceRegions:src.regions||[],cat:src.cat,ts:it.ts});
+      if(isFreshEnoughArticle(item))out.push(item);
+    }
+  }catch(e){stats.parseError=true;}
   return out;
 }
 
-function doRefresh(){
-  var btn=document.getElementById('rbtn');
-  if(btn){btn.disabled=true;btn.textContent='·';}
+// ── Refresh ───────────────────────────────────────────────────────
+// Ogni fonte ha una cache con TTL per categoria: ad ogni tick si riscaricano solo le fonti
+// "scadute" (prima: tutte le ~150 ogni 2 minuti, saturando i proxy gratuiti e andando in 429).
+// Un refresh manuale (doRefresh(true)) ignora i TTL.
+var _feedCache={};          // srcId -> {t, ok, items, total, fresh, newest, ms, via, fails, err}
+var _refreshing=false, _refreshAgain=false, _refreshAgainForce=false, _lastActiveSig='';
+var FEED_CONCURRENCY=8, REFRESH_WATCHDOG_MS=90000;
+function feedTTL(src){
+  if(SLOW_CATS[src.cat]||SLOW_SRC_IDS[src.id])return 590000;
+  var c=src.cat;
+  if(c==='cina'||c==='sudest_asia'||c==='giappone'||c==='osint')return 230000;
+  return 100000;
+}
+function feedErrTTL(c){return Math.min(600000,30000*Math.pow(2,Math.max(0,(c.fails||1)-1)));} // backoff sui feed morti
 
-  var active=sources.filter(function(s){return s.on;});
-  var done=0,newArts=[];
-  if(!active.length){
-    if(!window._shInitialLoadDone){
-      articles=[];
-      renderAll();
-      try{ensureSeenFromArticles&&ensureSeenFromArticles();}catch(e){}
-      window._shInitialLoadDone=true;
+var ART_CACHE_KEY='sh_art_cache_v1';
+function saveArticleCache(){
+  try{
+    var slim=(articles||[]).slice(0,300).map(function(a){
+      return {title:a.title,link:a.link,description:(a.description||'').substring(0,160),pub:'',ts:a.ts,src:a.src,srcId:a.srcId,cat:a.cat,region:a.region,sev:a.sev,pubName:a.pubName||'',sourceRegions:a.sourceRegions||[]};
+    });
+    localStorage.setItem(ART_CACHE_KEY,JSON.stringify({t:Date.now(),a:slim}));
+  }catch(e){}
+}
+function restoreArticleCache(){
+  // Primo paint immediato con l'ultimo stato noto, mentre i feed si aggiornano in background
+  try{
+    var c=JSON.parse(localStorage.getItem(ART_CACHE_KEY)||'null');
+    if(c&&Array.isArray(c.a)&&Date.now()-c.t<6*3600000){
+      articles=sortArticlesChronologically(c.a.filter(function(a){return a&&a.title;}));
     }
+  }catch(e){}
+}
+
+function _stInfo(id){
+  var st=sourceStatus[id],c=_feedCache[id];
+  if(st==='ok')return {cls:'ok',txt:'OK',dot:'●',title:c&&c.fresh?(c.fresh+' articoli recenti'):'OK'};
+  if(st==='old')return {cls:'lo',txt:'VECCHIA',dot:'◐',title:'Feed raggiungibile ma senza articoli recenti'};
+  if(st==='empty')return {cls:'lo',txt:'VUOTA',dot:'○',title:'Feed raggiungibile ma senza item'};
+  if(st==='err')return {cls:'err',txt:'ERR',dot:'✕',title:(c&&c.err)||'Errore di caricamento'};
+  return {cls:'lo',txt:'—',dot:'○',title:'Non ancora caricata'};
+}
+
+function doRefresh(force){
+  force=(force===true);
+  var btn=document.getElementById('rbtn');
+  if(_refreshing){ // evita refresh sovrapposti (timer + toggle fonte + focus finestra)
+    _refreshAgain=true;if(force)_refreshAgainForce=true;
+    return;
+  }
+  var active=sources.filter(function(s){return s.on;});
+  var sig=active.map(function(s){return s.id;}).sort().join(',');
+  if(!active.length){
+    articles=[];_lastActiveSig=sig;
+    renderAll();
+    try{ensureSeenFromArticles&&ensureSeenFromArticles();}catch(e){}
+    window._shInitialLoadDone=true;
     if(btn){btn.disabled=false;btn.textContent='↻';}
     startTimer();
     return;
   }
+  _refreshing=true;
+  if(btn){btn.disabled=true;btn.textContent='·';}
+  // Render completo al primo caricamento o quando cambia l'insieme di fonti attive
+  // (così disattivare una fonte rimuove davvero le sue notizie dalle colonne)
+  var fullRender=!window._shInitialLoadDone || sig!==_lastActiveSig;
+  if(!window._shInitialLoadDone && !(articles&&articles.length))showSkeletons();
 
-  // Only show skeletons on the very first load
-  if(!window._shInitialLoadDone){
-    showSkeletons();
-  }
+  var now=Date.now(), queue=[];
+  active.forEach(function(s){
+    var c=_feedCache[s.id];
+    var due=force||!c||(now-c.t)>=(c.ok?feedTTL(s):feedErrTTL(c));
+    if(due)queue.push(s);
+  });
+  var finished=false, started=0, completed=0, total=queue.length, urlCache={};
+  var watchdog=setTimeout(function(){finish(true);},REFRESH_WATCHDOG_MS);
 
-  // ── Bounded concurrency queue: max 20 parallel fetches ───────────
-  var CONCURRENCY=20;
-  var _qIdx=0;
-  // URL-level dedup cache: evita di fetchare 2x la stessa URL (press_* vs originale)
-  var _urlFetchCache={};
-  function _onFeedDone(){
-    done++;
-    // Launch next pending feed if any
-    if(_qIdx<active.length) _runFeed(active[_qIdx++]);
-    if(done===active.length) _onAllDone();
+  function runNext(){
+    if(finished||started>=total)return;
+    runOne(queue[started++]);
   }
-  function _runFeed(src){
-    var url=src.url;
-    var p=_urlFetchCache[url];
-    if(!p){
-      p=fetchRSS(url);
-      _urlFetchCache[url]=p;
-    }
-    p.then(function(xml){
-      sourceStatus[src.id]='ok';
-      newArts=newArts.concat(parseRSS(xml,src));
-    }).catch(function(){
+  function runOne(src){
+    var t0=Date.now(), ent=urlCache[src.url];
+    if(!ent){ent=urlCache[src.url]={meta:{}};ent.p=fetchRSS(src.url,ent.meta);} // stessa URL = una sola richiesta
+    ent.p.then(function(xml){
+      var st={}, items=parseRSS(xml,src,st), prev=_feedCache[src.id]||{};
+      _feedCache[src.id]={t:Date.now(),ok:!st.parseError,items:items,total:st.total,fresh:items.length,newest:st.newest,ms:Date.now()-t0,via:ent.meta.via||'',fails:st.parseError?(prev.fails||0)+1:0,err:st.parseError?'XML non valido':''};
+      sourceStatus[src.id]=st.parseError?'err':(st.total===0?'empty':(items.length?'ok':'old'));
+    }).catch(function(e){
+      var prev=_feedCache[src.id]||{}, keep=prev.items||[];
+      _feedCache[src.id]={t:Date.now(),ok:false,items:keep,total:prev.total||0,fresh:keep.length,newest:prev.newest||0,ms:Date.now()-t0,via:'',fails:(prev.fails||0)+1,err:(e&&e.message)||'errore'};
       sourceStatus[src.id]='err';
-    }).then(_onFeedDone);
+    }).then(function(){
+      completed++;
+      if(finished)return;
+      if(completed>=total)finish(false);else runNext();
+    });
   }
-  function _onAllDone(){
+
+  function assemble(){
+    var newArts=[];
+    active.forEach(function(s){
+      var c=_feedCache[s.id];
+      if(c&&c.items)newArts=newArts.concat(c.items);
+    });
     var seenLocal={};
     newArts=newArts.filter(function(a){
-      var k=articleKey ? articleKey(a) : ((a.link||'')+'|'+(a.title||''));
-      if(seenLocal[k]) return false;
+      if(!isFreshEnoughArticle(a))return false;
+      var k=articleKey(a);
+      if(seenLocal[k])return false;
       seenLocal[k]=true;
       return true;
     });
     newArts.sort(function(a,b){
       var td=(b.ts||0)-(a.ts||0);
-      if(td!==0) return td;
+      if(td!==0)return td;
       var SO={critical:4,high:3,medium:2,low:1};
       return (SO[b.sev]||1)-(SO[a.sev]||1);
     });
-    // First load = full render once
-    if(!window._shInitialLoadDone){
+    var firstLoad=!window._shInitialLoadDone;
+    if(fullRender){
       articles=sortArticlesChronologically(newArts);
+      _lastActiveSig=sig;
       renderAll();
       try{renderSrcList();}catch(e){}
       try{_refreshP2Overlay();}catch(e){}
       try{ensureSeenFromArticles&&ensureSeenFromArticles();}catch(e){}
       window._shInitialLoadDone=true;
-      if(btn){btn.disabled=false;btn.textContent='↻';}
-      startTimer();
-      // ── C: auto-refresh briefing on first load
-      try{if(typeof renderBriefingPage==='function') renderBriefingPage();}catch(e){}
-      return;
-    }
-    // Subsequent loads = incremental only
-    var fresh=newArts.filter(function(a){
-      var k=articleKey ? articleKey(a) : ((a.link||'')+'|'+(a.title||''));
-      if(window._seenArticleKeys && window._seenArticleKeys.has(k)) return false;
-      if(window._seenArticleKeys) window._seenArticleKeys.add(k);
-      return true;
-    });
-    // ── G: prune _seenArticleKeys if it grows too large
-    if(window._seenArticleKeys && window._seenArticleKeys.size>4000){
-      var arr=Array.from(window._seenArticleKeys);
-      window._seenArticleKeys=new Set(arr.slice(arr.length-2000));
-    }
-    if(fresh.length){
-      articles=sortArticlesChronologically(fresh.concat(articles||[]));
-      var colAdds={};
-      fresh.slice().reverse().forEach(function(a){
-        (ALL_COLS||[]).forEach(function(col){
-          if(colClosed && colClosed.indexOf(col.id)!==-1) return;
-          try{
-            if(inCol(col,a)){
-              if(typeof insertArticleIntoColumn==='function' && insertArticleIntoColumn(col.id,a)){
+    }else{
+      var fresh=newArts.filter(function(a){
+        var k=articleKey(a);
+        if(window._seenArticleKeys&&window._seenArticleKeys.has(k))return false;
+        if(window._seenArticleKeys)window._seenArticleKeys.add(k);
+        return true;
+      });
+      if(window._seenArticleKeys&&window._seenArticleKeys.size>4000){
+        var arr=Array.from(window._seenArticleKeys);
+        window._seenArticleKeys=new Set(arr.slice(arr.length-2000));
+      }
+      if(fresh.length){
+        articles=sortArticlesChronologically(fresh.concat(articles||[]));
+        var colAdds={};
+        fresh.slice().reverse().forEach(function(a){
+          (ALL_COLS||[]).forEach(function(col){
+            if(colClosed&&colClosed.indexOf(col.id)!==-1)return;
+            try{
+              if(inCol(col,a)&&typeof insertArticleIntoColumn==='function'&&insertArticleIntoColumn(col.id,a))
                 colAdds[col.id]=(colAdds[col.id]||0)+1;
-              }
-            }
-          }catch(e){}
+            }catch(e){}
+          });
         });
-      });
-      if(typeof updateColumnCounters==='function') updateColumnCounters();
-      Object.keys(colAdds).forEach(function(colId){
-        if(typeof updateNewBadge==='function') updateNewBadge(colId,colAdds[colId]);
-      });
-      try{renderSrcList();}catch(e){}
-      try{_refreshP2Overlay();}catch(e){}
-      // ── C: auto-refresh briefing page if open and new articles arrived
-      try{
-        var bp=document.getElementById('page-4');
-        if(bp && bp.classList.contains('active') && typeof renderBriefingPage==='function'){
-          renderBriefingPage();
-        }
-      }catch(e){}
+        if(typeof updateColumnCounters==='function')updateColumnCounters();
+        Object.keys(colAdds).forEach(function(colId){
+          if(typeof updateNewBadge==='function')updateNewBadge(colId,colAdds[colId]);
+        });
+        try{renderSrcList();}catch(e){}
+        try{_refreshP2Overlay();}catch(e){}
+        // Timeline e Briefing si aggiornano solo se la pagina è aperta (prima: classe 'active' inesistente)
+        var p3=document.getElementById('page-3'),p4=document.getElementById('page-4');
+        try{if(p3&&p3.classList.contains('on'))renderTimelinePage();}catch(e){}
+        try{if(p4&&p4.classList.contains('on'))renderBriefingPage();}catch(e){}
+      }
     }
+    saveArticleCache();
+    if(firstLoad||force){
+      var ok=0,err=0,odd=0;
+      active.forEach(function(s){var st=sourceStatus[s.id];if(st==='ok')ok++;else if(st==='err')err++;else if(st)odd++;});
+      notify('Fonti: '+ok+'/'+active.length+' OK'+(odd?' · '+odd+' senza articoli recenti':'')+(err?' · '+err+' in errore (Fonti → Verifica)':''));
+    }
+  }
+
+  function finish(timedOut){
+    if(finished)return;
+    finished=true;clearTimeout(watchdog);
+    try{assemble();}catch(e){console.error('SHERLOCK refresh',e);}
+    _refreshing=false;
     if(btn){btn.disabled=false;btn.textContent='↻';}
     startTimer();
+    try{if(typeof window._onRefreshDone==='function')window._onRefreshDone();}catch(e){}
+    if(_refreshAgain){
+      var f=_refreshAgainForce;_refreshAgain=false;_refreshAgainForce=false;
+      setTimeout(function(){doRefresh(f);},250);
+    }
   }
-  // Seed initial batch
-  var _initBatch=Math.min(CONCURRENCY,active.length);
-  _qIdx=_initBatch;
-  for(var _i=0;_i<_initBatch;_i++) _runFeed(active[_i]);
+
+  if(!total){finish(false);return;}
+  for(var i=0;i<Math.min(FEED_CONCURRENCY,total);i++)runNext();
 }
 
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function fmtTime(pub){if(!pub)return '';var d=new Date(pub);if(isNaN(d))return '';var diff=Date.now()-d.getTime();if(diff<3600000)return Math.round(diff/60000)+'m fa';if(diff<86400000)return Math.round(diff/3600000)+'h fa';return d.toLocaleDateString('it-IT',{day:'numeric',month:'short'});}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+function fmtTime(pub){
+  if(!pub)return '';
+  var t=(typeof pub==='number')?pub:articleTsFromPub(pub);
+  if(!t)return '';
+  var diff=Math.max(0,Date.now()-t);
+  if(diff<3600000)return Math.max(1,Math.round(diff/60000))+'m fa';
+  if(diff<86400000)return Math.round(diff/3600000)+'h fa';
+  return new Date(t).toLocaleDateString('it-IT',{day:'numeric',month:'short'});
+}
+function _normName(s){return String(s||'').toLowerCase().replace(/[^a-z0-9一-鿿]+/g,'');}
+function _sameName(a,b){a=_normName(a);b=_normName(b);return !a||!b||a.indexOf(b)>=0||b.indexOf(a)>=0;}
 function _isNonLatin(s){return /[\u4e00-\u9fff\u3040-\u30ff\u0600-\u06ff\u3400-\u4dbf]/.test(s||'');}
 function cardHTML(a){
-  var time=a.pub?'<span class="ctime">'+fmtTime(a.pub)+'</span>':'';
+  var time=(a.ts||a.pub)?'<span class="ctime">'+fmtTime(a.ts||a.pub)+'</span>':'';
   var titleText=(a.title||'');
   var srcText=(a.src||'');
   var isChinese=/[一-鿿㐀-䶿]/.test(titleText)||/[一-鿿㐀-䶿]/.test(srcText);
@@ -2846,10 +3051,10 @@ function cardHTML(a){
   var needsAttr=needsTr?' data-needstr="1"':'';
   var aKey=articlePinKey(a);
   var isPinned=_pinnedKeys.has(aKey);
-  var pinBtn='<button class="cpin'+(isPinned?' pinned':'')+'" onclick="togglePin(this,\''+esc(aKey)+'\')" title="'+(isPinned?'Rimuovi dai salvati':'Salva articolo')+'">★</button>';
+  var pinBtn='<button class="cpin'+(isPinned?' pinned':'')+'" onclick="togglePin(this)" title="'+(isPinned?'Rimuovi dai salvati':'Salva articolo')+'">★</button>';
   return '<div class="card'+(isPinned?' is-pinned':'')+'" data-sev="'+a.sev+'" data-ts="'+(a.ts||0)+'" data-akey="'+esc(aKey)+'" data-cat="'+esc(a.cat||'')+'" data-region="'+esc(a.region||'')+'"'+needsAttr+'>'
-    +'<div class="ctop"><span class="csrc">'+esc(a.src)+'</span>'+langBadge+'</div>'
-    +'<a class="ctlink" href="'+esc(a.link||'')+'" target="_blank" rel="noopener">'+esc(a.title)+'</a>'
+    +'<div class="ctop"><span class="csrc">'+esc(a.src)+'</span>'+((a.pubName&&!_sameName(a.pubName,a.src))?'<span class="cpub">· '+esc(a.pubName)+'</span>':'')+langBadge+'</div>'
+    +'<a class="ctlink" href="'+esc(safeUrl(a.link)||'#')+'" target="_blank" rel="noopener noreferrer">'+esc(a.title)+'</a>'
     +(a.description?'<div class="cdesc">'+esc(a.description)+'</div>':'')
     +'<div class="cfoot">'+time+trBtn+pinBtn+'</div></div>';
 }
@@ -2927,6 +3132,9 @@ function getPinnedForCol(def){
 }
 function togglePin(btn, key){
   var card=btn.closest('.card');
+  // La chiave si legge dalla card: passarla inline nell'onclick si rompeva con titoli contenenti apostrofi
+  key=key||(card&&card.getAttribute('data-akey'))||'';
+  if(!key)return;
   if(_pinnedKeys.has(key)){
     _pinnedKeys.delete(key);
     delete _pinnedStore[key];
@@ -3003,7 +3211,9 @@ function _articleMatchesCol(a, def){
 function _dedup(arts){
   var seen={};
   return arts.filter(function(a){
-    var key=(a.link||'')+'||'+(a.title||'').toLowerCase().replace(/\s+/g,' ').trim().substring(0,80);
+    // Stessa notizia da feed diversi ha link diversi: confronta il titolo normalizzato
+    var nt=(a.title||'').toLowerCase().replace(/[^a-z0-9\u00c0-\u024f\u3040-\u30ff\u4e00-\u9fff]+/g,'');
+    var key=nt.length>=30?nt.substring(0,90):(a.link||'')+'||'+nt;
     if(seen[key]) return false;
     seen[key]=true;
     return true;
@@ -3012,14 +3222,20 @@ function _dedup(arts){
 
 function getForCol(def){
   if(def.id==='global'){
-    return sortArticlesChronologically(_dedup(articles||[]));
+    return sortArticlesChronologically(_dedup(articles||[]),MAX_ARTICLE_AGE_DAYS*86400000);
   }
   var filtered=articles.filter(function(a){ return _articleMatchesCol(a,def); });
   return sortArticlesChronologically(_dedup(filtered));
 }
 function inCol(col, a){ return _articleMatchesCol(a, col); }
 
-function renderAll(){renderColumns();updateColList();renderTimelinePage();renderBriefingPage();}
+function renderAll(){
+  renderColumns();updateColList();
+  // Timeline e Briefing solo se visibili: erano ricostruiti ad ogni refresh anche a pagina nascosta
+  var p3=document.getElementById('page-3'),p4=document.getElementById('page-4');
+  if(p3&&p3.classList.contains('on'))renderTimelinePage();
+  if(p4&&p4.classList.contains('on'))renderBriefingPage();
+}
 function renderColumns(){
   var wrap=document.getElementById('cols-wrap');if(!wrap)return;
   var addBtn=document.getElementById('add-col-btn');
@@ -3241,10 +3457,10 @@ function renderSrcList(){
     Object.keys(catmap).forEach(function(cat){
       html+='<div style="font-size:9px;color:var(--mu);padding:4px 8px 1px;font-family:Inter,sans-serif;text-transform:uppercase;letter-spacing:.04em">'+(CAT[cat]||cat)+'</div>';
       catmap[cat].forEach(function(s){
-        var st=sourceStatus[s.id],stCls=st==='ok'?'ok':st==='err'?'err':'lo',stTxt=st==='ok'?'●':st==='err'?'✕':'○';
+        var si=_stInfo(s.id),stCls=si.cls,stTxt=si.dot;
         html+='<div class="src-item"><div class="src-dot" style="background:'+(s.on?'var(--acc)':'var(--mu)')+'"></div>'
           +'<span class="src-nm" title="'+esc(s.url)+'">'+esc(s.name)+'</span>'
-          +'<span class="src-st '+stCls+'">'+stTxt+'</span>'
+          +'<span class="src-st '+stCls+'" title="'+esc(si.title)+'">'+stTxt+'</span>'
           +'<button class="tog '+(s.on?'on':'off')+'" onclick="toggleSrc(\''+s.id+'\')"></button>'
           +'<button class="src-del" onclick="delSrc(\''+s.id+'\')" title="Rimuovi fonte">&#x2715;</button></div>';
       });
@@ -3278,9 +3494,9 @@ function renderSourceManager(){
       var active=arr.filter(function(s){return s.on;}).length;
       html+='<details class="manager-source-group" open><summary><span>'+esc(labels[th]||th)+'</span><small>'+active+'/'+arr.length+' attive</small></summary>';
       arr.sort(function(a,b){return (a.name||'').localeCompare(b.name||'');}).forEach(function(s){
-        var st=sourceStatus[s.id],stCls=st==='ok'?'ok':st==='err'?'err':'lo',stTxt=st==='ok'?'OK':st==='err'?'ERR':'LO';
+        var si=_stInfo(s.id),stCls=si.cls,stTxt=si.txt;
         var isCustom=s.id&&s.id.indexOf('c_')===0;
-        html+='<div class="manager-source-row"><button class="tog '+(s.on?'on':'off')+'" onclick="toggleSrc(\''+s.id+'\')" title="Attiva/disattiva"></button><div class="manager-source-main"><div class="manager-source-name">'+esc(s.name)+'</div><div class="manager-source-url">'+esc(s.url)+'</div></div><span class="src-st '+stCls+'">'+stTxt+'</span>'+(isCustom?'<button class="src-del" onclick="delSrc(\''+s.id+'\')" title="Rimuovi fonte">&#x2715;</button>':'')+'</div>';
+        html+='<div class="manager-source-row"><button class="tog '+(s.on?'on':'off')+'" onclick="toggleSrc(\''+s.id+'\')" title="Attiva/disattiva"></button><div class="manager-source-main"><div class="manager-source-name">'+esc(s.name)+'</div><div class="manager-source-url">'+esc(s.url)+'</div></div><span class="src-st '+stCls+'" title="'+esc(si.title)+'">'+stTxt+'</span>'+(isCustom?'<button class="src-del" onclick="delSrc(\''+s.id+'\')" title="Rimuovi fonte">&#x2715;</button>':'')+'</div>';
       });
       html+='</details>';
     });
@@ -3309,7 +3525,8 @@ function delSrc(id){
   var isCustom=s.id&&s.id.indexOf('c_')===0;
   if(!isCustom&&!confirm('Rimuovere "'+s.name+'"?\n(Puoi riaggiungerla dal menu Fonte)'))return;
   sources=sources.filter(function(x){return x.id!==id;});
-  persist();renderSrcList();
+  delete _feedCache[id];
+  persist();renderSrcList();doRefresh();
   notify('Rimossa: '+s.name);
 }
 function addInline(){
@@ -3353,6 +3570,7 @@ function addSrc(){
 }
 function addPreset(id){
   var p=PRESETS.find(function(x){return x.id===id;});if(!p)return;
+  if(sources.find(function(s){return s.url===p.url;})&&!sources.find(function(s){return s.id===id;})){notify('Fonte equivalente già presente');return;}
   if(!sources.find(function(s){return s.id===id;})){sources.push({id:p.id,name:p.name,cat:p.cat,url:p.url,on:true});persist();doRefresh();}
   notify('Aggiunto: '+p.name);openSrcModal();
 }
@@ -3478,8 +3696,14 @@ function renderTimelinePage(){
   });
   body.innerHTML=html;
 }
+function _briefList(){
+  // "Da seguire oggi": solo ultime 48h (con le finestre più ampie delle fonti lente rischiava di includere pezzi vecchi)
+  var cut=Date.now()-48*3600000;
+  var l=(articles||[]).filter(function(a){return (a.ts||0)>=cut;});
+  return l.length?l:(articles||[]).slice();
+}
 function buildBriefingData(){
-  var list=(articles||[]).slice().sort(function(a,b){
+  var list=_briefList().sort(function(a,b){
     var s=_sevRank(b.sev)-_sevRank(a.sev); if(s!==0)return s;
     return (b.ts||0)-(a.ts||0);
   });
@@ -3512,7 +3736,7 @@ function renderBriefingPage(){
   if(status)status.textContent='Aggiornato '+now.toLocaleTimeString('it-IT',{hour:'2-digit',minute:'2-digit'});
 
   // Sorted list: recency first
-  var allSorted=(articles||[]).slice().sort(function(a,b){return (b.ts||0)-(a.ts||0);});
+  var allSorted=_briefList().sort(function(a,b){return (b.ts||0)-(a.ts||0);});
   var lead=allSorted[0]||null;
   var rest=lead?allSorted.filter(function(a){return a.title!==lead.title;}):allSorted.slice(1);
   var top9=rest.slice(0,9);
@@ -3524,7 +3748,7 @@ function renderBriefingPage(){
   if(lead){
     html+='<div class="md-lead">'
       +'<a class="md-lead-title" href="'+esc(lead.link||'#')+'" target="_blank" rel="noopener">'+esc(lead.title)+'</a>'
-      +'<div class="md-lead-meta">'+esc(lead.src||'')+' · '+esc(REGION_LABELS[lead.region]||lead.region||'Globale')+(lead.pub?' · '+fmtTime(lead.pub):'')+'</div>'
+      +'<div class="md-lead-meta">'+esc(lead.src||'')+' · '+esc(REGION_LABELS[lead.region]||lead.region||'Globale')+(lead.ts?' · '+fmtTime(lead.ts):'')+'</div>'
       +'</div>';
   }
 
@@ -5065,10 +5289,88 @@ function tvOpenYT(){var ch=TV_CH[_tvIdx];if(!ch)return;var url=_tvOpenUrlFor(_tv
   });
 })();
 
+
+// ── Verifica fonti ────────────────────────────────────────────────
+function _fmtAge(ts){
+  if(!ts)return '—';
+  var m=Math.max(0,Math.round((Date.now()-ts)/60000));
+  if(m<60)return m+'m';
+  var hr=Math.round(m/60);
+  return hr<48?hr+'h':Math.round(hr/24)+'g';
+}
+function _healthRows(){
+  var rank={err:0,old:1,empty:2,ok:3};
+  return sources.filter(function(s){return s.on;}).map(function(s){
+    var c=_feedCache[s.id]||{}, st=sourceStatus[s.id]||'none';
+    return {s:s,c:c,st:st,si:_stInfo(s.id)};
+  }).sort(function(a,b){
+    var ra=rank[a.st]===undefined?4:rank[a.st], rb=rank[b.st]===undefined?4:rank[b.st];
+    return ra!==rb?ra-rb:(a.s.name||'').localeCompare(b.s.name||'');
+  });
+}
+function renderHealth(){
+  var body=document.getElementById('health-body'),sum=document.getElementById('health-sum');
+  if(!body||!sum)return;
+  var rows=_healthRows(),n={ok:0,err:0,old:0,empty:0,none:0};
+  rows.forEach(function(r){n[r.st]=(n[r.st]||0)+1;});
+  var now=Date.now();
+  var px=_proxyChain().map(function(p){
+    var hh=_pxHealth[p.id];
+    var cd=hh&&hh.until>now?(' ⏸'+Math.ceil((hh.until-now)/1000)+'s'):'';
+    return p.id+(hh&&hh.f?' ('+hh.f+' err'+cd+')':' ✓');
+  }).join(' · ');
+  sum.innerHTML='<b>'+n.ok+'</b> OK · <b>'+n.err+'</b> in errore · <b>'+(n.old+n.empty)+'</b> senza articoli recenti · <b>'+n.none+'</b> non ancora caricate su '+rows.length+' attive'
+    +'<div class="health-px">Proxy: '+esc(px)+(getCustomProxy()?' · <i>proxy personale attivo</i>':'')+'</div>';
+  if(!rows.length){body.innerHTML='<div class="empty">Nessuna fonte attiva</div>';return;}
+  body.innerHTML='<table class="health-tbl"><thead><tr><th>Fonte</th><th>Stato</th><th>Art.</th><th>Ultimo</th><th>ms</th><th>Via</th><th>Dettaglio</th></tr></thead><tbody>'
+    +rows.map(function(r){
+      return '<tr class="hs-'+r.si.cls+'"><td>'+esc(r.s.name)+'</td><td><span class="src-st '+r.si.cls+'">'+r.si.txt+'</span></td>'
+        +'<td>'+(r.c.fresh!=null?r.c.fresh+'/'+(r.c.total||0):'—')+'</td><td>'+_fmtAge(r.c.newest)+'</td>'
+        +'<td>'+(r.c.ms||'—')+'</td><td>'+esc(r.c.via||'')+'</td><td class="hs-err">'+esc(r.st==='err'?(r.c.err||''):r.si.title)+'</td></tr>';
+    }).join('')+'</tbody></table>';
+}
+function openHealthModal(){
+  var m=document.getElementById('health-modal');
+  if(!m){
+    m=document.createElement('div');m.id='health-modal';m.className='modal-bg';m.style.cssText='display:none;z-index:1300';
+    m.onclick=function(e){if(e.target===m)closeHealthModal();};
+    m.innerHTML='<div class="modal health-modal" role="dialog" aria-modal="true"><div class="modal-h"><div class="modal-t">Verifica fonti</div>'
+      +'<button class="src-modal-close" aria-label="Chiudi" onclick="closeHealthModal()">&#x2715;</button></div>'
+      +'<div class="health-sum" id="health-sum"></div>'
+      +'<div class="health-actions"><button class="hbtn" id="health-recheck" onclick="healthRecheck()">Ricontrolla tutte</button>'
+      +'<button class="hbtn" onclick="healthCopy()">Copia report</button></div>'
+      +'<div class="health-body" id="health-body"></div></div>';
+    document.body.appendChild(m);
+  }
+  m.style.display='flex';
+  window._onRefreshDone=function(){
+    var b=document.getElementById('health-recheck');if(b){b.disabled=false;b.textContent='Ricontrolla tutte';}
+    renderHealth();
+  };
+  renderHealth();
+}
+function closeHealthModal(){
+  var m=document.getElementById('health-modal');if(m)m.style.display='none';
+  window._onRefreshDone=null;
+}
+function healthRecheck(){
+  var b=document.getElementById('health-recheck');if(b){b.disabled=true;b.textContent='Controllo in corso…';}
+  doRefresh(true);
+}
+function healthCopy(){
+  var txt='SHERLOCK · verifica fonti · '+new Date().toLocaleString('it-IT')+'\n'
+    +_healthRows().map(function(r){
+      return [r.si.txt,r.s.name,(r.c.fresh!=null?r.c.fresh+'/'+(r.c.total||0):'-'),_fmtAge(r.c.newest),r.c.via||'',r.st==='err'?(r.c.err||''):''].join(' | ');
+    }).join('\n');
+  try{navigator.clipboard.writeText(txt).then(function(){notify('Report copiato');},function(){_fallbackCopyMD(txt);});}
+  catch(e){_fallbackCopyMD(txt);}
+}
+
 // ── INIT ──────────────────────────────────────────────────────────
 function hardReset(){
-  try{localStorage.removeItem('sh3_sources');localStorage.removeItem('sh3_colorder');localStorage.removeItem('sh3_colclosed');}catch(e){}
-  sources=DEFAULTS.slice();
+  try{['sh3_sources','sh3_sources_v3','sh3_colorder','sh3_colclosed','sh_proxy_mem2','sh_art_cache_v1'].forEach(function(k){localStorage.removeItem(k);});}catch(e){}
+  _feedCache={};_proxyMem={};_pxHealth={};_lastActiveSig='';
+  sources=DEFAULTS.map(function(d){return JSON.parse(JSON.stringify(d));});
   colOrder=ALL_COLS.map(function(c){return c.id;});
   colClosed=[];
   renderAll();doRefresh();
@@ -5110,6 +5412,7 @@ document.addEventListener('click', function(e){
 
 try{document.body.classList.remove('sidebar-collapsed');}catch(e){}
 loadPersist();
+restoreArticleCache();
 renderAll();
 doRefresh();
 
@@ -5504,9 +5807,7 @@ function toggleSidebar(){
         'sh3_sources',
         'sh3_colorder',
         'sh3_colclosed',
-        'sh3_live_cfg_v1',
-        'sh3_pinned',
-        'sh3_pinned_articles'
+        'sh3_live_cfg_v1'
       ].forEach(function(key){
         try{localStorage.removeItem(key);}catch(e){}
       });
@@ -6453,7 +6754,7 @@ body.desktop-browser-upgrade #page-4{width:100%;min-width:0;min-height:0;}
         break;
       case 'r': case 'R':
         e.preventDefault();
-        if(typeof doRefresh==='function'){ doRefresh(); notify('🔄 Refresh'); }
+        if(typeof doRefresh==='function'){ doRefresh(true); notify('🔄 Refresh'); }
         break;
       case 'm': case 'M':
         e.preventDefault();
